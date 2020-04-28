@@ -1,11 +1,11 @@
 import * as React from 'react';
 
-require('./Player.scss');
+import appleMusicIcon from '../../../../resources/icons/apple-music-white.png';
+import previousIcon from '../../../../resources/icons/previous-track-white.png';
+import playIcon from '../../../../resources/icons/play-white.png';
+import nextIcon from '../../../../resources/icons/next-track-white.png';
 
-const appleMusicIcon = '../../../../resources/icons/apple-music-white.png';
-const previousIcon = '../../../../resources/icons/previous-track-white.png';
-const playIcon = '../../../../resources/icons/play-white.png';
-const nextIcon = '../../../../resources/icons/next-track-white.png';
+require('./Player.scss');
 
 class Player extends React.Component {
     componentDidMount() {

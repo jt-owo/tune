@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import TitleBar from './TitleBar/TitleBar';
 import Navigation from './Navigation/Navigation';
+import Player from './Player/Player';
 
 import Home from './Views/Home/Home';
 import Browse from './Views/Browse/Browse';
@@ -33,6 +34,7 @@ const Application = () => (
                 </Switch>
             </div>
         </Router>
+        <Player />
     </div>
 );
 

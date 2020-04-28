@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import PageHeading from '../../PageHeading/PageHeading';
 
-require('./Home.scss');
+import './Home.scss';
 
 class Home extends React.Component {
     componentDidMount() {

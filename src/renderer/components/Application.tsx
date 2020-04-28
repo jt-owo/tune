@@ -11,9 +11,9 @@ import Browse from './Views/Browse/Browse';
 import Library from './Views/Library/Library';
 import Settings from './Views/Settings/Settings';
 
-require('./Application.scss');
+import './Application.scss';
 
-function LoadTitleBar(props: any) {
+function LoadTitleBar() {
     if (process.platform !== 'darwin') {
         return <TitleBar />;
     }

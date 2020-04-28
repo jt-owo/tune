@@ -1,14 +1,9 @@
-/* eslint-disable jsx-a11y/interactive-supports-focus */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 
+import './Navigation.scss';
+
 import logo from '../../../../resources/images/logo.png';
-
-require('./Navigation.scss');
-
-const electron = window.require('electron');
-const win = electron.remote.getCurrentWindow();
 
 const Navigation: React.FunctionComponent<any> = () => (
     <nav id="nav-bar-div">

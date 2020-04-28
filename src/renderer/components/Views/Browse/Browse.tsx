@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import PageHeading from '../../PageHeading/PageHeading';
 
-require('./Browse.scss');
+import './Browse.scss';
 
 class Browse extends React.Component {
     componentDidMount() {

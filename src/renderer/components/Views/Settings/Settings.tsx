@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import PageHeading from '../../PageHeading/PageHeading';
 
-require('./Settings.scss');
+import './Settings.scss';
 
 class Settings extends React.Component {
     componentDidMount() {

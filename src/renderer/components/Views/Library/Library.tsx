@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import PageHeading from '../../PageHeading/PageHeading';
 
-require('./Library.scss');
+import './Library.scss';
 
 class Library extends React.Component {
     componentDidMount() {

@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import * as React from 'react';
 
-require('./TitleBar.scss'); // Include Styles
+import './TitleBar.scss';
 
 const electron = window.require('electron');
 const win = electron.remote.getCurrentWindow();

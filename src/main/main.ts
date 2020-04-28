@@ -35,7 +35,7 @@ const createWindow = async () => {
     });
 
     if (process.env.NODE_ENV !== 'production') {
-        process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = '1'; // eslint-disable-line require-atomic-updates
+        process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = '1';
         win.loadURL(`http://localhost:2003`);
     } else {
         win.loadURL(

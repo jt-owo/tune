@@ -1,10 +1,14 @@
 import { hot } from 'react-hot-loader/root';
 import * as React from 'react';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import TitleBar from './TitleBar/TitleBar';
 import Navigation from './Navigation/Navigation';
-import ExampleContainer from '../containers/ExampleContainer';
+
+import Home from './Views/Home/Home';
+import Browse from './Views/Browse/Browse';
+import Library from './Views/Library/Library';
+import Settings from './Views/Settings/Settings';
 
 require('./Application.scss');
 
@@ -18,11 +22,17 @@ function LoadTitleBar(props: any) {
 const Application = () => (
     <div id="container">
         <LoadTitleBar />
-        <BrowserRouter>
+        <Router>
             <div>
                 <Navigation />
+                <Switch>
+                    <Route path="/home" component={Home} exact />
+                    <Route path="/library" component={Browse} exact />
+                    <Route path="/browse" component={Library} exact />
+                    <Route path="/settings" component={Settings} exact />
+                </Switch>
             </div>
-        </BrowserRouter>
+        </Router>
     </div>
 );
 

@@ -2,10 +2,10 @@ import * as React from 'react';
 
 require('./Player.scss');
 
-const appleMusicIcon = require('../../../../resources/icons/apple-music-white.png');
-const previousIcon = require('../../../../resources/icons/previous-track-white.png');
-const playIcon = require('../../../../resources/icons/play-white.png');
-const nextIcon = require('../../../../resources/icons/next-track-white.png');
+const appleMusicIcon = '../../../../resources/icons/apple-music-white.png';
+const previousIcon = '../../../../resources/icons/previous-track-white.png';
+const playIcon = '../../../../resources/icons/play-white.png';
+const nextIcon = '../../../../resources/icons/next-track-white.png';
 
 class Player extends React.Component {
     componentDidMount() {

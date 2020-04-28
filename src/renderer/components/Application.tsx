@@ -17,7 +17,7 @@ function LoadTitleBar(props: any) {
     if (process.platform !== 'darwin') {
         return <TitleBar />;
     }
-    return <div />;
+    return <div id="macos-titlebar" />;
 }
 
 const Application = () => (

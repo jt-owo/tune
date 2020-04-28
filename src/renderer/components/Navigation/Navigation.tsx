@@ -5,7 +5,7 @@ import { NavLink } from 'react-router-dom';
 
 require('./Navigation.scss');
 
-const logo = require('../../../../resources/images/logo.png');
+const logo = '../../../../resources/images/logo.png';
 
 const electron = window.require('electron');
 const win = electron.remote.getCurrentWindow();

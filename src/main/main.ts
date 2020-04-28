@@ -14,7 +14,7 @@ const installExtensions = async () => {
     const extensions = ['REACT_DEVELOPER_TOOLS', 'REDUX_DEVTOOLS'];
 
     return Promise.all(
-        extensions.map(name => installer.default(installer[name], forceDownload))
+        extensions.map((name) => installer.default(installer[name], forceDownload))
     ).catch(console.log); // eslint-disable-line no-console
 };
 
@@ -30,7 +30,8 @@ const createWindow = async () => {
         minHeight: 450,
         show: false,
         frame: false,
-        webPreferences: { nodeIntegration: true, webSecurity: false }
+        titleBarStyle: 'hiddenInset',
+        webPreferences: { nodeIntegration: true, webSecurity: false },
     });
 
     if (process.env.NODE_ENV !== 'production') {
@@ -41,7 +42,7 @@ const createWindow = async () => {
             url.format({
                 pathname: path.join(__dirname, 'index.html'),
                 protocol: 'file:',
-                slashes: true
+                slashes: true,
             })
         );
     }
@@ -60,7 +61,7 @@ const createWindow = async () => {
 };
 
 app.on('ready', () => {
-    app.setName('tune.');
+    app.name = 'tune.';
     checkSettings();
     createWindow();
 });

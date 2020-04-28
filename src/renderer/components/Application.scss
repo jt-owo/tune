@@ -1,0 +1,27 @@
+/* Application Stylesheet */
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    width: 100%;
+    overflow: hidden;
+}
+
+body {
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+#container {
+    width: 100%;
+    height: 100%;
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    user-select: none; /* removes ability to select text */
+}

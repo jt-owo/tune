@@ -1,6 +1,10 @@
 import { app, BrowserWindow } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
+import * as fs from 'fs';
+
+const settingsPath = `${app.getPath('userData')}/settings.json`;
+const defaultSettings = { path: '' };
 
 let win: BrowserWindow | null;
 
@@ -19,7 +23,15 @@ const createWindow = async () => {
         await installExtensions();
     }
 
-    win = new BrowserWindow({ width: 800, height: 600 });
+    win = new BrowserWindow({
+        width: 1280,
+        height: 720,
+        minWidth: 700,
+        minHeight: 450,
+        show: false,
+        frame: false,
+        webPreferences: { nodeIntegration: true, webSecurity: false }
+    });
 
     if (process.env.NODE_ENV !== 'production') {
         process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = '1'; // eslint-disable-line require-atomic-updates
@@ -40,12 +52,18 @@ const createWindow = async () => {
         });
     }
 
+    win.once('ready-to-show', win!.show);
+
     win.on('closed', () => {
         win = null;
     });
 };
 
-app.on('ready', createWindow);
+app.on('ready', () => {
+    app.setName('tune.');
+    checkSettings();
+    createWindow();
+});
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
@@ -58,3 +76,19 @@ app.on('activate', () => {
         createWindow();
     }
 });
+
+/**
+ * Checks if the settings file exists.
+ *
+ * If the file exists it will load the file into a global variable,
+ * if the file doesn't exist it will create a new one with the defaultSettings object
+ */
+function checkSettings() {
+    global.settings = defaultSettings;
+
+    if (!fs.existsSync(settingsPath)) {
+        fs.writeFileSync(settingsPath, JSON.stringify(defaultSettings));
+    } else {
+        global.settings = JSON.parse(fs.readFileSync(settingsPath).toString());
+    }
+}

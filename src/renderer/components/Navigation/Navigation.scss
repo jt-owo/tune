@@ -1,0 +1,87 @@
+/* Navigation Stylesheet */
+
+.nav-btn {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: bold;
+    padding: 5px 16px;
+    margin: 10px 15px;
+    border-radius: 6px;
+}
+
+#nav-bar {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(0, 0, 0);
+    border-radius: 6px;
+    box-shadow: 3px 5px 5px 5px rgb(7, 7, 7);
+    min-height: 580px; // TODO: Replace this with a dyanmic height
+}
+
+#nav-bar > :last-child {
+    margin-top: auto;
+}
+
+#nav-bar-div {
+    width: 180px;
+    float: left;
+    margin: 20px 0 0 20px;
+}
+
+#nav-bar-logo {
+    max-width: 100px;
+    padding: 5px 5px 0px 38px;
+    margin: 5px 5px 5px 5px;
+}
+
+#home-btn {
+    color: rgb(255, 255, 255);
+}
+
+#library-btn {
+    /* background-image: linear-gradient(to bottom right, rgb(255, 60, 0), rgb(255, 208, 0)); */
+    color: rgb(255, 255, 255);
+}
+
+#browse-btn {
+    /* background-image: linear-gradient(to bottom right, rgb(163, 233, 0), rgb(0, 233, 97)); */
+    color: rgb(255, 255, 255);
+}
+
+#settings-btn {
+    /* background-image: linear-gradient(to bottom right, rgb(163, 233, 0), rgb(0, 233, 97)); */
+    color: rgb(255, 255, 255);
+}
+
+#pinned-playlist-section {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    float: left;
+    margin-left: 20px;
+    color: rgb(199, 199, 199);
+    font-size: 11px;
+    font-weight: bold;
+    margin-top: 25px;
+}
+
+.btn-hover-animation {
+    transition: all 0.1s ease-in-out;
+    box-shadow: 4px 6px 10px -4px rgb(0, 0, 0);
+}
+
+.btn-hover-animation:hover {
+    background-color: rgb(66, 66, 66);
+}
+
+.active {
+    background-image: linear-gradient(to bottom right, rgb(0, 174, 255), rgb(183, 0, 255));
+}
+
+.active:hover {
+    box-shadow: 0px 0px 2px 3px rgb(66, 66, 66);
+}

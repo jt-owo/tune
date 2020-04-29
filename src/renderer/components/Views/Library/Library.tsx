@@ -1,12 +1,17 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
 
 import PageHeading from '../../PageHeading/PageHeading';
 
 import './Library.scss';
 
-class Library extends React.Component {
+class Library extends React.Component<any> {
     componentDidMount() {
         // TODO: Add library functionality
+    }
+
+    componentDidUpdate() {
+        // console.log(this.props.player.status);
     }
 
     render() {
@@ -18,4 +23,10 @@ class Library extends React.Component {
     }
 }
 
-export default Library;
+const mapStateToProps = (state: any) => {
+    return {
+        player: state.player,
+    };
+};
+
+export default connect(mapStateToProps)(Library);

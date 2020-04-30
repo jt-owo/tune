@@ -2,6 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 
 import PageHeading from '../../PageHeading/PageHeading';
+import DropArea from '../../DropArea/DropArea';
 
 import './Library.scss';
 
@@ -18,6 +19,7 @@ class Library extends React.Component<any> {
         return (
             <div id="library-container">
                 <PageHeading title="Library" />
+                <DropArea>{/* TODO: insert playlist here */}</DropArea>
             </div>
         );
     }

@@ -1,5 +1,9 @@
 /* Navigation Stylesheet */
 
+* {
+    box-sizing: border-box;
+}
+
 .nav-btn {
     display: block;
     text-align: center;
@@ -7,11 +11,16 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-weight: bold;
     padding: 5px 16px;
-    margin: 10px 15px;
+    margin: 5px 15px;
     border-radius: 6px;
 }
 
 #nav-bar {
+    position: absolute;
+    top: 40px;
+    bottom: 100px;
+    left: 20px;
+    width: 180px;
     list-style-type: none;
     margin: 0;
     padding: 0;
@@ -20,24 +29,20 @@
     flex-direction: column;
     background-color: rgb(0, 0, 0);
     border-radius: 6px;
-    box-shadow: 3px 5px 5px 5px rgb(7, 7, 7);
-    min-height: 580px; // TODO: Replace this with a dyanmic height
+    box-shadow: 3px 3px 3px 3px rgb(4, 4, 4);
 }
 
 #nav-bar > :last-child {
     margin-top: auto;
 }
 
-#nav-bar-div {
-    width: 180px;
-    float: left;
-    margin: 20px 0 0 20px;
-}
-
 #nav-bar-logo {
-    max-width: 100px;
-    padding: 5px 5px 0px 38px;
-    margin: 5px 5px 5px 5px;
+    max-width: 50%;
+    display: block;
+    margin: auto;
+    margin-bottom: 20px;
+    padding-top: 20px;
+    padding-left: 10px;
 }
 
 #home-btn {
@@ -71,7 +76,6 @@
 
 .btn-hover-animation {
     transition: all 0.1s ease-in-out;
-    box-shadow: 4px 6px 10px -4px rgb(0, 0, 0);
 }
 
 .btn-hover-animation:hover {

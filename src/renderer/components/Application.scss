@@ -31,5 +31,6 @@ body {
 }
 
 #macos-titlebar {
-    height: 15px;
+    height: 35px;
+    -webkit-app-region: drag;
 }

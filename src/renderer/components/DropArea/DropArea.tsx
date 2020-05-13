@@ -26,6 +26,7 @@ class DropArea extends React.Component<any> {
     };
 
     dragOver = (e: DragEvent) => {
+        // FIXME: File dropping not working with track list sorting because there are 2 dropOver events :/
         e.stopPropagation();
         e.preventDefault();
     };
@@ -45,8 +46,6 @@ class DropArea extends React.Component<any> {
                 path: e.dataTransfer?.files[0].path,
                 type: e.dataTransfer?.files[0].type,
             };
-
-            // console.log(file);
         }
     };
 

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import PageHeading from '../../PageHeading/PageHeading';
 import TrackList from '../../TrackList/TrackList';
+import Playlist from '../../Playlist/Playlist';
 import DropArea from '../../DropArea/DropArea';
 
 import './Library.scss';
@@ -20,9 +21,9 @@ class Library extends React.Component<any> {
         return (
             <div id="library-container">
                 <PageHeading title="Library" />
-                <DropArea>
-                    <TrackList />
-                </DropArea>
+                <DropArea> </DropArea>
+                <TrackList />
+                <Playlist />
             </div>
         );
     }

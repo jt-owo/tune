@@ -17,9 +17,9 @@ class TrackList extends React.Component<any, TrackListState> {
         items: ['Track [1]', 'Track [2]', 'Track [3]', 'Track [4]'],
     };
 
-    private draggedItem: any;
+    protected draggedItem: any;
 
-    private draggedIdx?: number;
+    protected draggedIdx?: number;
 
     UNSAFE_componentWillMount() {
         const songs: any = [];
@@ -37,41 +37,6 @@ class TrackList extends React.Component<any, TrackListState> {
     }
 
     /**
-     * Sets the current item to dragged and add drag effect
-     * @param {Event} e - Event Object to handle the drag
-     * @param {number} index - Number of the current items position in the list
-     */
-    onDragStart = (e: React.DragEvent, index: number) => {
-        this.draggedItem = this.state.items[index];
-        e.dataTransfer!.effectAllowed = 'move';
-        e.dataTransfer!.setData('text/html', 'test');
-    };
-
-    /**
-     * Handles the events when dragging with an item over another item
-     * @param {number} - Number of the current items position in the list
-     */
-    onDragOver = (index: number) => {
-        const draggedOverItem = this.state.items[index];
-
-        if (this.draggedItem === draggedOverItem) {
-            return;
-        }
-
-        const items = this.state.items.filter((item) => item !== this.draggedItem);
-        items.splice(index, 0, this.draggedItem);
-
-        this.setState({ items });
-    };
-
-    /**
-     * Handles the drop
-     */
-    onDragEnd = () => {
-        this.draggedIdx = undefined;
-    };
-
-    /**
      * Handles the click to start a song
      */
     startSong = (trackName: string) => {
@@ -82,15 +47,8 @@ class TrackList extends React.Component<any, TrackListState> {
         return (
             <div id="song-list-div">
                 <ul id="song-list">
-                    {this.state.items.map((item, idx) => (
-                        <li
-                            key={item}
-                            onDragOver={() => this.onDragOver(idx)}
-                            onDragStart={(e) => this.onDragStart(e, idx)}
-                            onDragEnd={this.onDragEnd}
-                            draggable>
-                            {item}
-                        </li>
+                    {this.state.items.map((item: string, idx: number) => (
+                        <li key={item}>{item}</li>
                     ))}
                 </ul>
             </div>

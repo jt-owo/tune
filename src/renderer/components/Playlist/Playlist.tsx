@@ -4,6 +4,7 @@ import * as React from 'react';
 import * as fs from 'fs';
 
 import TrackList from '../TrackList/TrackList';
+import Song from '../Song/Song';
 
 require('./Playlist.scss');
 
@@ -73,14 +74,15 @@ class Playlist extends TrackList {
             <div id="song-list-div">
                 <ul id="song-list">
                     {this.state.items.map((item, idx) => (
-                        <li
+                        <Song
                             key={item}
-                            onDragOver={() => this.onDragOver(idx)}
-                            onDragStart={(e) => this.onDragStart(e, idx)}
+                            item={item}
+                            idx={idx}
+                            onDragOver={this.onDragOver}
+                            onDragStart={this.onDragStart}
                             onDragEnd={this.onDragEnd}
-                            draggable>
-                            {item} 1
-                        </li>
+                            startSong={this.startSong}
+                            />
                     ))}
                 </ul>
             </div>

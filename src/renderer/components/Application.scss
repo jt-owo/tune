@@ -1,5 +1,7 @@
 /* Application Stylesheet */
 
+@import '../colors.scss';
+
 * {
     margin: 0;
     padding: 0;
@@ -12,7 +14,8 @@ body {
 }
 
 html {
-    background-color: rgb(27, 27, 33);
+    background-color: $main-color;
+    color: $font-color;
 }
 
 body {

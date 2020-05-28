@@ -21,7 +21,7 @@ function LoadTitleBar() {
 }
 
 const Application = () => (
-    <div id="container">
+    <div id="app-container">
         <LoadTitleBar />
         <Router>
             <div>

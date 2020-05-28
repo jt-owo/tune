@@ -17,8 +17,8 @@ export interface Props {
 
 const Player: React.FunctionComponent<Props> = ({ playPause }) => {
     return (
-        <div id="audio-player-div">
-            <div id="audio-player-controls">
+        <div id="player-container">
+            <div id="player-controls-container">
                 <img src={appleMusicIcon} alt="appleMusicLogo" className="player-icon-service" />
                 <img src={nextIcon} alt="previousTrack" className="player-control-icons" />
                 <img

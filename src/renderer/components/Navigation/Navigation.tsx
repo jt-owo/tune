@@ -6,7 +6,7 @@ import './Navigation.scss';
 import logo from '../../../../resources/images/logo.png';
 
 const Navigation: React.FunctionComponent<any> = () => (
-    <nav id="nav-bar-div">
+    <nav id="nav-bar-container">
         <ul id="nav-bar">
             <li>
                 <img src={logo} alt="logo" id="nav-bar-logo" draggable="false" />

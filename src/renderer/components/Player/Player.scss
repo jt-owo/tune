@@ -1,18 +1,4 @@
-/* Player Stylesheet */
-
-.player-icon-service {
-    max-height: 20px;
-    margin: 18px 0 0 20px;
-    float: left;
-}
-
-.player-control-icons {
-    max-height: 30px;
-    margin: 16px 20px 0 0px;
-    float: right;
-}
-
-#audio-player-div {
+#player-container {
     position: absolute;
     bottom: 20px;
     left: 20px;
@@ -24,7 +10,14 @@
     box-shadow: 5px 5px 5px 0px rgb(8, 8, 8);
 }
 
-#audio-player {
-    width: 100%;
+.player-icon-service {
+    max-height: 20px;
+    margin: 18px 0 0 20px;
     float: left;
+}
+
+.player-control-icons {
+    max-height: 30px;
+    margin: 16px 20px 0 0px;
+    float: right;
 }

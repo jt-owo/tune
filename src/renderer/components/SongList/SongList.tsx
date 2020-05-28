@@ -3,17 +3,59 @@
 import * as React from 'react';
 import * as fs from 'fs';
 
-import TrackList from '../TrackList/TrackList';
-import Song from '../Song/Song';
+import Song, { SongObject } from '../Song/Song';
 
-require('./Playlist.scss');
+require('./SongList.scss');
+
+interface SongListState {
+    items: Array<SongObject>;
+}
 
 const electron = window.require('electron');
-const localPath = electron.remote.getGlobal('settings').path;
 
-class Playlist extends TrackList {
+class SongList extends React.Component<any, SongListState> {
+    state: SongListState = {
+        items: [
+            {
+                ID: 1,
+                title: 'Track [1]',
+                artist: 'Band',
+                album: 'Album',
+                genre: 'Genre',
+                year: 2019,
+                artwork: 'pathToImage',
+                duration: 600,
+            },
+            {
+                ID: 2,
+                title: 'Track [2]',
+                artist: 'Band',
+                album: 'Album',
+                genre: 'Genre',
+                year: 2019,
+                artwork: 'pathToImage',
+                duration: 600,
+            },
+            {
+                ID: 3,
+                title: 'Track [3]',
+                artist: 'Band',
+                album: 'Album',
+                genre: 'Genre',
+                year: 2019,
+                artwork: 'pathToImage',
+                duration: 600,
+            },
+        ],
+    };
+
+    private draggedItem: any;
+
+    private draggedIndex?: number;
+
     UNSAFE_componentWillMount() {
         const songs: any = [];
+        const localPath = '';
         if (localPath !== '') {
             fs.readdirSync(localPath).forEach((file) => {
                 if (
@@ -59,23 +101,23 @@ class Playlist extends TrackList {
      * Handles the drop
      */
     onDragEnd = () => {
-        this.draggedIdx = undefined;
+        this.draggedIndex = undefined;
     };
 
     /**
      * Handles the click to start a song
      */
-    startSong = (trackName: string) => {
-        const track = `${localPath}${trackName}.mp3`;
+    startSong = (songName: string) => {
+        // TODO: Implement
     };
 
     render() {
         return (
-            <div id="song-list-div">
+            <div id="song-list-container">
                 <ul id="song-list">
                     {this.state.items.map((item, idx) => (
                         <Song
-                            key={item}
+                            key={item.ID}
                             item={item}
                             idx={idx}
                             onDragOver={this.onDragOver}
@@ -90,4 +132,4 @@ class Playlist extends TrackList {
     }
 }
 
-export default Playlist;
+export default SongList;

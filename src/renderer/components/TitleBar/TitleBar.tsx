@@ -13,11 +13,8 @@ class TitleBar extends React.Component {
     };
 
     maximize = () => {
-        if (!win.isMaximized()) {
-            win.maximize();
-        } else {
-            win.unmaximize();
-        }
+        if (!win.isMaximized()) win.maximize();
+        else win.unmaximize();
     };
 
     close = () => {

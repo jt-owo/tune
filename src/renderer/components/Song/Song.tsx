@@ -4,6 +4,17 @@ import * as React from 'react';
 
 require('./Song.scss');
 
+export interface SongObject {
+    ID: number;
+    title: string;
+    artist: string;
+    album: string;
+    genre: string;
+    year: number;
+    artwork: string;
+    duration: number;
+}
+
 class Song extends React.Component<any> {
     onDragStart = (e: React.DragEvent, index: number) => {
         this.props.onDragStart(e, index);
@@ -24,16 +35,18 @@ class Song extends React.Component<any> {
     render() {
         return (
             <li
-                className="track"
-                key={this.props.item}
-                onDragOver={() => this.onDragOver(this.props.idx)}
+                className="song"
+                key={this.props.item.ID}
+                onDragOver={(e) => this.onDragOver(this.props.idx)}
                 onClick={(e) => this.startSong(this.props.item)}>
                 <div
                     className="drag"
                     draggable
                     onDragStart={(e) => this.onDragStart(e, this.props.idx)}
                     onDragEnd={this.onDragEnd}>
-                    <span className="content">{this.props.item}</span>
+                    <span className="content">
+                        {this.props.item.artist} - {this.props.item.title}
+                    </span>
                 </div>
             </li>
         );

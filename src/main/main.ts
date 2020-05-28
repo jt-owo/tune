@@ -3,8 +3,11 @@ import * as path from 'path';
 import * as url from 'url';
 import * as fs from 'fs';
 
+const MIN_WIDTH = 700;
+const MIN_HEIGHT = 450;
+
 const settingsPath = `${app.getPath('userData')}/settings.json`;
-const defaultSettings = { path: '' };
+const defaultSettings = { dummy: '' };
 
 let win: BrowserWindow | null;
 
@@ -26,8 +29,8 @@ const createWindow = async () => {
     win = new BrowserWindow({
         width: 1280,
         height: 720,
-        minWidth: 700,
-        minHeight: 450,
+        minWidth: MIN_WIDTH,
+        minHeight: MIN_HEIGHT,
         show: false,
         frame: false,
         titleBarStyle: 'hiddenInset',
@@ -81,8 +84,7 @@ app.on('activate', () => {
 /**
  * Checks if the settings file exists.
  *
- * If the file exists it will load the file into a global variable,
- * if the file doesn't exist it will create a new one with the defaultSettings object
+ * The JSON file will be loaded into a global variable or the file will be created
  */
 function checkSettings() {
     global.settings = defaultSettings;

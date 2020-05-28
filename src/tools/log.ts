@@ -6,7 +6,7 @@ const pkgJSON = require('../../package.json');
 const logDir = `${app.getPath('userData')}/logs`;
 const logFile = `${logDir}/log.txt`;
 
-export enum Types {
+export enum LogType {
     INFO = 'INFO',
     WARN = 'WARN',
     ERROR = 'ERROR',
@@ -33,7 +33,7 @@ export function init() {
     stream.write(versions);
     stream.end();
 
-    log('INIT', 'LOG FILE CREATED', Types.INFO);
+    log('INIT', 'LOG FILE CREATED', LogType.INFO);
 }
 
 /**
@@ -42,7 +42,7 @@ export function init() {
  * @param {string} msg - Log mesasge.
  * @param {Types} type - Type of the log.
  */
-export function log(name: string, msg: string, type: Types): boolean {
+export function log(name: string, msg: string, type: LogType): boolean {
     if (!fs.existsSync(logFile)) {
         return false;
     }

@@ -2,7 +2,11 @@ import * as React from 'react';
 
 import './PageHeading.scss';
 
-const PageHeading: React.FunctionComponent<any> = (props) => (
+interface PageHeadingProps {
+    title: string;
+}
+
+const PageHeading: React.FunctionComponent<PageHeadingProps> = (props) => (
     <div id="page-heading">{props.title}</div>
 );
 

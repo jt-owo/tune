@@ -3,11 +3,11 @@ import { Reducer } from 'redux';
 import { PLAY_PAUSE, PlayerAction } from '../actions/playerActions';
 
 export interface PlayerState {
-    readonly status: string;
+    readonly playing: boolean;
 }
 
 const defaultState: PlayerState = {
-    status: 'paused',
+    playing: false,
 };
 
 export const playerReducer: Reducer<PlayerState> = (state = defaultState, action: PlayerAction) => {
@@ -15,7 +15,7 @@ export const playerReducer: Reducer<PlayerState> = (state = defaultState, action
         case PLAY_PAUSE:
             return {
                 ...state,
-                status: state.status === 'paused' ? 'playing' : 'paused',
+                playing: !state.playing,
             };
         default:
             return state;

@@ -9,13 +9,13 @@ import previousIcon from '../../../../resources/icons/previous-track-white.png';
 import playIcon from '../../../../resources/icons/play-white.png';
 import nextIcon from '../../../../resources/icons/next-track-white.png';
 
-export interface Props {
-    status: string;
+export interface PlayerProps {
+    playing: boolean;
 
-    playPause: () => any;
+    playPause: () => void;
 }
 
-const Player: React.FunctionComponent<Props> = ({ playPause }) => {
+const Player: React.FunctionComponent<PlayerProps> = ({ playPause }) => {
     return (
         <div id="player-container">
             <div id="player-controls-container">

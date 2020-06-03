@@ -11,8 +11,6 @@ interface SongListState {
     items: Array<SongObject>;
 }
 
-const electron = window.require('electron');
-
 class SongList extends React.Component<any, SongListState> {
     state: SongListState = {
         items: [
@@ -71,7 +69,7 @@ class SongList extends React.Component<any, SongListState> {
 
     /**
      * Sets the current item to dragged and add drag effect
-     * @param {Event} e - Event Object to handle the drag
+     * @param {React.DragEvent} e - Event Object to handle the drag
      * @param {number} index - Number of the current items position in the list
      */
     onDragStart = (e: React.DragEvent, index: number) => {
@@ -107,7 +105,7 @@ class SongList extends React.Component<any, SongListState> {
     /**
      * Handles the click to start a song
      */
-    startSong = (songName: string) => {
+    startSong = (song: SongObject) => {
         // TODO: Implement
     };
 
@@ -115,11 +113,11 @@ class SongList extends React.Component<any, SongListState> {
         return (
             <div id="song-list-container">
                 <ul id="song-list">
-                    {this.state.items.map((item, idx) => (
+                    {this.state.items.map((song: SongObject, index: number) => (
                         <Song
-                            key={item.ID}
-                            item={item}
-                            idx={idx}
+                            key={song.ID}
+                            song={song}
+                            index={index}
                             onDragOver={this.onDragOver}
                             onDragStart={this.onDragStart}
                             onDragEnd={this.onDragEnd}

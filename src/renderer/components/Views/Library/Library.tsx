@@ -1,18 +1,19 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
+import { RootState } from '../../../reducers';
 
 import PageHeading from '../../PageHeading/PageHeading';
 import SongList from '../../SongList/SongList';
 
 import './Library.scss';
 
-class Library extends React.Component<any> {
-    componentDidMount() {
-        // TODO: Add library functionality
-    }
+interface LibraryProps {
+    playing: boolean;
+}
 
+class Library extends React.Component<LibraryProps> {
     componentDidUpdate() {
-        // console.log(this.props.player.status);
+        // console.log(this.props.playing);
     }
 
     render() {
@@ -25,9 +26,9 @@ class Library extends React.Component<any> {
     }
 }
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: RootState) => {
     return {
-        player: state.player,
+        playing: state.player.playing,
     };
 };
 

@@ -7,16 +7,20 @@ import Song, { SongObject } from '../Song/Song';
 
 require('./SongList.scss');
 
-interface SongListState {
-    items: Array<SongObject>;
+interface SongListProps {
+    list?: Array<SongObject>;
 }
 
-class SongList extends React.Component<any, SongListState> {
+interface SongListState {
+    list: Array<SongObject>;
+}
+
+class SongList extends React.Component<SongListProps, SongListState> {
     state: SongListState = {
-        items: [
+        list: [
             {
                 ID: 1,
-                title: 'Track [1]',
+                title: 'Track',
                 artist: 'Band',
                 album: 'Album',
                 genre: 'Genre',
@@ -26,7 +30,7 @@ class SongList extends React.Component<any, SongListState> {
             },
             {
                 ID: 2,
-                title: 'Track [2]',
+                title: 'Track',
                 artist: 'Band',
                 album: 'Album',
                 genre: 'Genre',
@@ -36,7 +40,7 @@ class SongList extends React.Component<any, SongListState> {
             },
             {
                 ID: 3,
-                title: 'Track [3]',
+                title: 'Track',
                 artist: 'Band',
                 album: 'Album',
                 genre: 'Genre',
@@ -51,19 +55,10 @@ class SongList extends React.Component<any, SongListState> {
 
     private draggedIndex?: number;
 
-    UNSAFE_componentWillMount() {
-        const songs: any = [];
-        const localPath = '';
-        if (localPath !== '') {
-            fs.readdirSync(localPath).forEach((file) => {
-                if (
-                    file.substring(file.length - 4) === '.mp3' ||
-                    file.substring(file.length - 5) === '.flac'
-                ) {
-                    songs.push(file.slice(0, -4));
-                }
-            });
-            this.setState({ items: songs });
+    constructor(props: SongListProps) {
+        super(props);
+        if (this.props.list !== undefined) {
+            this.state.list = this.props.list;
         }
     }
 
@@ -73,9 +68,9 @@ class SongList extends React.Component<any, SongListState> {
      * @param {number} index - Number of the current items position in the list
      */
     onDragStart = (e: React.DragEvent, index: number) => {
-        this.draggedItem = this.state.items[index];
+        this.draggedItem = this.state.list[index];
         e.dataTransfer!.effectAllowed = 'move';
-        e.dataTransfer!.setData('text/html', 'test');
+        e.dataTransfer!.setData('text/html', 'drag');
     };
 
     /**
@@ -83,16 +78,16 @@ class SongList extends React.Component<any, SongListState> {
      * @param {number} - Number of the current items position in the list
      */
     onDragOver = (index: number) => {
-        const draggedOverItem = this.state.items[index];
+        const draggedOverItem = this.state.list[index];
 
         if (this.draggedItem === draggedOverItem) {
             return;
         }
 
-        const items = this.state.items.filter((item) => item !== this.draggedItem);
-        items.splice(index, 0, this.draggedItem);
+        const list = this.state.list.filter((song) => song !== this.draggedItem);
+        list.splice(index, 0, this.draggedItem);
 
-        this.setState({ items });
+        this.setState({ list });
     };
 
     /**
@@ -113,7 +108,7 @@ class SongList extends React.Component<any, SongListState> {
         return (
             <div id="song-list-container">
                 <ul id="song-list">
-                    {this.state.items.map((song: SongObject, index: number) => (
+                    {this.state.list.map((song: SongObject, index: number) => (
                         <Song
                             key={song.ID}
                             song={song}

@@ -8,7 +8,7 @@ import PlayerContainer from '../containers/PlayerContainer';
 
 import Home from './Views/Home/Home';
 import Browse from './Views/Browse/Browse';
-import Library from './Views/Library/Library';
+import LibraryContainer from '../containers/LibraryContainer';
 import Settings from './Views/Settings/Settings';
 
 import './Application.scss';
@@ -29,7 +29,7 @@ const Application = () => (
                 <Switch>
                     <Route path="/home" component={Home} exact />
                     <Route path="/browse" component={Browse} exact />
-                    <Route path="/library" component={Library} exact />
+                    <Route path="/library" component={LibraryContainer} exact />
                     <Route path="/settings" component={Settings} exact />
                 </Switch>
             </div>

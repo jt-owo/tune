@@ -1,35 +1,45 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { RootState } from '../../../reducers';
+import { Dispatch } from 'redux';
+import { SongObject } from '../../Song/Song';
 
 import PageHeading from '../../PageHeading/PageHeading';
 import SongList from '../../SongList/SongList';
 
 import './Library.scss';
+import { PlayerState } from '../../../reducers/playerReducer';
 
 interface LibraryProps {
-    playing: boolean;
+    player: PlayerState;
+
+    addToQueue: (song: SongObject) => void;
 }
 
-class Library extends React.Component<LibraryProps> {
+interface LibraryState {
+    queue: Array<SongObject>;
+}
+
+class Library extends React.Component<LibraryProps, LibraryState> {
     componentDidUpdate() {
-        // console.log(this.props.playing);
+        console.log(this.props.player.queue);
     }
+
+    testQueue = () => {
+        for (let index = 0; index < 10; index += 1) {
+            this.props.addToQueue({ ID: index, title: 'Track', artist: 'Band' });
+        }
+    };
 
     render() {
         return (
             <div id="library-container">
                 <PageHeading title="Library" />
                 <SongList />
+                <SongList list={this.props.player.queue} />
+                <button onClick={this.testQueue}>TEST QUEUE</button>
             </div>
         );
     }
 }
 
-const mapStateToProps = (state: RootState) => {
-    return {
-        playing: state.player.playing,
-    };
-};
-
-export default connect(mapStateToProps)(Library);
+export default Library;

@@ -64,7 +64,7 @@ class Song extends React.Component<SongProps> {
                     onDragStart={(e) => this.onDragStart(e, this.props.index)}
                     onDragEnd={this.onDragEnd}>
                     <span className="content">
-                        {this.props.song.artist} - {this.props.song.title}
+                        {this.props.song.artist} - {this.props.song.title} [{this.props.song.ID}]
                     </span>
                 </div>
             </li>

@@ -3,12 +3,14 @@
 import * as React from 'react';
 import * as fs from 'fs';
 
-import Song, { SongObject } from '../Song/Song';
+import Song from '../Song/Song';
+import { ListType, SongObject } from '../../../types/DataTypes';
 
 require('./SongList.scss');
 
 interface SongListProps {
     list?: Array<SongObject>;
+    type?: ListType;
 }
 
 interface SongListState {
@@ -117,6 +119,7 @@ class SongList extends React.Component<SongListProps, SongListState> {
                             onDragStart={this.onDragStart}
                             onDragEnd={this.onDragEnd}
                             startSong={this.startSong}
+                            type={this.props.type}
                             />
                     ))}
                 </ul>

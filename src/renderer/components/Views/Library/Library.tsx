@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { SongObject } from '../../Song/Song';
+import { PlayerState } from '../../../reducers/playerReducer';
+import { ListType, SongObject } from '../../../../types/DataTypes';
 
 import PageHeading from '../../PageHeading/PageHeading';
 import SongList from '../../SongList/SongList';
 
 import './Library.scss';
-import { PlayerState } from '../../../reducers/playerReducer';
 
 interface LibraryProps {
     player: PlayerState;
@@ -21,7 +21,7 @@ interface LibraryState {
 
 class Library extends React.Component<LibraryProps, LibraryState> {
     componentDidUpdate() {
-        console.log(this.props.player.queue);
+        // console.log(this.props.player.queue);
     }
 
     testQueue = () => {
@@ -35,7 +35,7 @@ class Library extends React.Component<LibraryProps, LibraryState> {
             <div id="library-container">
                 <PageHeading title="Library" />
                 <SongList />
-                <SongList list={this.props.player.queue} />
+                <SongList list={this.props.player.queue} type={ListType.QUEUE} />
                 <button onClick={this.testQueue}>TEST QUEUE</button>
             </div>
         );

@@ -1,29 +1,19 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import * as React from 'react';
+import { ListType, SongObject } from '../../../types/DataTypes';
 
 require('./Song.scss');
 
-export interface SongObject {
-    ID: number;
-    title?: string;
-    artist?: string;
-    album?: string;
-    genre?: string;
-    year?: number;
-    artwork?: string;
-    duration?: number;
-    src?: string;
-}
-
 interface SongProps {
+    song: SongObject;
+    index: number;
+    showOnly?: boolean;
+    type?: ListType;
     onDragStart: (e: React.DragEvent, index: number) => void;
     onDragOver: (index: number) => void;
     onDragEnd: () => void;
     startSong: (song: SongObject) => void;
-    song: SongObject;
-    index: number;
-    showOnly?: boolean;
 }
 
 class Song extends React.Component<SongProps> {

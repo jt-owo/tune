@@ -1,6 +1,6 @@
 import { Reducer } from 'redux';
 
-import { SongObject } from '../components/Song/Song';
+import { SongObject } from '../../types/DataTypes';
 
 import { PLAY_PAUSE, ADD_TO_QUEUE, PlayerAction } from '../actions/playerActions';
 

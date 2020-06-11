@@ -1,5 +1,5 @@
 import { Action, ActionCreator } from 'redux';
-import { SongObject } from '../components/Song/Song';
+import { SongObject } from '../../types/DataTypes';
 
 export const PLAY_PAUSE = 'PLAY_PAUSE';
 export const ADD_TO_QUEUE = 'ADD_TO_QUEUE';

@@ -4,7 +4,7 @@ import { RootState } from '../reducers';
 
 import Library from '../components/Views/Library/Library';
 import { PlayerAction, addToQueue } from '../actions/playerActions';
-import { SongObject } from '../components/Song/Song';
+import { SongObject } from '../../types/DataTypes';
 
 const mapStateToProps = (state: RootState) => {
     return {

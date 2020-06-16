@@ -1,6 +1,6 @@
 import { hot } from 'react-hot-loader/root';
 import * as React from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 
 import TitleBar from './TitleBar/TitleBar';
 import Navigation from './Navigation/Navigation';
@@ -31,6 +31,7 @@ const Application = () => (
                     <Route path="/browse" component={Browse} exact />
                     <Route path="/library" component={LibraryContainer} exact />
                     <Route path="/settings" component={Settings} exact />
+                    <Redirect to="/home" />
                 </Switch>
             </div>
         </Router>

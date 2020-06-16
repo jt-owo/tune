@@ -1,6 +1,6 @@
 /* Application Stylesheet */
 
-@import '../colors.scss';
+@import '../../../resources/styles/colors.scss';
 
 * {
     margin: 0;
@@ -14,8 +14,8 @@ body {
 }
 
 html {
-    background-color: $main-color;
-    color: $font-color;
+    background-color: $second-color;
+    color: $primary-font-color;
 }
 
 body {

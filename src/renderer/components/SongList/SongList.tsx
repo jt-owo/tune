@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import * as React from 'react';
+import { Console } from '../../../tools/log';
 import { ListType, SongObject } from '../../../types/DataTypes';
 
 import Song from '../Song/Song';
@@ -106,7 +107,7 @@ class SongList extends React.Component<SongListProps, SongListState> {
     };
 
     removeFromQueue = (index: number) => {
-        // console.log(`Removing index [${index}] from List`);
+        Console.info('SONGLIST', `Removing Index [${index}] from list`);
     };
 
     render() {

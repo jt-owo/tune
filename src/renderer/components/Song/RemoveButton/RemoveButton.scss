@@ -1,0 +1,11 @@
+.removeButton {
+    position: absolute;
+    right: 10px;
+    font-weight: bold;
+    color: #fff;
+    transition: color 0.2s;
+}
+
+.removeButton:hover {
+    color: #f04747;
+}

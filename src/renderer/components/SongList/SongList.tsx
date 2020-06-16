@@ -1,10 +1,9 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import * as React from 'react';
-import * as fs from 'fs';
+import { ListType, SongObject } from '../../../types/DataTypes';
 
 import Song from '../Song/Song';
-import { ListType, SongObject } from '../../../types/DataTypes';
 
 require('./SongList.scss');
 
@@ -106,21 +105,31 @@ class SongList extends React.Component<SongListProps, SongListState> {
         // TODO: Implement
     };
 
+    removeFromQueue = (index: number) => {
+        // console.log(`Removing index [${index}] from List`);
+    };
+
     render() {
         return (
             <div id="song-list-container">
                 <ul id="song-list">
                     {this.state.list.map((song: SongObject, index: number) => (
-                        <Song
+                        <li
+                            className="song drag"
                             key={song.ID}
-                            song={song}
-                            index={index}
-                            onDragOver={this.onDragOver}
-                            onDragStart={this.onDragStart}
+                            onDragOver={() => this.onDragOver(index)}
+                            onClick={() => this.startSong(song)}
+                            onDragStart={(e) => this.onDragStart(e, index)}
                             onDragEnd={this.onDragEnd}
-                            startSong={this.startSong}
-                            type={this.props.type}
-                            />
+                            draggable>
+                            <Song
+                                key={song.ID}
+                                song={song}
+                                index={index}
+                                type={this.props.type}
+                                removeFromQueue={this.removeFromQueue}
+                                />
+                        </li>
                     ))}
                 </ul>
             </div>

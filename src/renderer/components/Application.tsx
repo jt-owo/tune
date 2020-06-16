@@ -12,6 +12,7 @@ import LibraryContainer from '../containers/LibraryContainer';
 import Settings from './Views/Settings/Settings';
 
 import './Application.scss';
+import SongQueue from './SongQueue/SongQueue';
 
 function LoadTitleBar() {
     if (process.platform !== 'darwin') {
@@ -36,6 +37,7 @@ const Application = () => (
             </div>
         </Router>
         <PlayerContainer />
+        <SongQueue />
     </div>
 );
 

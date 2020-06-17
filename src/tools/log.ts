@@ -80,9 +80,9 @@ export class Console {
         const stream = fs.createWriteStream(this.LOG_FILE_PATH, { flags: 'a' });
 
         const tuneVer = `PROGRAM VERSION: ${pkgJSON.version}`;
-        const electronVer = `\nELECTRON VERSION: ${process.versions.electron}`;
-        const nodeVer = `\nNODE VERSION: ${process.version}`;
-        const versions = tuneVer + electronVer + nodeVer;
+        const electronVer = `ELECTRON VERSION: ${process.versions.electron}`;
+        const nodeVer = `NODE VERSION: ${process.version}`;
+        const versions = `${tuneVer}\n${electronVer}\n${nodeVer}`;
 
         stream.write(versions);
         stream.end();
@@ -92,9 +92,9 @@ export class Console {
 
     /**
      * Writes a new line in the log document.
-     * @param {string} name - Name of the component where the log function was called.
-     * @param {string} msg - Log mesasge.
-     * @param {Types} type - Type of the log.
+     * @param name - Name of the component where the log function was called.
+     * @param msg - Log mesasge.
+     * @param type - Type of the log.
      */
     private static writeToFile(name: string, msg: string, type: LogType): boolean {
         if (!fs.existsSync(this.LOG_FILE_PATH)) {

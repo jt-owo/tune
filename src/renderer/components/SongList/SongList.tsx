@@ -60,7 +60,7 @@ class SongList extends React.Component<SongListProps, SongListState> {
     constructor(props: SongListProps) {
         super(props);
         if (this.props.list !== undefined) {
-            this.state.list = this.props.list;
+            this.setState({ list: this.props.list });
         }
     }
 
@@ -107,7 +107,7 @@ class SongList extends React.Component<SongListProps, SongListState> {
     };
 
     removeFromQueue = (index: number) => {
-        Console.info('SONGLIST', `Removing Index [${index}] from list`);
+        Console.info('SONGLIST', `Removing Element[${index}] from list`);
     };
 
     render() {

@@ -14,7 +14,6 @@ export enum LogType {
 /**
  * Console logging class
  * Every log function will also write the same log in the log file.
- * Please use this if you want to log something to the console.
  */
 export class Console {
     private static LOG_DIR_PATH = `${app.getPath('userData')}/logs`;
@@ -24,8 +23,8 @@ export class Console {
     /**
      * Emits a warning message in the console and writes a new line in the log file.
      * @param className - The name where the function is called.
-     * @param message - The log messe.
-     * @param data - Any kind of data (variables, objects, etc...).
+     * @param message - The log message.
+     * @param data - Any kind of data (objects, etc...).
      */
     public static warn(className: string, message: string, ...data: any[]): void {
         this.emitLog(className, message, data, LogType.WARN);
@@ -34,8 +33,8 @@ export class Console {
     /**
      * Emits an error message in the console and writes a new line in the log file.
      * @param className - The name where the function is called.
-     * @param message - The log messe.
-     * @param data - Any kind of data (variables, objects, etc...).
+     * @param message - The log message.
+     * @param data - Any kind of data (objects, etc...).
      */
     public static error(className: string, message: string, ...data: any[]): void {
         this.emitLog(className, message, data, LogType.ERROR);
@@ -44,8 +43,8 @@ export class Console {
     /**
      * Emits an info message in the console and writes a new line in the log file.
      * @param className - The name where the function is called.
-     * @param message - The log messe.
-     * @param data - Any kind of data (variables, objects, etc...).
+     * @param message - The log message.
+     * @param data - Any kind of data (objects, etc...).
      */
     public static info(className: string, message: string, ...data: any[]): void {
         this.emitLog(className, message, data, LogType.INFO);

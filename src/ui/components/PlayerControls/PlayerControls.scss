@@ -1,0 +1,23 @@
+#player-container {
+	position: absolute;
+	bottom: 20px;
+	left: 15px;
+	right: 15px;
+	display: block;
+	height: 60px;
+	background: rgb(0, 0, 0);
+	border-radius: 10px;
+	box-shadow: 5px 5px 5px 0px rgb(8, 8, 8);
+}
+
+.player-icon-service {
+	max-height: 20px;
+	margin: 18px 0 0 20px;
+	float: left;
+}
+
+.player-control-icon {
+	max-height: 30px;
+	margin: 20px 20px 0 0px;
+	float: right;
+}

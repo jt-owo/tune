@@ -1,0 +1,27 @@
+# Log files
+logs
+*.log
+
+# Runtime files
+pids
+*.pid
+*.seed
+
+# Dev files
+.eslintcache
+webpack/
+*.ejs
+
+# Dependencies
+node_modules
+
+# Build files
+release/app/dist
+release/build
+
+# Temp files
+.DS_Store
+.idea
+npm-debug.log.*
+*.css.d.ts
+*.scss.d.ts

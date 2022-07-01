@@ -1,0 +1,29 @@
+$DEBUG: true;
+$queue-width: 90px;
+$nav-width: 205px;
+
+#library-container {
+	display: flex;
+	flex-flow: row;
+}
+
+.content {
+	flex: 1 1 auto;
+}
+
+.placeholder {
+	&.nav {
+		flex: 0 1 $nav-width;
+		min-height: 100%;
+	}
+
+	&.queue {
+		flex: 0 1 $queue-width;
+		min-height: 100%;
+	}
+
+	@if $DEBUG {
+		border: 1px dotted white;
+		background-color: white;
+	}
+}

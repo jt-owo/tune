@@ -1,0 +1,40 @@
+@import '../../styles/colors';
+
+@font-face {
+	font-family: FredokaOne;
+	src: url('../../../../assets/fonts/FredokaOne.ttf');
+}
+
+#view {
+	background-color: $floating-component-color;
+	position: absolute;
+	top: 40px;
+	bottom: 100px;
+	left: 210px;
+	right: 100px;
+	border-radius: 10px;
+	box-shadow: 3px 3px 3px 3px rgb(4, 4, 4);
+	overflow: hidden;
+}
+
+#view-heading {
+	box-sizing: border-box;
+	font-size: 50px;
+	font-family: FredokaOne;
+	color: rgb(255, 255, 255);
+	padding: 2px 0 0 20px;
+}
+
+#divider {
+	border-top: 4px solid rgb(43, 43, 43);
+	border-radius: 10px;
+	margin-top: 5px;
+	position: absolute;
+	left: 15px;
+	right: 15px;
+}
+
+.view-content {
+	padding-top: 15px;
+	padding-left: 15px;
+}

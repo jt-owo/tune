@@ -1,0 +1,17 @@
+{
+	"name": "tune",
+	"version": "1.0.0",
+	"description": "Customizable Music Player",
+	"license": "GPL-3.0",
+	"author": {
+		"name": "jt-owo & tobytaken",
+		"url": "https://github.com/jt-owo"
+	},
+	"main": "./dist/main/main.js",
+	"scripts": {
+		"electron-rebuild": "node -r ts-node/register ../../webpack/scripts/electron-rebuild.js",
+		"postinstall": "npm run electron-rebuild && npm run link-modules",
+		"link-modules": "node -r ts-node/register ../../webpack/scripts/linkModules.ts"
+	},
+	"dependencies": {}
+}

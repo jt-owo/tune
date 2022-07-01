@@ -1,0 +1,42 @@
+@import './styles/colors';
+/*
+ * @NOTE: Prepend a `~` to css file paths that are in your node_modules
+ *        See https://github.com/webpack-contrib/sass-loader#imports
+ */
+
+* {
+	margin: 0;
+	box-sizing: border-box;
+	padding: 0;
+}
+
+html,
+body {
+	width: 100%;
+	overflow: hidden;
+}
+
+html {
+	background-color: $dark-gray-1;
+	color: $font-white;
+}
+
+body {
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+}
+
+#app-container {
+	width: 100%;
+	height: 100%;
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
+	user-select: none;
+}
+
+#macos-titlebar {
+	height: 35px;
+	-webkit-app-region: drag;
+}

@@ -5,7 +5,8 @@ module.exports = {
 		'react/react-in-jsx-scope': 'off',
 		'react/require-default-props': 'off',
 		'import/no-unresolved': 'error',
-		'import/no-extraneous-dependencies': 'off'
+		'import/no-extraneous-dependencies': 'off',
+		'import/no-named-as-default': 'off'
 	},
 	parserOptions: {
 		ecmaVersion: 2020,

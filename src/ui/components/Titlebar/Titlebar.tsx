@@ -1,5 +1,5 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/interactive-supports-focus */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import * as React from 'react';
 
 import './Titlebar.scss';
@@ -8,15 +8,15 @@ const Titlebar: React.FC = () => {
 	const title = document.querySelector('title');
 
 	const minimize = () => {
-		// window.electron.mainWindow.minimize();
+		window.electron.ipc.window.minimize();
 	};
 
 	const maximize = () => {
-		// window.electron.mainWindow.maximize();
+		window.electron.ipc.window.maximize();
 	};
 
 	const close = () => {
-		// window.electron.mainWindow.close();
+		window.electron.ipc.window.close();
 	};
 
 	return (

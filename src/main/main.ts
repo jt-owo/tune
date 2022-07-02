@@ -1,6 +1,8 @@
-/* eslint class-methods-use-this: off, @typescript-eslint/no-var-requires: off, global-require: off */
-import { app, ipcMain } from 'electron';
-import Window from './window';
+/* eslint @typescript-eslint/no-var-requires: off, global-require: off */
+import { App, app, IpcMain, ipcMain } from 'electron';
+import { IpcChannel } from './ipc/types';
+import { CloseWindowChannel, MinimizeWindowChannel, MaximizeWindowChannel } from './ipc/channels';
+import Window from './window/window';
 
 if (process.env.NODE_ENV === 'production') {
 	const sourceMapSupport = require('source-map-support');
@@ -14,36 +16,51 @@ if (isDebug) {
 }
 
 class Main {
+	/** Electron App instance */
+	private app: App;
+
+	/** Electron IpcMain instance */
+	private ipcMain: IpcMain;
+
+	/** Electron main window instance */
 	private mainWindow!: Window;
 
-	constructor() {
-		app.on('ready', () => {
+	constructor(_app: App, _ipcMain: IpcMain) {
+		this.app = _app;
+		this.ipcMain = _ipcMain;
+
+		this.app.on('ready', () => {
 			this.onReady();
 		});
 
-		app.on('window-all-closed', () => {
+		this.app.on('window-all-closed', () => {
 			this.onWindowAllClosed();
+		});
+
+		this.initIpc([new CloseWindowChannel(), new MinimizeWindowChannel(), new MaximizeWindowChannel()]);
+	}
+
+	/**
+	 * Initializes the {@link ipcMain} channels.
+	 * @param channels Channels to initialize.
+	 */
+	private initIpc(channels: IpcChannel[]) {
+		channels.forEach((channel) => {
+			this.ipcMain.on(channel.getName(), (event, request) => channel.handle(event, request));
 		});
 	}
 
 	private onReady() {
 		this.mainWindow = new Window();
 
-		app.on('activate', () => {
+		this.app.on('activate', () => {
 			this.onActivate();
-		});
-
-		ipcMain.on('ipc-example', async (event, arg) => {
-			const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
-			// eslint-disable-next-line no-console
-			console.log(msgTemplate(arg));
-			event.reply('ipc-example', msgTemplate('pong'));
 		});
 	}
 
 	private onWindowAllClosed() {
 		if (process.platform !== 'darwin') {
-			app.quit();
+			this.app.quit();
 		}
 	}
 
@@ -55,4 +72,4 @@ class Main {
 }
 
 // eslint-disable-next-line no-new
-new Main();
+new Main(app, ipcMain);

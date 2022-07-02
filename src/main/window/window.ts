@@ -1,10 +1,10 @@
-/* eslint @typescript-eslint/no-var-requires: off, max-classes-per-file: off, no-new: off, no-console: off, class-methods-use-this: off */
+/* eslint @typescript-eslint/no-var-requires: off, max-classes-per-file: off, no-new: off, no-console: off, class-methods-use-this: off, global-require: off */
 import { app, BrowserWindow, shell } from 'electron';
 import log from 'electron-log';
 import { autoUpdater } from 'electron-updater';
 import path from 'path';
 import MenuBuilder from './menu';
-import { resolveHtmlPath } from './util';
+import { resolveHtmlPath } from '../util';
 
 class AppUpdater {
 	constructor() {
@@ -18,8 +18,6 @@ const isDebug = process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD
 const RESOURCES_PATH = app.isPackaged ? path.join(process.resourcesPath, 'assets') : path.join(__dirname, '../../assets');
 
 const installExtensions = async () => {
-	// eslint-disable-next-line @typescript-eslint/no-var-requires
-	// eslint-disable-next-line global-require
 	const installer = require('electron-devtools-installer');
 	const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
 	const extensions = ['REACT_DEVELOPER_TOOLS'];
@@ -56,9 +54,13 @@ export default class Window {
 			minHeight: MIN_HEIGHT,
 			show: false,
 			frame: false,
+			titleBarStyle: 'hiddenInset',
 			webPreferences: {
+				nodeIntegration: false /* DO NOT CHANGE */,
+				contextIsolation: true /* DO NOT CHANGE */,
+				webSecurity: true /* DO NOT CHANGE */,
 				devTools: process.env.NODE_ENV !== 'production',
-				preload: app.isPackaged ? path.join(__dirname, 'preload.js') : path.join(__dirname, '../../webpack/dll/preload.js')
+				preload: app.isPackaged ? path.join(__dirname, 'preload.js') : path.join(__dirname, '../../../webpack/dll/preload.js')
 			}
 		});
 
@@ -92,18 +94,30 @@ export default class Window {
 		new AppUpdater();
 	}
 
+	/**
+	 * Closes the underlying browser window.
+	 */
 	public close() {
 		this.browserWindow?.close();
 	}
 
+	/**
+	 * Minimizes the underlying browser window.
+	 */
 	public maximize() {
 		this.browserWindow?.maximize();
 	}
 
+	/**
+	 * Minimizes the underlying browser window.
+	 */
 	public minimize() {
 		this.browserWindow?.minimize();
 	}
 
+	/**
+	 * Installs dev extensions.
+	 */
 	private async installExtensions() {
 		if (process.env.NODE_ENV !== 'production') {
 			await installExtensions();

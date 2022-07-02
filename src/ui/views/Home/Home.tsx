@@ -6,11 +6,9 @@ import './Home.scss';
 
 const Home: React.FC = () => {
 	return (
-		<div id="home-container">
-			<View title="Home">
-				<div className="content"> </div>
-			</View>
-		</div>
+		<View title="Home" id="home">
+			<div className="content"> </div>
+		</View>
 	);
 };
 

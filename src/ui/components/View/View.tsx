@@ -3,12 +3,13 @@ import * as React from 'react';
 import './View.scss';
 
 interface ViewProps {
+	id: string;
 	title?: string;
 	children?: JSX.Element | JSX.Element[];
 }
 
 const View: React.FC<ViewProps> = (props) => {
-	const { title, children } = props;
+	const { title, children, id } = props;
 
 	return (
 		<div id="view">
@@ -18,7 +19,9 @@ const View: React.FC<ViewProps> = (props) => {
 					<div id="divider" />
 				</>
 			)}
-			<div className="view-content">{children}</div>
+			<div className="view-content">
+				<div className={`${id}-container`}>{children}</div>
+			</div>
 		</div>
 	);
 };

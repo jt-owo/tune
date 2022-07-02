@@ -2,14 +2,14 @@ import * as React from 'react';
 
 import View from '../../components/View/View';
 
-import './Library.scss';
+import './Browse.scss';
 
-const Library: React.FC = () => {
+const Browse: React.FC = () => {
 	return (
-		<View title="Library" id="library">
+		<View title="Browse" id="browse">
 			<div className="content"> </div>
 		</View>
 	);
 };
 
-export default Library;
+export default Browse;

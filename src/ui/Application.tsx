@@ -5,6 +5,8 @@ import AppRoutes from './routes';
 import Titlebar from './components/Titlebar/Titlebar';
 import Home from './views/Home/Home';
 import Library from './views/Library/Library';
+import Browse from './views/Browse/Browse';
+import Settings from './views/Settings/Settings';
 import Navigation from './components/Navigation/Navigation';
 import Queue from './components/Queue/Queue';
 import PlayerControls from './components/PlayerControls/PlayerControls';
@@ -20,8 +22,8 @@ const Application: React.FC = () => {
 				<Routes>
 					<Route path={AppRoutes.Home} element={<Home />} />
 					<Route path={AppRoutes.Library} element={<Library />} />
-					<Route path={AppRoutes.Browse} element={<div />} />
-					<Route path={AppRoutes.Settings} element={<div />} />
+					<Route path={AppRoutes.Browse} element={<Browse />} />
+					<Route path={AppRoutes.Settings} element={<Settings />} />
 				</Routes>
 			</Router>
 			<PlayerControls />

@@ -3,8 +3,21 @@ import { app, BrowserWindow, shell } from 'electron';
 import log from 'electron-log';
 import { autoUpdater } from 'electron-updater';
 import path from 'path';
-import MenuBuilder from './menu';
+import { IStoreData, UserPrefStore } from '../db/tuneStore';
 import { resolveHtmlPath } from '../util';
+import MenuBuilder from './menu';
+
+export interface UserPref extends IStoreData {
+	windowBounds: WindowBounds;
+	windowState: number;
+}
+
+export interface WindowBounds {
+	width: number;
+	height: number;
+	x: number;
+	y: number;
+}
 
 class AppUpdater {
 	constructor() {
@@ -13,6 +26,16 @@ class AppUpdater {
 		autoUpdater.checkForUpdatesAndNotify();
 	}
 }
+
+const USER_DEFAULTS: UserPref = {
+	windowBounds: {
+		width: 0,
+		height: 0,
+		x: 0,
+		y: 0
+	},
+	windowState: 0
+};
 
 const isDebug = process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
 const RESOURCES_PATH = app.isPackaged ? path.join(process.resourcesPath, 'assets') : path.join(__dirname, '../../assets');
@@ -39,6 +62,8 @@ const MIN_HEIGHT = 540;
 export default class Window {
 	private browserWindow: BrowserWindow | null;
 
+	private userPref: UserPrefStore;
+
 	constructor() {
 		if (isDebug) {
 			this.installExtensions();
@@ -64,18 +89,36 @@ export default class Window {
 			}
 		});
 
+		this.userPref = new UserPrefStore(USER_DEFAULTS);
+
+		const winBounds = this.userPref.get<WindowBounds>('windowBounds');
+		if (winBounds) {
+			this.browserWindow.setBounds(winBounds);
+		} else {
+			this.browserWindow.center();
+		}
+
+		const winState = this.userPref.get<number>('windowState');
+		if (winState) {
+			this.browserWindow.maximize();
+		}
+
 		this.browserWindow.loadURL(resolveHtmlPath('index.html'));
 
 		this.browserWindow.on('ready-to-show', () => {
-			if (!this.browserWindow) {
-				throw new Error('"browserWindow" is not defined');
-			}
+			this.onReadyToShow();
+		});
 
-			if (process.env.START_MINIMIZED) {
-				this.browserWindow.minimize();
-			} else {
-				this.browserWindow.show();
-			}
+		this.browserWindow.on('resize', () => {
+			this.onResize();
+		});
+
+		this.browserWindow.on('move', () => {
+			this.onMove();
+		});
+
+		this.browserWindow.on('close', () => {
+			this.onClose();
 		});
 
 		this.browserWindow.on('closed', () => {
@@ -113,6 +156,56 @@ export default class Window {
 	 */
 	public minimize() {
 		this.browserWindow?.minimize();
+	}
+
+	private onReadyToShow() {
+		if (!this.browserWindow) {
+			throw new Error('"browserWindow" is not defined');
+		}
+
+		if (process.env.START_MINIMIZED) {
+			this.browserWindow.minimize();
+		} else {
+			this.browserWindow.show();
+		}
+	}
+
+	private onResize() {
+		this.saveWindowBounds();
+		this.saveWindowState();
+	}
+
+	private onMove() {
+		this.saveWindowBounds();
+	}
+
+	private onClose() {
+		this.saveWindowBounds();
+		this.saveWindowState();
+	}
+
+	private saveWindowBounds() {
+		if (!this.browserWindow) return;
+
+		const { width, height } = this.browserWindow.getBounds();
+
+		const winPos = this.browserWindow.getPosition();
+		const x = winPos[0];
+		const y = winPos[1];
+
+		this.userPref.set('windowBounds', {
+			width,
+			height,
+			x,
+			y
+		});
+	}
+
+	private saveWindowState() {
+		if (!this.browserWindow) return;
+
+		const state = this.browserWindow.isMaximized() ? 1 : 0;
+		this.userPref.set('windowState', state);
 	}
 
 	/**

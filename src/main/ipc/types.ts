@@ -8,6 +8,5 @@ export interface IpcChannel {
 
 export interface IpcRequest {
 	responseChannel?: string;
-
 	params?: string[];
 }

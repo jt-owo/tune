@@ -1,9 +1,17 @@
 import '@testing-library/jest-dom';
 import { render } from '@testing-library/react';
+import { Provider } from 'react-redux';
+import store from '../state/store';
 import Application from '../ui/Application';
 
 describe('Application', () => {
 	it('should render', () => {
-		expect(render(<Application />)).toBeTruthy();
+		expect(
+			render(
+				<Provider store={store}>
+					<Application />
+				</Provider>
+			)
+		).toBeTruthy();
 	});
 });

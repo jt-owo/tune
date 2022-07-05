@@ -1,0 +1,60 @@
+@import '../../styles/animations';
+@import '../../styles/colors';
+
+.alert {
+	padding: 20px;
+	color: $font-white;
+	position: relative;
+	margin-left: auto;
+	margin-right: auto;
+	left: 0;
+	right: 0;
+	text-align: center;
+	border-radius: 10px;
+	width: 70%;
+	margin-top: 10px;
+	animation: fadeIn 0.5s;
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.alert.fade-out {
+	animation: fadeOut 0.5s;
+}
+
+.alert.info {
+	background-color: $dark-gray-2;
+}
+
+.alert.success {
+	background-color: #4CAF50;
+}
+
+.alert.warn {
+	background-color: #FF9800;
+}
+
+.alert.error {
+	background-color: #F44336;
+}
+
+.closebtn {
+	margin-left: 15px;
+	color: $font-white;
+	font-weight: bold;
+	float: right;
+	line-height: 20px;
+	cursor: pointer;
+	transition: 0.3s;
+}
+
+.type-icon {
+	color: $font-white;
+	font-weight: bold;
+	float: left;
+	transition: 0.3s;
+	user-select: none;
+}
+
+.closebtn:hover {
+	color: black;
+}

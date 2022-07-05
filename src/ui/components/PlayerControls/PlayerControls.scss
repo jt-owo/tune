@@ -1,13 +1,17 @@
+@import '../../styles/colors';
+
 #player-container {
 	position: absolute;
-	bottom: 20px;
-	left: 15px;
-	right: 15px;
+	bottom: 10px;
+	left: 10px;
+	right: 10px;
 	display: block;
 	height: 60px;
 	background: rgb(0, 0, 0);
 	border-radius: 10px;
-	box-shadow: 5px 5px 5px 0px rgb(8, 8, 8);
+	border-style: solid;
+	border-color: $border-color;
+	//box-shadow: 5px 5px 5px 0px rgb(8, 8, 8);
 }
 
 .player-icon-service {

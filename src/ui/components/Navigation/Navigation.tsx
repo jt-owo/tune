@@ -31,6 +31,11 @@ const Navigation: React.FC = () => {
 				</li>
 				<li id="pinned-playlist-section">PLAYLISTS</li>
 				<li>
+					<NavLink to={AppRoutes.Playlist} title="Weeb" className="playlist-btn btn-hover-animation" id="playlist-btn" draggable="false">
+						Playlist #1
+					</NavLink>
+				</li>
+				<li>
 					<NavLink to={AppRoutes.Settings} className="nav-btn btn-hover-animation" id="settings-btn" draggable="false">
 						Settings
 					</NavLink>

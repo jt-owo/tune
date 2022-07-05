@@ -1,3 +1,5 @@
+@import './colors';
+
 /* ANIMATIONS */
 
 /* KEYFRAMES */
@@ -19,4 +21,18 @@
 	100% {
 		opacity: 0;
 	}
+}
+
+/* Basic Animations */
+
+.btn-hover-animation {
+	transition: all 0.1s ease-in-out;
+}
+
+.btn-hover-animation:hover {
+	background-color: $hover-color-medium;
+}
+
+.btn-hover-animation:active {
+	background-color: $hover-color-light;
 }

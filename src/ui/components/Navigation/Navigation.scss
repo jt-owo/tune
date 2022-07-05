@@ -3,9 +3,9 @@
 #nav-bar {
 	position: absolute;
 	top: 40px;
-	bottom: 100px;
-	left: 15px;
-	width: 180px;
+	bottom: 80px;
+	left: 10px;
+	width: 200px;
 	list-style-type: none;
 	margin: 0;
 	padding: 0;
@@ -13,8 +13,10 @@
 	display: flex;
 	flex-direction: column;
 	background-color: rgb(0, 0, 0);
-	border-radius: 6px;
-	box-shadow: 3px 3px 3px 3px rgb(4, 4, 4);
+	border-style: solid;
+	border-color: $border-color;
+	border-radius: 10px;
+	//box-shadow: 3px 3px 3px 3px rgb(4, 4, 4);
 }
 
 #nav-bar> :last-child {
@@ -22,23 +24,40 @@
 }
 
 #nav-bar-logo {
-	max-width: 50%;
+	max-width: 40%;
 	display: block;
 	margin: auto;
 	margin-bottom: 20px;
 	padding-top: 20px;
-	padding-left: 10px;
+	padding-left: 0px;
 }
 
 .nav-btn {
 	display: block;
-	text-align: center;
+	text-align: left;
 	text-decoration: none;
+	color: #ffffff;
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	font-weight: bold;
+	padding: 5px 16px;
+	margin: 5px 10px;
+	border-radius: 6px;
+}
+
+.playlist-btn {
+	display: block;
+	text-align: left;
+	text-decoration: none;
+	color: #ffffff;
 	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 	font-weight: bold;
 	padding: 5px 16px;
 	margin: 5px 15px;
 	border-radius: 6px;
+}
+
+.playlist-btn.active {
+	background-color: $selected-neutral;
 }
 
 #home-btn {
@@ -55,6 +74,7 @@
 
 #settings-btn {
 	color: rgb(255, 255, 255);
+	margin-bottom: 10px;
 }
 
 #pinned-playlist-section {
@@ -72,17 +92,17 @@
 }
 
 .btn-hover-animation:hover {
-	background-color: rgb(66, 66, 66);
+	background-color: $hover-color-medium;
 }
 
-.active {
+.nav-btn.active {
 	background-image: linear-gradient(to bottom right,
 			rgb(0, 174, 255),
 			rgb(183, 0, 255));
 }
 
 .active:hover {
-	box-shadow: 0px 0px 2px 3px rgb(66, 66, 66);
+	box-shadow: 0px 0px 2px 3px $hover-color-dark;
 }
 
 .new-playlist-btn {

@@ -54,10 +54,10 @@ const installExtensions = async () => {
 };
 
 /** @const minimum width of the window */
-const MIN_WIDTH = 720;
+const MIN_WIDTH = 960;
 
 /** @const minimum height of the window */
-const MIN_HEIGHT = 540;
+const MIN_HEIGHT = 640;
 
 export default class Window {
 	private browserWindow: BrowserWindow | null;

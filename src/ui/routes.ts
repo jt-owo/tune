@@ -2,7 +2,8 @@ export enum AppRoutes {
 	Home = '/',
 	Library = '/library',
 	Browse = '/browse',
-	Settings = '/settings'
+	Settings = '/settings',
+	Playlist = '/playlist'
 }
 
 export default AppRoutes;

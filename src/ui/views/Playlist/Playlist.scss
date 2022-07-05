@@ -1,0 +1,102 @@
+@import '../../styles/colors';
+@import '../../styles/animations';
+@import '../../styles/fonts';
+
+
+#playlist-container {
+	background-color: $floating-component-color;
+	position: absolute;
+	top: 40px;
+	bottom: 80px;
+	left: 220px;
+	right: 90px;
+	border-style: solid;
+	border-color: $border-color;
+	border-radius: 10px;
+	//box-shadow: 3px 3px 3px 3px rgb(4, 4, 4);
+	overflow: hidden;
+}
+
+#playlist-heading {
+	box-sizing: border-box;
+	font-size: 35px;
+	font-family: FredokaOne;
+	color: rgb(255, 255, 255);
+	padding: 2px 0 0 20px;
+}
+
+#playlist-heading #playlist-play-btn {
+	position: absolute;
+	right: 80px;
+	top: 10px;
+	width: 30px;
+	height: 30px;
+	border-radius: 6px;
+}
+#playlist-heading #playlist-shuffle-btn {
+	position: absolute;
+	right: 45px;
+	top: 10px;
+	width: 30px;
+	height: 30px;
+	border-radius: 6px;
+}
+#playlist-heading #playlist-option-btn {
+	position: absolute;
+	right: 10px;
+	top: 10px;
+	width: 30px;
+	height: 30px;
+	border-radius: 6px;
+}
+
+#playlist-play-btn #play-icon {
+	max-width: 30px;
+	max-height: 30px;
+	padding: 0px 0 7px 4px;
+}
+
+#playlist-shuffle-btn #shuffle-icon {
+	max-width: 35px;
+	max-height: 35px;
+	padding: 0 0 4px 1px;
+}
+
+#playlist-option-btn #option-icon {
+	max-width: 35px;
+	max-height: 35px;
+	padding: 0 5px 9px 5px;
+}
+
+#playlist-container #divider {
+	border-top: 2px solid rgb(43, 43, 43);
+	border-radius: 10px;
+	margin: 5px 0 20px 0;
+	position: absolute;
+	left: 15px;
+	right: 15px;
+}
+
+.song-item {
+	display: flex;
+	font-family: Poppins-Medium;
+	padding: 10px 10px 10px 10px;
+	margin: 15px 10px 0 10px;
+	border-radius: 10px;
+}
+
+.song-item img {
+	max-width: 40px;
+	max-height: 40px;
+	border-radius: 3px;
+}
+
+.song-item .song-title {
+	margin: 8px 5px 0 10px;
+}
+
+.song-item:hover {
+	background-color: $hover-color-dark;
+}
+
+

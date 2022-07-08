@@ -1,5 +1,5 @@
 /* eslint @typescript-eslint/no-var-requires: off, global-require: off */
-import { App, app, IpcMain, ipcMain } from 'electron';
+import { App, app, dialog, IpcMain, ipcMain } from 'electron';
 import { IpcChannel } from './ipc/types';
 import { CloseWindowChannel, MinimizeWindowChannel, MaximizeWindowChannel } from './ipc/channels';
 import Window from './window/window';
@@ -47,6 +47,20 @@ class Main {
 	private initIpc(channels: IpcChannel[]) {
 		channels.forEach((channel) => {
 			this.ipcMain.on(channel.getName(), (event, request) => channel.handle(event, request));
+		});
+
+		ipcMain.handle('add-tracks', async () => {
+			const result = await dialog.showOpenDialog({
+				properties: ['openFile', 'multiSelections'],
+				filters: [{ name: 'Audio Files', extensions: ['mp3', 'flac'] }]
+			});
+
+			return [...result.filePaths];
+		});
+
+		// FIXME: Rewrite IpcChannels
+		ipcMain.handle('get-path', (_event, type) => {
+			return app.getPath(type);
 		});
 	}
 

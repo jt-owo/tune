@@ -3,7 +3,7 @@ import { app, BrowserWindow, shell } from 'electron';
 import log from 'electron-log';
 import { autoUpdater } from 'electron-updater';
 import path from 'path';
-import { IStoreData, UserPrefStore } from '../db/tuneStore';
+import { IStoreData, UserPrefStore } from '../api/tuneStore';
 import { resolveHtmlPath } from '../util';
 import MenuBuilder from './menu';
 
@@ -92,7 +92,7 @@ export default class Window {
 		this.userPref = new UserPrefStore(USER_DEFAULTS);
 
 		const winBounds = this.userPref.get<WindowBounds>('windowBounds');
-		if (winBounds) {
+		if (winBounds && winBounds.height !== 0 && winBounds.width !== 0 && winBounds.x !== 0 && winBounds.y !== 0) {
 			this.browserWindow.setBounds(winBounds);
 		} else {
 			this.browserWindow.center();
@@ -100,7 +100,7 @@ export default class Window {
 
 		const winState = this.userPref.get<number>('windowState');
 		if (winState) {
-			this.browserWindow.maximize();
+			this.browserWindow.setFullScreen(true);
 		}
 
 		this.browserWindow.loadURL(resolveHtmlPath('index.html'));

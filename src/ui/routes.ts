@@ -6,4 +6,8 @@ export enum AppRoutes {
 	Playlist = '/playlist'
 }
 
+export enum AppRoutesParams {
+	PlaylistID = '/playlist/:id'
+}
+
 export default AppRoutes;

@@ -91,6 +91,7 @@
 	max-width: 40px;
 	max-height: 40px;
 	border-radius: 3px;
+	image-rendering: -webkit-optimize-contrast;
 }
 
 .song-item .song-title {
@@ -100,7 +101,6 @@
 .song-item:hover {
 	background-color: $hover-color-dark;
 }
-
 
 /* CONTEXT MENU */
 #menu {

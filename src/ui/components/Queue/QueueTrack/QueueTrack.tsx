@@ -3,15 +3,13 @@
 import { useEffect, useState } from 'react';
 import { AudioMetadata, TrackData } from '../../../../typings/playlist';
 
-import AlbumCover from '../../../../../assets/images/AlbumCover.png';
-
-interface PlaylistTrackProps {
+interface QueueTrackProps {
 	track: TrackData;
-	setCurrentTrack: (track: TrackData) => void;
+	setCurrentTrack?: (track: TrackData) => void;
 }
 
-const PlaylistTrack: React.FC<PlaylistTrackProps> = (props) => {
-	const { track, setCurrentTrack } = props;
+const QueueTrack: React.FC<QueueTrackProps> = (props) => {
+	const { track } = props;
 
 	const [metadata, setMetadata] = useState<AudioMetadata>();
 
@@ -27,15 +25,16 @@ const PlaylistTrack: React.FC<PlaylistTrackProps> = (props) => {
 	return (
 		<>
 			{metadata && (
-				<li className="song-item btn-hover-animation" onDoubleClick={() => setCurrentTrack(track)}>
+				<div className="queue-track">
 					<img src={metadata.info?.cover} alt="" />
-					<div className="song-title">
-						{metadata?.info?.title} - {metadata?.info?.artist}
+					<div className="queue-track-info">
+						<div className="info queue-track-title">{metadata.info?.title}</div>
+						<div className="info queue-track-artist">{metadata.info?.artist}</div>
 					</div>
-				</li>
+				</div>
 			)}
 		</>
 	);
 };
 
-export default PlaylistTrack;
+export default QueueTrack;

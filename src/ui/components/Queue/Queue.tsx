@@ -2,9 +2,9 @@
 import * as React from 'react';
 import { selectQueue } from '../../../state/slices/playerSlice';
 import { useAppSelector } from '../../hooks';
-import AlbumCover from '../../../../assets/images/AlbumCover.png';
 
 import './Queue.scss';
+import QueueTrack from './QueueTrack/QueueTrack';
 
 const Queue: React.FC = () => {
 	const queue = useAppSelector(selectQueue);
@@ -15,15 +15,7 @@ const Queue: React.FC = () => {
 			<div id="queue">
 				{queue &&
 					queue.map((track, index) => {
-						return (
-							<div key={track.filePath + index} className="queue-track">
-								<img src={AlbumCover} alt="" />
-								<div className="queue-track-info">
-									<div className="info queue-track-title">Title</div>
-									<div className="info queue-track-artist">Artist</div>
-								</div>
-							</div>
-						);
+						return <QueueTrack key={track.fileName + index} track={track} />;
 					})}
 			</div>
 		</div>

@@ -1,5 +1,5 @@
 import * as mm from 'music-metadata';
-import { AudioMetadata, TrackData } from '../../typings/playlist';
+import { AudioMetadata } from '../../typings/playlist';
 
 export default class AudioParser {
 	/**
@@ -17,7 +17,6 @@ export default class AudioParser {
 			metadata.info.cover = undefined;
 		} else {
 			metadata.info.cover = `data:${cover?.format};base64,${cover?.data.toString('base64')}`;
-			metadata.info.cover = undefined;
 		}
 
 		if (rawMetadata.common.artist) {

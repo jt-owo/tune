@@ -2,15 +2,14 @@
 /* eslint-disable promise/always-return */
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IPlaylist } from '../../typings/playlist';
+import { PlaylistData } from '../../typings/playlist';
 import newGuid from '../../ui/util';
 import type { RootState } from '../store';
 
 export interface PlaylistState {
-	playlists: IPlaylist[];
+	playlists: PlaylistData[];
 }
 
-// Define the initial state using that type
 const initialState: PlaylistState = {
 	playlists: []
 };
@@ -19,8 +18,8 @@ export const playlistSlice = createSlice({
 	name: 'playlist',
 	initialState,
 	reducers: {
-		addPlaylist: (state, action: PayloadAction<IPlaylist>) => {
-			const playlist: IPlaylist = {
+		addPlaylist: (state, action: PayloadAction<PlaylistData>) => {
+			const playlist: PlaylistData = {
 				id: newGuid(),
 				name: action.payload.name,
 				tracks: action.payload.tracks,
@@ -41,27 +40,22 @@ export const playlistSlice = createSlice({
 
 			window.tuneApi.db.set('playlists', JSON.stringify([...state.playlists]));
 		},
-		updatePlaylist: (state, action: PayloadAction<IPlaylist>) => {
+		updatePlaylist: (state, action: PayloadAction<PlaylistData>) => {
 			const toUpdate = state.playlists.find((p) => p.id === action.payload.id);
 			if (!toUpdate) return;
-
-			console.log(state.playlists);
 
 			const index = state.playlists.indexOf(toUpdate);
 			state.playlists[index] = action.payload;
 
-			console.log(state.playlists);
-
 			window.tuneApi.db.set('playlists', JSON.stringify([...state.playlists]));
 		},
 		loadPlaylists: (state) => {
-			const stored = window.tuneApi.db.get('playlists') as IPlaylist[];
+			const stored = window.tuneApi.db.get('playlists') as PlaylistData[];
 			state.playlists = stored;
 		}
 	}
 });
 
-// Action creators are generated for each case reducer function
 export const { addPlaylist, removePlaylist, updatePlaylist, loadPlaylists } = playlistSlice.actions;
 
 export const selectPlaylists = (state: RootState) => state.playlist.playlists;

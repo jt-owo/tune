@@ -2,7 +2,7 @@ import { contextBridge, ipcRenderer } from 'electron';
 import Database, { DatabaseKey, DatabaseValue } from './api/database';
 import WindowChannels from './ipc/windowChannels';
 
-// FIXME: eventually switch to init method.
+// FIXME: maybe switch to init method.
 let db: Database;
 
 (async () => {
@@ -28,6 +28,13 @@ contextBridge.exposeInMainWorld('electron', {
 				const paths = await ipcRenderer.invoke('add-tracks');
 
 				return paths as string[];
+			}
+		},
+		parser: {
+			async getMetadata(file: string) {
+				const metadata = await ipcRenderer.invoke('get-metadata', file);
+
+				return metadata as string;
 			}
 		}
 	}

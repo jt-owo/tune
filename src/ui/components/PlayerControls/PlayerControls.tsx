@@ -1,8 +1,96 @@
+/* eslint-disable jsx-a11y/media-has-caption */
 import * as React from 'react';
+import { createRef, useEffect, useState } from 'react';
+import { selectCurrentTrack } from '../../../state/slices/playerSlice';
+import { useAppSelector } from '../../hooks';
 
 import './PlayerControls.scss';
 
 const PlayerControls: React.FC = () => {
+	const audioRef = createRef<HTMLAudioElement>();
+
+	const currentTrack = useAppSelector(selectCurrentTrack);
+
+	const [seekPosition, setSeekPosition] = useState(0);
+	const [volume, setVolume] = useState(25);
+	const [seekTo, setSeekTo] = useState(0);
+	const [currentTime, setCurrentTime] = useState('00:00');
+	const [totalDuration, setTotalDuration] = useState('00:00');
+
+	useEffect(() => {
+		let mounted = false;
+		let interval: NodeJS.Timeout | null = null;
+
+		const seekUpdate = () => {
+			if (!audioRef.current) return;
+			let seekPositionLocal = 0;
+
+			if (audioRef.current.duration) {
+				seekPositionLocal = audioRef.current.currentTime * (100 / audioRef.current.duration);
+				setSeekPosition(seekPositionLocal);
+
+				// Calculate the time left and the total duration
+				let currentMinutes: number | string = Math.floor(audioRef.current.currentTime / 60);
+				let currentSeconds: number | string = Math.floor(audioRef.current.currentTime - currentMinutes * 60);
+				let durationMinutes: number | string = Math.floor(audioRef.current.duration / 60);
+				let durationSeconds: number | string = Math.floor(audioRef.current.duration - durationMinutes * 60);
+
+				// Add a zero to the single digit time values
+				if (currentSeconds < 10) {
+					currentSeconds = `0${currentSeconds}`;
+				}
+				if (durationSeconds < 10) {
+					durationSeconds = `0${durationSeconds}`;
+				}
+				if (currentMinutes < 10) {
+					currentMinutes = `0${currentMinutes}`;
+				}
+				if (durationMinutes < 10) {
+					durationMinutes = `0${durationMinutes}`;
+				}
+
+				// Display the updated duration
+				setCurrentTime(`${currentMinutes}:${currentSeconds}`);
+				setTotalDuration(`${durationMinutes}:${durationSeconds}`);
+			}
+		};
+		seekUpdate();
+
+		if (interval) clearTimeout(interval);
+		interval = setTimeout(seekUpdate, 1000);
+
+		if (audioRef.current) {
+			audioRef.current.play();
+			audioRef.current.volume = volume / 100;
+
+			if (!mounted) {
+				mounted = true;
+			}
+		}
+
+		return () => {
+			mounted = false;
+			if (interval) clearInterval(interval);
+		};
+	}, [currentTrack, audioRef, volume]);
+
+	const onEnded = (_e: React.SyntheticEvent<HTMLAudioElement>) => {};
+
+	const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setVolume(parseInt(e.target.value, 10));
+		if (audioRef.current) {
+			audioRef.current.volume = volume / 100;
+		}
+	};
+
+	const handleSeekTo = (e: React.ChangeEvent<HTMLInputElement>) => {
+		if (!audioRef.current || !audioRef.current.duration) return;
+
+		setSeekTo(parseInt(e.target.value, 10));
+		audioRef.current.currentTime = audioRef.current.duration * (seekTo / 100);
+		setSeekPosition(seekTo);
+	};
+
 	return (
 		<div id="player-container">
 			<div id="player-controls-container">
@@ -10,7 +98,14 @@ const PlayerControls: React.FC = () => {
 				<div className="player-control-icon" />
 				<div className="player-control-icon" />
 				<div className="player-control-icon" />
+				<input type="range" name="volumeSlider" className="volume-slider" min="0" max="100" value={volume} onChange={handleVolumeChange} />
+				<div className="slider-container">
+					<div className="current-time">{currentTime}</div>
+					<input type="range" min="0" max="100" className="seek-slider" value={seekPosition} onChange={handleSeekTo} />
+					<div className="total-duration">{totalDuration}</div>
+				</div>
 			</div>
+			<audio src={currentTrack?.filePath} ref={audioRef} onEnded={onEnded} />
 		</div>
 	);
 };

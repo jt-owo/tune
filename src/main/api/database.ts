@@ -1,8 +1,8 @@
 import fs from 'fs';
 import path from 'path';
-import { IPlaylist } from '../../typings/playlist';
+import { PlaylistData } from '../../typings/playlist';
 
-export type DatabaseValue = IPlaylist[] | undefined;
+export type DatabaseValue = PlaylistData[] | undefined;
 export type DatabaseKey = 'playlists';
 
 export type Tables = {

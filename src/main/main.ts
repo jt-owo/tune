@@ -1,8 +1,10 @@
+/* eslint-disable consistent-return */
 /* eslint @typescript-eslint/no-var-requires: off, global-require: off */
-import { App, app, dialog, IpcMain, ipcMain } from 'electron';
+import { App, app, dialog, IpcMain, ipcMain, protocol } from 'electron';
 import { IpcChannel } from './ipc/types';
 import { CloseWindowChannel, MinimizeWindowChannel, MaximizeWindowChannel } from './ipc/channels';
 import Window from './window/window';
+import AudioParser from './api/audioParser';
 
 if (process.env.NODE_ENV === 'production') {
 	const sourceMapSupport = require('source-map-support');
@@ -40,6 +42,7 @@ class Main {
 		this.initIpc([new CloseWindowChannel(), new MinimizeWindowChannel(), new MaximizeWindowChannel()]);
 	}
 
+	// FIXME: Rewrite IpcChannels
 	/**
 	 * Initializes the {@link ipcMain} channels.
 	 * @param channels Channels to initialize.
@@ -58,9 +61,12 @@ class Main {
 			return [...result.filePaths];
 		});
 
-		// FIXME: Rewrite IpcChannels
 		ipcMain.handle('get-path', (_event, type) => {
 			return app.getPath(type);
+		});
+
+		ipcMain.handle('get-metadata', (_event, filePath) => {
+			return AudioParser.getMetadata(filePath);
 		});
 	}
 
@@ -69,6 +75,17 @@ class Main {
 
 		this.app.on('activate', () => {
 			this.onActivate();
+		});
+
+		protocol.registerFileProtocol('tune', (request, callback) => {
+			const url = request.url.replace('tune://getMediaFile/', '');
+			try {
+				return callback(url);
+			} catch (error) {
+				// eslint-disable-next-line no-console
+				console.error(error);
+				return callback('404');
+			}
 		});
 	}
 

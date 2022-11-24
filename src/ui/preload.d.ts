@@ -29,6 +29,9 @@ declare global {
 				playlist: {
 					addTracks(): Promise<string[]>;
 				};
+				parser: {
+					getMetadata(file: string): Promise<string>;
+				};
 			};
 		};
 		process: {

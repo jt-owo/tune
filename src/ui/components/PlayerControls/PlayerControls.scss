@@ -11,7 +11,6 @@
 	border-radius: 10px;
 	border-style: solid;
 	border-color: $border-color;
-	//box-shadow: 5px 5px 5px 0px rgb(8, 8, 8);
 }
 
 .player-icon-service {
@@ -24,4 +23,56 @@
 	max-height: 30px;
 	margin: 20px 20px 0 0px;
 	float: right;
+}
+
+/* Define the slider width so that it scales properly */
+.slider-container {
+	width: 75%;
+	max-width: 400px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+/* Modify the appearance of the slider */
+.seek-slider,
+.volume-slider {
+	-webkit-appearance: none;
+	appearance: none;
+	height: 5px;
+	background: white;
+	opacity: 0.7;
+	-webkit-transition: .2s;
+	transition: opacity .2s;
+}
+
+/* Modify the appearance of the slider thumb */
+.seek-slider::-webkit-slider-thumb,
+.volume-slider::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	appearance: none;
+	width: 15px;
+	height: 15px;
+	background: aqua;
+	cursor: pointer;
+	border-radius: 50%;
+}
+
+/* Change the opacity when mouse is hovered */
+.seek-slider:hover,
+.volume-slider:hover {
+	opacity: 1.0;
+}
+
+.seek-slider {
+	width: 60%;
+}
+
+.volume-slider {
+	width: 20%;
+}
+
+.current-time,
+.total-duration {
+	padding: 10px;
 }

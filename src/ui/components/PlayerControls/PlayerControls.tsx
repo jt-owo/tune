@@ -1,8 +1,8 @@
 /* eslint-disable jsx-a11y/media-has-caption */
 import * as React from 'react';
 import { createRef, useEffect, useState } from 'react';
-import { selectCurrentTrack } from '../../../state/slices/playerSlice';
-import { useAppSelector } from '../../hooks';
+import { selectCurrentTrack, selectQueue, setTrack, updateQueue } from '../../../state/slices/playerSlice';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 
 import './PlayerControls.scss';
 
@@ -10,12 +10,15 @@ const PlayerControls: React.FC = () => {
 	const audioRef = createRef<HTMLAudioElement>();
 
 	const currentTrack = useAppSelector(selectCurrentTrack);
+	const queue = useAppSelector(selectQueue);
 
 	const [seekPosition, setSeekPosition] = useState(0);
 	const [volume, setVolume] = useState(25);
 	const [seekTo, setSeekTo] = useState(0);
 	const [currentTime, setCurrentTime] = useState('00:00');
 	const [totalDuration, setTotalDuration] = useState('00:00');
+
+	const dispatch = useAppDispatch();
 
 	useEffect(() => {
 		let mounted = false;
@@ -74,7 +77,14 @@ const PlayerControls: React.FC = () => {
 		};
 	}, [currentTrack, audioRef, volume]);
 
-	const onEnded = (_e: React.SyntheticEvent<HTMLAudioElement>) => {};
+	const onEnded = (_e: React.SyntheticEvent<HTMLAudioElement>) => {
+		const queueCopy = [...queue];
+		queueCopy.shift();
+		if (queueCopy.length > 0) {
+			dispatch(setTrack(queueCopy[0]));
+			dispatch(updateQueue(queueCopy));
+		}
+	};
 
 	const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setVolume(parseInt(e.target.value, 10));
@@ -104,6 +114,7 @@ const PlayerControls: React.FC = () => {
 					<input type="range" min="0" max="100" className="seek-slider" value={seekPosition} onChange={handleSeekTo} />
 					<div className="total-duration">{totalDuration}</div>
 				</div>
+				{currentTrack?.fileName}
 			</div>
 			<audio src={currentTrack?.filePath} ref={audioRef} onEnded={onEnded} />
 		</div>

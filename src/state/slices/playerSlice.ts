@@ -31,9 +31,10 @@ export const playerSlice = createSlice({
 
 			state.queue = action.payload;
 
-			if (wasEmpty) {
-				state.currentTrack = state.queue[0];
-			}
+			state.currentTrack = state.queue[0];
+		},
+		updateQueue: (state, action: PayloadAction<TrackData[]>) => {
+			state.queue = action.payload;
 		},
 		setTrack: (state, action: PayloadAction<TrackData>) => {
 			state.currentTrack = action.payload;
@@ -41,7 +42,7 @@ export const playerSlice = createSlice({
 	}
 });
 
-export const { addToQueue, setTrack, setQueue } = playerSlice.actions;
+export const { addToQueue, setTrack, setQueue, updateQueue } = playerSlice.actions;
 
 export const selectQueue = (state: RootState) => state.player.queue;
 export const selectCurrentTrack = (state: RootState) => state.player.currentTrack;

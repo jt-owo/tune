@@ -30,8 +30,6 @@ const Playlist: React.FC = () => {
 		navigate(AppRoutes.Library);
 	}
 
-	const [tracks, setTracks] = useState([...playlist!.tracks]);
-
 	const dispatch = useAppDispatch();
 
 	const deletePlaylist = () => {
@@ -73,7 +71,7 @@ const Playlist: React.FC = () => {
 		});
 
 		dispatch(updatePlaylist(updateData));
-		setTracks(updateData.tracks);
+		setPlaylist(updateData);
 	};
 
 	const setCurrentTrack = (track: TrackData) => {
@@ -86,10 +84,7 @@ const Playlist: React.FC = () => {
 
 	useEffect(() => {
 		const playlistFound = playlists.find((x) => x.id === id);
-
-		if (playlistFound) {
-			setPlaylist(playlistFound);
-		}
+		if (playlistFound) setPlaylist(playlistFound);
 	}, [playlists, id]);
 
 	return (
@@ -109,8 +104,8 @@ const Playlist: React.FC = () => {
 			<div id="divider" />
 			<div id="playlist-content">
 				<ul>
-					{tracks &&
-						[...tracks]
+					{playlist?.tracks &&
+						[...playlist.tracks]
 							.sort((a, b) => (a.sortIndex > b.sortIndex ? 1 : -1))
 							.map((track) => {
 								return <PlaylistTrack key={track.sortIndex} track={track} setCurrentTrack={setCurrentTrack} />;

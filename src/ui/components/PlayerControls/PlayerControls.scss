@@ -34,7 +34,6 @@
 	align-items: center;
 }
 
-/* Modify the appearance of the slider */
 .seek-slider,
 .volume-slider {
 	-webkit-appearance: none;
@@ -46,7 +45,6 @@
 	transition: opacity .2s;
 }
 
-/* Modify the appearance of the slider thumb */
 .seek-slider::-webkit-slider-thumb,
 .volume-slider::-webkit-slider-thumb {
 	-webkit-appearance: none;
@@ -58,7 +56,6 @@
 	border-radius: 50%;
 }
 
-/* Change the opacity when mouse is hovered */
 .seek-slider:hover,
 .volume-slider:hover {
 	opacity: 1.0;

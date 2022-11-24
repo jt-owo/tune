@@ -48,12 +48,30 @@
 	display: block;
 	text-align: left;
 	text-decoration: none;
-	color: #ffffff;
+	color: #fff;
 	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 	font-weight: bold;
 	padding: 5px 16px;
 	margin: 5px 15px;
 	border-radius: 6px;
+}
+
+.new-playlist-name-field {
+	display: block;
+	text-align: left;
+	text-decoration: none;
+	color: #000;
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	font-weight: bold;
+	padding: 5px 16px;
+	margin: 5px 15px;
+	border-radius: 6px;
+
+	max-width: 164px;
+
+	&:focus {
+		outline: none;
+	}
 }
 
 .playlist-btn.active {
@@ -113,34 +131,4 @@
 .new-playlist-btn:hover {
 	color: lightgoldenrodyellow;
 	cursor: pointer;
-}
-
-#pinned-playlist-section {
-	ul {
-		list-style-type: none;
-
-		li {
-			div {
-				color: rgb(199, 199, 199);
-				text-decoration: none;
-				cursor: pointer;
-			}
-
-			div:hover {
-				box-shadow: none;
-			}
-
-			input {
-				border: none;
-				width: 90%;
-				border-radius: 5px;
-				background-color: $dark-gray-2;
-				color: white;
-			}
-
-			input:focus {
-				outline: none;
-			}
-		}
-	}
 }

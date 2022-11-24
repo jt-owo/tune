@@ -3,7 +3,7 @@ import { app, BrowserWindow, shell } from 'electron';
 import log from 'electron-log';
 import { autoUpdater } from 'electron-updater';
 import path from 'path';
-import { IStoreData, UserPrefStore } from '../db/tuneStore';
+import { IStoreData, UserPrefStore } from '../api/tuneStore';
 import { resolveHtmlPath } from '../util';
 import MenuBuilder from './menu';
 
@@ -83,7 +83,8 @@ export default class Window {
 			webPreferences: {
 				nodeIntegration: false /* DO NOT CHANGE */,
 				contextIsolation: true /* DO NOT CHANGE */,
-				webSecurity: true /* DO NOT CHANGE */,
+				// FIXME: https://github.com/electron/electron/issues/23393
+				webSecurity: false /* DO NOT CHANGE: WebSecurity can't be true, because otherwise local audio files woudn't work */,
 				devTools: process.env.NODE_ENV !== 'production',
 				preload: app.isPackaged ? path.join(__dirname, 'preload.js') : path.join(__dirname, '../../../webpack/dll/preload.js')
 			}
@@ -92,7 +93,7 @@ export default class Window {
 		this.userPref = new UserPrefStore(USER_DEFAULTS);
 
 		const winBounds = this.userPref.get<WindowBounds>('windowBounds');
-		if (winBounds) {
+		if (winBounds && winBounds.height !== 0 && winBounds.width !== 0 && winBounds.x !== 0 && winBounds.y !== 0) {
 			this.browserWindow.setBounds(winBounds);
 		} else {
 			this.browserWindow.center();
@@ -100,7 +101,7 @@ export default class Window {
 
 		const winState = this.userPref.get<number>('windowState');
 		if (winState) {
-			this.browserWindow.maximize();
+			this.browserWindow.setFullScreen(true);
 		}
 
 		this.browserWindow.loadURL(resolveHtmlPath('index.html'));

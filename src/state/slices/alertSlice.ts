@@ -11,12 +11,10 @@ export interface AlertData {
 	type: AlertType;
 }
 
-// Define a type for the slice state
 export interface AlertState {
 	items: AlertData[];
 }
 
-// Define the initial state using that type
 const initialState: AlertState = {
 	items: []
 };
@@ -47,7 +45,6 @@ export const alertSlice = createSlice({
 	}
 });
 
-// Action creators are generated for each case reducer function
 export const { addAlert, removeAlert } = alertSlice.actions;
 
 export const selectAlerts = (state: RootState) => state.alerts.items;

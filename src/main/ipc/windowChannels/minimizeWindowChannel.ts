@@ -1,15 +1,15 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable class-methods-use-this */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { IpcMainEvent, BrowserWindow } from 'electron';
-import { IpcChannel, IpcRequest } from '../types';
+import { IpcChannel } from '../types';
 import WindowChannels from '.';
 
-class MinimizeWindowChannel implements IpcChannel {
+class MinimizeWindowChannel implements IpcChannel<string, void> {
 	getName(): string {
 		return WindowChannels.MINIMIZE_WINDOW;
 	}
 
-	handle(_event: IpcMainEvent, _request: IpcRequest): void {
+	handle(_event: IpcMainEvent, _args: string): void {
 		const win = BrowserWindow.getFocusedWindow();
 
 		if (!win) return;

@@ -1,12 +1,13 @@
 import { contextBridge, ipcRenderer } from 'electron';
 import Database, { DatabaseKey, DatabaseValue } from './api/database';
+import MiscChannels from './ipc/miscChannels';
 import WindowChannels from './ipc/windowChannels';
 
-// FIXME: maybe switch to init method.
+// TODO: maybe switch to init method.
 let db: Database;
 
 (async () => {
-	const path = await ipcRenderer.invoke('get-path', 'userData');
+	const path = await ipcRenderer.invoke(MiscChannels.GET_PATH, 'userData');
 	db = new Database(path);
 })();
 
@@ -14,25 +15,25 @@ contextBridge.exposeInMainWorld('electron', {
 	ipc: {
 		window: {
 			minimize() {
-				ipcRenderer.send(WindowChannels.MINIMIZE_WINDOW);
+				ipcRenderer.invoke(WindowChannels.MINIMIZE_WINDOW);
 			},
 			maximize() {
-				ipcRenderer.send(WindowChannels.MAXIMIZE_WINDOW);
+				ipcRenderer.invoke(WindowChannels.MAXIMIZE_WINDOW);
 			},
 			close() {
-				ipcRenderer.send(WindowChannels.CLOSE_WINDOW);
+				ipcRenderer.invoke(WindowChannels.CLOSE_WINDOW);
 			}
 		},
 		playlist: {
 			async addTracks() {
-				const paths = await ipcRenderer.invoke('add-tracks');
+				const paths = await ipcRenderer.invoke(MiscChannels.ADD_TRACKS);
 
 				return paths as string[];
 			}
 		},
 		parser: {
 			async getMetadata(file: string) {
-				const metadata = await ipcRenderer.invoke('get-metadata', file);
+				const metadata = await ipcRenderer.invoke(MiscChannels.GET_METADATA, file);
 
 				return metadata as string;
 			}

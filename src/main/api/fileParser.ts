@@ -1,7 +1,7 @@
 import * as mm from 'music-metadata';
 import { AudioMetadata } from '../../typings/playlist';
 
-export default class AudioParser {
+export default class FileParser {
 	/**
 	 * Parses a {@link mm.IAudioMetadata} object into a more compact {@link AudioMetadata} object.
 	 * @param rawMetadata Raw AudioMetadata.
@@ -49,7 +49,6 @@ export default class AudioParser {
 			year: rawMetadata.common.year,
 			date: rawMetadata.common.date,
 			copyright: rawMetadata.common.copyright
-			/* pictures: rawMetadata.common.picture */
 		};
 
 		metadata.format = {
@@ -66,7 +65,7 @@ export default class AudioParser {
 
 	public static async getMetadata(file: string): Promise<string> {
 		const fileMetadata = await mm.parseFile(file);
-		const parsedMetadata = AudioParser.parseMM(fileMetadata);
+		const parsedMetadata = FileParser.parseMM(fileMetadata);
 
 		return JSON.stringify(parsedMetadata);
 	}

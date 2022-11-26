@@ -1,13 +1,17 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
+import { setOutputDevice } from '../../../state/slices/playerSlice';
 
 import View from '../../components/View/View';
+import { useAppDispatch } from '../../hooks';
 
 import './Settings.scss';
 
 const Settings: React.FC = () => {
 	const [audioDevices, setOutputDevices] = useState<MediaDeviceInfo[]>();
 	const [selectedDevice, setSelectedDevice] = useState<string>();
+
+	const dispatch = useAppDispatch();
 
 	const getOutputDevices = async () => {
 		const mediaDevices = await navigator.mediaDevices.enumerateDevices();
@@ -16,6 +20,7 @@ const Settings: React.FC = () => {
 
 	const outputDeviceOnChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		setSelectedDevice(e.currentTarget.value);
+		dispatch(setOutputDevice(e.currentTarget.value));
 	};
 
 	useEffect(() => {

@@ -7,6 +7,7 @@ import { TrackData } from '../../typings/playlist';
 export interface PlayerState {
 	queue: TrackData[];
 	currentTrack?: TrackData;
+	outputDeviceId?: string;
 }
 
 const initialState: PlayerState = {
@@ -27,8 +28,6 @@ export const playerSlice = createSlice({
 			}
 		},
 		setQueue: (state, action: PayloadAction<TrackData[]>) => {
-			const wasEmpty = state.queue.length < 1;
-
 			state.queue = action.payload;
 
 			state.currentTrack = state.queue[0];
@@ -38,13 +37,17 @@ export const playerSlice = createSlice({
 		},
 		setTrack: (state, action: PayloadAction<TrackData>) => {
 			state.currentTrack = action.payload;
+		},
+		setOutputDevice: (state, action: PayloadAction<string>) => {
+			state.outputDeviceId = action.payload;
 		}
 	}
 });
 
-export const { addToQueue, setTrack, setQueue, updateQueue } = playerSlice.actions;
+export const { addToQueue, setTrack, setQueue, updateQueue, setOutputDevice } = playerSlice.actions;
 
 export const selectQueue = (state: RootState) => state.player.queue;
 export const selectCurrentTrack = (state: RootState) => state.player.currentTrack;
+export const selectOutputDeviceId = (state: RootState) => state.player.outputDeviceId;
 
 export default playerSlice.reducer;

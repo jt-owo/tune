@@ -2,7 +2,7 @@
 /* eslint-disable promise/always-return */
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { PlaylistData } from '../../typings/playlist';
+import { PlaylistData, TrackData } from '../../typings/playlist';
 import newGuid from '../../ui/util';
 import type { RootState } from '../store';
 
@@ -18,11 +18,11 @@ export const playlistSlice = createSlice({
 	name: 'playlist',
 	initialState,
 	reducers: {
-		addPlaylist: (state, action: PayloadAction<PlaylistData>) => {
+		addPlaylist: (state, action: PayloadAction<string>) => {
 			const playlist: PlaylistData = {
 				id: newGuid(),
-				name: action.payload.name,
-				tracks: action.payload.tracks,
+				name: action.payload,
+				tracks: [],
 				pinned: true
 			};
 

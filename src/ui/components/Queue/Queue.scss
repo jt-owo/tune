@@ -16,14 +16,14 @@
 }
 
 .queue-track-title {
-	font-family: Quicksand;
+	font-family: Quicksand-regular;
 	font-weight: bold;
 	margin: 2px 0 0 10px;
 	width: 100%;
 }
 
 .queue-track-artist {
-	font-family: Quicksand;
+	font-family: Quicksand-regular;
 	font-weight: bold;
 	color: #b4b4b4;
 	font-size: 12px;
@@ -68,7 +68,7 @@
 }
 
 #queue-container header {
-	font-family: Quicksand;
+	font-family: Quicksand-bold;
 	font-weight: bold;
 	color: $font-white-2;
 

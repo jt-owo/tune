@@ -1,10 +1,15 @@
 /* eslint-disable jsx-a11y/media-has-caption */
 import * as React from 'react';
+import Lottie from 'lottie-react';
 import { createRef, useEffect, useState } from 'react';
 import { selectCurrentTrack, selectQueue, setTrack, updateQueue } from '../../../state/slices/playerSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 
 import './PlayerControls.scss';
+
+import playBtn from '../../../../assets/animations/playPause.json';
+import skipBackBtn from '../../../../assets/animations/skipBack.json';
+import skipForwardBtn from '../../../../assets/animations/skipForward.json';
 
 const PlayerControls: React.FC = () => {
 	const audioRef = createRef<HTMLAudioElement>();
@@ -105,9 +110,15 @@ const PlayerControls: React.FC = () => {
 		<div id="player-container">
 			<div id="player-controls-container">
 				<img className="player-icon-service" alt="" />
-				<div className="player-control-icon" />
-				<div className="player-control-icon" />
-				<div className="player-control-icon" />
+				<div className="player-control-icon">
+					<Lottie id="skip-back-btn" animationData={skipBackBtn} loop={false} />
+				</div>
+				<div className="player-control-icon">
+					<Lottie id="play-btn" animationData={playBtn} loop={false} />
+				</div>
+				<div className="player-control-icon">
+					<Lottie id="skip-forward-btn" animationData={skipForwardBtn} loop={false} />
+				</div>
 				<input type="range" name="volumeSlider" className="volume-slider" min="0" max="100" value={volume} onChange={handleVolumeChange} />
 				<div className="slider-container">
 					<div className="current-time">{currentTime}</div>

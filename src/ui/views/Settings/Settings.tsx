@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import View from '../../components/View/View';
 
 import './Settings.scss';
+import '../../styles/_components.scss';
 
 const Settings: React.FC = () => {
 	const [audioDevices, setOutputDevices] = useState<MediaDeviceInfo[]>();
@@ -25,7 +26,7 @@ const Settings: React.FC = () => {
 	return (
 		<View title="Settings" id="settings">
 			<div className="content">
-				<select onChange={outputDeviceOnChange} value={selectedDevice}>
+				<select className="dropdown-select-1" onChange={outputDeviceOnChange} value={selectedDevice}>
 					{audioDevices &&
 						audioDevices.map((device) => {
 							return (

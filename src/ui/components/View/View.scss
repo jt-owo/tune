@@ -10,7 +10,7 @@
 	right: 90px;
 	border-style: solid;
 	border-color: $border-color;
-	border-radius: 10px;
+	border-radius: 20px;
 	//box-shadow: 3px 3px 3px 3px rgb(4, 4, 4);
 	overflow: hidden;
 }
@@ -18,7 +18,8 @@
 #view-heading {
 	box-sizing: border-box;
 	font-size: 35px;
-	font-family: FredokaOne;
+	font-family: 'Quicksand';
+	font-weight: 800;
 	color: rgb(255, 255, 255);
 	padding: 2px 0 0 20px;
 }

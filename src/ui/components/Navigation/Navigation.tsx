@@ -3,6 +3,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable import/no-named-as-default */
 import * as React from 'react';
+import Lottie from 'lottie-react';
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { addPlaylist, selectPlaylists } from '../../../state/slices/playlistSlice';
@@ -11,6 +12,11 @@ import { addAlert } from '../../../state/slices/alertSlice';
 import AppRoutes from '../../routes';
 
 import logo from '../../../../assets/images/logo.png';
+import iconPlus from '../../../../assets/ui-icons/plus-solid.svg';
+import homeIcon from '../../../../assets/animations/home.json';
+import browseIcon from '../../../../assets/animations/explore.json';
+import libraryIcon from '../../../../assets/animations/folder.json';
+import settingsIcon from '../../../../assets/animations/settings.json';
 
 import './Navigation.scss';
 
@@ -50,24 +56,31 @@ const Navigation: React.FC = () => {
 				</li>
 				<li>
 					<NavLink to={AppRoutes.Home} className="nav-btn btn-hover-animation" id="home-btn" draggable="false">
+						<Lottie id="home-icon" animationData={homeIcon} loop={false} />
 						Home
 					</NavLink>
 				</li>
 				<li>
 					<NavLink to={AppRoutes.Browse} className="nav-btn btn-hover-animation" id="browse-btn" draggable="false">
+						<Lottie id="home-icon" animationData={browseIcon} loop={false} />
 						Browse
 					</NavLink>
 				</li>
 				<li>
 					<NavLink to={AppRoutes.Library} className="nav-btn btn-hover-animation" id="library-btn" draggable="false">
+						<Lottie id="home-icon" animationData={libraryIcon} loop={false} />
 						Library
 					</NavLink>
 				</li>
 				<li id="pinned-playlist-section">
-					PLAYLISTS
+					<h2>PLAYLISTS</h2>
 					<div className="new-playlist-btn" onClick={() => setCreateNew(true)}>
-						+
+						<img src={iconPlus} alt="" />
+						New
 					</div>
+				</li>
+				<li>
+					<div className="spacer" />
 				</li>
 				<li>
 					{createNew && <input type="text" placeholder="Name..." className="new-playlist-name-field" autoFocus onBlur={() => setCreateNew(false)} onChange={(e) => setNewPlaylistName(e.target.value)} onKeyPress={handleKeyPress} />}
@@ -81,6 +94,7 @@ const Navigation: React.FC = () => {
 				</li>
 				<li>
 					<NavLink to={AppRoutes.Settings} className="nav-btn btn-hover-animation" id="settings-btn" draggable="false">
+						<Lottie id="home-icon" animationData={settingsIcon} loop={false} />
 						Settings
 					</NavLink>
 				</li>

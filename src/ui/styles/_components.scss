@@ -1,0 +1,44 @@
+/* ==========================================================================
+   This file defines all frequently used UI components within the app
+   ========================================================================== */
+
+   /* PATHS & IMPORTS
+   ========================================================================== */
+@import 'colors';
+$icon-path : '../../../assets/ui-icons';
+
+
+   /* SELECT
+   ========================================================================== */
+.dropdown-select-1 {
+	height: 35px;
+	width: 350px;
+	background-color: $dark-gray-4;
+	color: #ffffff;
+	font-family: Quicksand;
+	font-size: 16px;
+	font-weight: normal;
+	border: none;
+	border-radius: 12px;
+	padding-left: 10px;
+	transition: ease-in-out 0.1s;
+	appearance: none;
+	background-image: url(#{$icon-path}/angle-down-solid-w.svg);
+	background-repeat: no-repeat;
+	background-position-x: 322px;
+	background-position-y: 14px;
+	background-size: 16px;
+}
+
+.dropdown-select-1:focus {
+	outline: none;
+}
+
+.dropdown-select-1:hover {
+	background-color: #3d3d45;
+	box-shadow: 0 0 10px #3d3d45;
+}
+
+
+   /* BUTTONS
+   ========================================================================== */

@@ -19,17 +19,25 @@
 	float: left;
 }
 
-.player-control-icon {
+.player-control-container {
 	max-height: 30px;
 	margin: 20px 20px 0 0px;
 	float: right;
 }
 
+.player-control-icon {
+	border-radius: 10px;
+	transition: ease-in-out 0.08s;
+}
+.player-control-icon:hover {
+	background-color: rgba($color: #ffffff, $alpha: 0.15);
+}
+
 #play-btn {
-	height: 45px;
+	height: 37px;
 	position: absolute;
-	top: 5px;
-	right: 50px;
+	top: 9px;
+	right: 54px;
 }
 
 #skip-back-btn {
@@ -37,13 +45,15 @@
 	position: absolute;
 	top: 9px;
 	right: 100px;
+	padding: 3px;
 }
 
 #skip-forward-btn {
-	height: 50px;
+	height: 37px;
 	position: absolute;
-	top: 2px;
-	right: 5px;
+	top: 9px;
+	right: 10px;
+	padding: 3px;
 }
 
 /* Define the slider width so that it scales properly */
@@ -61,11 +71,11 @@
 	-webkit-appearance: none;
 	appearance: none;
 	background: white;
-	opacity: 0.3;
+	opacity: 0;
 	-webkit-transition: .2s;
 	transition: opacity .2s;
 	border-radius: 19px;
-	display: none;
+	// display: none;
 }
 
 .volume-slider {
@@ -94,7 +104,7 @@
 
 .seek-slider:hover,
 .volume-slider:hover {
-	opacity: 0.7;
+	opacity: 0.1;
 }
 
 .seek-slider {

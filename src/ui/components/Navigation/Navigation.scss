@@ -39,7 +39,6 @@
 	text-decoration: none;
 	color: #ffffff;
 	font-family: Quicksand-regular;
-	font-weight: light;
 	padding: 5px 16px 5px 10px;
 	margin: 5px 10px;
 	border-radius: 6px;
@@ -79,30 +78,8 @@
 	background-color: $selected-neutral;
 }
 
-#home-btn {
-	color: rgb(255, 255, 255);
-	display: flex;
-}
-
-#home-icon {
-	height: 20px;
-	margin-right: 10px;
-}
-
-#library-btn {
-	color: rgb(255, 255, 255);
-	display: flex;
-}
-
-#browse-btn {
-	color: rgb(255, 255, 255);
-	display: flex;
-}
-
 #settings-btn {
-	color: rgb(255, 255, 255);
 	margin-bottom: 10px;
-	display: flex;
 }
 
 #pinned-playlist-section {

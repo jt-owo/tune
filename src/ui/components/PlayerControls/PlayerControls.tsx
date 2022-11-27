@@ -1,6 +1,8 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/media-has-caption */
 import * as React from 'react';
-import Lottie from 'lottie-react';
+import Lottie, { LottieRefCurrentProps } from 'lottie-react';
 import { createRef, useEffect, useState } from 'react';
 import { selectCurrentTrack, selectQueue, setTrack, updateQueue } from '../../../state/slices/playerSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks';
@@ -22,6 +24,12 @@ const PlayerControls: React.FC = () => {
 	const [seekTo, setSeekTo] = useState(0);
 	const [currentTime, setCurrentTime] = useState('00:00');
 	const [totalDuration, setTotalDuration] = useState('00:00');
+
+	const [isPlaying, setPlaying] = useState(false);
+
+	const skipBackBtnRef = React.useRef<LottieRefCurrentProps>(null);
+	const playBtnRef = React.useRef<LottieRefCurrentProps>(null);
+	const skipForwardBtnRef = React.useRef<LottieRefCurrentProps>(null);
 
 	const dispatch = useAppDispatch();
 
@@ -106,24 +114,49 @@ const PlayerControls: React.FC = () => {
 		setSeekPosition(seekTo);
 	};
 
+	useEffect(() => {
+		playBtnRef?.current?.goToAndStop(7, true);
+	}, []);
+
+	const startAnimation = (ref: React.RefObject<LottieRefCurrentProps>) => {
+		if (ref === playBtnRef) {
+			ref?.current?.setSpeed(2);
+			if (isPlaying) {
+				ref?.current?.setDirection(1);
+			} else {
+				ref?.current?.setDirection(-1);
+			}
+			ref?.current?.play();
+			if (isPlaying) {
+				setPlaying(false);
+			} else {
+				setPlaying(true);
+			}
+		} else {
+			ref?.current?.setSpeed(4);
+			ref?.current?.stop();
+			ref?.current?.play();
+		}
+	};
+
 	return (
 		<div id="player-container">
 			<div id="player-controls-container">
-				<img className="player-icon-service" alt="" />
-				<div className="player-control-icon">
-					<Lottie id="skip-back-btn" animationData={skipBackBtn} loop={false} />
-				</div>
-				<div className="player-control-icon">
-					<Lottie id="play-btn" animationData={playBtn} loop={false} />
-				</div>
-				<div className="player-control-icon">
-					<Lottie id="skip-forward-btn" animationData={skipForwardBtn} loop={false} />
-				</div>
 				<input type="range" name="volumeSlider" className="volume-slider" min="0" max="100" value={volume} onChange={handleVolumeChange} />
 				<div className="slider-container">
 					<div className="current-time">{currentTime}</div>
 					<input type="range" min="0" max="100" className="seek-slider" value={seekPosition} onChange={handleSeekTo} />
 					<div className="total-duration">{totalDuration}</div>
+				</div>
+				<img className="player-icon-service" alt="" />
+				<div className="player-control-container" onClick={() => startAnimation(skipBackBtnRef)}>
+					<Lottie id="skip-back-btn" className="player-control-icon" animationData={skipBackBtn} loop={false} lottieRef={skipBackBtnRef} autoplay={false} />
+				</div>
+				<div className="player-control-container" onClick={() => startAnimation(playBtnRef)}>
+					<Lottie id="play-btn" className="player-control-icon" animationData={playBtn} loop={false} lottieRef={playBtnRef} autoplay={false} />
+				</div>
+				<div className="player-control-container" onClick={() => startAnimation(skipForwardBtnRef)}>
+					<Lottie id="skip-forward-btn" className="player-control-icon" animationData={skipForwardBtn} loop={false} lottieRef={skipForwardBtnRef} autoplay={false} />
 				</div>
 				{currentTrack?.fileName}
 			</div>

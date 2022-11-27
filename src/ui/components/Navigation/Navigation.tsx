@@ -11,6 +11,8 @@ import { useAppDispatch, useAppSelector } from '../../hooks';
 import { addAlert } from '../../../state/slices/alertSlice';
 import AppRoutes from '../../routes';
 
+import NavlistButton from '../NavlistButton/NavlistButton';
+
 import logo from '../../../../assets/images/logo.png';
 import iconPlus from '../../../../assets/ui-icons/plus-solid.svg';
 import homeIcon from '../../../../assets/animations/home.json';
@@ -56,20 +58,17 @@ const Navigation: React.FC = () => {
 				</li>
 				<li>
 					<NavLink to={AppRoutes.Home} className="nav-btn btn-hover-animation" id="home-btn" draggable="false">
-						<Lottie id="home-icon" animationData={homeIcon} loop={false} />
-						Home
+						<NavlistButton animation={homeIcon} doLoop={false} title="Home" />
 					</NavLink>
 				</li>
 				<li>
 					<NavLink to={AppRoutes.Browse} className="nav-btn btn-hover-animation" id="browse-btn" draggable="false">
-						<Lottie id="home-icon" animationData={browseIcon} loop={false} />
-						Browse
+						<NavlistButton animation={browseIcon} doLoop={false} title="Browse" />
 					</NavLink>
 				</li>
 				<li>
 					<NavLink to={AppRoutes.Library} className="nav-btn btn-hover-animation" id="library-btn" draggable="false">
-						<Lottie id="home-icon" animationData={libraryIcon} loop={false} />
-						Library
+						<NavlistButton animation={libraryIcon} doLoop={false} title="Library" />
 					</NavLink>
 				</li>
 				<li id="pinned-playlist-section">
@@ -94,8 +93,7 @@ const Navigation: React.FC = () => {
 				</li>
 				<li>
 					<NavLink to={AppRoutes.Settings} className="nav-btn btn-hover-animation" id="settings-btn" draggable="false">
-						<Lottie id="home-icon" animationData={settingsIcon} loop={false} />
-						Settings
+						<NavlistButton animation={settingsIcon} doLoop={false} title="Settings" />
 					</NavLink>
 				</li>
 			</ul>

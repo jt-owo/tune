@@ -3,6 +3,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import * as React from 'react';
+import Lottie, { LottieRefCurrentProps } from 'lottie-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
@@ -13,8 +14,9 @@ import PlaylistTrack from './PlaylistTrack/PlaylistTrack';
 import AppRoutes from '../../routes';
 
 import playIcon from '../../../../assets/ui-icons/simple-play-btn.svg';
-import shuffleIcon from '../../../../assets/ui-icons/shuffle-svgrepo-com.svg';
-import optionIcon from '../../../../assets/ui-icons/three-dots.svg';
+
+import folderIcon from '../../../../assets/animations/folder.json';
+import trashIcon from '../../../../assets/animations/trash.json';
 
 import './Playlist.scss';
 
@@ -25,6 +27,10 @@ const Playlist: React.FC = () => {
 
 	const playlists = useAppSelector(selectPlaylists);
 	const [playlist, setPlaylist] = useState(playlists.find((x) => x.id === id));
+
+	const lottiePlayPlaylistRef = React.useRef<LottieRefCurrentProps>(null);
+	const lottieAddTracksRef = React.useRef<LottieRefCurrentProps>(null);
+	const lottieDeletePlaylistRef = React.useRef<LottieRefCurrentProps>(null);
 
 	if (!playlist) {
 		navigate(AppRoutes.Library);
@@ -87,6 +93,15 @@ const Playlist: React.FC = () => {
 		if (playlistFound) setPlaylist(playlistFound);
 	}, [playlists, id]);
 
+	const startAnimation = (e: React.RefObject<LottieRefCurrentProps>) => {
+		e?.current?.setDirection(1);
+		e?.current?.play();
+	};
+	const stopAnimation = (e: React.RefObject<LottieRefCurrentProps>) => {
+		e?.current?.setDirection(-1);
+		e?.current?.play();
+	};
+
 	return (
 		<div key={id} id="playlist-container">
 			<div id="playlist-heading">
@@ -94,11 +109,11 @@ const Playlist: React.FC = () => {
 				<div id="playlist-play-btn" className="playlist-heading-btn btn-hover-animation" onClick={playPlaylist}>
 					<img id="play-icon" src={playIcon} alt="" draggable="false" />
 				</div>
-				<div id="playlist-shuffle-btn" className="playlist-heading-btn btn-hover-animation" onClick={handleAddTracks}>
-					<img id="shuffle-icon" src={shuffleIcon} alt="" draggable="false" />
+				<div id="playlist-import-btn" className="playlist-heading-btn btn-hover-animation" onClick={handleAddTracks} onMouseEnter={() => startAnimation(lottieAddTracksRef)} onMouseLeave={() => stopAnimation(lottieAddTracksRef)}>
+					<Lottie id="import-icon" animationData={folderIcon} lottieRef={lottieAddTracksRef} loop={false} autoplay={false} />
 				</div>
-				<div id="playlist-option-btn" className="playlist-heading-btn btn-hover-animation" onClick={deletePlaylist}>
-					<img id="option-icon" src={optionIcon} alt="" draggable="false" />
+				<div id="playlist-delete-btn" className="playlist-heading-btn btn-hover-animation" onClick={deletePlaylist} onMouseEnter={() => startAnimation(lottieDeletePlaylistRef)} onMouseLeave={() => stopAnimation(lottieDeletePlaylistRef)}>
+					<Lottie id="delete-icon" animationData={trashIcon} lottieRef={lottieDeletePlaylistRef} loop={false} autoplay={false} />
 				</div>
 			</div>
 			<div id="divider" />

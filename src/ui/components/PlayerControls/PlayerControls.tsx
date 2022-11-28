@@ -31,6 +31,8 @@ const PlayerControls: React.FC = () => {
 	const playBtnRef = React.useRef<LottieRefCurrentProps>(null);
 	const skipForwardBtnRef = React.useRef<LottieRefCurrentProps>(null);
 
+	const progressBarRef = createRef<HTMLDivElement>();
+
 	const dispatch = useAppDispatch();
 
 	useEffect(() => {
@@ -70,7 +72,13 @@ const PlayerControls: React.FC = () => {
 				setTotalDuration(`${durationMinutes}:${durationSeconds}`);
 			}
 		};
+		const updateProgressDiv = () => {
+			if (progressBarRef.current && audioRef.current) {
+				progressBarRef.current.style.right = `${(1 - audioRef.current.currentTime / audioRef.current.duration) * 100}%`;
+			}
+		};
 		seekUpdate();
+		updateProgressDiv();
 
 		if (interval) clearTimeout(interval);
 		interval = setTimeout(seekUpdate, 1000);
@@ -88,7 +96,7 @@ const PlayerControls: React.FC = () => {
 			mounted = false;
 			if (interval) clearInterval(interval);
 		};
-	}, [currentTrack, audioRef, volume]);
+	}, [currentTrack, audioRef, volume, progressBarRef]);
 
 	const onEnded = (_e: React.SyntheticEvent<HTMLAudioElement>) => {
 		const queueCopy = [...queue];
@@ -118,6 +126,7 @@ const PlayerControls: React.FC = () => {
 		playBtnRef?.current?.goToAndStop(7, true);
 	}, []);
 
+	// Handles Lottie Animations for the Player Controls
 	const startAnimation = (ref: React.RefObject<LottieRefCurrentProps>) => {
 		if (ref === playBtnRef) {
 			ref?.current?.setSpeed(2);
@@ -127,11 +136,7 @@ const PlayerControls: React.FC = () => {
 				ref?.current?.setDirection(-1);
 			}
 			ref?.current?.play();
-			if (isPlaying) {
-				setPlaying(false);
-			} else {
-				setPlaying(true);
-			}
+			setPlaying(!isPlaying);
 		} else {
 			ref?.current?.setSpeed(4);
 			ref?.current?.stop();
@@ -139,11 +144,26 @@ const PlayerControls: React.FC = () => {
 		}
 	};
 
+	// Called on mouseEnter of Progress Bar
+	const handleProgressBarEnter = () => {
+		if (progressBarRef.current) {
+			progressBarRef.current.style.opacity = '0.4';
+		}
+	};
+
+	// Called on mouseLeave of Progress Bar
+	const handleProgressBarLeave = () => {
+		if (progressBarRef.current) {
+			progressBarRef.current.style.opacity = '0.2';
+		}
+	};
+
 	return (
 		<div id="player-container">
 			<div id="player-controls-container">
+				<div id="progress-bar" ref={progressBarRef} />
 				<input type="range" name="volumeSlider" className="volume-slider" min="0" max="100" value={volume} onChange={handleVolumeChange} />
-				<div className="slider-container">
+				<div className="slider-container" onMouseEnter={handleProgressBarEnter} onMouseLeave={handleProgressBarLeave}>
 					<div className="current-time">{currentTime}</div>
 					<input type="range" min="0" max="100" className="seek-slider" value={seekPosition} onChange={handleSeekTo} />
 					<div className="total-duration">{totalDuration}</div>

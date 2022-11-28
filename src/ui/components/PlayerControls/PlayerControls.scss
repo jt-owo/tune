@@ -11,6 +11,7 @@
 	border-radius: 20px;
 	border-style: solid;
 	border-color: $border-color;
+	overflow: hidden;
 }
 
 .player-icon-service {
@@ -28,6 +29,7 @@
 .player-control-icon {
 	border-radius: 10px;
 	transition: ease-in-out 0.08s;
+	z-index: 3;
 }
 .player-control-icon:hover {
 	background-color: rgba($color: #ffffff, $alpha: 0.15);
@@ -72,9 +74,10 @@
 	appearance: none;
 	background: white;
 	opacity: 0;
-	-webkit-transition: .2s;
-	transition: opacity .2s;
+	-webkit-transition: 0.2s;
+	transition: opacity 0.2s;
 	border-radius: 19px;
+	z-index: 2;
 	// display: none;
 }
 
@@ -85,8 +88,8 @@
 	height: 10px;
 	background: white;
 	opacity: 0.7;
-	-webkit-transition: .2s;
-	transition: opacity .2s;
+	-webkit-transition: 0.2s;
+	transition: opacity 0.2s;
 	border-radius: 10px;
 }
 
@@ -102,13 +105,13 @@
 	border-radius: 0%;
 }
 
-.seek-slider:hover,
 .volume-slider:hover {
 	opacity: 0.1;
 }
 
 .seek-slider {
 	width: 100%;
+	cursor: pointer;
 }
 
 .volume-slider {
@@ -119,4 +122,16 @@
 .total-duration {
 	padding: 10px;
 	display: none;
+}
+
+#progress-bar {
+	background-color: #ffffff;
+	opacity: 0.15;
+	position: absolute;
+	top: 0px;
+	bottom: 0px;
+	left: 0px;
+	border-radius: 19px 0 0 19px;
+	z-index: 1;
+	transition: opacity ease-in-out 0.15s;
 }

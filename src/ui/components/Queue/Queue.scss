@@ -1,5 +1,6 @@
 @import '../../styles/animations';
 @import '../../styles/colors';
+@import '../../styles/fonts';
 
 * {
 	padding: 0;
@@ -15,14 +16,14 @@
 }
 
 .queue-track-title {
-	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	font-family: Quicksand-regular;
 	font-weight: bold;
 	margin: 2px 0 0 10px;
 	width: 100%;
 }
 
 .queue-track-artist {
-	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	font-family: Quicksand-regular;
 	font-weight: bold;
 	color: #b4b4b4;
 	font-size: 12px;
@@ -41,7 +42,7 @@
 	background-color: $floating-component-color;
 	border-style: solid;
 	border-color: $border-color;
-	border-radius: 10px;
+	border-radius: 20px;
 	//box-shadow: 3px 3px 3px 3px rgb(4, 4, 4);
 
 	transition: all 0.2s ease-in-out;
@@ -67,7 +68,7 @@
 }
 
 #queue-container header {
-	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	font-family: Quicksand-bold;
 	font-weight: bold;
 	color: $font-white-2;
 

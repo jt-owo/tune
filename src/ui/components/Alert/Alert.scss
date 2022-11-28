@@ -1,5 +1,6 @@
 @import '../../styles/animations';
 @import '../../styles/colors';
+@import '../../styles/fonts';
 
 .alert {
 	padding: 20px;
@@ -10,11 +11,11 @@
 	left: 0;
 	right: 0;
 	text-align: center;
-	border-radius: 10px;
+	border-radius: 20px;
 	width: 70%;
 	margin-top: 10px;
 	animation: fadeIn 0.5s;
-	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	font-family: Quicksand;
 }
 
 .alert.fade-out {

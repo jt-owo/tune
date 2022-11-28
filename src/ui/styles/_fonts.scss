@@ -2,10 +2,31 @@
 
 @font-face {
 	font-family: Poppins-Medium;
-	src: url(../../../../assets/fonts/Poppins-Medium.ttf);
+	src: url('../../../../assets/fonts/Poppins-Medium.ttf');
 }
 
 @font-face {
 	font-family: FredokaOne;
 	src: url('../../../../assets/fonts/FredokaOne.ttf');
+}
+
+@font-face {
+	font-family: Quicksand-bold;
+	font-weight: bold;
+	src: url('../../../../assets/fonts/Quicksand.ttf');
+}
+@font-face {
+	font-family: Quicksand-semibold;
+	font-weight: bolder;
+	src: url('../../../../assets/fonts/Quicksand.ttf');
+}
+@font-face {
+	font-family: Quicksand-regular;
+	font-weight: normal;
+	src: url('../../../../assets/fonts/Quicksand.ttf');
+}
+@font-face {
+	font-family: Quicksand-light;
+	font-weight: 100;
+	src: url('../../../../assets/fonts/Quicksand.ttf');
 }

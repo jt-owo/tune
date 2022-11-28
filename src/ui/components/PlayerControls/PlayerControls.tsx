@@ -1,10 +1,17 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/media-has-caption */
 import * as React from 'react';
+import Lottie, { LottieRefCurrentProps } from 'lottie-react';
 import { createRef, useEffect, useState } from 'react';
 import { selectCurrentTrack, selectOutputDeviceId, selectQueue, setTrack, updateQueue } from '../../../state/slices/playerSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 
 import './PlayerControls.scss';
+
+import playBtn from '../../../../assets/animations/playPause.json';
+import skipBackBtn from '../../../../assets/animations/skipBack.json';
+import skipForwardBtn from '../../../../assets/animations/skipForward.json';
 
 const PlayerControls: React.FC = () => {
 	const audioRef = createRef<HTMLAudioElement & { setSinkId(deviceId: string): void }>();
@@ -18,6 +25,14 @@ const PlayerControls: React.FC = () => {
 	const [seekTo, setSeekTo] = useState(0);
 	const [currentTime, setCurrentTime] = useState('00:00');
 	const [totalDuration, setTotalDuration] = useState('00:00');
+
+	const [isPlaying, setPlaying] = useState(false);
+
+	const skipBackBtnRef = React.useRef<LottieRefCurrentProps>(null);
+	const playBtnRef = React.useRef<LottieRefCurrentProps>(null);
+	const skipForwardBtnRef = React.useRef<LottieRefCurrentProps>(null);
+
+	const progressBarRef = createRef<HTMLDivElement>();
 
 	const dispatch = useAppDispatch();
 
@@ -62,6 +77,13 @@ const PlayerControls: React.FC = () => {
 				setTotalDuration(`${durationMinutes}:${durationSeconds}`);
 			}
 		};
+		const updateProgressDiv = () => {
+			if (progressBarRef.current && audioRef.current) {
+				progressBarRef.current.style.right = `${(1 - audioRef.current.currentTime / audioRef.current.duration) * 100}%`;
+			}
+		};
+		seekUpdate();
+		updateProgressDiv();
 
 		if (interval) clearTimeout(interval);
 		interval = setInterval(seekUpdate, 1000);
@@ -80,8 +102,8 @@ const PlayerControls: React.FC = () => {
 			mounted = false;
 			if (interval) clearInterval(interval);
 		};
-	}, [currentTrack, audioRef, volume, outputDeviceId]);
-
+	}, [currentTrack, audioRef, volume, progressBarRef, outputDeviceId]);
+  
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const onEnded = (_e: React.SyntheticEvent<HTMLAudioElement>) => {
 		const queueCopy = [...queue];
@@ -107,18 +129,61 @@ const PlayerControls: React.FC = () => {
 		setSeekPosition(seekTo);
 	};
 
+	useEffect(() => {
+		playBtnRef?.current?.goToAndStop(7, true);
+	}, []);
+
+	// Handles Lottie Animations for the Player Controls
+	const startAnimation = (ref: React.RefObject<LottieRefCurrentProps>) => {
+		if (ref === playBtnRef) {
+			ref?.current?.setSpeed(2);
+			if (isPlaying) {
+				ref?.current?.setDirection(1);
+			} else {
+				ref?.current?.setDirection(-1);
+			}
+			ref?.current?.play();
+			setPlaying(!isPlaying);
+		} else {
+			ref?.current?.setSpeed(4);
+			ref?.current?.stop();
+			ref?.current?.play();
+		}
+	};
+
+	// Called on mouseEnter of Progress Bar
+	const handleProgressBarEnter = () => {
+		if (progressBarRef.current) {
+			progressBarRef.current.style.opacity = '0.4';
+		}
+	};
+
+	// Called on mouseLeave of Progress Bar
+	const handleProgressBarLeave = () => {
+		if (progressBarRef.current) {
+			progressBarRef.current.style.opacity = '0.2';
+		}
+	};
+
 	return (
 		<div id="player-container">
 			<div id="player-controls-container">
-				<img className="player-icon-service" alt="" />
-				<div className="player-control-icon" />
-				<div className="player-control-icon" />
-				<div className="player-control-icon" />
+				<div id="progress-bar" ref={progressBarRef} />
 				<input type="range" name="volumeSlider" className="volume-slider" min="0" max="100" value={volume} onChange={handleVolumeChange} />
-				<div className="slider-container">
+				<div className="slider-container" onMouseEnter={handleProgressBarEnter} onMouseLeave={handleProgressBarLeave}>
 					<div className="current-time">{currentTime}</div>
 					<input type="range" min="0" max="100" className="seek-slider" value={seekPosition} onChange={handleSeekTo} />
 					<div className="total-duration">{totalDuration}</div>
+				</div>
+				<img className="player-icon-service" alt="" />
+				<div className="player-control-container" onClick={() => startAnimation(skipBackBtnRef)}>
+					<Lottie id="skip-back-btn" className="player-control-icon" animationData={skipBackBtn} loop={false} lottieRef={skipBackBtnRef} autoplay={false} />
+				</div>
+				<div className="player-control-container" onClick={() => startAnimation(playBtnRef)}>
+					<Lottie id="play-btn" className="player-control-icon" animationData={playBtn} loop={false} lottieRef={playBtnRef} autoplay={false} />
+				</div>
+				<div className="player-control-container" onClick={() => startAnimation(skipForwardBtnRef)}>
+					<Lottie id="skip-forward-btn" className="player-control-icon" animationData={skipForwardBtn} loop={false} lottieRef={skipForwardBtnRef} autoplay={false} />
 				</div>
 				{currentTrack?.fileName}
 			</div>

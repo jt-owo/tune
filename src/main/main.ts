@@ -1,10 +1,11 @@
 /* eslint-disable class-methods-use-this */
-/* eslint-disable consistent-return */
 /* eslint @typescript-eslint/no-var-requires: off, global-require: off */
 import { app, ipcMain, protocol } from 'electron';
 import { IpcChannel } from './ipc/types';
-import { CloseWindowChannel, MinimizeWindowChannel, MaximizeWindowChannel, DirectoryPathChannel, ReadMetadataChannel, AddTracksChannel } from './ipc/channels';
 import Window from './window/window';
+import Database from './api/database';
+import { ReadMetadataChannel, SelectFileChannel, WindowControlChannel } from './ipc';
+import Channels from './ipc/channel';
 
 if (process.env.NODE_ENV === 'production') {
 	const sourceMapSupport = require('source-map-support');
@@ -21,6 +22,9 @@ class Main {
 	/** Electron main window instance */
 	private mainWindow!: Window;
 
+	/** JSON database instance */
+	private database!: Database;
+
 	constructor() {
 		app.on('ready', () => {
 			this.onReady();
@@ -30,7 +34,7 @@ class Main {
 			this.onWindowAllClosed();
 		});
 
-		this.initIpc([new CloseWindowChannel(), new MinimizeWindowChannel(), new MaximizeWindowChannel(), new DirectoryPathChannel(), new ReadMetadataChannel(), new AddTracksChannel()]);
+		this.initIpc([new WindowControlChannel(), new ReadMetadataChannel(), new SelectFileChannel()]);
 	}
 
 	/**
@@ -43,10 +47,25 @@ class Main {
 				return channel.handle(event, args);
 			});
 		});
+
+		ipcMain.on(Channels.DATABASE_GET, (event, args) => {
+			const key = args;
+
+			// eslint-disable-next-line no-param-reassign
+			event.returnValue = this.database.get(key);
+		});
+
+		ipcMain.handle(Channels.DATABASE_SET, (_event, args) => {
+			const key = args[0];
+			const value = args[1];
+
+			if (Database.validate(value)) this.database.set(key, JSON.parse(value));
+		});
 	}
 
 	private onReady() {
 		this.mainWindow = new Window();
+		this.database = new Database(app.getPath('userData'));
 
 		app.on('activate', () => {
 			this.onActivate();

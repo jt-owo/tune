@@ -6,7 +6,7 @@ export default class FileParser {
 	 * Parses a {@link mm.IAudioMetadata} object into a more compact {@link AudioMetadata} object.
 	 * @param rawMetadata Raw AudioMetadata.
 	 */
-	public static parseMM(rawMetadata: mm.IAudioMetadata): AudioMetadata {
+	private static parseMetadata(rawMetadata: mm.IAudioMetadata): AudioMetadata {
 		const metadata: AudioMetadata = {};
 		metadata.format = { losless: false };
 		metadata.info = { artist: '', title: '' };
@@ -65,7 +65,7 @@ export default class FileParser {
 
 	public static async getMetadata(file: string): Promise<string> {
 		const fileMetadata = await mm.parseFile(file);
-		const parsedMetadata = FileParser.parseMM(fileMetadata);
+		const parsedMetadata = FileParser.parseMetadata(fileMetadata);
 
 		return JSON.stringify(parsedMetadata);
 	}

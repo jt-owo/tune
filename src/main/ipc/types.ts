@@ -1,4 +1,3 @@
-// eslint-disable-next-line max-classes-per-file
 import { IpcMainInvokeEvent } from 'electron';
 
 export interface IpcChannel<ArgsType, RetType> {

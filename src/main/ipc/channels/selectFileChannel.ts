@@ -1,22 +1,22 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { dialog } from 'electron';
+import { dialog, IpcMainInvokeEvent } from 'electron';
 import { IpcChannel } from '../types';
-import MiscChannels from '.';
+import Channels from '../channel';
 
-class AddTracksChannel implements IpcChannel<string, string[]> {
+class SelectFileChannel implements IpcChannel<string, string[]> {
 	getName(): string {
-		return MiscChannels.ADD_TRACKS;
+		return Channels.SELECT_FILE;
 	}
 
-	async handle(_event: Electron.IpcMainInvokeEvent, _args: string): Promise<string[]> {
+	async handle(_event: IpcMainInvokeEvent, _args: string): Promise<string[]> {
 		const result = await dialog.showOpenDialog({
 			properties: ['openFile', 'multiSelections'],
 			filters: [{ name: 'Audio Files', extensions: ['mp3', 'flac'] }]
 		});
 
-		return [...result.filePaths] as string[];
+		return result.filePaths;
 	}
 }
 
-export default AddTracksChannel;
+export default SelectFileChannel;

@@ -11,13 +11,13 @@ export interface FileInfo {
 
 export interface IFileWriter<T> {
 	file: FileInfo;
-	read(defaults?: any): T;
+	read(defaults: T): T;
 	write(object: T): void;
 }
 
 export interface IAsyncFileWriter<T> {
 	file: FileInfo;
-	read(defaults?: any): Promise<T>;
+	read(defaults: T): Promise<T>;
 	write(object: T): Promise<void>;
 }
 
@@ -34,7 +34,7 @@ export class JsonFileWriter<T> implements IFileWriter<T> {
 		};
 	}
 
-	read(defaults?: any): T {
+	read(defaults: T): T {
 		let data;
 
 		try {

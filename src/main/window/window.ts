@@ -3,11 +3,11 @@ import { app, BrowserWindow, shell } from 'electron';
 import log from 'electron-log';
 import { autoUpdater } from 'electron-updater';
 import path from 'path';
-import { IStoreData, UserPrefStore } from '../api/tuneStore';
+import { IStoreData, DynamicStore } from '../api/dynamicStore';
 import { resolveHtmlPath } from '../util';
 import MenuBuilder from './menu';
 
-export interface UserPref extends IStoreData {
+export interface UserConfig extends IStoreData {
 	windowBounds: WindowBounds;
 	windowState: number;
 }
@@ -27,7 +27,7 @@ class AppUpdater {
 	}
 }
 
-const USER_DEFAULTS: UserPref = {
+const USER_DEFAULTS: UserConfig = {
 	windowBounds: {
 		width: 0,
 		height: 0,
@@ -62,7 +62,7 @@ const MIN_HEIGHT = 640;
 export default class Window {
 	private browserWindow: BrowserWindow | null;
 
-	private userPref: UserPrefStore;
+	private userConfig: DynamicStore;
 
 	constructor() {
 		if (isDebug) {
@@ -90,16 +90,16 @@ export default class Window {
 			}
 		});
 
-		this.userPref = new UserPrefStore(USER_DEFAULTS);
+		this.userConfig = new DynamicStore('userPref', USER_DEFAULTS);
 
-		const winBounds = this.userPref.get<WindowBounds>('windowBounds');
+		const winBounds = this.userConfig.get<WindowBounds>('windowBounds');
 		if (winBounds && winBounds.height !== 0 && winBounds.width !== 0 && winBounds.x !== 0 && winBounds.y !== 0) {
 			this.browserWindow.setBounds(winBounds);
 		} else {
 			this.browserWindow.center();
 		}
 
-		const winState = this.userPref.get<number>('windowState');
+		const winState = this.userConfig.get<number>('windowState');
 		if (winState) {
 			this.browserWindow.setFullScreen(true);
 		}
@@ -194,7 +194,7 @@ export default class Window {
 		const x = winPos[0];
 		const y = winPos[1];
 
-		this.userPref.set('windowBounds', {
+		this.userConfig.set('windowBounds', {
 			width,
 			height,
 			x,
@@ -206,7 +206,7 @@ export default class Window {
 		if (!this.browserWindow) return;
 
 		const state = this.browserWindow.isMaximized() ? 1 : 0;
-		this.userPref.set('windowState', state);
+		this.userConfig.set('windowState', state);
 	}
 
 	/**

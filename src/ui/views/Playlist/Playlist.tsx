@@ -51,7 +51,7 @@ const Playlist: React.FC = () => {
 			pinned: playlist.pinned
 		};
 
-		const paths = await window.electron.ipc.playlist.addTracks();
+		const paths = await window.ipc.system.selectFiles();
 
 		let index = 0;
 		paths.forEach((path) => {

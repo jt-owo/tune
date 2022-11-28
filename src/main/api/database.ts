@@ -16,7 +16,7 @@ const DEFAULT_DB: Tables = {
 export default class Database {
 	private filePath: string;
 
-	private data!: Tables;
+	private data: Tables;
 
 	/**
 	 * Initializes the db.

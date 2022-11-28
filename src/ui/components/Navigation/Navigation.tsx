@@ -11,7 +11,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks';
 import { addAlert } from '../../../state/slices/alertSlice';
 import AppRoutes from '../../routes';
 
-import NavlistButton from '../NavlistButton/NavlistButton';
+import NavlistButton from './NavlistButton/NavlistButton';
 
 import logo from '../../../../assets/images/logo.png';
 import iconPlus from '../../../../assets/ui-icons/plus-solid.svg';

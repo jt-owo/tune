@@ -1,5 +1,3 @@
-/* eslint-disable react/jsx-no-useless-fragment */
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import * as React from 'react';
@@ -59,16 +57,16 @@ const Playlist: React.FC = () => {
 			pinned: playlist.pinned
 		};
 
-		const paths = await window.electron.ipc.playlist.addTracks();
+		const paths = await window.ipc.system.selectFiles();
 
 		let index = 0;
 		paths.forEach((path) => {
-			if (updateData.tracks!.length > 0) {
-				const values = updateData.tracks!.map((p) => p.sortIndex);
+			if (updateData.tracks.length > 0) {
+				const values = updateData.tracks.map((p) => p.sortIndex);
 				index = Math.max(...values) + 1;
 			}
 
-			updateData.tracks!.push({
+			updateData.tracks.push({
 				filePath: path,
 				fileName: '',
 				fileExt: '',
@@ -85,7 +83,9 @@ const Playlist: React.FC = () => {
 	};
 
 	const playPlaylist = () => {
-		dispatch(setQueue(playlist!.tracks));
+		if (!playlist) return;
+
+		dispatch(setQueue(playlist.tracks));
 	};
 
 	useEffect(() => {

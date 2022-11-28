@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/no-autofocus */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable import/no-named-as-default */
 import * as React from 'react';
 import Lottie from 'lottie-react';
 import { useState } from 'react';
@@ -34,12 +33,7 @@ const Navigation: React.FC = () => {
 	const handleKeyPress = async (event: React.KeyboardEvent) => {
 		if (event.key === 'Enter') {
 			setCreateNew(false);
-			dispatch(
-				addPlaylist({
-					name: newPlaylistName,
-					tracks: []
-				})
-			);
+			dispatch(addPlaylist(newPlaylistName));
 			dispatch(
 				addAlert({
 					message: `Playlist '${newPlaylistName}' was successfully added.`,

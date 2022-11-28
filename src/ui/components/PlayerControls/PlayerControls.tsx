@@ -4,7 +4,7 @@
 import * as React from 'react';
 import Lottie, { LottieRefCurrentProps } from 'lottie-react';
 import { createRef, useEffect, useState } from 'react';
-import { selectCurrentTrack, selectQueue, setTrack, updateQueue } from '../../../state/slices/playerSlice';
+import { selectCurrentTrack, selectOutputDeviceId, selectQueue, setTrack, updateQueue } from '../../../state/slices/playerSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 
 import './PlayerControls.scss';
@@ -14,10 +14,11 @@ import skipBackBtn from '../../../../assets/animations/skipBack.json';
 import skipForwardBtn from '../../../../assets/animations/skipForward.json';
 
 const PlayerControls: React.FC = () => {
-	const audioRef = createRef<HTMLAudioElement>();
+	const audioRef = createRef<HTMLAudioElement & { setSinkId(deviceId: string): void }>();
 
 	const currentTrack = useAppSelector(selectCurrentTrack);
 	const queue = useAppSelector(selectQueue);
+	const outputDeviceId = useAppSelector(selectOutputDeviceId);
 
 	const [seekPosition, setSeekPosition] = useState(0);
 	const [volume, setVolume] = useState(25);
@@ -38,6 +39,10 @@ const PlayerControls: React.FC = () => {
 	useEffect(() => {
 		let mounted = false;
 		let interval: NodeJS.Timeout | null = null;
+
+		if (audioRef.current && outputDeviceId) {
+			audioRef.current.setSinkId(outputDeviceId);
+		}
 
 		const seekUpdate = () => {
 			if (!audioRef.current) return;
@@ -81,23 +86,25 @@ const PlayerControls: React.FC = () => {
 		updateProgressDiv();
 
 		if (interval) clearTimeout(interval);
-		interval = setTimeout(seekUpdate, 1000);
+		interval = setInterval(seekUpdate, 1000);
+		seekUpdate();
 
-		if (audioRef.current) {
+		if (audioRef.current && audioRef.current.paused) {
 			audioRef.current.play();
 			audioRef.current.volume = volume / 100;
+		}
 
-			if (!mounted) {
-				mounted = true;
-			}
+		if (!mounted) {
+			mounted = true;
 		}
 
 		return () => {
 			mounted = false;
 			if (interval) clearInterval(interval);
 		};
-	}, [currentTrack, audioRef, volume, progressBarRef]);
-
+	}, [currentTrack, audioRef, volume, progressBarRef, outputDeviceId]);
+  
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const onEnded = (_e: React.SyntheticEvent<HTMLAudioElement>) => {
 		const queueCopy = [...queue];
 		queueCopy.shift();

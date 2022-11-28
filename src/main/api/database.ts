@@ -16,8 +16,12 @@ const DEFAULT_DB: Tables = {
 export default class Database {
 	private filePath: string;
 
-	private data!: Tables;
+	private data: Tables;
 
+	/**
+	 * Initializes the db.
+	 * @param dir Path where the db file is located.
+	 */
 	constructor(dir: string) {
 		this.filePath = path.join(dir, 'db');
 
@@ -42,6 +46,11 @@ export default class Database {
 		return this.data[key];
 	}
 
+	/**
+	 * Checks if a key already exists.
+	 * @param key Key to check
+	 * @returns True if the key already exists.
+	 */
 	exists(key: DatabaseKey): boolean {
 		return Object.prototype.hasOwnProperty.call(this.data, key);
 	}

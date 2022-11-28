@@ -1,5 +1,3 @@
-/* eslint-disable promise/catch-or-return */
-/* eslint-disable promise/always-return */
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { PlaylistData } from '../../typings/playlist';
@@ -18,17 +16,16 @@ export const playlistSlice = createSlice({
 	name: 'playlist',
 	initialState,
 	reducers: {
-		addPlaylist: (state, action: PayloadAction<PlaylistData>) => {
+		addPlaylist: (state, action: PayloadAction<string>) => {
 			const playlist: PlaylistData = {
 				id: newGuid(),
-				name: action.payload.name,
-				tracks: action.payload.tracks,
+				name: action.payload,
+				tracks: [],
 				pinned: true
 			};
 
 			state.playlists.push(playlist);
-
-			window.tuneApi.db.set('playlists', JSON.stringify([...state.playlists]));
+			window.tuneAPI.db.set('playlists', JSON.stringify([...state.playlists]));
 		},
 		removePlaylist: (state, action: PayloadAction<string>) => {
 			state.playlists = state.playlists.filter((playlist) => {
@@ -38,7 +35,7 @@ export const playlistSlice = createSlice({
 				return true;
 			});
 
-			window.tuneApi.db.set('playlists', JSON.stringify([...state.playlists]));
+			window.tuneAPI.db.set('playlists', JSON.stringify([...state.playlists]));
 		},
 		updatePlaylist: (state, action: PayloadAction<PlaylistData>) => {
 			const toUpdate = state.playlists.find((p) => p.id === action.payload.id);
@@ -47,10 +44,10 @@ export const playlistSlice = createSlice({
 			const index = state.playlists.indexOf(toUpdate);
 			state.playlists[index] = action.payload;
 
-			window.tuneApi.db.set('playlists', JSON.stringify([...state.playlists]));
+			window.tuneAPI.db.set('playlists', JSON.stringify([...state.playlists]));
 		},
 		loadPlaylists: (state) => {
-			const stored = window.tuneApi.db.get('playlists') as PlaylistData[];
+			const stored = window.tuneAPI.db.get('playlists') as PlaylistData[];
 			state.playlists = stored;
 		}
 	}

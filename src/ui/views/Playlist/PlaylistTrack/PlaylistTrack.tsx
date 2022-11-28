@@ -3,8 +3,6 @@
 import { useEffect, useState } from 'react';
 import { AudioMetadata, TrackData } from '../../../../typings/playlist';
 
-import AlbumCover from '../../../../../assets/images/AlbumCover.png';
-
 interface PlaylistTrackProps {
 	track: TrackData;
 	setCurrentTrack: (track: TrackData) => void;
@@ -16,7 +14,7 @@ const PlaylistTrack: React.FC<PlaylistTrackProps> = (props) => {
 	const [metadata, setMetadata] = useState<AudioMetadata>();
 
 	const getMetadata = async () => {
-		const metadataJSON = await window.electron.ipc.parser.getMetadata(track.filePath);
+		const metadataJSON = await window.ipc.system.readMetadata(track.filePath);
 		setMetadata(JSON.parse(metadataJSON) as AudioMetadata);
 	};
 

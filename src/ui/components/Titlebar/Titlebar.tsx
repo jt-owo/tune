@@ -8,15 +8,15 @@ const Titlebar: React.FC = () => {
 	const title = document.querySelector('title');
 
 	const minimize = () => {
-		window.electron.ipc.window.minimize();
+		window.ipc.window.minimize();
 	};
 
 	const maximize = () => {
-		window.electron.ipc.window.maximize();
+		window.ipc.window.maximize();
 	};
 
 	const close = () => {
-		window.electron.ipc.window.close();
+		window.ipc.window.close();
 	};
 
 	return (

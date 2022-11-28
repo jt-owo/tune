@@ -1,6 +1,6 @@
 import { DatabaseKey, DatabaseValue } from '../main/api/database';
 
-interface TuneApi {
+interface TuneAPI {
 	db: {
 		/**
 		 * Sets a value in the JSON database.
@@ -19,25 +19,21 @@ interface TuneApi {
 
 declare global {
 	interface Window {
-		electron: {
-			ipc: {
-				window: {
-					minimize(): void;
-					maximize(): void;
-					close(): void;
-				};
-				playlist: {
-					addTracks(): Promise<string[]>;
-				};
-				parser: {
-					getMetadata(file: string): Promise<string>;
-				};
+		ipc: {
+			window: {
+				minimize(): void;
+				maximize(): void;
+				close(): void;
+			};
+			system: {
+				selectFiles(): Promise<string[]>;
+				readMetadata(file: string): Promise<string>;
 			};
 		};
 		process: {
 			platform: string;
 		};
-		tuneApi: TuneApi;
+		tuneAPI: TuneAPI;
 	}
 }
 

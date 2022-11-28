@@ -1,10 +1,11 @@
-/* eslint-disable consistent-return */
+/* eslint-disable class-methods-use-this */
 /* eslint @typescript-eslint/no-var-requires: off, global-require: off */
-import { App, app, dialog, IpcMain, ipcMain, protocol } from 'electron';
+import { app, ipcMain, protocol } from 'electron';
 import { IpcChannel } from './ipc/types';
-import { CloseWindowChannel, MinimizeWindowChannel, MaximizeWindowChannel } from './ipc/channels';
 import Window from './window/window';
-import AudioParser from './api/audioParser';
+import Database from './api/database';
+import { ReadMetadataChannel, SelectFileChannel, WindowControlChannel } from './ipc';
+import Channels from './ipc/channel';
 
 if (process.env.NODE_ENV === 'production') {
 	const sourceMapSupport = require('source-map-support');
@@ -18,62 +19,55 @@ if (isDebug) {
 }
 
 class Main {
-	/** Electron App instance */
-	private app: App;
-
-	/** Electron IpcMain instance */
-	private ipcMain: IpcMain;
-
 	/** Electron main window instance */
 	private mainWindow!: Window;
 
-	constructor(_app: App, _ipcMain: IpcMain) {
-		this.app = _app;
-		this.ipcMain = _ipcMain;
+	/** JSON database instance */
+	private database!: Database;
 
-		this.app.on('ready', () => {
+	constructor() {
+		app.on('ready', () => {
 			this.onReady();
 		});
 
-		this.app.on('window-all-closed', () => {
+		app.on('window-all-closed', () => {
 			this.onWindowAllClosed();
 		});
 
-		this.initIpc([new CloseWindowChannel(), new MinimizeWindowChannel(), new MaximizeWindowChannel()]);
+		this.initIpc([new WindowControlChannel(), new ReadMetadataChannel(), new SelectFileChannel()]);
 	}
 
-	// FIXME: Rewrite IpcChannels
 	/**
 	 * Initializes the {@link ipcMain} channels.
 	 * @param channels Channels to initialize.
 	 */
-	private initIpc(channels: IpcChannel[]) {
+	private initIpc(channels: IpcChannel<unknown, unknown>[]) {
 		channels.forEach((channel) => {
-			this.ipcMain.on(channel.getName(), (event, request) => channel.handle(event, request));
-		});
-
-		ipcMain.handle('add-tracks', async () => {
-			const result = await dialog.showOpenDialog({
-				properties: ['openFile', 'multiSelections'],
-				filters: [{ name: 'Audio Files', extensions: ['mp3', 'flac'] }]
+			ipcMain.handle(channel.getName(), (event, args) => {
+				return channel.handle(event, args);
 			});
-
-			return [...result.filePaths];
 		});
 
-		ipcMain.handle('get-path', (_event, type) => {
-			return app.getPath(type);
+		ipcMain.on(Channels.DATABASE_GET, (event, args) => {
+			const key = args;
+
+			// eslint-disable-next-line no-param-reassign
+			event.returnValue = this.database.get(key);
 		});
 
-		ipcMain.handle('get-metadata', (_event, filePath) => {
-			return AudioParser.getMetadata(filePath);
+		ipcMain.handle(Channels.DATABASE_SET, (_event, args) => {
+			const key = args[0];
+			const value = args[1];
+
+			if (Database.validate(value)) this.database.set(key, JSON.parse(value));
 		});
 	}
 
 	private onReady() {
 		this.mainWindow = new Window();
+		this.database = new Database(app.getPath('userData'));
 
-		this.app.on('activate', () => {
+		app.on('activate', () => {
 			this.onActivate();
 		});
 
@@ -91,7 +85,7 @@ class Main {
 
 	private onWindowAllClosed() {
 		if (process.platform !== 'darwin') {
-			this.app.quit();
+			app.quit();
 		}
 	}
 
@@ -103,4 +97,4 @@ class Main {
 }
 
 // eslint-disable-next-line no-new
-new Main(app, ipcMain);
+new Main();

@@ -1,8 +1,3 @@
-/* eslint-disable max-classes-per-file */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-// TODO: Remove
-
 import { IFileWriter, JsonFileWriter } from '../util/fileWriter';
 
 export type StoreValue = number | string | boolean | object;
@@ -11,17 +6,20 @@ export interface IStoreData {
 	[key: string]: StoreValue;
 }
 
-export class UserPrefStore {
+export class DynamicStore {
 	private data: IStoreData;
 
 	private fileWriter: IFileWriter<IStoreData>;
 
 	/**
-	 * Creates a new instance of the {@link UserPrefStore} class.
+	 * Creates a new instance of the {@link DynamicStore} class.
+	 *
+	 * A dynamic store is used for something like a client config file.
+	 * @param storeName Name of the dynamic store.
+	 * @param defaults Default value of the dynamic store data.
 	 */
-	constructor(defaults: IStoreData) {
-		this.fileWriter = new JsonFileWriter<IStoreData>('userPref');
-
+	constructor(storeName: string, defaults: IStoreData) {
+		this.fileWriter = new JsonFileWriter<IStoreData>(storeName);
 		this.data = this.fileWriter.read(defaults);
 	}
 
@@ -31,11 +29,11 @@ export class UserPrefStore {
 	 * @returns store value assigned to the key.
 	 */
 	get<T>(key: string): T | null {
-		if (this.data) {
-			return this.data[key] as unknown as T;
+		if (!this.data) {
+			return null;
 		}
 
-		return null;
+		return this.data[key] as T;
 	}
 
 	/**

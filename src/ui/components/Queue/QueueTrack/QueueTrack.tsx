@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react';
 import { AudioMetadata, TrackData } from '../../../../typings/playlist';
 
+import defaultAlbumCover from '../../../../../assets/images/tune_no_artwork.svg';
+
 interface QueueTrackProps {
 	track: TrackData;
 	setCurrentTrack?: (track: TrackData) => void;
@@ -22,11 +24,18 @@ const QueueTrack: React.FC<QueueTrackProps> = (props) => {
 		getMetadata();
 	});
 
+	const getAlbumCover = () => {
+		if (metadata?.info?.cover) {
+			return metadata.info.cover;
+		}
+		return defaultAlbumCover;
+	};
+
 	return (
 		<>
 			{metadata && (
 				<div className="queue-track">
-					<img src={metadata.info?.cover} alt="" />
+					<img src={getAlbumCover()} alt="" />
 					<div className="queue-track-info">
 						<div className="info queue-track-title">{metadata.info?.title}</div>
 						<div className="info queue-track-artist">{metadata.info?.artist}</div>

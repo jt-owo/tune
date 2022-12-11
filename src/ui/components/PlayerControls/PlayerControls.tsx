@@ -13,6 +13,8 @@ import playBtn from '../../../../assets/animations/playPause.json';
 import skipBackBtn from '../../../../assets/animations/skipBack.json';
 import skipForwardBtn from '../../../../assets/animations/skipForward.json';
 
+import tuneLogo from '../../../../assets/images/logo.png';
+
 const PlayerControls: React.FC = () => {
 	const audioRef = createRef<HTMLAudioElement & { setSinkId(deviceId: string): void }>();
 
@@ -90,7 +92,9 @@ const PlayerControls: React.FC = () => {
 		seekUpdate();
 
 		if (audioRef.current && audioRef.current.paused) {
-			audioRef.current.play();
+			audioRef.current.play().catch((error) => {
+				console.log(`Promise rejected: ${error}`);
+			});
 			audioRef.current.volume = volume / 100;
 		}
 
@@ -103,7 +107,7 @@ const PlayerControls: React.FC = () => {
 			if (interval) clearInterval(interval);
 		};
 	}, [currentTrack, audioRef, volume, progressBarRef, outputDeviceId]);
-  
+
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const onEnded = (_e: React.SyntheticEvent<HTMLAudioElement>) => {
 		const queueCopy = [...queue];
@@ -154,41 +158,67 @@ const PlayerControls: React.FC = () => {
 	// Called on mouseEnter of Progress Bar
 	const handleProgressBarEnter = () => {
 		if (progressBarRef.current) {
-			progressBarRef.current.style.opacity = '0.4';
+			progressBarRef.current.style.opacity = '0.25';
 		}
 	};
 
 	// Called on mouseLeave of Progress Bar
 	const handleProgressBarLeave = () => {
 		if (progressBarRef.current) {
-			progressBarRef.current.style.opacity = '0.2';
+			progressBarRef.current.style.opacity = '0.15';
 		}
 	};
 
+	const displayTrackTitle = () => {
+		if (currentTrack?.metadata?.info?.title) {
+			return currentTrack.metadata?.info?.title;
+		}
+		return 'No metadata found';
+	};
+
+	const displayTrackArtist = () => {
+		if (currentTrack?.metadata?.info?.artist) {
+			return currentTrack.metadata?.info?.artist;
+		}
+		return 'No metadata found';
+	};
+
 	return (
-		<div id="player-container">
-			<div id="player-controls-container">
-				<div id="progress-bar" ref={progressBarRef} />
-				<input type="range" name="volumeSlider" className="volume-slider" min="0" max="100" value={volume} onChange={handleVolumeChange} />
-				<div className="slider-container" onMouseEnter={handleProgressBarEnter} onMouseLeave={handleProgressBarLeave}>
-					<div className="current-time">{currentTime}</div>
-					<input type="range" min="0" max="100" className="seek-slider" value={seekPosition} onChange={handleSeekTo} />
-					<div className="total-duration">{totalDuration}</div>
-				</div>
-				<img className="player-icon-service" alt="" />
-				<div className="player-control-container" onClick={() => startAnimation(skipBackBtnRef)}>
-					<Lottie id="skip-back-btn" className="player-control-icon" animationData={skipBackBtn} loop={false} lottieRef={skipBackBtnRef} autoplay={false} />
-				</div>
-				<div className="player-control-container" onClick={() => startAnimation(playBtnRef)}>
-					<Lottie id="play-btn" className="player-control-icon" animationData={playBtn} loop={false} lottieRef={playBtnRef} autoplay={false} />
-				</div>
-				<div className="player-control-container" onClick={() => startAnimation(skipForwardBtnRef)}>
-					<Lottie id="skip-forward-btn" className="player-control-icon" animationData={skipForwardBtn} loop={false} lottieRef={skipForwardBtnRef} autoplay={false} />
-				</div>
-				{currentTrack?.fileName}
+		<>
+			<div id="duration-floater">
+				{currentTime} / {totalDuration}
 			</div>
-			<audio src={currentTrack?.filePath} ref={audioRef} onEnded={onEnded} />
-		</div>
+			<div id="player-container">
+				<div id="player-controls-container">
+					<div id="service-selector">
+						<img src={tuneLogo} alt="" draggable={false} />
+					</div>
+					<div id="player-control-divider" />
+					<div id="track-info">
+						<div id="current-track">{displayTrackTitle()}</div>
+						<div id="current-artist">{displayTrackArtist()}</div>
+					</div>
+					<div id="progress-bar" ref={progressBarRef} />
+					<input type="range" name="volumeSlider" className="volume-slider" min="0" max="100" value={volume} onChange={handleVolumeChange} />
+					<div className="slider-container" onMouseEnter={handleProgressBarEnter} onMouseLeave={handleProgressBarLeave}>
+						<div className="current-time">{currentTime}</div>
+						<input type="range" min="0" max="100" className="seek-slider" value={seekPosition} onChange={handleSeekTo} />
+						<div className="total-duration">{totalDuration}</div>
+					</div>
+					<div className="player-control-container" onClick={() => startAnimation(skipBackBtnRef)}>
+						<Lottie id="skip-back-btn" className="player-control-icon" animationData={skipBackBtn} loop={false} lottieRef={skipBackBtnRef} autoplay={false} />
+					</div>
+					<div className="player-control-container" onClick={() => startAnimation(playBtnRef)}>
+						<Lottie id="play-btn" className="player-control-icon" animationData={playBtn} loop={false} lottieRef={playBtnRef} autoplay={false} />
+					</div>
+					<div className="player-control-container" onClick={() => startAnimation(skipForwardBtnRef)}>
+						<Lottie id="skip-forward-btn" className="player-control-icon" animationData={skipForwardBtn} loop={false} lottieRef={skipForwardBtnRef} autoplay={false} />
+					</div>
+					{/* {currentTrack?.fileName} */}
+				</div>
+				<audio src={currentTrack?.filePath} ref={audioRef} onEnded={onEnded} crossOrigin="anonymous" />
+			</div>
+		</>
 	);
 };
 

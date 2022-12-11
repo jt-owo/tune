@@ -8,6 +8,9 @@ import { useAppDispatch } from '../../hooks';
 import './Settings.scss';
 import '../../styles/_components.scss';
 
+import spotifyLogo from '../../../../assets/service-icons/Spotify_Logo_RGB_White.png';
+import appleMusicIcon from '../../../../assets/service-icons/Apple_Music_Icon_W.svg';
+
 const Settings: React.FC = () => {
 	const [audioDevices, setOutputDevices] = useState<MediaDeviceInfo[]>();
 	const [selectedDevice, setSelectedDevice] = useState<string>();
@@ -41,6 +44,12 @@ const Settings: React.FC = () => {
 							);
 						})}
 				</select>
+				<a href="" className="service-btn" id="spotify">
+					Connect to <img src={spotifyLogo} alt="" />
+				</a>
+				<a href="" className="service-btn" id="apple-music">
+					Connect to <img src={appleMusicIcon} alt="" /> Apple Music
+				</a>
 			</div>
 		</View>
 	);

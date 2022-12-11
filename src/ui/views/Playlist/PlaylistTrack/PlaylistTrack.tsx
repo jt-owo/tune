@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react';
 import { AudioMetadata, TrackData } from '../../../../typings/playlist';
 
+import defaultAlbumCover from '../../../../../assets/images/tune_no_artwork.svg';
+
 interface PlaylistTrackProps {
 	track: TrackData;
 	setCurrentTrack: (track: TrackData) => void;
@@ -22,14 +24,34 @@ const PlaylistTrack: React.FC<PlaylistTrackProps> = (props) => {
 		getMetadata();
 	});
 
+	const getAlbumCover = () => {
+		if (metadata?.info?.cover) {
+			return metadata.info.cover;
+		}
+		return defaultAlbumCover;
+	};
+
+	const getDuration = () => {
+		if (metadata?.info?.duration) {
+			const total = metadata.info.duration;
+			const minutes = Math.floor(total / 60);
+			const seconds = Math.floor(total - minutes * 60);
+
+			return `${minutes}:${seconds}`;
+		}
+		return NaN;
+	};
+
 	return (
 		<>
 			{metadata && (
 				<li className="song-item btn-hover-animation" onDoubleClick={() => setCurrentTrack(track)}>
-					<img src={metadata.info?.cover} alt="" />
-					<div className="song-title">
-						{metadata?.info?.title} - {metadata?.info?.artist}
+					<img src={getAlbumCover()} alt="" draggable={false} />
+					<div>
+						<div className="song-title">{metadata?.info?.title}</div>
+						<div className="song-artist">{metadata?.info?.artist}</div>
 					</div>
+					<div className="song-duration">{getDuration()}</div>
 				</li>
 			)}
 		</>

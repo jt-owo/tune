@@ -53,7 +53,7 @@
 	bottom: 85px;
 	right: 10px;
 	width: 70px;
-	overflow: scroll;
+	overflow: hidden;
 	background-color: $floating-component-color;
 	border-style: solid;
 	border-color: $border-color;
@@ -74,6 +74,8 @@
 
 #queue-container:hover {
 	width: 260px;
+	overflow-y: auto;
+	overflow-x: hidden;
 
 	.queue-track {
 		margin-bottom: 3px;
@@ -97,7 +99,7 @@
 #queue-title {
 	font-family: Quicksand-bold;
 	font-weight: bold;
-	font-size: 12px;
+	font-size: 11px;
 	color: $font-white-2;
 	text-align: center;
 	padding: 10px;

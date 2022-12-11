@@ -12,7 +12,11 @@
 	border-style: solid;
 	border-color: $border-color;
 	border-radius: 20px;
-	overflow: scroll;
+	overflow-y: hidden;
+}
+
+#playlist-container:hover {
+	overflow-y: auto;
 }
 
 #playlist-heading {

@@ -107,7 +107,6 @@
 	width: 10px;
 	height: 57px;
 	background-color: aqua;
-	// opacity: 0;
 	cursor: pointer;
 	border-radius: 0%;
 }
@@ -132,9 +131,9 @@
 	position: absolute;
 	top: 0px;
 	bottom: 0px;
-	left: -2px;
-	right: 50%;
-	border-radius: 19px 0 0 19px;
+	left: 0px;
+	right: 100%;
+	border-radius: 18px 0 0 18px;
 	z-index: 0;
 	transition: opacity ease-in-out 0.15s;
 }
@@ -174,11 +173,11 @@
 }
 
 #duration-floater {
-	position: relative;
-	top: -30px;
-	right: 0px;
+	position: fixed;
+	top: 5px;
+	left: 50%;
 	width: 150px;
-	margin: auto;
+	transform: translateX(-50%);
 	text-align: center;
 	background-color: $dark-gray-3;
 	padding: 5px;

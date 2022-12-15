@@ -5,13 +5,19 @@
 	bottom: 10px;
 	left: 10px;
 	right: 10px;
-	display: block;
-	height: 60px;
+	height: 65px;
 	background: rgb(0, 0, 0);
 	border-radius: 20px;
 	border-style: solid;
 	border-color: $border-color;
 	overflow: hidden;
+	display: block;
+}
+
+#player-controls-container {
+	display: flex;
+	flex-direction: row;
+	height: 100%;
 }
 
 .player-icon-service {
@@ -31,29 +37,30 @@
 	transition: ease-in-out 0.08s;
 	z-index: 3;
 }
+
 .player-control-icon:hover {
 	background-color: rgba($color: #ffffff, $alpha: 0.15);
 }
 
 #play-btn {
-	height: 37px;
+	height: 38px;
 	position: absolute;
-	top: 9px;
+	top: 12px;
 	right: 54px;
 }
 
 #skip-back-btn {
-	height: 37px;
+	height: 38px;
 	position: absolute;
-	top: 9px;
+	top: 12px;
 	right: 100px;
 	padding: 3px;
 }
 
 #skip-forward-btn {
-	height: 37px;
+	height: 38px;
 	position: absolute;
-	top: 9px;
+	top: 12px;
 	right: 10px;
 	padding: 3px;
 }
@@ -69,7 +76,7 @@
 .seek-slider {
 	position: absolute;
 	left: 0px;
-	height: 57px;
+	height: 62px;
 	-webkit-appearance: none;
 	appearance: none;
 	background: white;
@@ -78,7 +85,8 @@
 	transition: opacity 0.2s;
 	border-radius: 19px;
 	z-index: 2;
-	// display: none;
+	width: 100%;
+	cursor: pointer;
 }
 
 .volume-slider {
@@ -100,18 +108,12 @@
 	width: 10px;
 	height: 57px;
 	background-color: aqua;
-	// opacity: 0;
 	cursor: pointer;
 	border-radius: 0%;
 }
 
 .volume-slider:hover {
 	opacity: 0.1;
-}
-
-.seek-slider {
-	width: 100%;
-	cursor: pointer;
 }
 
 .volume-slider {
@@ -125,13 +127,62 @@
 }
 
 #progress-bar {
-	background-color: #ffffff;
+	background-color: #e2e5ff;
 	opacity: 0.15;
 	position: absolute;
 	top: 0px;
 	bottom: 0px;
 	left: 0px;
-	border-radius: 19px 0 0 19px;
-	z-index: 1;
+	right: 100%;
+	border-radius: 18px 0 0 18px;
+	z-index: 0;
 	transition: opacity ease-in-out 0.15s;
+}
+
+#track-info {
+	margin-left: 10px;
+}
+
+#current-track {
+	font-family: Quicksand-bold;
+	margin: 11px 10px 0 20px;
+}
+
+#current-artist {
+	font-family: Quicksand-regular;
+	color: rgba($color: #ffffff, $alpha: 0.7);
+	margin: 0 10px 0 20px;
+}
+
+#current-artist:hover {
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+#player-control-divider {
+	border-left: 1px solid rgba(255, 255, 255, 0.2);
+	margin: 7px 0 7px 0;
+}
+
+#service-selector {
+	margin: 20px 15px 17px 15px;
+	z-index: 3;
+}
+
+#service-selector img {
+	height: 22px;
+}
+
+#duration-floater {
+	position: fixed;
+	top: 5px;
+	left: 50%;
+	width: 150px;
+	transform: translateX(-50%);
+	text-align: center;
+	background-color: $dark-gray-3;
+	padding: 5px;
+	border-radius: 20px;
+	font-family: Quicksand-regular;
+	z-index: 4;
 }

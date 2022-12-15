@@ -1,21 +1,19 @@
-/* eslint-disable react/prop-types */
 /* eslint-disable react/jsx-no-useless-fragment */
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AudioMetadata, TrackData } from '../../../../typings/playlist';
-
 import defaultAlbumCover from '../../../../../assets/images/tune_no_artwork.svg';
 
-interface QueueTrackProps {
-	track: TrackData;
-	setCurrentTrack?: (track: TrackData) => void;
+interface NowPlayingProps {
+	track?: TrackData;
 }
 
-const QueueTrack: React.FC<QueueTrackProps> = (props) => {
+const NowPlaying: React.FC<NowPlayingProps> = (props) => {
 	const { track } = props;
 
 	const [metadata, setMetadata] = useState<AudioMetadata>();
 
 	const getMetadata = async () => {
+		if (!track) return;
 		const metadataJSON = await window.ipc.system.readMetadata(track.filePath);
 		setMetadata(JSON.parse(metadataJSON) as AudioMetadata);
 	};
@@ -34,16 +32,13 @@ const QueueTrack: React.FC<QueueTrackProps> = (props) => {
 	return (
 		<>
 			{metadata && (
-				<div className="queue-track">
-					<img src={getAlbumCover()} alt="" />
-					<div className="queue-track-info">
-						<div className="info queue-track-title">{metadata.info?.title}</div>
-						<div className="info queue-track-artist">{metadata.info?.artist}</div>
-					</div>
+				<div id="track-info">
+					<div id="current-track">{metadata.info?.title}</div>
+					<div id="current-artist">{metadata.info?.artist}</div>
 				</div>
 			)}
 		</>
 	);
 };
 
-export default QueueTrack;
+export default NowPlaying;

@@ -1,0 +1,39 @@
+@import '../../styles/fonts';
+
+.service-btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: #24262e;
+	color: #ffffff;
+	text-decoration: none;
+	font-family: Quicksand-regular;
+	font-weight: 500;
+	font-size: 14px;
+	border-radius: 15px;
+	height: 30px;
+	width: 220px;
+	margin: 10px 0 0 0;
+	transition: all ease-in-out 0.1s;
+}
+
+.service-btn img {
+	height: 18px;
+	margin: 0 5px 0 5px;
+}
+
+#spotify {
+	background-color: #1db954;
+}
+
+#spotify:hover {
+	background-color: #22d561;
+}
+
+#apple-music {
+	background-color: #f94c57;
+}
+
+#apple-music:hover {
+	background-color: #ff737c;
+}

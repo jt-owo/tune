@@ -4,7 +4,7 @@
 	display: block;
 	width: 100%;
 	height: 30px;
-	background-color: #222;
+	background-color: $dark-gray-3;
 	-webkit-app-region: drag;
 
 	#title {
@@ -24,7 +24,7 @@
 		width: 150px;
 		height: 100%;
 		line-height: 30px;
-		background-color: #222;
+		background-color: $dark-gray-3;
 		-webkit-app-region: no-drag;
 	}
 }
@@ -45,7 +45,7 @@
 
 	#minimize:hover,
 	#maximize:hover {
-		background-color: $dark-gray-3;
+		background-color: $hover-color-medium;
 	}
 
 	#close:hover {

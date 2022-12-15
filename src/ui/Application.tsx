@@ -12,7 +12,7 @@ import Playlist from './views/Playlist/Playlist';
 import Settings from './views/Settings/Settings';
 import Navigation from './components/Navigation/Navigation';
 import Queue from './components/Queue/Queue';
-import PlayerControls from './components/PlayerControls/PlayerControls';
+import AudioPlayer from './components/AudioPlayer/AudioPlayer';
 import AlertContainer from './components/Alert/Alert';
 
 import './Application.scss';
@@ -34,7 +34,7 @@ const Application: React.FC = () => {
 					<Route path={AppRoutes.Settings} element={<Settings />} />
 				</Routes>
 			</Router>
-			<PlayerControls />
+			<AudioPlayer />
 			<Queue />
 			<AlertContainer />
 		</div>

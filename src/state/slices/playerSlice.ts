@@ -6,47 +6,69 @@ import { TrackData } from '../../typings/playlist';
 
 export interface PlayerState {
 	queue: TrackData[];
+	queueIndex: number;
+	history: TrackData[];
 	currentTrack?: TrackData;
 	outputDeviceId?: string;
+	isPlaying: boolean;
 }
 
 const initialState: PlayerState = {
-	queue: []
+	queue: [],
+	queueIndex: 0,
+	history: [],
+	isPlaying: false
 };
 
 export const playerSlice = createSlice({
 	name: 'player',
 	initialState,
 	reducers: {
-		addToQueue: (state, action: PayloadAction<TrackData[]>) => {
-			const wasEmpty = state.queue.length < 1;
-
-			state.queue = [...state.queue, ...action.payload];
-
-			if (wasEmpty) {
-				state.currentTrack = state.queue[0];
-			}
-		},
 		setQueue: (state, action: PayloadAction<TrackData[]>) => {
 			state.queue = action.payload;
 
-			state.currentTrack = state.queue[0];
+			state.queueIndex = 0;
+			state.currentTrack = state.queue[state.queueIndex];
+			state.isPlaying = true;
 		},
 		updateQueue: (state, action: PayloadAction<TrackData[]>) => {
 			state.queue = action.payload;
 		},
 		setTrack: (state, action: PayloadAction<TrackData>) => {
 			state.currentTrack = action.payload;
+			state.isPlaying = true;
 		},
 		setOutputDevice: (state, action: PayloadAction<string>) => {
 			state.outputDeviceId = action.payload;
+		},
+		play: (state) => {
+			state.isPlaying = !state.isPlaying;
+		},
+		playNext: (state) => {
+			const lastTrack = state.queue[state.queueIndex];
+			if (state.queueIndex < state.queue.length) {
+				state.queueIndex += 1;
+				state.currentTrack = state.queue[state.queueIndex];
+				state.isPlaying = true;
+			}
+
+			if (lastTrack) state.history = [...state.history, lastTrack];
+		},
+		playPrevious: (state) => {
+			if (state.queueIndex !== 0 && state.queueIndex <= state.queue.length) {
+				state.queueIndex -= 1;
+				state.currentTrack = state.queue[state.queueIndex];
+				state.isPlaying = true;
+			}
 		}
 	}
 });
 
-export const { addToQueue, setTrack, setQueue, updateQueue, setOutputDevice } = playerSlice.actions;
+export const { setTrack, setQueue, updateQueue, setOutputDevice, play, playNext, playPrevious } = playerSlice.actions;
 
+export const selectIsPlaying = (state: RootState) => state.player.isPlaying;
 export const selectQueue = (state: RootState) => state.player.queue;
+export const selectQueueIndex = (state: RootState) => state.player.queueIndex;
 export const selectCurrentTrack = (state: RootState) => state.player.currentTrack;
 export const selectOutputDeviceId = (state: RootState) => state.player.outputDeviceId;
 

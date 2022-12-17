@@ -1,5 +1,10 @@
 import * as React from 'react';
+import Lottie from 'lottie-react';
 import { AlertType } from '../../../../state/slices/alertSlice';
+
+import infoIcon from '../../../../../assets/animations/alertCircle.json';
+import successIcon from '../../../../../assets/animations/checkmark.json';
+import warnIcon from '../../../../../assets/animations/alertTriangle.json';
 
 interface AlertIconProps {
 	type: AlertType;
@@ -10,13 +15,13 @@ const AlertIcon: React.FC<AlertIconProps> = (props) => {
 
 	switch (type) {
 		case 'info':
-			return <div />;
+			return <Lottie animationData={infoIcon} className="lottie" />;
 		case 'warn':
-			return <div />;
+			return <Lottie animationData={warnIcon} className="lottie" />;
 		case 'error':
-			return <div />;
+			return <Lottie animationData={warnIcon} className="lottie" />;
 		case 'success':
-			return <div />;
+			return <Lottie animationData={successIcon} loop={false} className="lottie" />;
 		default:
 			return <div />;
 	}

@@ -3,49 +3,66 @@
 @import '../../styles/fonts';
 
 .alert {
-	padding: 20px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	// padding: 20px;
 	color: $font-white;
-	position: relative;
+	position: absolute;
 	margin-left: auto;
 	margin-right: auto;
 	left: 0;
 	right: 0;
+	top: 50px;
 	text-align: center;
-	border-radius: 20px;
-	width: 70%;
+	border-radius: 30px;
+	width: 450px;
+	height: 50px;
 	margin-top: 10px;
-	animation: fadeIn 0.5s;
-	font-family: Quicksand;
+	// animation: fadeIn 0.5s;
+	font-family: Quicksand-700;
+	animation: alertEnter 1s;
+}
+
+.message {
+	// margin-left: 20px;
+	opacity: 1;
+	animation: messageEnter 1s;
 }
 
 .alert.fade-out {
-	animation: fadeOut 0.5s;
+	animation: fadeOut 0.3s;
 }
 
 .alert.info {
-	background-color: $dark-gray-2;
+	background-color: $dark-gray-3;
 }
 
 .alert.success {
-	background-color: #4CAF50;
+	background-color: #4caf50;
 }
 
 .alert.warn {
-	background-color: #FF9800;
+	background-color: #d78100;
 }
 
 .alert.error {
-	background-color: #F44336;
+	background-color: #f44336;
 }
 
 .closebtn {
-	margin-left: 15px;
+	// margin: auto;
+	position: absolute;
+	right: 10px;
+	padding: 5px 10px 5px 10px;
+	margin-right: 2px;
 	color: $font-white;
 	font-weight: bold;
-	float: right;
+	// float: right;
 	line-height: 20px;
 	cursor: pointer;
 	transition: 0.3s;
+	border-radius: 15px;
 }
 
 .type-icon {
@@ -57,5 +74,10 @@
 }
 
 .closebtn:hover {
-	color: black;
+	// color: rgb(255, 0, 0);
+	background-color: rgba($color: #000000, $alpha: 0.3);
+}
+
+.lottie {
+	margin: 5px 10px 0 0;
 }

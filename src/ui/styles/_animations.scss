@@ -23,6 +23,39 @@
 	}
 }
 
+@keyframes alertEnter {
+	0% {
+		top: -70px;
+		width: 80px;
+		height: 20px;
+	}
+
+	50% {
+		top: 50px;
+	}
+
+	100% {
+		width: 450px;
+		height: 50px;
+	}
+}
+
+@keyframes messageEnter {
+	0% {
+		display: none;
+		opacity: 0;
+	}
+
+	50% {
+		display: inline;
+		opacity: 0;
+	}
+
+	100% {
+		opacity: 1;
+	}
+}
+
 /* Basic Animations */
 
 .btn-hover-animation {

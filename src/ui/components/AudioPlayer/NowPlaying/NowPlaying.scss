@@ -1,0 +1,37 @@
+#track-info {
+	margin-left: 15px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
+#track-artist {
+	display: flex;
+	flex-direction: column;
+}
+
+#current-album-cover {
+	width: 42px;
+	height: 42px;
+	border-radius: 7px;
+	box-shadow: 0 0 5px #000000;
+	z-index: 1;
+}
+
+#current-track {
+	font-family: Quicksand-700;
+	margin-left: 15px;
+	margin-bottom: 1px;
+}
+
+#current-artist {
+	font-family: Quicksand-500;
+	font-size: 13px;
+	color: rgba($color: #ffffff, $alpha: 0.7);
+	margin-left: 15px;
+}
+
+#current-artist:hover {
+	text-decoration: underline;
+	cursor: pointer;
+}

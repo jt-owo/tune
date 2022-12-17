@@ -139,33 +139,13 @@
 	transition: opacity ease-in-out 0.15s;
 }
 
-#track-info {
-	margin-left: 10px;
-}
-
-#current-track {
-	font-family: Quicksand-bold;
-	margin: 11px 10px 0 20px;
-}
-
-#current-artist {
-	font-family: Quicksand-regular;
-	color: rgba($color: #ffffff, $alpha: 0.7);
-	margin: 0 10px 0 20px;
-}
-
-#current-artist:hover {
-	text-decoration: underline;
-	cursor: pointer;
-}
-
 #player-control-divider {
 	border-left: 1px solid rgba(255, 255, 255, 0.2);
-	margin: 7px 0 7px 0;
+	margin: 7px 3px 7px 0px;
 }
 
 #service-selector {
-	margin: 20px 15px 17px 15px;
+	margin: 20px 15px 17px 18px;
 	z-index: 3;
 }
 
@@ -183,6 +163,6 @@
 	background-color: $dark-gray-3;
 	padding: 5px;
 	border-radius: 20px;
-	font-family: Quicksand-regular;
+	font-family: Quicksand-400;
 	z-index: 4;
 }

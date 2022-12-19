@@ -2,4 +2,4 @@
 
 Customizable cross-platform music player
 
-Animated Icons by: [useAnimations](https://useanimations.com/i)
+Animated Icons by: [useAnimations](https://useanimations.com/)

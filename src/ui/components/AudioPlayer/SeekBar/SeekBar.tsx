@@ -25,14 +25,14 @@ const SeekBar: React.FC<SeekBarProps> = (props) => {
 	// Called on mouseEnter of Progress Bar
 	const handleProgressBarEnter = () => {
 		if (progressBarRef.current) {
-			progressBarRef.current.style.opacity = '0.25';
+			progressBarRef.current.style.opacity = '0.3';
 		}
 	};
 
 	// Called on mouseLeave of Progress Bar
 	const handleProgressBarLeave = () => {
 		if (progressBarRef.current) {
-			progressBarRef.current.style.opacity = '0.15';
+			progressBarRef.current.style.opacity = '0.2';
 		}
 	};
 

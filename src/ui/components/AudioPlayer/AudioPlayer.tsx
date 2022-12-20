@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/media-has-caption */
 import * as React from 'react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { play, playNext, playPrevious, selectCurrentTrack, selectIsPlaying, selectOutputDeviceId } from '../../../state/slices/playerSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 
@@ -15,6 +15,7 @@ import PlayPauseButton from './PlayPauseButton/PlayPauseButton';
 import SeekBar from './SeekBar/SeekBar';
 import NowPlaying from './NowPlaying/NowPlaying';
 import ServiceSelector from './ServiceSelector/ServiceSelector';
+import VolumeSlider from './VolumeSlider/VolumeSlider';
 
 const AudioPlayer: React.FC = () => {
 	const audioRef = useRef<HTMLAudioElement & { setSinkId(deviceId: string): void; volume: number }>(null);
@@ -22,8 +23,6 @@ const AudioPlayer: React.FC = () => {
 	const currentTrack = useAppSelector(selectCurrentTrack);
 	const isPlaying = useAppSelector(selectIsPlaying);
 	const outputDeviceId = useAppSelector(selectOutputDeviceId);
-
-	const [volume, setVolume] = useState(1);
 
 	const dispatch = useAppDispatch();
 
@@ -43,16 +42,6 @@ const AudioPlayer: React.FC = () => {
 	const onEnded = (_e: React.SyntheticEvent<HTMLAudioElement>) => {
 		handlePlayNext();
 	};
-
-	const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setVolume(parseInt(e.target.value, 10));
-	};
-
-	useEffect(() => {
-		if (audioRef.current) {
-			audioRef.current.volume = volume / 100;
-		}
-	}, [audioRef, volume]);
 
 	useEffect(() => {
 		if (audioRef.current && outputDeviceId) {
@@ -78,7 +67,7 @@ const AudioPlayer: React.FC = () => {
 				<ServiceSelector />
 				<div id="player-control-divider" />
 				<NowPlaying track={currentTrack} />
-				<input type="range" name="volumeSlider" className="volume-slider" min="0" max="100" value={volume} onChange={handleVolumeChange} />
+				<VolumeSlider audioRef={audioRef} />
 				<SeekBar audioRef={audioRef} />
 				<AudioControlButton id="skip-back-btn" onClick={handlePlayPrev} animationData={skipBackBtn} />
 				<PlayPauseButton isPlaying={isPlaying} onClick={handlePlayPause} animationData={playBtn} />

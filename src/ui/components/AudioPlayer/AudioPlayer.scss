@@ -89,37 +89,6 @@
 	cursor: pointer;
 }
 
-.volume-slider {
-	display: none;
-	-webkit-appearance: none;
-	appearance: none;
-	height: 10px;
-	background: white;
-	opacity: 0.7;
-	-webkit-transition: 0.2s;
-	transition: opacity 0.2s;
-	border-radius: 10px;
-}
-
-.seek-slider::-webkit-slider-thumb,
-.volume-slider::-webkit-slider-thumb {
-	-webkit-appearance: none;
-	appearance: none;
-	width: 10px;
-	height: 57px;
-	background-color: aqua;
-	cursor: pointer;
-	border-radius: 0%;
-}
-
-.volume-slider:hover {
-	opacity: 0.1;
-}
-
-.volume-slider {
-	width: 20%;
-}
-
 .current-time,
 .total-duration {
 	padding: 10px;
@@ -128,7 +97,7 @@
 
 #progress-bar {
 	background-color: #e2e5ff;
-	opacity: 0.15;
+	opacity: 0.2;
 	position: absolute;
 	top: 0px;
 	bottom: 0px;

@@ -13,7 +13,13 @@ const MAX_VOLUME_FRAME = 0;
 const MID_VOLUME_FRAME = 9;
 const MIN_VOLUME_FRAME = 14;
 const MUTE_FRAME = 28;
-let volumeSliderState = 0;
+const VOLUME_SLIDER_STATES = {
+	MUTE: 0,
+	MIN_VOLUME: 1,
+	MID_VOLUME: 2,
+	MAX_VOLUME: 3
+};
+let volumeSliderState = 2;
 
 const VolumeSlider: React.FC<VolumeSliderProps> = (props) => {
 	const { audioRef } = props;
@@ -34,24 +40,24 @@ const VolumeSlider: React.FC<VolumeSliderProps> = (props) => {
 
 		// Handle animation of lottie icon - sry for this mess
 		if (lottieRef.current) {
-			if (volume >= 0 && volume <= 1 && volumeSliderState === 1) {
+			if (volume >= 0 && volume <= 1 && volumeSliderState === VOLUME_SLIDER_STATES.MIN_VOLUME) {
 				lottieRef.current.playSegments([MIN_VOLUME_FRAME, MUTE_FRAME], true);
-				volumeSliderState = 0;
-			} else if (volume > 2 && volume < 35 && volumeSliderState === 0) {
+				volumeSliderState = VOLUME_SLIDER_STATES.MUTE;
+			} else if (volume > 2 && volume < 35 && volumeSliderState === VOLUME_SLIDER_STATES.MUTE) {
 				lottieRef.current.playSegments([MUTE_FRAME, MIN_VOLUME_FRAME], true);
-				volumeSliderState = 1;
-			} else if (volume > 2 && volume < 35 && volumeSliderState === 2) {
+				volumeSliderState = VOLUME_SLIDER_STATES.MIN_VOLUME;
+			} else if (volume > 2 && volume < 35 && volumeSliderState === VOLUME_SLIDER_STATES.MID_VOLUME) {
 				lottieRef.current.playSegments([MID_VOLUME_FRAME, MIN_VOLUME_FRAME + 1], true);
-				volumeSliderState = 1;
-			} else if (volume > 35 && volume < 70 && volumeSliderState === 1) {
+				volumeSliderState = VOLUME_SLIDER_STATES.MIN_VOLUME;
+			} else if (volume > 35 && volume < 70 && volumeSliderState === VOLUME_SLIDER_STATES.MIN_VOLUME) {
 				lottieRef.current.playSegments([MIN_VOLUME_FRAME - 1, MID_VOLUME_FRAME], true);
-				volumeSliderState = 2;
-			} else if (volume > 35 && volume < 70 && volumeSliderState === 3) {
+				volumeSliderState = VOLUME_SLIDER_STATES.MID_VOLUME;
+			} else if (volume > 35 && volume < 70 && volumeSliderState === VOLUME_SLIDER_STATES.MAX_VOLUME) {
 				lottieRef.current.playSegments([MAX_VOLUME_FRAME, MID_VOLUME_FRAME], true);
-				volumeSliderState = 2;
+				volumeSliderState = VOLUME_SLIDER_STATES.MID_VOLUME;
 			} else if (volume > 70 && volumeSliderState === 2) {
 				lottieRef.current.playSegments([MID_VOLUME_FRAME, MAX_VOLUME_FRAME], true);
-				volumeSliderState = 3;
+				volumeSliderState = VOLUME_SLIDER_STATES.MAX_VOLUME;
 			}
 		}
 	};
@@ -63,7 +69,7 @@ const VolumeSlider: React.FC<VolumeSliderProps> = (props) => {
 	}, [audioRef, volume]);
 
 	useEffect(() => {
-		lottieRef?.current?.goToAndStop(MAX_VOLUME_FRAME, true);
+		lottieRef?.current?.goToAndStop(MID_VOLUME_FRAME, true);
 	}, []);
 
 	return (

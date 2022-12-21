@@ -2,20 +2,19 @@
    This file defines all frequently used UI components within the app
    ========================================================================== */
 
-   /* PATHS & IMPORTS
+/* PATHS & IMPORTS
    ========================================================================== */
 @import 'colors';
-$icon-path : '../../../assets/ui-icons';
+$icon-path: '../../../assets/ui-icons';
 
-
-   /* SELECT
+/* SELECT
    ========================================================================== */
 .dropdown-select-1 {
 	height: 35px;
 	width: 350px;
 	background-color: $dark-gray-4;
 	color: #ffffff;
-	font-family: Quicksand-regular;
+	font-family: Quicksand-400;
 	font-size: 16px;
 	font-weight: normal;
 	border: none;
@@ -39,6 +38,5 @@ $icon-path : '../../../assets/ui-icons';
 	box-shadow: 0 0 10px #3d3d45;
 }
 
-
-   /* BUTTONS
+/* BUTTONS
    ========================================================================== */

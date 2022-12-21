@@ -3,18 +3,20 @@ import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { play, playNext, playPrevious, selectCurrentTrack, selectIsPlaying, selectOutputDeviceId } from '../../../state/slices/playerSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-
-import './AudioPlayer.scss';
-
-import playBtn from '../../../../assets/animations/playPause.json';
-import skipBackBtn from '../../../../assets/animations/skipBack.json';
-import skipForwardBtn from '../../../../assets/animations/skipForward.json';
+import { AudioMetadata, TrackData } from '../../../typings/playlist';
 
 import AudioControlButton from './AudioControlButton/AudioControlButton';
 import PlayPauseButton from './PlayPauseButton/PlayPauseButton';
 import SeekBar from './SeekBar/SeekBar';
 import NowPlaying from './NowPlaying/NowPlaying';
 import ServiceSelector from './ServiceSelector/ServiceSelector';
+import useMediaSession from '../../hooks/useMediaSession';
+
+import playBtn from '../../../../assets/animations/playPause.json';
+import skipBackBtn from '../../../../assets/animations/skipBack.json';
+import skipForwardBtn from '../../../../assets/animations/skipForward.json';
+
+import './AudioPlayer.scss';
 
 const AudioPlayer: React.FC = () => {
 	const audioRef = useRef<HTMLAudioElement & { setSinkId(deviceId: string): void; volume: number }>(null);
@@ -24,8 +26,14 @@ const AudioPlayer: React.FC = () => {
 	const outputDeviceId = useAppSelector(selectOutputDeviceId);
 
 	const [volume, setVolume] = useState(1);
+	const [metadata, setMetadata] = useState<AudioMetadata>();
 
 	const dispatch = useAppDispatch();
+
+	const getMetadata = async (track: TrackData) => {
+		const metadataJSON = await window.ipc.system.readMetadata(track.filePath);
+		setMetadata(JSON.parse(metadataJSON) as AudioMetadata);
+	};
 
 	const handlePlayPause = () => {
 		dispatch(play());
@@ -64,20 +72,36 @@ const AudioPlayer: React.FC = () => {
 		if (!audioRef.current) return;
 
 		if (isPlaying) {
-			audioRef.current.play().catch(() => {
-				// console.log(err);
-			});
+			audioRef.current.play().catch(() => {});
+			if (currentTrack) getMetadata(currentTrack);
 		} else {
 			audioRef.current.pause();
 		}
 	}, [audioRef, isPlaying, currentTrack]);
+
+	useMediaSession({
+		title: metadata?.info?.title,
+		artist: metadata?.info?.artist,
+		album: metadata?.info?.album,
+		artwork: [
+			{
+				src: metadata?.info?.cover ?? '',
+				sizes: '128x128', // TODO: Determine size from file metadata.
+				type: 'image/png'
+			}
+		],
+		onPlay: handlePlayPause,
+		onPause: handlePlayPause,
+		onPreviousTrack: handlePlayPrev,
+		onNextTrack: handlePlayNext
+	});
 
 	return (
 		<div id="player-container">
 			<div id="player-controls-container">
 				<ServiceSelector />
 				<div id="player-control-divider" />
-				<NowPlaying track={currentTrack} />
+				{currentTrack?.metadata && <NowPlaying metadata={currentTrack.metadata} />}
 				<input type="range" name="volumeSlider" className="volume-slider" min="0" max="100" value={volume} onChange={handleVolumeChange} />
 				<SeekBar audioRef={audioRef} />
 				<AudioControlButton id="skip-back-btn" onClick={handlePlayPrev} animationData={skipBackBtn} />

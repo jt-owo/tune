@@ -37,6 +37,9 @@ const PlaylistTrack: React.FC<PlaylistTrackProps> = (props) => {
 			const minutes = Math.floor(total / 60);
 			const seconds = Math.floor(total - minutes * 60);
 
+			if (seconds < 10) {
+				return `${minutes}:0${seconds}`;
+			}
 			return `${minutes}:${seconds}`;
 		}
 		return NaN;

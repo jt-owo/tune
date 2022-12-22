@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/media-has-caption */
 import * as React from 'react';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { play, playNext, playPrevious, selectCurrentTrack, selectIsPlaying, selectOutputDeviceId } from '../../../state/slices/playerSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { AudioMetadata, TrackData } from '../../../typings/playlist';
@@ -18,6 +18,7 @@ import skipBackBtn from '../../../../assets/animations/skipBack.json';
 import skipForwardBtn from '../../../../assets/animations/skipForward.json';
 
 import './AudioPlayer.scss';
+
 const AudioPlayer: React.FC = () => {
 	const audioRef = useRef<HTMLAudioElement & { setSinkId(deviceId: string): void; volume: number }>(null);
 
@@ -27,7 +28,7 @@ const AudioPlayer: React.FC = () => {
 
 	const [volume, setVolume] = useState(1);
 	const [metadata, setMetadata] = useState<AudioMetadata>();
-  
+
 	const dispatch = useAppDispatch();
 
 	const getMetadata = async (track: TrackData) => {

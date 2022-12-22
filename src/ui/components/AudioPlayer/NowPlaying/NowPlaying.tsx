@@ -19,13 +19,13 @@ const NowPlaying: React.FC<NowPlayingProps> = (props) => {
 	};
 
 	return (
-      <div id="track-info">
-        <img src={getAlbumCover()} alt="" id="current-album-cover" />
-        <div id="track-info">
-          <div id="current-track">{metadata.info?.title}</div>
-          <div id="current-artist">{metadata.info?.artist}</div>
-        </div>
-      </div>
+		<div id="track-info">
+			<img src={getAlbumCover()} alt="" id="current-album-cover" />
+			<div id="track-info">
+				<div id="current-track">{metadata.info?.title}</div>
+				<div id="current-artist">{metadata.info?.artist}</div>
+			</div>
+		</div>
 	);
 };
 

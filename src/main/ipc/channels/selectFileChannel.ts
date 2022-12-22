@@ -12,7 +12,7 @@ class SelectFileChannel implements IpcChannel<string, string[]> {
 	async handle(_event: IpcMainInvokeEvent, _args: string): Promise<string[]> {
 		const result = await dialog.showOpenDialog({
 			properties: ['openFile', 'multiSelections'],
-			filters: [{ name: 'Audio Files', extensions: ['mp3', 'flac'] }]
+			filters: [{ name: 'Audio Files', extensions: ['mp3', 'm4a', 'ogg', 'opus', 'flac', 'wav'] }]
 		});
 
 		return result.filePaths;

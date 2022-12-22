@@ -4,6 +4,10 @@ import * as React from 'react';
 
 import './Titlebar.scss';
 
+import maximizeIcon from '../../../../assets/ui-icons/titlebar-win/square-regular.svg';
+import minimizeIcon from '../../../../assets/ui-icons/titlebar-win/minus-solid.svg';
+import closeIcon from '../../../../assets/ui-icons/titlebar-win/x-solid.svg';
+
 const Titlebar: React.FC = () => {
 	const title = document.querySelector('title');
 
@@ -21,16 +25,16 @@ const Titlebar: React.FC = () => {
 
 	return (
 		<nav id="titlebar">
-			<div id="title">{title?.innerHTML || 'tune.'}</div>
+			{/* <div id="title">{title?.innerHTML || 'tune.'}</div> */}
 			<div id="buttons">
 				<div id="minimize" role="button" onClick={minimize}>
-					<span>_</span>
+					<img src={minimizeIcon} alt="" />
 				</div>
 				<div id="maximize" role="button" onClick={maximize}>
-					<span>■</span>
+					<img src={maximizeIcon} alt="" />
 				</div>
 				<div id="close" role="button" onClick={close}>
-					<span>&times;</span>
+					<img src={closeIcon} alt="" />
 				</div>
 			</div>
 		</nav>

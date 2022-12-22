@@ -20,35 +20,37 @@
 }
 
 #playlist-heading {
+	display: flex;
+	align-items: center;
 	box-sizing: border-box;
 	font-size: 35px;
-	font-family: Quicksand-regular;
+	font-family: Quicksand-400;
 	color: rgb(255, 255, 255);
 	padding: 2px 0 0 20px;
 }
 
 #playlist-heading #playlist-play-btn {
-	position: absolute;
-	right: 80px;
-	top: 10px;
+	// position: absolute;
+	// right: 80px;
+	// top: 10px;
 	width: 32px;
 	height: 32px;
 	border-radius: 8px;
 }
 
 #playlist-heading #playlist-import-btn {
-	position: absolute;
-	right: 45px;
-	top: 10px;
+	// position: absolute;
+	// right: 45px;
+	// top: 10px;
 	width: 32px;
 	height: 32px;
 	border-radius: 8px;
 }
 
 #playlist-heading #playlist-delete-btn {
-	position: absolute;
-	right: 10px;
-	top: 10px;
+	// position: absolute;
+	// right: 10px;
+	// top: 10px;
 	width: 32px;
 	height: 32px;
 	border-radius: 8px;
@@ -56,6 +58,20 @@
 
 #playlist-heading #playlist-delete-btn:hover {
 	background-color: #ff3535;
+}
+
+#playlist-heading-text {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+#playlist-controls {
+	display: flex;
+	flex-direction: row;
+	padding-left: 10px;
+	margin: 5px 10px 0 0;
+	margin-left: auto;
 }
 
 #playlist-play-btn #play-icon {
@@ -86,7 +102,7 @@
 .song-item {
 	display: flex;
 	align-items: center;
-	font-family: Quicksand-regular;
+	font-family: Quicksand-400;
 	font-size: 16px;
 	padding: 5px 5px 5px 5px;
 	margin: 5px 15px 0px 15px;
@@ -124,7 +140,7 @@
 	transform-origin: center;
 	z-index: 2;
 	opacity: 0;
-	font-family: Quicksand-regular;
+	font-family: Quicksand-400;
 	font-size: 14px;
 	transform: scale(0);
 	transition: transform 0.2s, opacity 0.2s;

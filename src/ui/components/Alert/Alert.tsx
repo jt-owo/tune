@@ -44,13 +44,13 @@ const Alert: React.FC<AlertProps> = (props) => {
 
 	return (
 		<div className={`${isFadingOut ? 'alert fade-out' : 'alert'} ${alert.type}`}>
-			<span className="closebtn" role="button" tabIndex={0} onClick={() => fadeOut(handleRemove)}>
-				X
-			</span>
-			<span className="type-icon">
+			<div className="type-icon">
 				<AlertIcon type={alert.type} />
-			</span>
-			{alert.message}
+			</div>
+			<div className="message">{alert.message}</div>
+			<div className="closebtn" role="button" tabIndex={0} onClick={() => fadeOut(handleRemove)}>
+				X
+			</div>
 		</div>
 	);
 };

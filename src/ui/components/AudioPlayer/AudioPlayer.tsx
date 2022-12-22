@@ -10,6 +10,7 @@ import PlayPauseButton from './PlayPauseButton/PlayPauseButton';
 import SeekBar from './SeekBar/SeekBar';
 import NowPlaying from './NowPlaying/NowPlaying';
 import ServiceSelector from './ServiceSelector/ServiceSelector';
+import VolumeSlider from './VolumeSlider/VolumeSlider';
 import useMediaSession from '../../hooks/useMediaSession';
 
 import playBtn from '../../../../assets/animations/playPause.json';
@@ -52,16 +53,6 @@ const AudioPlayer: React.FC = () => {
 		handlePlayNext();
 	};
 
-	const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setVolume(parseInt(e.target.value, 10));
-	};
-
-	useEffect(() => {
-		if (audioRef.current) {
-			audioRef.current.volume = volume / 100;
-		}
-	}, [audioRef, volume]);
-
 	useEffect(() => {
 		if (audioRef.current && outputDeviceId) {
 			audioRef.current.setSinkId(outputDeviceId);
@@ -102,7 +93,7 @@ const AudioPlayer: React.FC = () => {
 				<ServiceSelector />
 				<div id="player-control-divider" />
 				{currentTrack?.metadata && <NowPlaying metadata={currentTrack.metadata} />}
-				<input type="range" name="volumeSlider" className="volume-slider" min="0" max="100" value={volume} onChange={handleVolumeChange} />
+				<VolumeSlider audioRef={audioRef} />
 				<SeekBar audioRef={audioRef} />
 				<AudioControlButton id="skip-back-btn" onClick={handlePlayPrev} animationData={skipBackBtn} />
 				<PlayPauseButton isPlaying={isPlaying} onClick={handlePlayPause} animationData={playBtn} />

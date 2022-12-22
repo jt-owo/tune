@@ -1,0 +1,17 @@
+#context-menu-item {
+	list-style: none;
+	font-family: Quicksand-700;
+	// text-align: center;
+	padding: 8px;
+	margin: 3px;
+	border-radius: 10px;
+	transition: all ease-in-out 0.05s;
+}
+
+#context-menu-item:hover {
+	background-color: rgba($color: #000000, $alpha: 0.4);
+}
+
+#context-menu-item-text {
+	margin: 0 0 0 4px;
+}

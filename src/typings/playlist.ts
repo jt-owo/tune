@@ -9,6 +9,7 @@ export interface TrackData {
 	filePath: string;
 	fileName: string;
 	fileExt: string;
+	id: string;
 	sortIndex: number;
 	metadata?: AudioMetadata;
 }

@@ -1,6 +1,8 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import * as React from 'react';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import Lottie, { LottieRefCurrentProps } from 'lottie-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -8,6 +10,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks';
 import { removePlaylist, selectPlaylists, updatePlaylist } from '../../../state/slices/playlistSlice';
 import { PlaylistData, TrackData } from '../../../typings/playlist';
 import { setQueue, setTrack } from '../../../state/slices/playerSlice';
+import { SortableListContainer } from '../../components/DragAndDrop/SortableList';
 import PlaylistTrack from './PlaylistTrack/PlaylistTrack';
 import AppRoutes from '../../routes';
 
@@ -17,6 +20,7 @@ import folderIcon from '../../../../assets/animations/folder.json';
 import trashIcon from '../../../../assets/animations/trash.json';
 
 import './Playlist.scss';
+import newGuid from '../../util';
 
 const Playlist: React.FC = () => {
 	const { id } = useParams();
@@ -70,6 +74,7 @@ const Playlist: React.FC = () => {
 				filePath: path,
 				fileName: '',
 				fileExt: '',
+				id: newGuid(),
 				sortIndex: index
 			});
 		});
@@ -120,14 +125,17 @@ const Playlist: React.FC = () => {
 			</div>
 			<div id="divider" />
 			<div id="playlist-content">
-				<ul>
-					{playlist?.tracks &&
+				{playlist?.tracks && (
+					<DndProvider backend={HTML5Backend}>
+						<SortableListContainer tracks={playlist?.tracks} />
+					</DndProvider>
+				)}
+				{/* 					{playlist?.tracks &&
 						[...playlist.tracks]
 							.sort((a, b) => (a.sortIndex > b.sortIndex ? 1 : -1))
 							.map((track) => {
 								return <PlaylistTrack key={track.sortIndex} track={track} setCurrentTrack={setCurrentTrack} />;
-							})}
-				</ul>
+							})} */}
 			</div>
 		</div>
 	);

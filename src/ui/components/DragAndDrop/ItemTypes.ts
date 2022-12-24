@@ -1,5 +1,5 @@
 const ItemTypes = {
-	CARD: 'card'
+	TRACK: 'track'
 };
 
 export default ItemTypes;

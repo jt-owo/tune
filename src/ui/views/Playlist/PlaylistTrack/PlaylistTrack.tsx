@@ -27,7 +27,7 @@ const PlaylistTrack: React.FC<PlaylistTrackProps> = memo((props) => {
 	const originalIndex = findCard(id).index;
 	const [{ isDragging }, drag] = useDrag(
 		() => ({
-			type: ItemTypes.CARD,
+			type: ItemTypes.TRACK,
 			item: { id, originalIndex },
 			collect: (monitor) => ({
 				isDragging: monitor.isDragging()
@@ -45,7 +45,7 @@ const PlaylistTrack: React.FC<PlaylistTrackProps> = memo((props) => {
 
 	const [, drop] = useDrop(
 		() => ({
-			accept: ItemTypes.CARD,
+			accept: ItemTypes.TRACK,
 			hover({ id: draggedId }: Item) {
 				if (draggedId !== id) {
 					const { index: overIndex } = findCard(id);

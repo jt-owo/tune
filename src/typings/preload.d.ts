@@ -28,6 +28,7 @@ declare global {
 			system: {
 				selectFiles(): Promise<string[]>;
 				readMetadata(file: string): Promise<string>;
+				openURL(url: string): Promise<void>;
 			};
 		};
 		process: {

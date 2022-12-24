@@ -4,7 +4,7 @@ import { app, ipcMain, protocol } from 'electron';
 import { IpcChannel } from './ipc/types';
 import Window from './window/window';
 import Database from './api/database';
-import { ReadMetadataChannel, SelectFileChannel, WindowControlChannel } from './ipc';
+import { OpenUrlChannel, ReadMetadataChannel, SelectFileChannel, WindowControlChannel } from './ipc';
 import Channels from './ipc/channel';
 
 if (process.env.NODE_ENV === 'production') {
@@ -34,7 +34,7 @@ class Main {
 			this.onWindowAllClosed();
 		});
 
-		this.initIpc([new WindowControlChannel(), new ReadMetadataChannel(), new SelectFileChannel()]);
+		this.initIpc([new WindowControlChannel(), new ReadMetadataChannel(), new SelectFileChannel(), new OpenUrlChannel()]);
 	}
 
 	/**

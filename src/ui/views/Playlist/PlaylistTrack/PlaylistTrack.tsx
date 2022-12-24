@@ -1,17 +1,60 @@
-/* eslint-disable react/prop-types */
 /* eslint-disable react/jsx-no-useless-fragment */
-import { useEffect, useState } from 'react';
+/* eslint-disable @typescript-eslint/no-shadow */
+/* eslint-disable react/prop-types */
+import { memo, useEffect, useState } from 'react';
+import { useDrag, useDrop } from 'react-dnd';
 import { AudioMetadata, TrackData } from '../../../../typings/playlist';
 
 import defaultAlbumCover from '../../../../../assets/images/tune_no_artwork.svg';
+import ItemTypes from '../../../components/DragAndDrop/ItemTypes';
 
 interface PlaylistTrackProps {
+	id: string;
 	track: TrackData;
-	setCurrentTrack: (track: TrackData) => void;
+	setCurrentTrack?: (track: TrackData) => void;
+	moveTrack: (id: string, to: number) => void;
+	findTrack: (id: string) => { index: number };
 }
 
-const PlaylistTrack: React.FC<PlaylistTrackProps> = (props) => {
-	const { track, setCurrentTrack } = props;
+interface Item {
+	id: string;
+	originalIndex: number;
+}
+
+const PlaylistTrack: React.FC<PlaylistTrackProps> = memo((props) => {
+	const { id, track, moveTrack, findTrack } = props;
+
+	const originalIndex = findTrack(id).index;
+	const [{ isDragging }, drag] = useDrag(
+		() => ({
+			type: ItemTypes.TRACK,
+			item: { id, originalIndex },
+			collect: (monitor) => ({
+				isDragging: monitor.isDragging()
+			}),
+			end: (item, monitor) => {
+				const { id: droppedId, originalIndex } = item;
+				const didDrop = monitor.didDrop();
+				if (!didDrop) {
+					moveTrack(droppedId, originalIndex);
+				}
+			}
+		}),
+		[id, originalIndex, moveTrack]
+	);
+
+	const [, drop] = useDrop(
+		() => ({
+			accept: ItemTypes.TRACK,
+			hover({ id: draggedId }: Item) {
+				if (draggedId !== id) {
+					const { index: overIndex } = findTrack(id);
+					moveTrack(draggedId, overIndex);
+				}
+			}
+		}),
+		[findTrack, moveTrack]
+	);
 
 	const [metadata, setMetadata] = useState<AudioMetadata>();
 
@@ -45,10 +88,11 @@ const PlaylistTrack: React.FC<PlaylistTrackProps> = (props) => {
 		return NaN;
 	};
 
+	const opacity = isDragging ? 0 : 1;
 	return (
 		<>
 			{metadata && (
-				<li className="song-item btn-hover-animation" onDoubleClick={() => setCurrentTrack(track)}>
+				<li ref={(node) => drag(drop(node))} style={{ opacity }} className="song-item btn-hover-animation">
 					<img src={getAlbumCover()} alt="" draggable={false} />
 					<div>
 						<div className="song-title">{metadata?.info?.title}</div>
@@ -59,6 +103,6 @@ const PlaylistTrack: React.FC<PlaylistTrackProps> = (props) => {
 			)}
 		</>
 	);
-};
+});
 
 export default PlaylistTrack;

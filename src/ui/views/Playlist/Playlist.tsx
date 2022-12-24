@@ -1,13 +1,19 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable @typescript-eslint/no-shadow */
 import * as React from 'react';
+import update from 'immutability-helper';
+import { useDrop } from 'react-dnd';
 import Lottie, { LottieRefCurrentProps } from 'lottie-react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { FC, memo, useCallback, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { removePlaylist, selectPlaylists, updatePlaylist } from '../../../state/slices/playlistSlice';
 import { PlaylistData, TrackData } from '../../../typings/playlist';
-import { setQueue, setTrack } from '../../../state/slices/playerSlice';
+import { setQueue } from '../../../state/slices/playerSlice';
+import ItemTypes from '../../components/DragAndDrop/ItemTypes';
+import newGuid from '../../util';
+
 import PlaylistTrack from './PlaylistTrack/PlaylistTrack';
 import AppRoutes from '../../routes';
 
@@ -18,13 +24,15 @@ import trashIcon from '../../../../assets/animations/trash.json';
 
 import './Playlist.scss';
 
-const Playlist: React.FC = () => {
+const Playlist: FC = memo(function Playlist() {
 	const { id } = useParams();
 
 	const navigate = useNavigate();
+	const dispatch = useAppDispatch();
 
 	const playlists = useAppSelector(selectPlaylists);
 	const [playlist, setPlaylist] = useState(playlists.find((x) => x.id === id));
+	const [tracks, setTracks] = useState<TrackData[]>([]);
 
 	const lottiePlayPlaylistRef = React.useRef<LottieRefCurrentProps>(null);
 	const lottieAddTracksRef = React.useRef<LottieRefCurrentProps>(null);
@@ -33,8 +41,6 @@ const Playlist: React.FC = () => {
 	if (!playlist) {
 		navigate(AppRoutes.Library);
 	}
-
-	const dispatch = useAppDispatch();
 
 	const deletePlaylist = () => {
 		if (!playlist?.id) return;
@@ -70,16 +76,13 @@ const Playlist: React.FC = () => {
 				filePath: path,
 				fileName: '',
 				fileExt: '',
+				id: newGuid(),
 				sortIndex: index
 			});
 		});
 
 		dispatch(updatePlaylist(updateData));
-		setPlaylist(updateData);
-	};
-
-	const setCurrentTrack = (track: TrackData) => {
-		dispatch(setTrack(track));
+		setTracks(updateData.tracks);
 	};
 
 	const playPlaylist = () => {
@@ -87,11 +90,6 @@ const Playlist: React.FC = () => {
 
 		dispatch(setQueue(playlist.tracks));
 	};
-
-	useEffect(() => {
-		const playlistFound = playlists.find((x) => x.id === id);
-		if (playlistFound) setPlaylist(playlistFound);
-	}, [playlists, id]);
 
 	const startAnimation = (e: React.RefObject<LottieRefCurrentProps>) => {
 		e?.current?.setDirection(1);
@@ -101,6 +99,47 @@ const Playlist: React.FC = () => {
 		e?.current?.setDirection(-1);
 		e?.current?.play();
 	};
+
+	const findTrack = useCallback(
+		(id: string) => {
+			const card = tracks?.filter((c) => `${c.id}` === id)[0] as TrackData;
+			return {
+				card,
+				index: tracks?.indexOf(card)
+			};
+		},
+		[tracks]
+	);
+
+	const moveTrack = useCallback(
+		(id: string, atIndex: number) => {
+			const { card, index } = findTrack(id);
+			const updateData = update(tracks, {
+				$splice: [
+					[index, 1],
+					[atIndex, 0, card]
+				]
+			});
+			setTracks(updateData);
+			dispatch(
+				updatePlaylist({
+					...playlist,
+					tracks: updateData
+				} as PlaylistData)
+			);
+		},
+		[findTrack, tracks, dispatch, playlist]
+	);
+
+	const [, drop] = useDrop(() => ({ accept: ItemTypes.TRACK }));
+
+	useEffect(() => {
+		const playlistFound = playlists.find((x) => x.id === id);
+		if (playlistFound) {
+			setPlaylist(playlistFound);
+			if (playlistFound.tracks) setTracks(playlistFound.tracks);
+		}
+	}, [playlists, id]);
 
 	return (
 		<div key={id} id="playlist-container">
@@ -120,17 +159,14 @@ const Playlist: React.FC = () => {
 			</div>
 			<div id="divider" />
 			<div id="playlist-content">
-				<ul>
-					{playlist?.tracks &&
-						[...playlist.tracks]
-							.sort((a, b) => (a.sortIndex > b.sortIndex ? 1 : -1))
-							.map((track) => {
-								return <PlaylistTrack key={track.sortIndex} track={track} setCurrentTrack={setCurrentTrack} />;
-							})}
-				</ul>
+				{tracks.length > 0 && (
+					<div ref={drop}>
+						<ul>{tracks && tracks.map((track) => <PlaylistTrack key={track.id} id={`${track.id}`} track={track} moveTrack={moveTrack} findTrack={findTrack} />)}</ul>
+					</div>
+				)}
 			</div>
 		</div>
 	);
-};
+});
 
 export default Playlist;

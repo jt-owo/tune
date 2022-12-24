@@ -24,6 +24,9 @@ contextBridge.exposeInMainWorld('ipc', {
 			const metadata = await ipcRenderer.invoke(Channels.READ_METADATA, file);
 
 			return metadata as string;
+		},
+		openURL(url: string) {
+			ipcRenderer.invoke(Channels.OPEN_URL, url);
 		}
 	}
 });

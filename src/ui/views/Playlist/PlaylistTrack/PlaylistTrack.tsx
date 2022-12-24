@@ -1,6 +1,6 @@
+/* eslint-disable react/jsx-no-useless-fragment */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable react/prop-types */
-/* eslint-disable react/jsx-no-useless-fragment */
 import { memo, useEffect, useState } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { AudioMetadata, TrackData } from '../../../../typings/playlist';
@@ -22,9 +22,9 @@ interface Item {
 }
 
 const PlaylistTrack: React.FC<PlaylistTrackProps> = memo((props) => {
-	const { id, track, moveTrack: moveCard, findTrack: findCard } = props;
+	const { id, track, moveTrack, findTrack } = props;
 
-	const originalIndex = findCard(id).index;
+	const originalIndex = findTrack(id).index;
 	const [{ isDragging }, drag] = useDrag(
 		() => ({
 			type: ItemTypes.TRACK,
@@ -36,11 +36,11 @@ const PlaylistTrack: React.FC<PlaylistTrackProps> = memo((props) => {
 				const { id: droppedId, originalIndex } = item;
 				const didDrop = monitor.didDrop();
 				if (!didDrop) {
-					moveCard(droppedId, originalIndex);
+					moveTrack(droppedId, originalIndex);
 				}
 			}
 		}),
-		[id, originalIndex, moveCard]
+		[id, originalIndex, moveTrack]
 	);
 
 	const [, drop] = useDrop(
@@ -48,12 +48,12 @@ const PlaylistTrack: React.FC<PlaylistTrackProps> = memo((props) => {
 			accept: ItemTypes.TRACK,
 			hover({ id: draggedId }: Item) {
 				if (draggedId !== id) {
-					const { index: overIndex } = findCard(id);
-					moveCard(draggedId, overIndex);
+					const { index: overIndex } = findTrack(id);
+					moveTrack(draggedId, overIndex);
 				}
 			}
 		}),
-		[findCard, moveCard]
+		[findTrack, moveTrack]
 	);
 
 	const [metadata, setMetadata] = useState<AudioMetadata>();

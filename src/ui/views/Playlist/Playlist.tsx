@@ -1,13 +1,9 @@
-/* eslint-disable func-names */
-/* eslint-disable consistent-return */
-/* eslint-disable @typescript-eslint/no-shadow */
-/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable @typescript-eslint/no-shadow */
 import * as React from 'react';
 import update from 'immutability-helper';
-import { DndProvider, useDrop } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
+import { useDrop } from 'react-dnd';
 import Lottie, { LottieRefCurrentProps } from 'lottie-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FC, memo, useCallback, useEffect, useState } from 'react';

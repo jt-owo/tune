@@ -1,3 +1,5 @@
+@import '../../styles/colors';
+
 .tooltip {
 	position: relative;
 	display: inline-block;
@@ -6,12 +8,16 @@
 
 .tooltip .tooltip-text {
 	visibility: hidden;
-	width: 120px;
-	background-color: purple;
+	opacity: 0;
+	width: 140px;
+	background-color: #8400ff;
 	color: #fff;
 	text-align: center;
-	border-radius: 6px;
-	padding: 5px 0;
+	border-radius: 10px;
+	padding: 8px;
+	font-family: Quicksand-500;
+	font-size: 14px;
+	transition: all ease-in-out 0.15s;
 
 	/* Position the tooltip */
 	position: absolute;
@@ -23,4 +29,5 @@
 
 .tooltip:hover .tooltip-text {
 	visibility: visible;
+	opacity: 1;
 }

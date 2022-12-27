@@ -12,6 +12,8 @@ import NowPlaying from './NowPlaying/NowPlaying';
 import ServiceSelector from './ServiceSelector/ServiceSelector';
 import VolumeSlider from './VolumeSlider/VolumeSlider';
 import useMediaSession from '../../hooks/useMediaSession';
+import ShuffleButton from './ShuffleButton/ShuffleButton';
+import RepeatButton from './RepeatButton/RepeatButton';
 
 import playBtn from '../../../../assets/animations/playPause.json';
 import skipBackBtn from '../../../../assets/animations/skipBack.json';
@@ -98,6 +100,8 @@ const AudioPlayer: React.FC = () => {
 				<AudioControlButton id="skip-back-btn" onClick={handlePlayPrev} animationData={skipBackBtn} />
 				<PlayPauseButton isPlaying={isPlaying} onClick={handlePlayPause} animationData={playBtn} />
 				<AudioControlButton id="skip-forward-btn" onClick={handlePlayNext} animationData={skipForwardBtn} />
+				<ShuffleButton />
+				<RepeatButton />
 			</div>
 			<audio src={currentTrack?.filePath} ref={audioRef} onEnded={onEnded} crossOrigin="anonymous" />
 		</div>

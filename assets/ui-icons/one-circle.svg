@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+      }
+
+      .cls-2 {
+        font-family: Quicksand-Bold, Quicksand;
+        font-size: 501.59px;
+        font-variation-settings: 'wght' 700;
+        font-weight: 700;
+      }
+    </style>
+  </defs>
+  <circle class="cls-1" cx="256" cy="256" r="256"/>
+  <text class="cls-2" transform="translate(152.21 435.15)"><tspan x="0" y="0">1</tspan></text>
+</svg>

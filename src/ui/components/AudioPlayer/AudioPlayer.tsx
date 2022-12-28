@@ -94,7 +94,7 @@ const AudioPlayer: React.FC = () => {
 			<div id="player-controls-container">
 				<ServiceSelector />
 				<div id="player-control-divider" />
-				{currentTrack?.metadata && <NowPlaying metadata={currentTrack.metadata} />}
+				{metadata && <NowPlaying metadata={metadata} />}
 				<VolumeSlider audioRef={audioRef} />
 				<SeekBar audioRef={audioRef} />
 				<AudioControlButton id="skip-back-btn" onClick={handlePlayPrev} animationData={skipBackBtn} />

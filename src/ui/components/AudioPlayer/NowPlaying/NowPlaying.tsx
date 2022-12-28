@@ -19,7 +19,7 @@ const NowPlaying: React.FC<NowPlayingProps> = (props) => {
 	};
 
 	return (
-		<div id="track-info">
+		<div id="track">
 			<img src={getAlbumCover()} alt="" id="current-album-cover" />
 			<div id="track-info">
 				<div id="current-track">{metadata.info?.title}</div>

@@ -1,17 +1,35 @@
+@import '../../../styles/colors';
+
 #context-menu-item {
+	display: flex;
+	align-items: center;
 	list-style: none;
-	font-family: Quicksand-700;
-	// text-align: center;
-	padding: 8px;
+	padding: 7px;
 	margin: 3px;
-	border-radius: 10px;
+	border-radius: 12px;
 	transition: all ease-in-out 0.05s;
 }
 
 #context-menu-item:hover {
-	background-color: rgba($color: #000000, $alpha: 0.4);
+	background-color: rgba($color: #ffffff, $alpha: 0.15);
 }
 
 #context-menu-item-text {
+	font-family: Quicksand-700;
 	margin: 0 0 0 4px;
+}
+
+#context-menu-item > img {
+	height: 18px;
+	margin-right: 5px;
+}
+
+#context-menu-item > .lottie {
+	height: 20px;
+	margin: 0;
+	padding: 0;
+}
+
+#context-menu-item.danger:hover {
+	background-color: $danger-color;
 }

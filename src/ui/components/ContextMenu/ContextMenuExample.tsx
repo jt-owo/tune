@@ -7,6 +7,9 @@ import Dialog from '../Dialog/Dialog';
 import ContextMenu from './ContextMenu';
 import ContextMenuItem from './ContextMenuItem/ContextMenuItem';
 
+import editIcon from '../../../../assets/ui-icons/edit-3.svg';
+import deleteIcon from '../../../../assets/ui-icons/trash-2.svg';
+
 const ContextMenuExample: React.FC = () => {
 	const playlists: PlaylistData[] = useAppSelector(selectPlaylists);
 	const [isDialogVisible, setDialogVisibility] = React.useState(false);
@@ -35,8 +38,8 @@ const ContextMenuExample: React.FC = () => {
 			))}
 			{visibility && (
 				<ContextMenu y={position.y} x={position.x}>
-					<ContextMenuItem header="Rename" />
-					<ContextMenuItem header="Delete" onClick={() => setDialogVisibility(true)} />
+					<ContextMenuItem header="Edit" staticIcon={editIcon} type="default" />
+					<ContextMenuItem header="Delete" staticIcon={deleteIcon} type="danger" onClick={() => setDialogVisibility(true)} />
 				</ContextMenu>
 			)}
 		</div>

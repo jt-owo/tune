@@ -11,10 +11,12 @@ import { setQueue, setTrack } from '../../../state/slices/playerSlice';
 import PlaylistTrack from './PlaylistTrack/PlaylistTrack';
 import AppRoutes from '../../routes';
 
-import playIcon from '../../../../assets/ui-icons/simple-play-btn.svg';
-
+import playIcon from '../../../../assets/ui-icons/play.svg';
 import folderIcon from '../../../../assets/animations/folder.json';
 import trashIcon from '../../../../assets/animations/trash.json';
+import menuIcon from '../../../../assets/animations/menuV4.json';
+
+import defaultAlbumCover from '../../../../assets/images/tune_no_artwork.svg';
 
 import './Playlist.scss';
 
@@ -26,7 +28,7 @@ const Playlist: React.FC = () => {
 	const playlists = useAppSelector(selectPlaylists);
 	const [playlist, setPlaylist] = useState(playlists.find((x) => x.id === id));
 
-	const lottiePlayPlaylistRef = React.useRef<LottieRefCurrentProps>(null);
+	const lottieShowMenuRef = React.useRef<LottieRefCurrentProps>(null);
 	const lottieAddTracksRef = React.useRef<LottieRefCurrentProps>(null);
 	const lottieDeletePlaylistRef = React.useRef<LottieRefCurrentProps>(null);
 
@@ -105,6 +107,7 @@ const Playlist: React.FC = () => {
 	return (
 		<div key={id} id="playlist-container">
 			<div id="playlist-heading">
+				<img src={defaultAlbumCover} alt="" />
 				<div id="playlist-heading-text">{playlist?.name}</div>
 				<div id="playlist-controls">
 					<div id="playlist-play-btn" className="playlist-heading-btn btn-hover-animation" onClick={playPlaylist}>
@@ -115,6 +118,9 @@ const Playlist: React.FC = () => {
 					</div>
 					<div id="playlist-delete-btn" className="playlist-heading-btn btn-hover-animation" onClick={deletePlaylist} onMouseEnter={() => startAnimation(lottieDeletePlaylistRef)} onMouseLeave={() => stopAnimation(lottieDeletePlaylistRef)}>
 						<Lottie id="delete-icon" animationData={trashIcon} lottieRef={lottieDeletePlaylistRef} loop={false} autoplay={false} />
+					</div>
+					<div id="playlist-menu-btn" className="playlist-heading-btn btn-hover-animation">
+						<Lottie id="menu-icon" animationData={menuIcon} lottieRef={lottieShowMenuRef} loop={false} autoplay={false} />
 					</div>
 				</div>
 			</div>

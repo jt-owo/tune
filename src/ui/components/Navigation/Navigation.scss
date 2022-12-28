@@ -25,11 +25,11 @@
 }
 
 #nav-bar-logo {
-	max-width: 40%;
+	max-width: 45%;
 	display: block;
 	margin: auto;
 	margin-bottom: 20px;
-	padding-top: 20px;
+	margin-top: 20px;
 	padding-left: 0px;
 }
 
@@ -51,12 +51,9 @@
 	color: #fff;
 	font-family: Quicksand-400;
 	font-weight: bold;
-	padding: 5px 16px;
+	padding: 5px 10px 5px 5px;
 	margin: 5px 10px;
 	border-radius: 10px;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
 }
 
 .new-playlist-name-field {
@@ -152,4 +149,21 @@
 .new-playlist-btn img {
 	width: 12px;
 	margin: 4px 3px -2px 2px;
+}
+
+.playlist-navitem {
+	display: flex;
+}
+
+.playlist-navitem-img {
+	width: 20px;
+	height: 20px;
+	border-radius: 5px;
+	margin-right: 8px;
+}
+
+.playlist-navitem-name {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }

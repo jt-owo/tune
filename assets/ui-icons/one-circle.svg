@@ -1,19 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 546">
   <defs>
     <style>
       .cls-1 {
         fill: #fff;
       }
-
-      .cls-2 {
-        font-family: Quicksand-Bold, Quicksand;
-        font-size: 501.59px;
-        font-variation-settings: 'wght' 700;
-        font-weight: 700;
-      }
     </style>
   </defs>
   <circle class="cls-1" cx="256" cy="256" r="256"/>
-  <text class="cls-2" transform="translate(152.21 435.15)"><tspan x="0" y="0">1</tspan></text>
+  <path d="m271.59,435.15c-9.37,0-17.05-2.92-23.07-8.78-6.02-5.85-9.03-13.12-9.03-21.82v-252.8l7.02,11.04-36.62,27.09c-4.69,3.68-10.53,5.52-17.56,5.52-8.03,0-15.05-3.01-21.07-9.03s-9.03-13.21-9.03-21.57c0-10.7,5.18-19.39,15.55-26.08l72.23-48.15c3.34-2.34,7.1-4.01,11.29-5.02,4.18-1,8.1-1.5,11.79-1.5,9.7,0,17.38,2.93,23.07,8.78,5.68,5.85,8.53,13.13,8.53,21.82v289.92c0,8.7-3.1,15.97-9.28,21.82-6.19,5.85-14.13,8.78-23.83,8.78Z"/>
 </svg>

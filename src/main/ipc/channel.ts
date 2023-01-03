@@ -4,7 +4,10 @@ export enum Channels {
 	READ_METADATA = 'read-metadata',
 	OPEN_URL = 'open-shell-external',
 	DATABASE_GET = 'db-get-value',
-	DATABASE_SET = 'db-set-value'
+	DATABASE_SET = 'db-set-value',
+	CONFIG_GET = 'user-config-get-value',
+	CONFIG_SET = 'user-config-set-value',
+	UPDATE_TRACK_MAIN = 'update-track-for-main'
 }
 
 export default Channels;

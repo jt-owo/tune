@@ -1,5 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron';
 import { DatabaseKey, DatabaseValue } from './api/database';
+import { StoreValue } from './api/dynamicStore';
 import Channels from './ipc/channel';
 
 contextBridge.exposeInMainWorld('ipc', {
@@ -27,6 +28,17 @@ contextBridge.exposeInMainWorld('ipc', {
 		},
 		openURL(url: string) {
 			ipcRenderer.invoke(Channels.OPEN_URL, url);
+		},
+		updateTrack(trackPath: string) {
+			ipcRenderer.invoke(Channels.UPDATE_TRACK_MAIN, trackPath);
+		}
+	},
+	config: {
+		set(key: string, value: string) {
+			ipcRenderer.invoke(Channels.CONFIG_SET, [key, value]);
+		},
+		get(key: string): StoreValue {
+			return ipcRenderer.sendSync(Channels.CONFIG_GET, key) as StoreValue;
 		}
 	}
 });

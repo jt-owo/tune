@@ -3,14 +3,9 @@ import { app, BrowserWindow, shell } from 'electron';
 import log from 'electron-log';
 import { autoUpdater } from 'electron-updater';
 import path from 'path';
-import { IStoreData, DynamicStore } from '../api/dynamicStore';
+import { DynamicStore } from '../api/dynamicStore';
 import { resolveHtmlPath } from '../util';
 import MenuBuilder from './menu';
-
-export interface UserConfig extends IStoreData {
-	windowBounds: WindowBounds;
-	windowState: number;
-}
 
 export interface WindowBounds {
 	width: number;
@@ -26,16 +21,6 @@ class AppUpdater {
 		autoUpdater.checkForUpdatesAndNotify();
 	}
 }
-
-const USER_DEFAULTS: UserConfig = {
-	windowBounds: {
-		width: 0,
-		height: 0,
-		x: 0,
-		y: 0
-	},
-	windowState: 0
-};
 
 const isDebug = process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
 const RESOURCES_PATH = app.isPackaged ? path.join(process.resourcesPath, 'assets') : path.join(__dirname, '../../assets');
@@ -62,9 +47,10 @@ const MIN_HEIGHT = 640;
 export default class Window {
 	private browserWindow: BrowserWindow | null;
 
+	/** Config File instance from main */
 	private userConfig: DynamicStore;
 
-	constructor() {
+	constructor(userConfig: DynamicStore) {
 		if (isDebug) {
 			this.installExtensions();
 		}
@@ -84,13 +70,13 @@ export default class Window {
 				nodeIntegration: false /* DO NOT CHANGE */,
 				contextIsolation: true /* DO NOT CHANGE */,
 				// FIXME: https://github.com/electron/electron/issues/23393
-				webSecurity: false /* DO NOT CHANGE: WebSecurity can't be true, because otherwise local audio files woudn't work */,
+				webSecurity: false /* DO NOT CHANGE: WebSecurity can't be true, because otherwise local audio files wouldn't work */,
 				devTools: process.env.NODE_ENV !== 'production',
 				preload: app.isPackaged ? path.join(__dirname, 'preload.js') : path.join(__dirname, '../../../webpack/dll/preload.js')
 			}
 		});
 
-		this.userConfig = new DynamicStore('userPref', USER_DEFAULTS);
+		this.userConfig = userConfig;
 
 		const winBounds = this.userConfig.get<WindowBounds>('windowBounds');
 		if (winBounds && winBounds.height !== 0 && winBounds.width !== 0 && winBounds.x !== 0 && winBounds.y !== 0) {

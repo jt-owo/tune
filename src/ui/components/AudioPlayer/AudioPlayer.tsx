@@ -66,6 +66,7 @@ const AudioPlayer: React.FC = () => {
 		if (isPlaying) {
 			audioRef.current.play().catch(() => {});
 			if (currentTrack) getMetadata(currentTrack);
+			window.ipc.system.updateTrack(currentTrack?.filePath || '');
 		} else {
 			audioRef.current.pause();
 		}

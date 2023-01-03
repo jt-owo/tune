@@ -1,14 +1,15 @@
 @import '../../styles/colors';
 
-.tooltip {
+.tooltip-container {
 	position: relative;
 	display: inline-block;
 	border-bottom: 1px dotted black;
 }
 
-.tooltip .tooltip-text {
-	visibility: hidden;
-	opacity: 0;
+.tooltip-text {
+	position: absolute;
+	z-index: 98;
+
 	width: 140px;
 	background-color: #fff;
 	color: #000;
@@ -18,18 +19,5 @@
 	font-family: Quicksand-500;
 	font-size: 14px;
 	border: 2px solid black;
-	transition: all ease-in-out 0.15s;
-
-	/* Position the tooltip */
-	position: absolute;
-	z-index: 98;
-	bottom: 100%;
-	left: 50%;
-	margin-top: -75px;
-	margin-left: -70px;
-}
-
-.tooltip:hover .tooltip-text {
-	visibility: visible;
-	opacity: 1;
+	/* transition: all ease-in-out 0.15s; */
 }

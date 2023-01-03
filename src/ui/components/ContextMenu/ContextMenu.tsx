@@ -1,10 +1,10 @@
 import React from 'react';
-import { ContextMenuItemProps } from './ContextMenuItem/ContextMenuItem';
+import { Props } from './ContextMenuItem/ContextMenuItem';
 
 import './ContextMenu.scss';
 
 interface ContextMenuProps {
-	children?: React.ReactElement<ContextMenuItemProps>[];
+	children?: React.ReactElement<Props>[];
 	x: number;
 	y: number;
 }

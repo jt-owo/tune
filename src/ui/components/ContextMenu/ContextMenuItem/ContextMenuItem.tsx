@@ -5,7 +5,7 @@ import Lottie, { LottieComponentProps } from 'lottie-react';
 
 import './ContextMenuItem.scss';
 
-export interface ContextMenuItemDefaultProps {
+interface ContextMenuItemDefaultProps {
 	type: 'default' | 'danger';
 	header: string;
 	onClick?: () => void;
@@ -21,9 +21,9 @@ type ContextMenuItemConditionalProps =
 			lottieIcon?: LottieComponentProps['animationData'];
 	  };
 
-type Props = ContextMenuItemDefaultProps & ContextMenuItemConditionalProps;
+export type Props = ContextMenuItemDefaultProps & ContextMenuItemConditionalProps;
 
-const ContextMenuItem: React.FC<Props> = (props: Props) => {
+const ContextMenuItem: React.FC<Props> = (props) => {
 	const { onClick, header, staticIcon, lottieIcon, type } = props;
 
 	if (staticIcon && !lottieIcon) {

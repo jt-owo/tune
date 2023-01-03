@@ -1,0 +1,20 @@
+.tabcontrol-nav {
+	display: flex;
+	flex-direction: row;
+}
+
+.tab {
+	padding: 16px;
+	font-size: 16px;
+	background: transparent;
+	color: white;
+	cursor: pointer;
+}
+
+.tab:hover {
+	color: darkgrey;
+}
+
+.active {
+	color: grey;
+}

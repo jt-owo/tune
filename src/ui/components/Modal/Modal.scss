@@ -1,3 +1,5 @@
+@import '../../styles/colors';
+
 .modal {
 	position: fixed;
 	inset: 0;
@@ -14,11 +16,47 @@
 
 .modal-content {
 	width: 70%;
-	height: 70%;
+	height: 20%;
 	background-color: #282c34;
 	color: #fff;
 	display: flex;
+	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	font-size: 2rem;
+	text-align: center;
+	font-family: Quicksand-700;
+	font-size: 24px;
+	border-radius: 40px;
+}
+
+.modal-content button {
+	height: 40px;
+	width: 80%;
+	background-color: #ffffff;
+	border: none;
+	border-radius: 12px;
+	margin-top: 15px;
+	font-family: Quicksand-700;
+	font-size: 16px;
+	transition: all ease-in-out 0.05s;
+}
+
+.modal-content button:hover {
+	background-color: #bababa;
+}
+
+.modal .close-btn {
+	font-family: Quicksand-700;
+	background-color: #ffffff;
+	color: #000000;
+	padding: 5px 8px 5px 8px;
+	border-radius: 20px;
+	margin-bottom: 10px;
+	cursor: pointer;
+	transition: all ease-in-out 0.15s;
+}
+
+.modal .close-btn:hover {
+	box-shadow: 0 0 10px rgba($color: #ffffff, $alpha: 1);
+	transition: all ease-in-out 0.05s;
 }

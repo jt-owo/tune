@@ -15,12 +15,15 @@ import ItemTypes from '../../components/DragAndDrop/ItemTypes';
 import newGuid from '../../util';
 
 import PlaylistTrack from './PlaylistTrack/PlaylistTrack';
+import ToolTip from '../../components/ToolTip/ToolTip';
 import AppRoutes from '../../routes';
 
-import playIcon from '../../../../assets/ui-icons/simple-play-btn.svg';
-
+import playIcon from '../../../../assets/ui-icons/play.svg';
 import folderIcon from '../../../../assets/animations/folder.json';
 import trashIcon from '../../../../assets/animations/trash.json';
+import menuIcon from '../../../../assets/animations/menuV4.json';
+
+import defaultAlbumCover from '../../../../assets/images/tune_no_artwork.svg';
 
 import './Playlist.scss';
 
@@ -34,7 +37,7 @@ const Playlist: FC = memo(function Playlist() {
 	const [playlist, setPlaylist] = useState(playlists.find((x) => x.id === id));
 	const [tracks, setTracks] = useState<TrackData[]>([]);
 
-	const lottiePlayPlaylistRef = React.useRef<LottieRefCurrentProps>(null);
+	const lottieShowMenuRef = React.useRef<LottieRefCurrentProps>(null);
 	const lottieAddTracksRef = React.useRef<LottieRefCurrentProps>(null);
 	const lottieDeletePlaylistRef = React.useRef<LottieRefCurrentProps>(null);
 
@@ -144,16 +147,26 @@ const Playlist: FC = memo(function Playlist() {
 	return (
 		<div key={id} id="playlist-container">
 			<div id="playlist-heading">
+				<img src={defaultAlbumCover} alt="" />
 				<div id="playlist-heading-text">{playlist?.name}</div>
 				<div id="playlist-controls">
-					<div id="playlist-play-btn" className="playlist-heading-btn btn-hover-animation" onClick={playPlaylist}>
-						<img id="play-icon" src={playIcon} alt="" draggable="false" />
-					</div>
-					<div id="playlist-import-btn" className="playlist-heading-btn btn-hover-animation" onClick={handleAddTracks} onMouseEnter={() => startAnimation(lottieAddTracksRef)} onMouseLeave={() => stopAnimation(lottieAddTracksRef)}>
-						<Lottie id="import-icon" animationData={folderIcon} lottieRef={lottieAddTracksRef} loop={false} autoplay={false} />
-					</div>
-					<div id="playlist-delete-btn" className="playlist-heading-btn btn-hover-animation" onClick={deletePlaylist} onMouseEnter={() => startAnimation(lottieDeletePlaylistRef)} onMouseLeave={() => stopAnimation(lottieDeletePlaylistRef)}>
-						<Lottie id="delete-icon" animationData={trashIcon} lottieRef={lottieDeletePlaylistRef} loop={false} autoplay={false} />
+					<ToolTip text="Play Playlist">
+						<div id="playlist-play-btn" className="playlist-heading-btn btn-hover-animation" onClick={playPlaylist}>
+							<img id="play-icon" src={playIcon} alt="" draggable="false" />
+						</div>
+					</ToolTip>
+					<ToolTip text="Import Tracks">
+						<div id="playlist-import-btn" className="playlist-heading-btn btn-hover-animation" onClick={handleAddTracks} onMouseEnter={() => startAnimation(lottieAddTracksRef)} onMouseLeave={() => stopAnimation(lottieAddTracksRef)}>
+							<Lottie id="import-icon" animationData={folderIcon} lottieRef={lottieAddTracksRef} loop={false} autoplay={false} />
+						</div>
+					</ToolTip>
+					<ToolTip text="Delete Playlist">
+						<div id="playlist-delete-btn" className="playlist-heading-btn btn-hover-animation" onClick={deletePlaylist} onMouseEnter={() => startAnimation(lottieDeletePlaylistRef)} onMouseLeave={() => stopAnimation(lottieDeletePlaylistRef)}>
+							<Lottie id="delete-icon" animationData={trashIcon} lottieRef={lottieDeletePlaylistRef} loop={false} autoplay={false} />
+						</div>
+					</ToolTip>
+					<div id="playlist-menu-btn" className="playlist-heading-btn btn-hover-animation">
+						<Lottie id="menu-icon" animationData={menuIcon} lottieRef={lottieShowMenuRef} loop={false} autoplay={false} />
 					</div>
 				</div>
 			</div>

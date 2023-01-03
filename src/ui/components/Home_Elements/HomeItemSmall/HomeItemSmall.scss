@@ -1,0 +1,54 @@
+@import '../../../styles/colors';
+
+#home-item-small-container {
+	display: flex;
+	align-items: center;
+	width: 280px;
+	background-color: $dark-gray-2;
+	font-family: Quicksand-500;
+	padding: 10px;
+	border-radius: 20px;
+	transition: all ease-in-out 0.2s;
+	cursor: pointer;
+}
+
+#home-item-small-img {
+	height: 60px;
+	width: 60px;
+	margin: 0 15px 0 0px;
+	border-radius: 10px;
+	box-shadow: 0 0 20px rgba($color: #000000, $alpha: 0.5);
+	transition: all ease-in-out 0.2s;
+}
+
+#home-item-small-info {
+	transition: all ease-in-out 0.2s;
+}
+
+#home-item-small-title {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	font-size: 15px;
+	margin-bottom: 5px;
+}
+
+#home-item-small-artist {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: 1;
+	-webkit-box-orient: vertical;
+	font-size: 13px;
+	color: rgba($color: #ffffff, $alpha: 0.5);
+}
+
+#home-item-small-container:hover {
+	background-color: $hover-color-light;
+
+	#home-item-small-img {
+		transform: translateY(-2px);
+	}
+}

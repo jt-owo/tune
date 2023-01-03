@@ -19,6 +19,8 @@ import browseIcon from '../../../../assets/animations/explore.json';
 import libraryIcon from '../../../../assets/animations/folder.json';
 import settingsIcon from '../../../../assets/animations/settings.json';
 
+import defaultAlbumCover from '../../../../assets/images/tune_no_artwork.svg';
+
 import './Navigation.scss';
 
 const Navigation: React.FC = () => {
@@ -80,7 +82,11 @@ const Navigation: React.FC = () => {
 					{pinnedPlaylists?.map((playlist) => {
 						return (
 							<NavLink to={`${AppRoutes.Playlist}/${playlist.id}`} title={playlist.name} key={playlist.id} className="playlist-btn btn-hover-animation" draggable="false">
-								{playlist.name}
+								<div className="playlist-navitem">
+									<img src={defaultAlbumCover} alt="" className="playlist-navitem-img" />
+
+									<div className="playlist-navitem-name">{playlist.name}</div>
+								</div>
 							</NavLink>
 						);
 					})}

@@ -76,7 +76,7 @@ const VolumeSlider: React.FC<VolumeSliderProps> = (props) => {
 		<div className="volume-slider-container">
 			<div id="volume-slider-progress" ref={volumeSliderProgressRef} />
 			<Lottie animationData={volumeIcon} loop={false} lottieRef={lottieRef} id="volume-slider-icon" />
-			<input type="range" min="0" max="100" value={volume} className="volume-slider" onChange={handleVolumeChange} defaultValue="50" />
+			<input type="range" min="0" max="100" value={volume} className="volume-slider" onChange={handleVolumeChange} />
 			<div id="volume-slider-percentage">{volume}%</div>
 		</div>
 	);

@@ -30,6 +30,7 @@ declare global {
 				selectFiles(): Promise<string[]>;
 				readMetadata(file: string): Promise<string>;
 				openURL(url: string): Promise<void>;
+				updateTrack(trackPath: string): void;
 			};
 			config: {
 				/**

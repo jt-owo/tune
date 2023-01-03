@@ -28,6 +28,9 @@ contextBridge.exposeInMainWorld('ipc', {
 		},
 		openURL(url: string) {
 			ipcRenderer.invoke(Channels.OPEN_URL, url);
+		},
+		updateTrack(trackPath: string) {
+			ipcRenderer.invoke(Channels.UPDATE_TRACK_MAIN, trackPath);
 		}
 	},
 	config: {

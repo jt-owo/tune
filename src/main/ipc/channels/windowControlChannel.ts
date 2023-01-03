@@ -1,11 +1,12 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { BrowserWindow, IpcMainInvokeEvent } from 'electron';
+import Channels from '../channel';
 import { IpcChannel } from '../types';
 
 class WindowControlChannel implements IpcChannel<string, void> {
 	getName(): string {
-		return 'window-controls';
+		return Channels.WINDOW_CONTROLS;
 	}
 
 	handle(event: IpcMainInvokeEvent, args: string): void {

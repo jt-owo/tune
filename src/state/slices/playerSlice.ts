@@ -17,7 +17,8 @@ const initialState: PlayerState = {
 	queue: [],
 	queueIndex: 0,
 	history: [],
-	isPlaying: false
+	isPlaying: false,
+	outputDeviceId: window.ipc.config.get('outputDeviceId') as string
 };
 
 export const playerSlice = createSlice({
@@ -40,6 +41,7 @@ export const playerSlice = createSlice({
 		},
 		setOutputDevice: (state, action: PayloadAction<string>) => {
 			state.outputDeviceId = action.payload;
+			window.ipc.config.set('outputDeviceId', JSON.stringify(action.payload));
 		},
 		play: (state) => {
 			state.isPlaying = !state.isPlaying;

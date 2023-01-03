@@ -6,6 +6,8 @@ import Window from './window/window';
 import Database from './api/database';
 import { OpenUrlChannel, ReadMetadataChannel, SelectFileChannel, WindowControlChannel } from './ipc';
 import Channels from './ipc/channel';
+import { DynamicStore } from './api/dynamicStore';
+import { UserConfig } from '../typings/config';
 
 if (process.env.NODE_ENV === 'production') {
 	const sourceMapSupport = require('source-map-support');
@@ -18,12 +20,27 @@ if (isDebug) {
 	require('electron-debug')();
 }
 
+const USER_CONFIG_DEFAULTS: UserConfig = {
+	windowBounds: {
+		width: 0,
+		height: 0,
+		x: 0,
+		y: 0
+	},
+	windowState: 0,
+	volume: 25,
+	outputDeviceId: 'default'
+};
+
 class Main {
 	/** Electron main window instance */
 	private mainWindow!: Window;
 
 	/** JSON database instance */
 	private database!: Database;
+
+	/** Config file instance */
+	private configFile!: DynamicStore;
 
 	constructor() {
 		app.on('ready', () => {
@@ -61,11 +78,26 @@ class Main {
 
 			if (Database.validate(value)) this.database.set(key, JSON.parse(value));
 		});
+
+		ipcMain.on(Channels.CONFIG_GET, (event, args) => {
+			const key = args;
+
+			// eslint-disable-next-line no-param-reassign
+			event.returnValue = this.configFile.get(key);
+		});
+
+		ipcMain.handle(Channels.CONFIG_SET, (_event, args) => {
+			const key = args[0];
+			const value = args[1];
+
+			if (Database.validate(value)) this.configFile.set(key, JSON.parse(value));
+		});
 	}
 
 	private onReady() {
-		this.mainWindow = new Window();
 		this.database = new Database(app.getPath('userData'));
+		this.configFile = new DynamicStore('userConfig', USER_CONFIG_DEFAULTS);
+		this.mainWindow = new Window(this.configFile);
 
 		app.on('activate', () => {
 			this.onActivate();
@@ -91,7 +123,7 @@ class Main {
 
 	private onActivate() {
 		if (!this.mainWindow) {
-			this.mainWindow = new Window();
+			this.mainWindow = new Window(this.configFile);
 		}
 	}
 }

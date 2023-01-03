@@ -25,7 +25,7 @@ const VolumeSlider: React.FC<VolumeSliderProps> = (props) => {
 	const { audioRef } = props;
 	const volumeSliderProgressRef = useRef<HTMLDivElement>(null);
 	const lottieRef = useRef<LottieRefCurrentProps>(null);
-	const [volume, setVolume] = useState(50);
+	const [volume, setVolume] = useState(window.ipc.config.get('volume') as number);
 
 	const updateVolumeSliderProgress = () => {
 		if (volumeSliderProgressRef.current) {
@@ -35,8 +35,10 @@ const VolumeSlider: React.FC<VolumeSliderProps> = (props) => {
 	};
 
 	const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setVolume(parseInt(e.target.value, 10));
+		const newVolume = parseInt(e.target.value, 10);
+		setVolume(newVolume);
 		updateVolumeSliderProgress();
+		window.ipc.config.set('volume', JSON.stringify(newVolume.toString()));
 
 		// Handle animation of lottie icon - sry for this mess
 		if (lottieRef.current) {

@@ -26,7 +26,6 @@ const AudioPlayer: React.FC = () => {
 	const isPlaying = useAppSelector(selectIsPlaying);
 	const outputDeviceId = useAppSelector(selectOutputDeviceId);
 
-	const [volume, setVolume] = useState(1);
 	const [metadata, setMetadata] = useState<AudioMetadata>();
 
 	const dispatch = useAppDispatch();

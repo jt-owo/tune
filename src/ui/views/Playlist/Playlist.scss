@@ -39,28 +39,29 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	width: 32px;
-	height: 32px;
-	border-radius: 8px;
+	width: 38px;
+	height: 38px;
+	border-radius: 10px;
 }
 
 #playlist-play-btn #play-icon {
-	width: 23px;
+	width: 25px;
 	// padding: 0px 0 7px 4px;
 }
 
 #playlist-import-btn #import-icon {
 	margin-top: 5px;
-	width: 27px;
+	width: 29px;
 }
 
 #playlist-delete-btn #delete-icon {
 	margin-top: 1px;
-	width: 25px;
+	width: 27px;
 }
 
 #playlist-menu-btn #menu-icon {
 	margin-top: 3px;
+	width: 36px;
 }
 
 #playlist-heading #playlist-delete-btn:hover {

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { FC } from 'react';
 
 import './View.scss';
 
@@ -8,7 +8,7 @@ interface ViewProps {
 	children?: JSX.Element | JSX.Element[];
 }
 
-const View: React.FC<ViewProps> = (props) => {
+const View: FC<ViewProps> = (props) => {
 	const { title, children, id } = props;
 
 	return (

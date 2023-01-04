@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import React, { useEffect } from 'react';
+import { FC, useEffect } from 'react';
 import Portal from '../Portal/Portal';
 
 import './Modal.scss';
@@ -8,10 +8,10 @@ import './Modal.scss';
 export interface ModalProps {
 	isOpen: boolean;
 	onClose: () => void;
-	children?: React.ReactNode | React.ReactNode[];
+	children?: JSX.Element | JSX.Element[];
 }
 
-const Modal: React.FC<ModalProps> = (props) => {
+const Modal: FC<ModalProps> = (props) => {
 	const { children, isOpen, onClose } = props;
 
 	useEffect(() => {

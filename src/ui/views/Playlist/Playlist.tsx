@@ -1,12 +1,11 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable @typescript-eslint/no-shadow */
-import * as React from 'react';
-import update from 'immutability-helper';
-import { useDrop } from 'react-dnd';
-import Lottie, { LottieRefCurrentProps } from 'lottie-react';
+import { FC, memo, useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { FC, memo, useCallback, useEffect, useState } from 'react';
+import Lottie, { LottieRefCurrentProps } from 'lottie-react';
+import { useDrop } from 'react-dnd';
+import update from 'immutability-helper';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { removePlaylist, selectPlaylists, updatePlaylist } from '../../../state/slices/playlistSlice';
 import { PlaylistData, TrackData } from '../../../typings/playlist';
@@ -37,9 +36,9 @@ const Playlist: FC = memo(function Playlist() {
 	const [playlist, setPlaylist] = useState(playlists.find((x) => x.id === id));
 	const [tracks, setTracks] = useState<TrackData[]>([]);
 
-	const lottieShowMenuRef = React.useRef<LottieRefCurrentProps>(null);
-	const lottieAddTracksRef = React.useRef<LottieRefCurrentProps>(null);
-	const lottieDeletePlaylistRef = React.useRef<LottieRefCurrentProps>(null);
+	const lottieShowMenuRef = useRef<LottieRefCurrentProps>(null);
+	const lottieAddTracksRef = useRef<LottieRefCurrentProps>(null);
+	const lottieDeletePlaylistRef = useRef<LottieRefCurrentProps>(null);
 
 	if (!playlist) {
 		navigate(AppRoutes.Library);

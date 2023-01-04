@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { FC, useState } from 'react';
 import useMousePosition from '../../hooks/useMousePosition';
 import Portal from '../Portal/Portal';

@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC, useState } from 'react';
 import { selectPlaylists } from '../../../state/slices/playlistSlice';
 import { PlaylistData } from '../../../typings/playlist';
 import { useAppSelector } from '../../hooks';
@@ -10,9 +10,9 @@ import ContextMenuItem from './ContextMenuItem/ContextMenuItem';
 import editIcon from '../../../../assets/ui-icons/edit-3.svg';
 import deleteIcon from '../../../../assets/ui-icons/trash-2.svg';
 
-const ContextMenuExample: React.FC = () => {
+const ContextMenuExample: FC = () => {
 	const playlists: PlaylistData[] = useAppSelector(selectPlaylists);
-	const [isDialogVisible, setDialogVisibility] = React.useState(false);
+	const [isDialogVisible, setDialogVisibility] = useState(false);
 
 	const [visibility, setVisibility, position, setPosition] = useContextMenu();
 

@@ -1,11 +1,10 @@
-import * as React from 'react';
-import { useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 
 interface SeekBarProps {
 	audioRef: React.RefObject<HTMLAudioElement>;
 }
 
-const SeekBar: React.FC<SeekBarProps> = (props) => {
+const SeekBar: FC<SeekBarProps> = (props) => {
 	const { audioRef } = props;
 
 	const progressBarRef = useRef<HTMLDivElement>(null);

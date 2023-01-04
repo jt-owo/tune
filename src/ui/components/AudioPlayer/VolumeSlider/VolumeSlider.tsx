@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { ChangeEvent, FC, useEffect, useRef, useState } from 'react';
 import Lottie, { LottieRefCurrentProps } from 'lottie-react';
 
 import './VolumeSlider.scss';
@@ -21,7 +21,7 @@ const VOLUME_SLIDER_STATES = {
 };
 let volumeSliderState = 2;
 
-const VolumeSlider: React.FC<VolumeSliderProps> = (props) => {
+const VolumeSlider: FC<VolumeSliderProps> = (props) => {
 	const { audioRef } = props;
 	const volumeSliderProgressRef = useRef<HTMLDivElement>(null);
 	const lottieRef = useRef<LottieRefCurrentProps>(null);
@@ -34,7 +34,7 @@ const VolumeSlider: React.FC<VolumeSliderProps> = (props) => {
 		}
 	};
 
-	const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+	const handleVolumeChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const newVolume = parseInt(e.target.value, 10);
 		setVolume(newVolume);
 		updateVolumeSliderProgress();

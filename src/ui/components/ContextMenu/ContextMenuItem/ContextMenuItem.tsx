@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import React from 'react';
+import { FC } from 'react';
 import Lottie, { LottieComponentProps } from 'lottie-react';
 
 import './ContextMenuItem.scss';
@@ -23,7 +23,7 @@ type ContextMenuItemConditionalProps =
 
 export type Props = ContextMenuItemDefaultProps & ContextMenuItemConditionalProps;
 
-const ContextMenuItem: React.FC<Props> = (props) => {
+const ContextMenuItem: FC<Props> = (props) => {
 	const { onClick, header, staticIcon, lottieIcon, type } = props;
 
 	if (staticIcon && !lottieIcon) {

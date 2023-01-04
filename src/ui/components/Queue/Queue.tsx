@@ -1,12 +1,12 @@
 /* eslint-disable react/no-array-index-key */
-import * as React from 'react';
+import { FC } from 'react';
 import { selectQueue, selectQueueIndex } from '../../../state/slices/playerSlice';
 import { useAppSelector } from '../../hooks';
 
 import './Queue.scss';
 import QueueTrack from './QueueTrack/QueueTrack';
 
-const Queue: React.FC = () => {
+const Queue: FC = () => {
 	const queue = useAppSelector(selectQueue);
 	const queueIndex = useAppSelector(selectQueueIndex);
 
@@ -15,7 +15,8 @@ const Queue: React.FC = () => {
 			<header id="queue-title">Up Next</header>
 			<div id="queue">
 				{queue &&
-					queue.slice(queueIndex, queue.length).map((track, index) => {
+					queue.length <= queueIndex + 1 &&
+					queue.slice(queueIndex + 1, queue.length).map((track, index) => {
 						return <QueueTrack key={track.fileName + index} track={track} />;
 					})}
 			</div>

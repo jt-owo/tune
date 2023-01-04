@@ -1,9 +1,7 @@
 /* eslint-disable jsx-a11y/no-autofocus */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import * as React from 'react';
-import Lottie from 'lottie-react';
-import { useState } from 'react';
+import { FC, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { addPlaylist, selectPlaylists } from '../../../state/slices/playlistSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks';
@@ -23,7 +21,7 @@ import defaultAlbumCover from '../../../../assets/images/tune_no_artwork.svg';
 
 import './Navigation.scss';
 
-const Navigation: React.FC = () => {
+const Navigation: FC = () => {
 	const [createNew, setCreateNew] = useState(false);
 	const [newPlaylistName, setNewPlaylistName] = useState('');
 

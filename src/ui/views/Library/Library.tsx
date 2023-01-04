@@ -1,14 +1,13 @@
-import * as React from 'react';
+import { FC } from 'react';
 import newGuid from '../../util';
 import { useAppDispatch } from '../../hooks';
 import { addAlert, AlertType } from '../../../state/slices/alertSlice';
 
-import ToolTip from '../../components/ToolTip/ToolTip';
 import View from '../../components/View/View';
 
 import './Library.scss';
 
-const Library: React.FC = () => {
+const Library: FC = () => {
 	const dispatch = useAppDispatch();
 
 	const testAlert = (msg: string, type: AlertType) => {

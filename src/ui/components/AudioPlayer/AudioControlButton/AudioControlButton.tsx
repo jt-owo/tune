@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
+import { FC, useRef } from 'react';
 import Lottie, { LottieRefCurrentProps } from 'lottie-react';
-import React from 'react';
 
 interface AudioControlButtonProps {
 	animationData: unknown;
@@ -9,10 +9,10 @@ interface AudioControlButtonProps {
 	onClick: () => void;
 }
 
-const AudioControlButton: React.FC<AudioControlButtonProps> = (props) => {
+const AudioControlButton: FC<AudioControlButtonProps> = (props) => {
 	const { animationData, id, onClick } = props;
 
-	const lottieRef = React.useRef<LottieRefCurrentProps>(null);
+	const lottieRef = useRef<LottieRefCurrentProps>(null);
 
 	const startAnimation = () => {
 		lottieRef.current?.setSpeed(4);

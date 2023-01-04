@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { FC, useRef } from 'react';
 import Lottie, { LottieRefCurrentProps } from 'lottie-react';
 
 import './NavlistButton.scss';
@@ -9,10 +9,10 @@ interface NavlistButtonProps {
 	title: string;
 }
 
-const NavlistButton: React.FC<NavlistButtonProps> = (props) => {
+const NavlistButton: FC<NavlistButtonProps> = (props) => {
 	const { animation, doLoop, title } = props;
 
-	const lottieRef = React.useRef<LottieRefCurrentProps>(null);
+	const lottieRef = useRef<LottieRefCurrentProps>(null);
 
 	const startAnimation = () => {
 		lottieRef?.current?.setDirection(1);

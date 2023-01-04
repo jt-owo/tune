@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { FC } from 'react';
 import Lottie from 'lottie-react';
 import { AlertType } from '../../../../state/slices/alertSlice';
 
@@ -10,7 +10,7 @@ interface AlertIconProps {
 	type: AlertType;
 }
 
-const AlertIcon: React.FC<AlertIconProps> = (props) => {
+const AlertIcon: FC<AlertIconProps> = (props) => {
 	const { type } = props;
 
 	switch (type) {

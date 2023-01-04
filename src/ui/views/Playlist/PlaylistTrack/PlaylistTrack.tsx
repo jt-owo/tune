@@ -1,12 +1,12 @@
 /* eslint-disable react/jsx-no-useless-fragment */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable react/prop-types */
-import { memo, useEffect, useState } from 'react';
+import { FC, MouseEvent, memo, useEffect, useState } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { AudioMetadata, TrackData } from '../../../../typings/playlist';
+import ItemTypes from '../../../../typings/dnd-types';
 
 import defaultAlbumCover from '../../../../../assets/images/tune_no_artwork.svg';
-import ItemTypes from '../../../components/DragAndDrop/ItemTypes';
 
 interface PlaylistTrackProps {
 	id: string;
@@ -14,6 +14,7 @@ interface PlaylistTrackProps {
 	setCurrentTrack?: (track: TrackData) => void;
 	moveTrack: (id: string, to: number) => void;
 	findTrack: (id: string) => { index: number };
+	onContextMenu: (event: MouseEvent<HTMLElement>) => void;
 }
 
 interface Item {
@@ -21,8 +22,8 @@ interface Item {
 	originalIndex: number;
 }
 
-const PlaylistTrack: React.FC<PlaylistTrackProps> = memo((props) => {
-	const { id, track, moveTrack, findTrack } = props;
+const PlaylistTrack: FC<PlaylistTrackProps> = memo((props) => {
+	const { id, track, moveTrack, findTrack, onContextMenu } = props;
 
 	const originalIndex = findTrack(id).index;
 	const [{ isDragging }, drag] = useDrag(
@@ -92,7 +93,7 @@ const PlaylistTrack: React.FC<PlaylistTrackProps> = memo((props) => {
 	return (
 		<>
 			{metadata && (
-				<li ref={(node) => drag(drop(node))} style={{ opacity }} className="song-item btn-hover-animation">
+				<li ref={(node) => drag(drop(node))} style={{ opacity }} className="song-item btn-hover-animation" onContextMenu={onContextMenu}>
 					<img src={getAlbumCover()} alt="" draggable={false} />
 					<div>
 						<div className="song-title">{metadata?.info?.title}</div>

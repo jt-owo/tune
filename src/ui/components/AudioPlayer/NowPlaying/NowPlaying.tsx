@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 import { AudioMetadata } from '../../../../typings/playlist';
 import defaultAlbumCover from '../../../../../assets/images/tune_no_artwork.svg';
 
@@ -8,7 +8,7 @@ interface NowPlayingProps {
 	metadata: AudioMetadata;
 }
 
-const NowPlaying: React.FC<NowPlayingProps> = (props) => {
+const NowPlaying: FC<NowPlayingProps> = (props) => {
 	const { metadata } = props;
 
 	const getAlbumCover = () => {

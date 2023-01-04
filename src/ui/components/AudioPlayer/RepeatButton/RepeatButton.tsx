@@ -1,4 +1,6 @@
-import React, { useState, useRef } from 'react';
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+import { useState, useRef, FC } from 'react';
 
 import './RepeatButton.scss';
 
@@ -11,7 +13,7 @@ const REPEAT_MODE = {
 	ALL: 2
 };
 
-const RepeatButton: React.FC = () => {
+const RepeatButton: FC = () => {
 	const [isRepeat, setIsRepeat] = useState(REPEAT_MODE.OFF);
 
 	const repeatRef = useRef<HTMLDivElement>(null);

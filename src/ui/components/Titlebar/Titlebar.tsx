@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/interactive-supports-focus */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import * as React from 'react';
+import { FC } from 'react';
 
 import './Titlebar.scss';
 
@@ -8,9 +8,7 @@ import maximizeIcon from '../../../../assets/ui-icons/titlebar-win/square-regula
 import minimizeIcon from '../../../../assets/ui-icons/titlebar-win/minus-solid.svg';
 import closeIcon from '../../../../assets/ui-icons/titlebar-win/x-solid.svg';
 
-const Titlebar: React.FC = () => {
-	const title = document.querySelector('title');
-
+const Titlebar: FC = () => {
 	const minimize = () => {
 		window.ipc.window.minimize();
 	};
@@ -25,7 +23,6 @@ const Titlebar: React.FC = () => {
 
 	return (
 		<nav id="titlebar">
-			{/* <div id="title">{title?.innerHTML || 'tune.'}</div> */}
 			<div id="buttons">
 				<div id="minimize" role="button" onClick={minimize}>
 					<img src={minimizeIcon} alt="" />

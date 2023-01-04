@@ -1,5 +1,4 @@
-import * as React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, FC, ChangeEvent } from 'react';
 import { selectOutputDeviceId, setOutputDevice } from '../../../state/slices/playerSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 
@@ -11,7 +10,7 @@ import '../../styles/_components.scss';
 import spotifyLogo from '../../../../assets/service-icons/Spotify_Logo_RGB_White.png';
 import appleMusicIcon from '../../../../assets/service-icons/Apple_Music_Icon_W.svg';
 
-const Settings: React.FC = () => {
+const Settings: FC = () => {
 	const selectedOutputDevice = useAppSelector(selectOutputDeviceId);
 
 	const [audioDevices, setOutputDevices] = useState<MediaDeviceInfo[]>();
@@ -23,7 +22,7 @@ const Settings: React.FC = () => {
 		setOutputDevices(mediaDevices.filter((device) => device.kind === 'audiooutput'));
 	};
 
-	const onOutputDeviceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+	const onOutputDeviceChange = (e: ChangeEvent<HTMLSelectElement>) => {
 		dispatch(setOutputDevice(e.currentTarget.value));
 	};
 

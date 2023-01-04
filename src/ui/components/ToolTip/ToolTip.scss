@@ -1,13 +1,16 @@
 @import '../../styles/colors';
+@import '../../styles/animations';
 
-.tooltip {
+.tooltip-container {
 	position: relative;
 	display: inline-block;
 	border-bottom: 1px dotted black;
 }
 
-.tooltip .tooltip-text {
-	visibility: hidden;
+.tooltip-text {
+	position: absolute;
+	z-index: 98;
+
 	opacity: 0;
 	width: 140px;
 	background-color: #fff;
@@ -18,18 +21,9 @@
 	font-family: Quicksand-500;
 	font-size: 14px;
 	border: 2px solid black;
-	transition: all ease-in-out 0.15s;
-
-	/* Position the tooltip */
-	position: absolute;
-	z-index: 98;
-	bottom: 100%;
-	left: 50%;
-	margin-top: -75px;
-	margin-left: -70px;
+	animation: fadeIn 0.3s;
 }
 
-.tooltip:hover .tooltip-text {
-	visibility: visible;
+.tooltip-text.fadeIn {
 	opacity: 1;
 }

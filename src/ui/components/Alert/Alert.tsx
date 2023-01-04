@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import * as React from 'react';
-import { useCallback, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { AlertData, removeAlert, selectAlerts } from '../../../state/slices/alertSlice';
 import AlertIcon from './AlertIcon/AlertIcon';
@@ -11,7 +10,7 @@ interface AlertProps {
 	alert: AlertData;
 }
 
-const Alert: React.FC<AlertProps> = (props) => {
+const Alert: FC<AlertProps> = (props) => {
 	const { alert } = props;
 	const [isFadingOut, setFadingOut] = useState(false);
 
@@ -55,7 +54,7 @@ const Alert: React.FC<AlertProps> = (props) => {
 	);
 };
 
-export const AlertContainer: React.FC = () => {
+export const AlertContainer: FC = () => {
 	const alerts = useAppSelector(selectAlerts);
 	const nextAlert = alerts && alerts[0];
 	return <div id="alerts-container">{nextAlert && <Alert alert={nextAlert} key={nextAlert.id} />}</div>;

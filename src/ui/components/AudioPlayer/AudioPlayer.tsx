@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/media-has-caption */
-import * as React from 'react';
-import { useEffect, useRef, useState } from 'react';
+import { FC, SyntheticEvent, useEffect, useRef, useState } from 'react';
 import { play, playNext, playPrevious, selectCurrentTrack, selectIsPlaying, selectOutputDeviceId } from '../../../state/slices/playerSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { AudioMetadata, TrackData } from '../../../typings/playlist';
@@ -21,7 +20,7 @@ import skipForwardBtn from '../../../../assets/animations/skipForward.json';
 
 import './AudioPlayer.scss';
 
-const AudioPlayer: React.FC = () => {
+const AudioPlayer: FC = () => {
 	const audioRef = useRef<HTMLAudioElement & { setSinkId(deviceId: string): void; volume: number }>(null);
 
 	const currentTrack = useAppSelector(selectCurrentTrack);
@@ -50,7 +49,7 @@ const AudioPlayer: React.FC = () => {
 	};
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	const onEnded = (_e: React.SyntheticEvent<HTMLAudioElement>) => {
+	const onEnded = (_e: SyntheticEvent<HTMLAudioElement>) => {
 		handlePlayNext();
 	};
 

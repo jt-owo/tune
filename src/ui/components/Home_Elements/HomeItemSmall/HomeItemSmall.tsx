@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 
 import './HomeItemSmall.scss';
 
@@ -8,7 +8,7 @@ interface HomeItemSmallProps {
 	image: string;
 }
 
-const HomeItemSmall: React.FC<HomeItemSmallProps> = (props) => {
+const HomeItemSmall: FC<HomeItemSmallProps> = (props) => {
 	const { title, artist, image } = props;
 	return (
 		<div id="home-item-small-container">

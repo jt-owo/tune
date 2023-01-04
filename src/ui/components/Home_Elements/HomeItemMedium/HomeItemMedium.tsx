@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 
 import './HomeItemMedium.scss';
 
@@ -9,7 +9,7 @@ interface HomeItemMediumProps {
 	description?: string;
 }
 
-const HomeItemMedium: React.FC<HomeItemMediumProps> = (props) => {
+const HomeItemMedium: FC<HomeItemMediumProps> = (props) => {
 	const { title, artist, image, description } = props;
 	return (
 		<div id="home-item-medium-container">

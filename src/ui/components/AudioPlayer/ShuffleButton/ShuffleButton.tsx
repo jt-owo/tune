@@ -1,10 +1,12 @@
-import React, { useState, useRef } from 'react';
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+import { useState, useRef, FC } from 'react';
 
 import './ShuffleButton.scss';
 
 import shuffleIcon from '../../../../../assets/ui-icons/shuffle.svg';
 
-const ShuffleButton: React.FC = () => {
+const ShuffleButton: FC = () => {
 	const [isShuffle, setIsShuffle] = useState(false);
 
 	const shuffleRef = useRef<HTMLDivElement>(null);

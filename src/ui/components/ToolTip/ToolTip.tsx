@@ -4,6 +4,9 @@ import Portal from '../Portal/Portal';
 
 import './ToolTip.scss';
 
+// in ms
+const DELAY_UNTIL_FADE_IN_START = 150;
+
 interface ToolTipProps {
 	/**
 	 * Text the tooltip should displays.
@@ -28,7 +31,7 @@ const ToolTip: FC<ToolTipProps> = (props) => {
 	const mouseEnter = () => {
 		timeout = setTimeout(() => {
 			setFadeIn(true);
-		}, 150);
+		}, DELAY_UNTIL_FADE_IN_START);
 		setActive(true);
 	};
 

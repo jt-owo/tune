@@ -59,14 +59,14 @@ const PlaylistTrack: FC<PlaylistTrackProps> = memo((props) => {
 
 	const [metadata, setMetadata] = useState<AudioMetadata>();
 
-	const getMetadata = async () => {
-		const metadataJSON = await window.ipc.system.readMetadata(track.filePath);
-		setMetadata(JSON.parse(metadataJSON) as AudioMetadata);
-	};
-
 	useEffect(() => {
+		const getMetadata = async () => {
+			const metadataJSON = await window.ipc.system.readMetadata(track.filePath);
+			setMetadata(JSON.parse(metadataJSON) as AudioMetadata);
+		};
+
 		getMetadata();
-	});
+	}, [track.filePath]);
 
 	const getAlbumCover = () => {
 		if (metadata?.info?.cover) {

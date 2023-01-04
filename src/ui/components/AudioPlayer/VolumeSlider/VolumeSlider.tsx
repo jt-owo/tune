@@ -19,7 +19,8 @@ const VOLUME_SLIDER_STATES = {
 	MID_VOLUME: 2,
 	MAX_VOLUME: 3
 };
-let volumeSliderState = 2;
+// TODO: @tobytaken set initial state depending on the volume from the config file => window.ipc.config.get('volume') as number
+let volumeSliderState = VOLUME_SLIDER_STATES.MID_VOLUME;
 
 const VolumeSlider: FC<VolumeSliderProps> = (props) => {
 	const { audioRef } = props;
@@ -34,12 +35,7 @@ const VolumeSlider: FC<VolumeSliderProps> = (props) => {
 		}
 	};
 
-	const handleVolumeChange = (e: ChangeEvent<HTMLInputElement>) => {
-		const newVolume = parseInt(e.target.value, 10);
-		setVolume(newVolume);
-		updateVolumeSliderProgress();
-		window.ipc.config.set('volume', JSON.stringify(newVolume.toString()));
-
+	const handleAnimation = () => {
 		// Handle animation of lottie icon - sry for this mess
 		if (lottieRef.current) {
 			if (volume >= 0 && volume <= 1 && volumeSliderState === VOLUME_SLIDER_STATES.MIN_VOLUME) {
@@ -62,6 +58,14 @@ const VolumeSlider: FC<VolumeSliderProps> = (props) => {
 				volumeSliderState = VOLUME_SLIDER_STATES.MAX_VOLUME;
 			}
 		}
+	};
+
+	const handleVolumeChange = (e: ChangeEvent<HTMLInputElement>) => {
+		const newVolume = parseInt(e.target.value, 10);
+		setVolume(newVolume);
+		updateVolumeSliderProgress();
+		window.ipc.config.set('volume', JSON.stringify(newVolume.toString()));
+		handleAnimation();
 	};
 
 	useEffect(() => {

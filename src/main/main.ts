@@ -8,7 +8,6 @@ import { OpenUrlChannel, ReadMetadataChannel, SelectFileChannel, WindowControlCh
 import Channels from './ipc/channel';
 import { DynamicStore } from './api/dynamicStore';
 import { UserConfig } from '../typings/config';
-import DiscordClient from './api/discord';
 
 if (process.env.NODE_ENV === 'production') {
 	const sourceMapSupport = require('source-map-support');
@@ -42,9 +41,6 @@ class Main {
 
 	/** Config file instance */
 	private configFile!: DynamicStore;
-
-	/** Discord client instance */
-	private discordClient!: DiscordClient;
 
 	constructor() {
 		app.on('ready', () => {
@@ -100,18 +96,12 @@ class Main {
 
 			if (Database.validate(value)) this.configFile.set(key, JSON.parse(value));
 		});
-
-		ipcMain.handle(Channels.UPDATE_TRACK_MAIN, (_event, args) => {
-			const trackPath = args;
-			this.discordClient.updateTrack(trackPath);
-		});
 	}
 
 	private onReady() {
 		this.database = new Database(app.getPath('userData'));
 		this.configFile = new DynamicStore('userConfig', USER_CONFIG_DEFAULTS);
 		this.mainWindow = new Window(this.configFile);
-		this.discordClient = new DiscordClient();
 
 		app.on('activate', () => {
 			this.onActivate();

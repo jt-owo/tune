@@ -65,7 +65,6 @@ const AudioPlayer: FC = () => {
 		if (isPlaying) {
 			audioRef.current.play().catch(() => {});
 			if (currentTrack) getMetadata(currentTrack);
-			window.api.system.updateTrack(currentTrack?.filePath || '');
 		} else {
 			audioRef.current.pause();
 		}

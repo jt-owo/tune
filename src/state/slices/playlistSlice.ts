@@ -25,7 +25,7 @@ export const playlistSlice = createSlice({
 			};
 
 			state.playlists.push(playlist);
-			window.tuneAPI.db.set('playlists', JSON.stringify([...state.playlists]));
+			window.api.db.set('playlists', JSON.stringify([...state.playlists]));
 		},
 		removePlaylist: (state, action: PayloadAction<string>) => {
 			state.playlists = state.playlists.filter((playlist) => {
@@ -35,7 +35,7 @@ export const playlistSlice = createSlice({
 				return true;
 			});
 
-			window.tuneAPI.db.set('playlists', JSON.stringify([...state.playlists]));
+			window.api.db.set('playlists', JSON.stringify([...state.playlists]));
 		},
 		updatePlaylist: (state, action: PayloadAction<PlaylistData>) => {
 			const toUpdate = state.playlists.find((p) => p.id === action.payload.id);
@@ -44,10 +44,10 @@ export const playlistSlice = createSlice({
 			const index = state.playlists.indexOf(toUpdate);
 			state.playlists[index] = action.payload;
 
-			window.tuneAPI.db.set('playlists', JSON.stringify([...state.playlists]));
+			window.api.db.set('playlists', JSON.stringify([...state.playlists]));
 		},
 		loadPlaylists: (state) => {
-			const stored = window.tuneAPI.db.get('playlists') as PlaylistData[];
+			const stored = window.api.db.get('playlists') as PlaylistData[];
 			state.playlists = stored;
 		}
 	}

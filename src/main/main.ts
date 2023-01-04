@@ -69,6 +69,10 @@ class Main {
 			});
 		});
 
+		this.initSpecialChannels();
+	}
+
+	private initSpecialChannels() {
 		ipcMain.on(Channels.DATABASE_GET, (event, args) => {
 			const key = args;
 

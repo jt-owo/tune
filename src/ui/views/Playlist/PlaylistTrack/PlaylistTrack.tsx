@@ -61,7 +61,7 @@ const PlaylistTrack: FC<PlaylistTrackProps> = memo((props) => {
 
 	useEffect(() => {
 		const getMetadata = async () => {
-			const metadataJSON = await window.ipc.system.readMetadata(track.filePath);
+			const metadataJSON = await window.api.system.readMetadata(track.filePath);
 			setMetadata(JSON.parse(metadataJSON) as AudioMetadata);
 		};
 

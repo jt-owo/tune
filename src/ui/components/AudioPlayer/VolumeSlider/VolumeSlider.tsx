@@ -19,14 +19,14 @@ const VOLUME_SLIDER_STATES = {
 	MID_VOLUME: 2,
 	MAX_VOLUME: 3
 };
-// TODO: @tobytaken set initial state depending on the volume from the config file => window.ipc.config.get('volume') as number
+// TODO: @tobytaken set initial state depending on the volume from the config file => window.api.config.get('volume') as number
 let volumeSliderState = VOLUME_SLIDER_STATES.MID_VOLUME;
 
 const VolumeSlider: FC<VolumeSliderProps> = (props) => {
 	const { audioRef } = props;
 	const volumeSliderProgressRef = useRef<HTMLDivElement>(null);
 	const lottieRef = useRef<LottieRefCurrentProps>(null);
-	const [volume, setVolume] = useState(window.ipc.config.get('volume') as number);
+	const [volume, setVolume] = useState(window.api.config.get('volume') as number);
 
 	const updateVolumeSliderProgress = () => {
 		if (volumeSliderProgressRef.current) {
@@ -64,7 +64,7 @@ const VolumeSlider: FC<VolumeSliderProps> = (props) => {
 		const newVolume = parseInt(e.target.value, 10);
 		setVolume(newVolume);
 		updateVolumeSliderProgress();
-		window.ipc.config.set('volume', JSON.stringify(newVolume.toString()));
+		window.api.config.set('volume', JSON.stringify(newVolume.toString()));
 		handleAnimation();
 	};
 

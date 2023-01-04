@@ -72,7 +72,7 @@ const Playlist: FC = memo(function Playlist() {
 			pinned: playlist.pinned
 		};
 
-		const paths = await window.ipc.system.selectFiles();
+		const paths = await window.api.system.selectFiles();
 
 		let index = 0;
 		paths.forEach((path) => {

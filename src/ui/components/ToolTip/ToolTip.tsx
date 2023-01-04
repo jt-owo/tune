@@ -19,15 +19,23 @@ interface ToolTipProps {
 const ToolTip: FC<ToolTipProps> = (props) => {
 	const { text, children, offsetY } = props;
 	const [active, setActive] = useState(false);
+	const [fadeIn, setFadeIn] = useState(false);
 
 	const mousePosition = useMousePosition();
 
+	let timeout: NodeJS.Timeout;
+
 	const mouseEnter = () => {
+		timeout = setTimeout(() => {
+			setFadeIn(true);
+		}, 150);
 		setActive(true);
 	};
 
 	const mouseLeave = () => {
 		setActive(false);
+		setFadeIn(false);
+		clearTimeout(timeout);
 	};
 
 	return (
@@ -35,7 +43,7 @@ const ToolTip: FC<ToolTipProps> = (props) => {
 			{children}
 			{active && (
 				<Portal wrapperID="tooltip-wrapper">
-					<div style={{ left: mousePosition.x, top: mousePosition.y - (offsetY || 50) }} className="tooltip-text">
+					<div style={{ left: mousePosition.x, top: mousePosition.y - (offsetY || 50) }} className={`tooltip-text ${fadeIn && 'fadeIn'}`}>
 						{text}
 					</div>
 				</Portal>

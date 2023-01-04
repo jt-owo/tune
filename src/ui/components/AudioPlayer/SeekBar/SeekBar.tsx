@@ -1,7 +1,7 @@
-import { FC, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, FC, RefObject, useEffect, useRef, useState } from 'react';
 
 interface SeekBarProps {
-	audioRef: React.RefObject<HTMLAudioElement>;
+	audioRef: RefObject<HTMLAudioElement>;
 }
 
 const SeekBar: FC<SeekBarProps> = (props) => {
@@ -13,7 +13,7 @@ const SeekBar: FC<SeekBarProps> = (props) => {
 	const [currentTime, setCurrentTime] = useState('00:00');
 	const [totalDuration, setTotalDuration] = useState('00:00');
 
-	const handleSeekTo = (e: React.ChangeEvent<HTMLInputElement>) => {
+	const handleSeekTo = (e: ChangeEvent<HTMLInputElement>) => {
 		if (!audioRef.current || !audioRef.current.duration) return;
 
 		const seekTo = parseInt(e.target.value, 10);

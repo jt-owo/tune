@@ -13,7 +13,7 @@ interface ToolTipProps {
 	 * Number of the y offset which should be subtracted. Default value is 70.
 	 */
 	offsetY?: number;
-	children: React.ReactNode | React.ReactNode[];
+	children: JSX.Element | JSX.Element[];
 }
 
 const ToolTip: FC<ToolTipProps> = (props) => {

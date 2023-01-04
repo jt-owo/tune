@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-no-useless-fragment */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable react/prop-types */
-import { memo, useEffect, useState } from 'react';
+import { FC, memo, useEffect, useState } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { AudioMetadata, TrackData } from '../../../../typings/playlist';
 import ItemTypes from '../../../../typings/dnd-types';
@@ -21,7 +21,7 @@ interface Item {
 	originalIndex: number;
 }
 
-const PlaylistTrack: React.FC<PlaylistTrackProps> = memo((props) => {
+const PlaylistTrack: FC<PlaylistTrackProps> = memo((props) => {
 	const { id, track, moveTrack, findTrack } = props;
 
 	const originalIndex = findTrack(id).index;

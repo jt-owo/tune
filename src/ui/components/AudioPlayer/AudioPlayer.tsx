@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/media-has-caption */
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, SyntheticEvent, useEffect, useRef, useState } from 'react';
 import { play, playNext, playPrevious, selectCurrentTrack, selectIsPlaying, selectOutputDeviceId } from '../../../state/slices/playerSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { AudioMetadata, TrackData } from '../../../typings/playlist';
@@ -49,7 +49,7 @@ const AudioPlayer: FC = () => {
 	};
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	const onEnded = (_e: React.SyntheticEvent<HTMLAudioElement>) => {
+	const onEnded = (_e: SyntheticEvent<HTMLAudioElement>) => {
 		handlePlayNext();
 	};
 

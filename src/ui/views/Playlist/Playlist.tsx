@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable @typescript-eslint/no-shadow */
-import { FC, memo, useCallback, useEffect, useRef, useState } from 'react';
+import { FC, memo, RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Lottie, { LottieRefCurrentProps } from 'lottie-react';
 import { useDrop } from 'react-dnd';
@@ -93,11 +93,11 @@ const Playlist: FC = memo(function Playlist() {
 		dispatch(setQueue(playlist.tracks));
 	};
 
-	const startAnimation = (e: React.RefObject<LottieRefCurrentProps>) => {
+	const startAnimation = (e: RefObject<LottieRefCurrentProps>) => {
 		e?.current?.setDirection(1);
 		e?.current?.play();
 	};
-	const stopAnimation = (e: React.RefObject<LottieRefCurrentProps>) => {
+	const stopAnimation = (e: RefObject<LottieRefCurrentProps>) => {
 		e?.current?.setDirection(-1);
 		e?.current?.play();
 	};

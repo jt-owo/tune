@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/jsx-no-useless-fragment */
-import { useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { AudioMetadata, TrackData } from '../../../../typings/playlist';
 
 import defaultAlbumCover from '../../../../../assets/images/tune_no_artwork.svg';
@@ -10,8 +10,8 @@ interface QueueTrackProps {
 	setCurrentTrack?: (track: TrackData) => void;
 }
 
-const QueueTrack: React.FC<QueueTrackProps> = (props) => {
-	const { track } = props;
+const QueueTrack: FC<QueueTrackProps> = (props) => {
+	const { track, setCurrentTrack } = props;
 
 	const [metadata, setMetadata] = useState<AudioMetadata>();
 

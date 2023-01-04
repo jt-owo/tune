@@ -54,7 +54,7 @@ const Alert: FC<AlertProps> = (props) => {
 	);
 };
 
-export const AlertContainer: React.FC = () => {
+export const AlertContainer: FC = () => {
 	const alerts = useAppSelector(selectAlerts);
 	const nextAlert = alerts && alerts[0];
 	return <div id="alerts-container">{nextAlert && <Alert alert={nextAlert} key={nextAlert.id} />}</div>;

@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, FC, RefObject, useEffect, useRef, useState } from 'react';
 import Lottie, { LottieRefCurrentProps } from 'lottie-react';
 
 import './VolumeSlider.scss';
@@ -6,7 +6,7 @@ import './VolumeSlider.scss';
 import volumeIcon from '../../../../../assets/animations/volume.json';
 
 interface VolumeSliderProps {
-	audioRef: React.RefObject<HTMLAudioElement>;
+	audioRef: RefObject<HTMLAudioElement>;
 }
 
 const MAX_VOLUME_FRAME = 0;

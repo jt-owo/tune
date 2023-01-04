@@ -12,7 +12,7 @@ function createWrapper(wrapperID: string): HTMLDivElement {
 
 interface PortalProps {
 	wrapperID: string;
-	children: React.ReactNode | React.ReactNode[];
+	children: JSX.Element | JSX.Element[];
 }
 
 const Portal: FC<PortalProps> = (props) => {

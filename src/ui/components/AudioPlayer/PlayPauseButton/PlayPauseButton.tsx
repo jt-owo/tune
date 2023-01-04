@@ -1,12 +1,12 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import Lottie, { LottieRefCurrentProps } from 'lottie-react';
-import { FC, useEffect, useRef } from 'react';
+import { FC, RefObject, useEffect, useRef } from 'react';
 
 interface PlayPauseButtonProps {
 	animationData: unknown;
 	isPlaying: boolean;
-	onClick: (ref: React.RefObject<LottieRefCurrentProps>) => void;
+	onClick: (ref: RefObject<LottieRefCurrentProps>) => void;
 }
 
 const PLAY_PAUSE_BUTTON_PLAY_FRAME = 7;

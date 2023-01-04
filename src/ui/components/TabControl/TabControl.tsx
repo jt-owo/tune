@@ -1,14 +1,14 @@
 /* eslint-disable jsx-a11y/interactive-supports-focus */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import { FC, useCallback, useState } from 'react';
+import { FC, ReactElement, useCallback, useState } from 'react';
 import { TabItemProps } from './TabItem/TabItem';
 
 import './TabControl.scss';
 
 interface TabControlProps {
 	selectedTab?: string;
-	children: React.ReactElement<TabItemProps>[];
+	children: ReactElement<TabItemProps>[];
 }
 
 const TabControl: FC<TabControlProps> = (props) => {

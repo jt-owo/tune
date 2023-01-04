@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -17,7 +18,7 @@ import AlertContainer from './components/Alert/Alert';
 
 import './Application.scss';
 
-const Application: React.FC = () => {
+const Application: FC = () => {
 	const dispatch = useAppDispatch();
 	dispatch(loadPlaylists());
 

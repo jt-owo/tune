@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/no-autofocus */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import { FC, useState } from 'react';
+import { FC, KeyboardEvent, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { addPlaylist, selectPlaylists } from '../../../state/slices/playlistSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks';
@@ -30,7 +30,7 @@ const Navigation: FC = () => {
 
 	const dispatch = useAppDispatch();
 
-	const handleKeyPress = async (event: React.KeyboardEvent) => {
+	const handleKeyPress = async (event: KeyboardEvent) => {
 		if (event.key === 'Enter') {
 			setCreateNew(false);
 			dispatch(addPlaylist(newPlaylistName));

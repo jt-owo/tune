@@ -3,18 +3,11 @@ import { DatabaseKey, DatabaseValue } from './api/database';
 import { StoreValue } from './api/dynamicStore';
 import Channels from './ipc/channel';
 
-contextBridge.exposeInMainWorld('ipc', {
-	window: {
-		minimize() {
-			ipcRenderer.invoke(Channels.WINDOW_CONTROLS, 'minimize');
-		},
-		maximize() {
-			ipcRenderer.invoke(Channels.WINDOW_CONTROLS, 'maximize');
-		},
-		close() {
-			ipcRenderer.invoke(Channels.WINDOW_CONTROLS, 'close');
-		}
-	},
+contextBridge.exposeInMainWorld('process', {
+	platform: process.platform
+});
+
+contextBridge.exposeInMainWorld('api', {
 	system: {
 		async selectFiles() {
 			const paths = await ipcRenderer.invoke(Channels.SELECT_FILE);
@@ -40,14 +33,7 @@ contextBridge.exposeInMainWorld('ipc', {
 		get(key: string): StoreValue {
 			return ipcRenderer.sendSync(Channels.CONFIG_GET, key) as StoreValue;
 		}
-	}
-});
-
-contextBridge.exposeInMainWorld('process', {
-	platform: process.platform
-});
-
-contextBridge.exposeInMainWorld('tuneAPI', {
+	},
 	db: {
 		set(key: DatabaseKey, value: string) {
 			ipcRenderer.invoke(Channels.DATABASE_SET, [key, value]);
@@ -55,5 +41,14 @@ contextBridge.exposeInMainWorld('tuneAPI', {
 		get(key: DatabaseKey): DatabaseValue {
 			return ipcRenderer.sendSync(Channels.DATABASE_GET, key) as DatabaseValue;
 		}
+	},
+	minimize() {
+		ipcRenderer.invoke(Channels.WINDOW_CONTROLS, 'minimize');
+	},
+	maximize() {
+		ipcRenderer.invoke(Channels.WINDOW_CONTROLS, 'maximize');
+	},
+	close() {
+		ipcRenderer.invoke(Channels.WINDOW_CONTROLS, 'close');
 	}
 });

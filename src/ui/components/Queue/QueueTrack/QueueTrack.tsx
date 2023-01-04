@@ -16,7 +16,7 @@ const QueueTrack: FC<QueueTrackProps> = (props) => {
 	const [metadata, setMetadata] = useState<AudioMetadata>();
 
 	const getMetadata = async () => {
-		const metadataJSON = await window.ipc.system.readMetadata(track.filePath);
+		const metadataJSON = await window.api.system.readMetadata(track.filePath);
 		setMetadata(JSON.parse(metadataJSON) as AudioMetadata);
 	};
 

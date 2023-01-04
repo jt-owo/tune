@@ -32,7 +32,7 @@ const AudioPlayer: FC = () => {
 	const dispatch = useAppDispatch();
 
 	const getMetadata = async (track: TrackData) => {
-		const metadataJSON = await window.ipc.system.readMetadata(track.filePath);
+		const metadataJSON = await window.api.system.readMetadata(track.filePath);
 		setMetadata(JSON.parse(metadataJSON) as AudioMetadata);
 	};
 
@@ -65,7 +65,7 @@ const AudioPlayer: FC = () => {
 		if (isPlaying) {
 			audioRef.current.play().catch(() => {});
 			if (currentTrack) getMetadata(currentTrack);
-			window.ipc.system.updateTrack(currentTrack?.filePath || '');
+			window.api.system.updateTrack(currentTrack?.filePath || '');
 		} else {
 			audioRef.current.pause();
 		}

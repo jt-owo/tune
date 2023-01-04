@@ -10,15 +10,15 @@ import closeIcon from '../../../../assets/ui-icons/titlebar-win/x-solid.svg';
 
 const Titlebar: FC = () => {
 	const minimize = () => {
-		window.ipc.window.minimize();
+		window.api.minimize();
 	};
 
 	const maximize = () => {
-		window.ipc.window.maximize();
+		window.api.maximize();
 	};
 
 	const close = () => {
-		window.ipc.window.close();
+		window.api.close();
 	};
 
 	return (

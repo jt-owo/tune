@@ -10,12 +10,15 @@ import { useAppDispatch, useAppSelector } from '../../hooks';
 import { removePlaylist, selectPlaylists, updatePlaylist } from '../../../state/slices/playlistSlice';
 import { PlaylistData, TrackData } from '../../../typings/playlist';
 import { setQueue } from '../../../state/slices/playerSlice';
+import useContextMenu from '../../hooks/useContextMenu';
 import ItemTypes from '../../../typings/dnd-types';
 import newGuid from '../../util';
+import AppRoutes from '../../routes';
 
 import PlaylistTrack from './PlaylistTrack/PlaylistTrack';
 import ToolTip from '../../components/ToolTip/ToolTip';
-import AppRoutes from '../../routes';
+import ContextMenu from '../../components/ContextMenu/ContextMenu';
+import ContextMenuItem from '../../components/ContextMenu/ContextMenuItem/ContextMenuItem';
 
 import playIcon from '../../../../assets/ui-icons/play.svg';
 import folderIcon from '../../../../assets/animations/folder.json';
@@ -23,6 +26,8 @@ import trashIcon from '../../../../assets/animations/trash.json';
 import menuIcon from '../../../../assets/animations/menuV4.json';
 
 import defaultAlbumCover from '../../../../assets/images/tune_no_artwork.svg';
+import deleteIcon from '../../../../assets/ui-icons/trash-2.svg';
+import editIcon from '../../../../assets/ui-icons/edit-3.svg';
 
 import './Playlist.scss';
 
@@ -35,6 +40,8 @@ const Playlist: FC = memo(function Playlist() {
 	const playlists = useAppSelector(selectPlaylists);
 	const [playlist, setPlaylist] = useState(playlists.find((x) => x.id === id));
 	const [tracks, setTracks] = useState<TrackData[]>([]);
+
+	const [visibility, setVisibility, position, setPosition] = useContextMenu();
 
 	const lottieShowMenuRef = useRef<LottieRefCurrentProps>(null);
 	const lottieAddTracksRef = useRef<LottieRefCurrentProps>(null);
@@ -173,10 +180,38 @@ const Playlist: FC = memo(function Playlist() {
 			<div id="playlist-content">
 				{tracks.length > 0 && (
 					<div ref={drop}>
-						<ul>{tracks && tracks.map((track) => <PlaylistTrack key={track.id} id={`${track.id}`} track={track} moveTrack={moveTrack} findTrack={findTrack} />)}</ul>
+						<ul>
+							{tracks &&
+								tracks.map((track) => (
+									<PlaylistTrack
+										key={track.id}
+										id={`${track.id}`}
+										track={track}
+										moveTrack={moveTrack}
+										findTrack={findTrack}
+										onContextMenu={(e) => {
+											e.preventDefault();
+											setVisibility(true);
+											setPosition({
+												x: e.pageX,
+												y: e.pageY
+											});
+											// FIXME: not sure if e.pageX/Y returns the correct value.
+											// console.log('right click', e.pageX, e.pageY);
+										}}
+									/>
+								))}
+						</ul>
 					</div>
 				)}
 			</div>
+			{visibility && (
+				<ContextMenu y={position.y} x={position.x}>
+					<ContextMenuItem header="Play Next" staticIcon={editIcon} type="default" />
+					<ContextMenuItem header="Play Later" staticIcon={editIcon} type="default" />
+					<ContextMenuItem header="Delete from Playlist" staticIcon={deleteIcon} type="danger" />
+				</ContextMenu>
+			)}
 		</div>
 	);
 });

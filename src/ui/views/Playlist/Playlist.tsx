@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks';
 import { removePlaylist, selectPlaylists, updatePlaylist } from '../../../state/slices/playlistSlice';
 import { PlaylistData, TrackData } from '../../../typings/playlist';
 import { setQueue } from '../../../state/slices/playerSlice';
-import ItemTypes from '../../components/DragAndDrop/ItemTypes';
+import ItemTypes from '../../../typings/dnd-types';
 import newGuid from '../../util';
 
 import PlaylistTrack from './PlaylistTrack/PlaylistTrack';

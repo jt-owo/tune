@@ -4,9 +4,9 @@
 import { memo, useEffect, useState } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { AudioMetadata, TrackData } from '../../../../typings/playlist';
+import ItemTypes from '../../../../typings/dnd-types';
 
 import defaultAlbumCover from '../../../../../assets/images/tune_no_artwork.svg';
-import ItemTypes from '../../../components/DragAndDrop/ItemTypes';
 
 interface PlaylistTrackProps {
 	id: string;

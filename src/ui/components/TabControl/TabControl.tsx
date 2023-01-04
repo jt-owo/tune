@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import { FC, useCallback, useState } from 'react';
-import { TabItemProps } from './TabItem';
+import { TabItemProps } from './TabItem/TabItem';
 
 import './TabControl.scss';
 

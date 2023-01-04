@@ -2,7 +2,7 @@ import { FC } from 'react';
 import View from '../../components/View/View';
 import ContextMenuExample from '../../components/ContextMenu/ContextMenuExample';
 import TabControl from '../../components/TabControl/TabControl';
-import TabItem from '../../components/TabControl/TabItem';
+import TabItem from '../../components/TabControl/TabItem/TabItem';
 import HomeItemSmall from '../../components/Home_Elements/HomeItemSmall/HomeItemSmall';
 import HomeItemMedium from '../../components/Home_Elements/HomeItemMedium/HomeItemMedium';
 

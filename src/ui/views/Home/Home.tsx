@@ -15,10 +15,10 @@ const Home: FC = () => {
 		<View title="Home" id="home">
 			<div className="content">
 				<TabControl>
-					<TabItem label="Tab1">
+					<TabItem label="Tab 1">
 						<ContextMenuExample />
 					</TabItem>
-					<TabItem label="Tab2">
+					<TabItem label="Tab 2">
 						<HomeItemSmall image={image1} title="Awesome Album" artist="TUNE" />
 						<HomeItemMedium image={image1} title="Awesome Album" artist="TUNE" />
 					</TabItem>

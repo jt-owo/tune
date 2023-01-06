@@ -4,7 +4,7 @@
 import { FC, ReactElement, useCallback, useState } from 'react';
 import { TabItemProps } from './TabItem/TabItem';
 
-import './TabControl.scss';
+import style from './TabControl.module.scss';
 
 interface TabControlProps {
 	selectedTab?: string;
@@ -18,17 +18,18 @@ const TabControl: FC<TabControlProps> = (props) => {
 	const handleActiveTab = useCallback((label: string) => setActiveTab(label), []);
 
 	return (
-		<div className="tabcontrol">
-			<nav className="tabcontrol-nav">
+		<div className={style.tabcontrol}>
+			<nav className={style['tabcontrol-nav']}>
+				<div className={style['tabcontrol-selected']} />
 				{children.map((child) => {
 					return child.props.label ? (
-						<div role="button" key={child.props.label} className={child.props.label === activeTab ? 'tab active' : 'tab'} onClick={() => handleActiveTab(child.props.label)}>
+						<div role="button" key={child.props.label} className={child.props.label === activeTab ? `${style.tab} ${style.active}` : style.tab} onClick={() => handleActiveTab(child.props.label)}>
 							{child.props.label}
 						</div>
 					) : null;
 				})}
 			</nav>
-			<div className="tabcontrol-content">{children.filter((child) => child.props.label === activeTab)}</div>
+			<div className={style['tabcontrol-content']}>{children.filter((child) => child.props.label === activeTab)}</div>
 		</div>
 	);
 };

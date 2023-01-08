@@ -3,25 +3,170 @@
 @import '../../styles/fonts';
 
 * {
+	/* Layout */
 	padding: 0;
 	margin: 0;
 }
 
 #queue-container {
+	/* Layout */
 	position: absolute;
 	display: flex;
 	flex-direction: column;
+	width: 70px;
 	top: 40px;
 	bottom: 85px;
 	right: 10px;
-	width: 70px;
-	overflow: hidden;
+
+	/* Color */
 	background-color: $floating-component-color;
-	border-style: solid;
 	border-color: $border-color;
-	border-radius: 20px;
+
+	/* Font */
 	font-size: 14px;
+
+	/* Animation */
 	transition: all ease-in-out 0.2s;
+
+	/* Misc */
+	overflow: hidden;
+	border-style: solid;
+	border-radius: 20px;
+}
+
+#queue-title {
+	/* Layout */
+	margin: 10px 0 5px 0;
+	text-align: center;
+
+	/* Font */
+	font-family: Quicksand-700;
+	font-size: 12px;
+
+	/* Animation */
+	transition: all ease-in-out 0.2s;
+}
+
+#queue {
+	/* Layout */
+	display: flex;
+	flex-direction: column;
+
+	/* Misc */
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.queue-track {
+	/* Layout */
+	height: 55px;
+	width: 235px;
+	display: flex;
+	align-items: center;
+	margin: 3px 6px;
+
+	/* Font */
+	font-family: Quicksand-700;
+	font-size: 14px;
+
+	/* Animation */
+	transition: all ease-in-out 0.1s;
+
+	/* Misc */
+	border-radius: 12px;
+}
+
+.queue-track img {
+	/* Layout */
+	height: 45px;
+	margin: 5px 10px 5px 5px;
+
+	/* Misc */
+	border-radius: 8px;
+	user-select: none;
+	-webkit-user-drag: none;
+	image-rendering: -webkit-optimize-contrast;
+}
+
+.queue-track-info {
+	/* Layout */
+	width: 170px;
+	margin-bottom: 2px;
+
+	/* Animation */
+	transition: all ease-in-out 0.2s;
+
+	/* Misc */
+	opacity: 0;
+}
+
+.queue-track-artist {
+	/* Color */
+	color: rgba($color: #ffffff, $alpha: 0.7);
+
+	/* Font */
+	font-size: 11px;
+
+	/* Misc */
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.queue-track-title {
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.queue-track-overlay {
+	/* Layout */
+	position: absolute;
+	right: 10px;
+	height: 55px;
+	width: 50%;
+
+	/* Color */
+	background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1));
+
+	/* Animation */
+	transition: all ease-in-out 0.1s;
+
+	/* Misc */
+	opacity: 0;
+}
+
+.queue-track-remove {
+	/* Layout */
+	position: absolute;
+	right: 20px;
+	height: 32px;
+	width: 32px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	/* Color */
+	background-color: $dark-gray-2;
+
+	/* Animation */
+	transition: all ease-in-out 0.2s;
+	// animation: removeBtnEnter 0.2s;
+
+	/* Misc */
+	border-radius: 8px;
+	z-index: 1;
+	opacity: 0;
+}
+
+.queue-track-remove img {
+	width: 16px;
+	margin-left: 10px;
+}
+
+#queue::-webkit-scrollbar-thumb {
+	width: 5px;
+	background-color: rgb(0, 0, 0);
 }
 
 #queue-container:hover {
@@ -40,73 +185,33 @@
 	}
 }
 
-#queue-title {
-	font-family: Quicksand-700;
-	text-align: center;
-	margin: 10px 0 5px 0;
-	font-size: 12px;
-	transition: all ease-in-out 0.2s;
-}
-
-#queue {
-	display: flex;
-	flex-direction: column;
-	overflow-y: auto;
-	overflow-x: hidden;
-}
-
-.queue-track {
-	height: 55px;
-	width: 235px;
-	display: flex;
-	align-items: center;
-	margin: 3px 6px;
-	font-family: Quicksand-700;
-	font-size: 14px;
-	border-radius: 12px;
-	transition: all ease-in-out 0.1s;
-}
-
-.queue-track img {
-	height: 45px;
-	margin: 5px 10px 5px 5px;
-	border-radius: 8px;
-	user-select: none;
-	-webkit-user-drag: none;
-	image-rendering: -webkit-optimize-contrast;
-}
-
 .queue-track:hover {
 	background-color: $hover-color-medium;
 	cursor: pointer;
+
+	.queue-track-overlay {
+		opacity: 1;
+	}
+
+	.queue-track-remove {
+		opacity: 1;
+		animation: removeBtnIn 0.2s;
+	}
 }
 
 .queue-track:active {
 	background-color: $hover-color-light;
 }
 
-.queue-track-info {
-	opacity: 0;
-	width: 170px;
-	margin-bottom: 2px;
-	transition: all ease-in-out 0.2s;
+.queue-track-remove:hover {
+	background-color: $danger-color;
 }
 
-.queue-track-artist {
-	font-size: 11px;
-	color: rgba($color: #ffffff, $alpha: 0.7);
-	text-overflow: ellipsis;
-	white-space: nowrap;
-	overflow: hidden;
-}
-
-.queue-track-title {
-	text-overflow: ellipsis;
-	white-space: nowrap;
-	overflow: hidden;
-}
-
-#queue::-webkit-scrollbar-thumb {
-	width: 5px;
-	background-color: rgb(0, 0, 0);
+@keyframes removeBtnIn {
+	0% {
+		right: -10px;
+	}
+	100% {
+		right: 20px;
+	}
 }

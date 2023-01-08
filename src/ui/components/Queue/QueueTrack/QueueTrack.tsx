@@ -4,6 +4,7 @@ import { FC, useEffect, useState } from 'react';
 import { AudioMetadata, TrackData } from '../../../../typings/playlist';
 
 import defaultAlbumCover from '../../../../../assets/images/tune_no_artwork.svg';
+import deleteIcon from '../../../../../assets/ui-icons/trash-2.svg';
 
 interface QueueTrackProps {
 	track: TrackData;
@@ -39,6 +40,10 @@ const QueueTrack: FC<QueueTrackProps> = (props) => {
 					<div className="queue-track-info">
 						<div className="info queue-track-title">{metadata.info?.title}</div>
 						<div className="info queue-track-artist">{metadata.info?.artist}</div>
+					</div>
+					<div className="queue-track-overlay" />
+					<div className="queue-track-remove">
+						<img src={deleteIcon} alt="" />
 					</div>
 				</div>
 			)}

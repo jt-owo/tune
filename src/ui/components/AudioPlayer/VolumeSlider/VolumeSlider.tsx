@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, RefObject, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, FC, RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import Lottie, { LottieRefCurrentProps } from 'lottie-react';
 
 import './VolumeSlider.scss';
@@ -9,18 +9,21 @@ interface VolumeSliderProps {
 	audioRef: RefObject<HTMLAudioElement>;
 }
 
-const MAX_VOLUME_FRAME = 0;
-const MID_VOLUME_FRAME = 9;
-const MIN_VOLUME_FRAME = 14;
-const MUTE_FRAME = 28;
+const LOTTIE_VOLUME_FRAMES = {
+	MAX_VOLUME: 0,
+	MID_VOLUME: 9,
+	MIN_VOLUME: 14,
+	MUTE: 28
+};
 const VOLUME_SLIDER_STATES = {
 	MUTE: 0,
 	MIN_VOLUME: 1,
 	MID_VOLUME: 2,
 	MAX_VOLUME: 3
 };
-// TODO: @tobytaken set initial state depending on the volume from the config file => window.api.config.get('volume') as number
-let volumeSliderState = VOLUME_SLIDER_STATES.MID_VOLUME;
+
+let volumeSliderState: number;
+let lottieInitialFrame: number;
 
 const VolumeSlider: FC<VolumeSliderProps> = (props) => {
 	const { audioRef } = props;
@@ -28,44 +31,59 @@ const VolumeSlider: FC<VolumeSliderProps> = (props) => {
 	const lottieRef = useRef<LottieRefCurrentProps>(null);
 	const [volume, setVolume] = useState(window.api.config.get('volume') as number);
 
-	const updateVolumeSliderProgress = () => {
+	const updateVolumeSliderProgress = useCallback(() => {
 		if (volumeSliderProgressRef.current) {
-			// Weird math to make the slider look right
-			volumeSliderProgressRef.current.style.right = `${101 - volume * 1.02}%`;
+			volumeSliderProgressRef.current.style.right = `${100 - volume * 1.0}%`;
+		}
+	}, [volumeSliderProgressRef, volume]);
+
+	const setInitialVolumeSliderState = () => {
+		const initialVolume = window.api.config.get('volume') as number;
+
+		if (initialVolume <= 1) {
+			volumeSliderState = VOLUME_SLIDER_STATES.MUTE;
+			lottieInitialFrame = LOTTIE_VOLUME_FRAMES.MUTE;
+		} else if (initialVolume < 35) {
+			volumeSliderState = VOLUME_SLIDER_STATES.MIN_VOLUME;
+			lottieInitialFrame = LOTTIE_VOLUME_FRAMES.MIN_VOLUME;
+		} else if (initialVolume < 70) {
+			volumeSliderState = VOLUME_SLIDER_STATES.MID_VOLUME;
+			lottieInitialFrame = LOTTIE_VOLUME_FRAMES.MID_VOLUME;
+		} else {
+			volumeSliderState = VOLUME_SLIDER_STATES.MAX_VOLUME;
+			lottieInitialFrame = LOTTIE_VOLUME_FRAMES.MAX_VOLUME;
 		}
 	};
 
-	const handleAnimation = () => {
+	const handleAnimation = useCallback(() => {
 		// Handle animation of lottie icon - sry for this mess
 		if (lottieRef.current) {
-			if (volume >= 0 && volume <= 1 && volumeSliderState === VOLUME_SLIDER_STATES.MIN_VOLUME) {
-				lottieRef.current.playSegments([MIN_VOLUME_FRAME, MUTE_FRAME], true);
+			if (volume >= 0 && volume <= 1 && volumeSliderState >= VOLUME_SLIDER_STATES.MIN_VOLUME) {
+				lottieRef.current.playSegments([LOTTIE_VOLUME_FRAMES.MIN_VOLUME, LOTTIE_VOLUME_FRAMES.MUTE], true);
 				volumeSliderState = VOLUME_SLIDER_STATES.MUTE;
-			} else if (volume > 2 && volume < 35 && volumeSliderState === VOLUME_SLIDER_STATES.MUTE) {
-				lottieRef.current.playSegments([MUTE_FRAME, MIN_VOLUME_FRAME], true);
+			} else if (volume > 1 && volume <= 35 && volumeSliderState === VOLUME_SLIDER_STATES.MUTE) {
+				lottieRef.current.playSegments([LOTTIE_VOLUME_FRAMES.MUTE, LOTTIE_VOLUME_FRAMES.MIN_VOLUME], true);
 				volumeSliderState = VOLUME_SLIDER_STATES.MIN_VOLUME;
-			} else if (volume > 2 && volume < 35 && volumeSliderState === VOLUME_SLIDER_STATES.MID_VOLUME) {
-				lottieRef.current.playSegments([MID_VOLUME_FRAME, MIN_VOLUME_FRAME + 1], true);
+			} else if (volume > 1 && volume <= 35 && volumeSliderState >= VOLUME_SLIDER_STATES.MID_VOLUME) {
+				lottieRef.current.playSegments([LOTTIE_VOLUME_FRAMES.MID_VOLUME, LOTTIE_VOLUME_FRAMES.MIN_VOLUME + 1], true);
 				volumeSliderState = VOLUME_SLIDER_STATES.MIN_VOLUME;
-			} else if (volume > 35 && volume < 70 && volumeSliderState === VOLUME_SLIDER_STATES.MIN_VOLUME) {
-				lottieRef.current.playSegments([MIN_VOLUME_FRAME - 1, MID_VOLUME_FRAME], true);
+			} else if (volume > 35 && volume <= 70 && volumeSliderState <= VOLUME_SLIDER_STATES.MIN_VOLUME) {
+				lottieRef.current.playSegments([LOTTIE_VOLUME_FRAMES.MIN_VOLUME - 1, LOTTIE_VOLUME_FRAMES.MID_VOLUME], true);
 				volumeSliderState = VOLUME_SLIDER_STATES.MID_VOLUME;
-			} else if (volume > 35 && volume < 70 && volumeSliderState === VOLUME_SLIDER_STATES.MAX_VOLUME) {
-				lottieRef.current.playSegments([MAX_VOLUME_FRAME, MID_VOLUME_FRAME], true);
+			} else if (volume > 35 && volume <= 70 && volumeSliderState === VOLUME_SLIDER_STATES.MAX_VOLUME) {
+				lottieRef.current.playSegments([LOTTIE_VOLUME_FRAMES.MAX_VOLUME, LOTTIE_VOLUME_FRAMES.MID_VOLUME], true);
 				volumeSliderState = VOLUME_SLIDER_STATES.MID_VOLUME;
-			} else if (volume > 70 && volumeSliderState === 2) {
-				lottieRef.current.playSegments([MID_VOLUME_FRAME, MAX_VOLUME_FRAME], true);
+			} else if (volume > 70 && volumeSliderState <= VOLUME_SLIDER_STATES.MID_VOLUME) {
+				lottieRef.current.playSegments([LOTTIE_VOLUME_FRAMES.MID_VOLUME, LOTTIE_VOLUME_FRAMES.MAX_VOLUME], true);
 				volumeSliderState = VOLUME_SLIDER_STATES.MAX_VOLUME;
 			}
 		}
-	};
+	}, [lottieRef, volume]);
 
 	const handleVolumeChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const newVolume = parseInt(e.target.value, 10);
 		setVolume(newVolume);
-		updateVolumeSliderProgress();
 		window.api.config.set('volume', JSON.stringify(newVolume.toString()));
-		handleAnimation();
 	};
 
 	useEffect(() => {
@@ -74,9 +92,17 @@ const VolumeSlider: FC<VolumeSliderProps> = (props) => {
 		}
 	}, [audioRef, volume]);
 
+	// Set initial volume slider state and lottie icon frame on component mount
 	useEffect(() => {
-		lottieRef?.current?.goToAndStop(MID_VOLUME_FRAME, true);
+		setInitialVolumeSliderState();
+		lottieRef?.current?.goToAndStop(lottieInitialFrame, true);
 	}, []);
+
+	// Update volume slider progress and handle animation on volume change
+	useEffect(() => {
+		updateVolumeSliderProgress();
+		handleAnimation();
+	}, [updateVolumeSliderProgress, handleAnimation]);
 
 	return (
 		<div className="volume-slider-container">

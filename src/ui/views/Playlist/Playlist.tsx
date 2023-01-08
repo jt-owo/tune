@@ -28,6 +28,8 @@ import menuIcon from '../../../../assets/animations/menuV4.json';
 import defaultAlbumCover from '../../../../assets/images/tune_no_artwork.svg';
 import deleteIcon from '../../../../assets/ui-icons/trash-2.svg';
 import editIcon from '../../../../assets/ui-icons/edit-3.svg';
+import addTopIcon from '../../../../assets/ui-icons/add-top.svg';
+import addBottomIcon from '../../../../assets/ui-icons/add-bottom.svg';
 
 import './Playlist.scss';
 
@@ -207,8 +209,8 @@ const Playlist: FC = memo(function Playlist() {
 			</div>
 			{visibility && (
 				<ContextMenu y={position.y} x={position.x}>
-					<ContextMenuItem header="Play Next" staticIcon={editIcon} type="default" />
-					<ContextMenuItem header="Play Later" staticIcon={editIcon} type="default" />
+					<ContextMenuItem header="Play Next" staticIcon={addTopIcon} type="default" />
+					<ContextMenuItem header="Play Later" staticIcon={addBottomIcon} type="default" />
 					<ContextMenuItem header="Delete from Playlist" staticIcon={deleteIcon} type="danger" />
 				</ContextMenu>
 			)}

@@ -1,36 +1,51 @@
 @import '../../../styles/colors';
 
 #context-menu-item {
+	/* Layout */
 	display: flex;
 	align-items: center;
-	list-style: none;
-	padding: 7px;
+	padding: 7px 10px;
 	margin: 3px;
-	border-radius: 12px;
+
+	/* Animation */
 	transition: all ease-in-out 0.15s;
+
+	/* Misc */
+	border-radius: 12px;
+	list-style: none;
 }
 
 #context-menu-item:hover {
+	/* Color */
 	background-color: rgba($color: #ffffff, $alpha: 0.15);
+
+	/* Animation */
 	transition: all ease-in-out 0.05s;
 }
 
 #context-menu-item-text {
-	font-family: Quicksand-700;
+	/* Layout */
 	margin: 0 0 0 4px;
+
+	/* Font */
+	font-family: Quicksand-600;
+	font-size: 14px;
 }
 
 #context-menu-item > img {
-	height: 18px;
+	/* Layout */
+	height: 16px;
 	margin-right: 5px;
 }
 
 #context-menu-item > .lottie {
+	/* Layout */
 	height: 20px;
 	margin: 0;
 	padding: 0;
 }
 
 #context-menu-item.danger:hover {
+	/* Color */
 	background-color: $danger-color;
 }

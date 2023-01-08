@@ -1,9 +1,15 @@
 @import '../../styles/colors';
 
 #context-menu {
-	background-color: $dark-gray-2;
-	max-width: 200px;
-	padding: 4px;
-	border-radius: 16px;
+	/* Layout */
 	position: fixed;
+	width: 210px;
+	padding: 4px;
+
+	/* Color */
+	background-color: $dark-gray-2;
+
+	/* Misc */
+	border-radius: 16px;
+	z-index: 2;
 }

@@ -56,6 +56,16 @@
 	}
 }
 
+@keyframes DialogEnter {
+	0% {
+		transform: scaleY(0);
+	}
+
+	100% {
+		transform: scaleY(1);
+	}
+}
+
 /* Basic Animations */
 
 .btn-hover-animation {

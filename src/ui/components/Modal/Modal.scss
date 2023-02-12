@@ -1,4 +1,5 @@
 @import '../../styles/colors';
+@import '../../styles/animations';
 
 .modal {
 	position: fixed;
@@ -11,38 +12,63 @@
 	transition: all 0.3s ease-in-out;
 	overflow: hidden;
 	z-index: 999;
-	padding: 40px 20px 20px;
 }
 
 .modal-content {
-	width: 70%;
-	height: 20%;
-	background-color: #282c34;
+	width: 600px;
+	height: 280px;
+	background-color: $dark-gray-1;
 	color: #fff;
 	display: flex;
 	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	text-align: center;
+	padding: 40px;
 	font-family: Quicksand-700;
-	font-size: 24px;
+	font-size: 18px;
 	border-radius: 40px;
+	animation: DialogEnter 0.15s;
 }
 
-.modal-content button {
-	height: 40px;
-	width: 80%;
+#modal-heading {
+	font-family: Quicksand-500;
+	font-size: 28px;
+}
+
+#modal-description {
+	font-family: Quicksand-500;
+	color: #bebebe;
+	font-size: 18px;
+	margin-top: 15px;
+}
+
+#modal-buttons-container {
+	margin-top: auto;
+}
+
+#modal-buttons-container .danger {
+	background-color: #ff4444;
+	color: #ffffff;
+}
+
+#modal-buttons-container button {
+	height: 45px;
+	min-width: 100px;
+	max-width: 50%;
 	background-color: #ffffff;
 	border: none;
 	border-radius: 12px;
-	margin-top: 15px;
+	margin-right: 15px;
 	font-family: Quicksand-700;
-	font-size: 16px;
+	font-size: 18px;
+	cursor: pointer;
 	transition: all ease-in-out 0.05s;
 }
 
-.modal-content button:hover {
-	background-color: #bababa;
+#modal-buttons-container .danger:hover {
+	background-color: #cd3636;
+}
+
+#modal-buttons-container button:hover {
+	background-color: #d2d2d2;
 }
 
 .modal .close-btn {

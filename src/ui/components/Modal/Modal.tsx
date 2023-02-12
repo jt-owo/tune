@@ -27,9 +27,7 @@ const Modal: FC<ModalProps> = (props) => {
 	return (
 		<Portal wrapperID="portal-modal-container">
 			<div className="modal">
-				<div onClick={onClose} className="close-btn">
-					Close
-				</div>
+				{/* <div onClick={onClose} className="close-btn">Close</div> */}
 				<div className="modal-content">{children}</div>
 			</div>
 		</Portal>

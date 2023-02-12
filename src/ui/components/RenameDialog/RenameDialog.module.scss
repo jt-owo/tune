@@ -1,0 +1,90 @@
+@import '../../styles/colors';
+
+.dialog {
+	/* Layout */
+	width: 350px;
+	padding: 10px;
+	display: flex;
+	flex-direction: column;
+
+	/* Color */
+	background-color: #000000;
+
+	/* Misc */
+	border-style: solid;
+	border-color: $dark-gray-2;
+	border-width: 3px;
+	border-radius: 20px;
+}
+
+.dialog input {
+	/* Layout */
+	height: 45px;
+	padding: 15px;
+
+	/* Color */
+	background-color: $dark-gray-1;
+	color: #ffffff;
+
+	/* Font */
+	font-family: Quicksand-600;
+	font-size: 18px;
+
+	/* Animation */
+	transition: all ease-in-out 0.1s;
+
+	/* Misc */
+	border: none;
+	outline: none;
+	border-radius: 10px;
+}
+
+.dialog input:hover {
+	background-color: $hover-color-medium;
+}
+
+.dialog input:focus {
+	background-color: $hover-color-medium;
+}
+
+.button-container {
+	display: flex;
+	justify-content: center;
+	gap: 10px;
+	margin-top: 10px;
+}
+
+.button-container button {
+	/* Layout */
+	height: 45px;
+	flex: 1;
+
+	/* Color */
+	background-color: $dark-gray-1;
+	color: #ffffff;
+
+	/* Font */
+	font-family: Quicksand-700;
+	font-size: 18px;
+
+	/* Animation */
+	transition: all ease-in-out 0.1s;
+
+	/* Misc */
+	border: none;
+	border-radius: 12px;
+	cursor: pointer;
+}
+
+.dialog .cancel-btn {
+	color: $danger-color-soft;
+}
+
+.dialog .cancel-btn:hover {
+	color: #ffffff;
+	background-color: $danger-color;
+}
+
+.dialog .confirm-btn:hover {
+	background-color: $hover-color-medium;
+}

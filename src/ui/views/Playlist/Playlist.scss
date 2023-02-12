@@ -72,9 +72,16 @@
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	margin-top: 5px;
-	font-size: 35px;
+	margin-top: 3px;
+	font-size: 32px;
 	font-family: Quicksand-400;
+	padding: 0px 6px;
+	border-radius: 10px;
+	transition: all ease-in-out 0.08s;
+}
+
+#playlist-heading-text:hover {
+	background-color: $hover-color-light;
 }
 
 #playlist-controls {

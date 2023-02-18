@@ -4,33 +4,34 @@
 	/* Layout */
 	display: inline-flex;
 	flex-direction: row;
-	margin-bottom: 10px;
+	margin-bottom: 15px;
 
 	/* Color */
 	background-color: $dark-gray-2;
-
-	/* Misc */
-	border-radius: 13px;
-}
-
-.tab {
-	/* Layout */
-	padding: 12px 20px;
-	margin: 6px;
-
-	/* Colors */
-	background-color: $dark-gray-3;
-	color: $font-white;
-
-	/* Font */
-	font-family: Quicksand-500;
-	font-size: 14px;
 
 	/* Animation */
 	transition: all ease-in-out 0.2s;
 
 	/* Misc */
-	border-radius: 10px;
+	border-radius: 32px;
+}
+
+.tab {
+	/* Layout */
+	padding: 8px 16px;
+
+	/* Colors */
+	color: $font-white;
+
+	/* Font */
+	font-family: Quicksand-600;
+	font-size: 16px;
+
+	/* Animation */
+	transition: all ease-in-out 0.2s;
+
+	/* Misc */
+	border-radius: 32px;
 	cursor: pointer;
 }
 

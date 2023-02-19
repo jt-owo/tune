@@ -1,0 +1,28 @@
+@import '../../../styles/colors';
+
+.container {
+	/* Layout */
+	height: 40px;
+	display: flex;
+	align-items: center;
+	margin: 2px;
+	padding: 10px;
+
+	/* Font */
+	font-family: Quicksand-500;
+
+	/* Animation */
+	transition: all ease-in-out 0.07s;
+
+	/* Misc */
+	border-radius: 10px;
+}
+
+.container:hover {
+	background-color: $hover-color-light;
+}
+
+.icon {
+	width: 18px;
+	margin-right: 10px;
+}

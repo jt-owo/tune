@@ -30,8 +30,13 @@ import deleteIcon from '../../../../assets/ui-icons/trash-2.svg';
 import editIcon from '../../../../assets/ui-icons/edit-3.svg';
 import addTopIcon from '../../../../assets/ui-icons/add-top.svg';
 import addBottomIcon from '../../../../assets/ui-icons/add-bottom.svg';
+import imageIcon from '../../../../assets/ui-icons/image-regular.svg';
 
 import './Playlist.scss';
+import RenameDialog from '../../components/RenameDialog/RenameDialog';
+import Dialog from '../../components/Dialog/Dialog';
+import HamburgerMenu from '../../components/HamburgerMenu/HamburgerMenu';
+import HamburgerMenuItem from '../../components/HamburgerMenu/HamburgerMenuItem/HamburgerMenuItem';
 
 const Playlist: FC = memo(function Playlist() {
 	const { id } = useParams();
@@ -43,6 +48,10 @@ const Playlist: FC = memo(function Playlist() {
 	const [playlist, setPlaylist] = useState(playlists.find((x) => x.id === id));
 	const [tracks, setTracks] = useState<TrackData[]>([]);
 
+	const [renameVisibility, setRenameVisibility] = useState(false);
+	const [hamburgerVisibility, setHamburgerVisibility] = useState(false);
+	const [isDialogVisible, setDialogVisibility] = useState(false);
+
 	const [visibility, setVisibility, position, setPosition] = useContextMenu();
 
 	const lottieShowMenuRef = useRef<LottieRefCurrentProps>(null);
@@ -53,11 +62,13 @@ const Playlist: FC = memo(function Playlist() {
 		navigate(AppRoutes.Library);
 	}
 
-	const deletePlaylist = () => {
+	const deletePlaylist = (confirm: boolean) => {
 		if (!playlist?.id) return;
 
-		dispatch(removePlaylist(playlist.id));
-		navigate(AppRoutes.Library);
+		if (confirm) {
+			dispatch(removePlaylist(playlist.id));
+			navigate(AppRoutes.Library);
+		}
 	};
 
 	const handleAddTracks = async () => {
@@ -152,12 +163,35 @@ const Playlist: FC = memo(function Playlist() {
 		}
 	}, [playlists, id]);
 
+	useEffect(() => {
+		if (lottieShowMenuRef.current) {
+			lottieShowMenuRef.current.setSpeed(2);
+			if (!hamburgerVisibility) {
+				stopAnimation(lottieShowMenuRef);
+			} else {
+				startAnimation(lottieShowMenuRef);
+			}
+		}
+	}, [hamburgerVisibility]);
+
+	const handleRename = (data: string) => {
+		if (playlist) dispatch(updatePlaylist({ ...playlist, name: data } as PlaylistData));
+	};
+
 	return (
 		<div key={id} id="playlist-container">
+			<Dialog heading="Delete?" description="You are about to delete this playlist. This action cannot be undone!" onClose={() => setDialogVisibility(false)} isOpen={isDialogVisible} type="danger" confirmText="Delete" rejectText="Keep" confirmCallback={deletePlaylist} />
 			<div id="playlist-heading">
+				<RenameDialog value={playlist?.name} nameCB={handleRename} visible={renameVisibility} onClose={() => setRenameVisibility(false)} />
 				<img src={defaultAlbumCover} alt="" />
-				<div id="playlist-heading-text">{playlist?.name}</div>
+				<div id="playlist-heading-text" onClick={() => setRenameVisibility(true)}>
+					{playlist?.name}
+				</div>
 				<div id="playlist-controls">
+					<HamburgerMenu onClose={() => setHamburgerVisibility(false)} visible={hamburgerVisibility} positionX={25} positionY={100}>
+						<HamburgerMenuItem title="Edit" icon={editIcon} />
+						<HamburgerMenuItem title="Choose image" icon={imageIcon} />
+					</HamburgerMenu>
 					<ToolTip text="Play Playlist">
 						<div id="playlist-play-btn" className="playlist-heading-btn btn-hover-animation" onClick={playPlaylist}>
 							<img id="play-icon" src={playIcon} alt="" draggable="false" />
@@ -169,13 +203,15 @@ const Playlist: FC = memo(function Playlist() {
 						</div>
 					</ToolTip>
 					<ToolTip text="Delete Playlist">
-						<div id="playlist-delete-btn" className="playlist-heading-btn btn-hover-animation" onClick={deletePlaylist} onMouseEnter={() => startAnimation(lottieDeletePlaylistRef)} onMouseLeave={() => stopAnimation(lottieDeletePlaylistRef)}>
+						<div id="playlist-delete-btn" className="playlist-heading-btn btn-hover-animation" onClick={() => setDialogVisibility(true)} onMouseEnter={() => startAnimation(lottieDeletePlaylistRef)} onMouseLeave={() => stopAnimation(lottieDeletePlaylistRef)}>
 							<Lottie id="delete-icon" animationData={trashIcon} lottieRef={lottieDeletePlaylistRef} loop={false} autoplay={false} />
 						</div>
 					</ToolTip>
-					<div id="playlist-menu-btn" className="playlist-heading-btn btn-hover-animation">
-						<Lottie id="menu-icon" animationData={menuIcon} lottieRef={lottieShowMenuRef} loop={false} autoplay={false} />
-					</div>
+					<ToolTip text="Options">
+						<div id="playlist-menu-btn" className="playlist-heading-btn btn-hover-animation" onClick={() => setHamburgerVisibility(true)}>
+							<Lottie id="menu-icon" animationData={menuIcon} lottieRef={lottieShowMenuRef} loop={false} autoplay={false} />
+						</div>
+					</ToolTip>
 				</div>
 			</div>
 			<div id="divider" />

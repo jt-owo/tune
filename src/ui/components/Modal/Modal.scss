@@ -25,7 +25,6 @@
 	font-family: Quicksand-700;
 	font-size: 18px;
 	border-radius: 40px;
-	animation: DialogEnter 0.15s;
 }
 
 #modal-heading {
@@ -85,4 +84,12 @@
 .modal .close-btn:hover {
 	box-shadow: 0 0 10px rgba($color: #ffffff, $alpha: 1);
 	transition: all ease-in-out 0.05s;
+}
+
+.visible {
+	animation: DialogEnter 0.15s;
+}
+
+.fading {
+	animation: DialogLeave 0.15s;
 }

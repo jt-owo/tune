@@ -1,0 +1,31 @@
+@import '../../styles/colors';
+@import '../../styles/animations';
+
+.container {
+	/* Layout */
+	position: fixed;
+	width: 200px;
+	padding: 4px;
+
+	/* Color */
+	background-color: $dark-gray-1;
+
+	/* Misc */
+	transform-origin: top;
+	border-radius: 14px;
+	z-index: 1;
+}
+
+.container ul {
+	/* Layout */
+	display: flex;
+	flex-direction: column;
+}
+
+.visible {
+	animation: showHamburger 0.15s;
+}
+
+.fading {
+	animation: hideHamburger 0.15s;
+}

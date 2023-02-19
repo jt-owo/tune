@@ -8,11 +8,12 @@ import './Modal.scss';
 export interface ModalProps {
 	isOpen: boolean;
 	onClose: () => void;
+	isFading?: boolean;
 	children?: JSX.Element | JSX.Element[];
 }
 
 const Modal: FC<ModalProps> = (props) => {
-	const { children, isOpen, onClose } = props;
+	const { children, isOpen, onClose, isFading } = props;
 
 	useEffect(() => {
 		const closeOnEscapeKey = (e: KeyboardEvent) => (e.key === 'Escape' ? onClose() : null);
@@ -28,7 +29,7 @@ const Modal: FC<ModalProps> = (props) => {
 		<Portal wrapperID="portal-modal-container">
 			<div className="modal">
 				{/* <div onClick={onClose} className="close-btn">Close</div> */}
-				<div className="modal-content">{children}</div>
+				<div className={`${'modal-content'} ${isFading ? 'fading' : 'visible'}`}>{children}</div>
 			</div>
 		</Portal>
 	);

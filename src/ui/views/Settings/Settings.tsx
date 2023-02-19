@@ -48,6 +48,9 @@ const Settings: FC = () => {
 								})}
 						</select>
 					</TabItem>
+					<TabItem label="Appearance">
+						<div> </div>
+					</TabItem>
 					<TabItem label=" Streaming Services">
 						<a href="/" className="service-btn" id="spotify">
 							Connect to <img src={spotifyLogo} alt="" />

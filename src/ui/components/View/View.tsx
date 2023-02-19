@@ -16,7 +16,7 @@ const View: FC<ViewProps> = (props) => {
 			{title && (
 				<>
 					<div id="view-heading">{title}</div>
-					<div id="divider" />
+					{/* <div id="divider" /> */}
 				</>
 			)}
 			<div className="view-content">

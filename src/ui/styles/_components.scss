@@ -5,7 +5,7 @@
 /* PATHS & IMPORTS
    ========================================================================== */
 @import 'colors';
-$icon-path: '../../../assets/ui-icons';
+$icon-path: '/assets/ui-icons';
 
 /* SELECT
    ========================================================================== */
@@ -36,6 +36,59 @@ $icon-path: '../../../assets/ui-icons';
 .dropdown-select-1:hover {
 	background-color: #3d3d45;
 	box-shadow: 0 0 10px #3d3d45;
+}
+
+/* BUTTONS
+   ========================================================================== */
+
+.text-input {
+	/* Layout */
+	width: 100%;
+
+	/* Color */
+	background-color: $dark-gray-1;
+	color: #ffffff;
+
+	/* Font */
+	font-family: Quicksand-600;
+
+	/* Animation */
+	transition: all ease-in-out 0.1s;
+
+	/* Misc */
+	border: none;
+	outline: none;
+
+	&-1 {
+		@extend .text-input;
+		height: 25px;
+		padding: 15px 10px;
+		font-size: 14px;
+		border-radius: 7px;
+	}
+
+	&-2 {
+		@extend .text-input;
+		height: 35px;
+		padding: 15px;
+		font-size: 16px;
+		border-radius: 8px;
+	}
+
+	&-3 {
+		@extend .text-input;
+		height: 45px;
+		padding: 15px;
+		font-size: 18px;
+		border-radius: 10px;
+	}
+}
+
+.text-input {
+	&:hover,
+	&:focus {
+		background-color: $hover-color-medium;
+	}
 }
 
 /* BUTTONS

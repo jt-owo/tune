@@ -9,7 +9,7 @@ import update from 'immutability-helper';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { removePlaylist, selectPlaylists, updatePlaylist } from '../../../state/slices/playlistSlice';
 import { PlaylistData, TrackData } from '../../../typings/playlist';
-import { setQueue } from '../../../state/slices/playerSlice';
+import { selectQueue, setQueue, updateQueue } from '../../../state/slices/playerSlice';
 import useContextMenu from '../../hooks/useContextMenu';
 import ItemTypes from '../../../typings/dnd-types';
 import newGuid from '../../util';
@@ -45,6 +45,7 @@ const Playlist: FC = memo(function Playlist() {
 	const dispatch = useAppDispatch();
 
 	const playlists = useAppSelector(selectPlaylists);
+	const queue = useAppSelector(selectQueue);
 	const [playlist, setPlaylist] = useState(playlists.find((x) => x.id === id));
 	const [tracks, setTracks] = useState<TrackData[]>([]);
 
@@ -53,6 +54,7 @@ const Playlist: FC = memo(function Playlist() {
 	const [isDialogVisible, setDialogVisibility] = useState(false);
 
 	const [visibility, setVisibility, position, setPosition] = useContextMenu();
+	const [usingContextMenuId, setUsingContextMenuId] = useState('');
 
 	const lottieShowMenuRef = useRef<LottieRefCurrentProps>(null);
 	const lottieAddTracksRef = useRef<LottieRefCurrentProps>(null);
@@ -155,6 +157,47 @@ const Playlist: FC = memo(function Playlist() {
 
 	const [, drop] = useDrop(() => ({ accept: ItemTypes.TRACK }));
 
+	const handleTrackRemove = (id: string) => {
+		if (!playlist) return;
+
+		const updateData: PlaylistData = {
+			id: playlist.id,
+			name: playlist.name,
+			tracks: [...playlist.tracks],
+			pinned: playlist.pinned
+		};
+
+		const index = updateData.tracks.findIndex((x) => x.id === id);
+		updateData.tracks.splice(index, 1);
+
+		dispatch(updatePlaylist(updateData));
+		setTracks(updateData.tracks);
+	};
+
+	const handlePlayNext = (id: string) => {
+		if (!playlist) return;
+
+		const updateData: TrackData[] = [...queue];
+
+		const index = playlist.tracks.findIndex((x) => x.id === id);
+		const track = playlist.tracks[index];
+		updateData.splice(1, 0, track);
+
+		dispatch(updateQueue(updateData));
+	};
+
+	const handlePlayLast = (id: string) => {
+		if (!playlist) return;
+
+		const updateData: TrackData[] = [...queue];
+
+		const index = playlist.tracks.findIndex((x) => x.id === id);
+		const track = playlist.tracks[index];
+		updateData.push(track);
+
+		dispatch(updateQueue(updateData));
+	};
+
 	useEffect(() => {
 		const playlistFound = playlists.find((x) => x.id === id);
 		if (playlistFound) {
@@ -229,6 +272,7 @@ const Playlist: FC = memo(function Playlist() {
 										findTrack={findTrack}
 										onContextMenu={(e) => {
 											e.preventDefault();
+											setUsingContextMenuId(track.id);
 											setVisibility(true);
 											setPosition({
 												x: e.pageX,
@@ -242,14 +286,14 @@ const Playlist: FC = memo(function Playlist() {
 						</ul>
 					</div>
 				)}
+				{visibility && (
+					<ContextMenu y={position.y} x={position.x}>
+						<ContextMenuItem header="Play Next" staticIcon={addTopIcon} type="default" onClick={() => handlePlayNext(usingContextMenuId)} />
+						<ContextMenuItem header="Play Last" staticIcon={addBottomIcon} type="default" onClick={() => handlePlayLast(usingContextMenuId)} />
+						<ContextMenuItem header="Delete from Playlist" staticIcon={deleteIcon} type="danger" onClick={() => handleTrackRemove(usingContextMenuId)} />
+					</ContextMenu>
+				)}
 			</div>
-			{visibility && (
-				<ContextMenu y={position.y} x={position.x}>
-					<ContextMenuItem header="Play Next" staticIcon={addTopIcon} type="default" />
-					<ContextMenuItem header="Play Later" staticIcon={addBottomIcon} type="default" />
-					<ContextMenuItem header="Delete from Playlist" staticIcon={deleteIcon} type="danger" />
-				</ContextMenu>
-			)}
 		</div>
 	);
 });

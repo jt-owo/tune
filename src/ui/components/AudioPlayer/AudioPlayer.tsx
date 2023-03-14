@@ -75,6 +75,9 @@ const AudioPlayer: FC = () => {
 		// Spacebar for play/pause.
 		document.addEventListener('keydown', (e) => {
 			if (e.code === 'Space') {
+				// Don't trigger if the user is typing in a text field.
+				if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+
 				e.preventDefault();
 				handlePlayPause();
 			}

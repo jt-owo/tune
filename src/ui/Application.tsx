@@ -1,7 +1,5 @@
 import { FC } from 'react';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
 import { useAppDispatch } from './hooks';
 import { loadPlaylists } from '../state/slices/playlistSlice';
 import AppRoutes, { AppRoutesParams } from './routes';
@@ -31,14 +29,7 @@ const Application: FC = () => {
 					<Route path={AppRoutes.Home} element={<Home />} />
 					<Route path={AppRoutes.Library} element={<Library />} />
 					<Route path={AppRoutes.Browse} element={<Browse />} />
-					<Route
-						path={AppRoutesParams.PlaylistID}
-						element={
-							<DndProvider backend={HTML5Backend}>
-								<Playlist />
-							</DndProvider>
-						}
-					/>
+					<Route path={AppRoutesParams.PlaylistID} element={<Playlist />} />
 					<Route path={AppRoutes.Settings} element={<Settings />} />
 				</Routes>
 			</Router>

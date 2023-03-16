@@ -29,7 +29,7 @@ const VolumeSlider: FC<VolumeSliderProps> = (props) => {
 	const { audioRef } = props;
 	const volumeSliderProgressRef = useRef<HTMLDivElement>(null);
 	const lottieRef = useRef<LottieRefCurrentProps>(null);
-	const [volume, setVolume] = useState(window.api.config.get('volume') as number);
+	const [volume, setVolume] = useState(+window.api.config.get('volume'));
 
 	const updateVolumeSliderProgress = useCallback(() => {
 		if (volumeSliderProgressRef.current) {
@@ -38,7 +38,7 @@ const VolumeSlider: FC<VolumeSliderProps> = (props) => {
 	}, [volumeSliderProgressRef, volume]);
 
 	const setInitialVolumeSliderState = () => {
-		const initialVolume = window.api.config.get('volume') as number;
+		const initialVolume = +window.api.config.get('volume');
 
 		if (initialVolume <= 1) {
 			volumeSliderState = VOLUME_SLIDER_STATES.MUTE;

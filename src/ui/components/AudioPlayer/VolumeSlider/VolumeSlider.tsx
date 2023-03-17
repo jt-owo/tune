@@ -81,8 +81,8 @@ const VolumeSlider: FC<VolumeSliderProps> = (props) => {
 	}, [lottieRef, volume]);
 
 	const handleScroll = (e: WheelEvent<HTMLInputElement>) => {
-		if (e.deltaY < 0 && volume < 100) setVolume(volume + 1);
-		else if (e.deltaY > 0 && volume > 0) setVolume(volume - 1);
+		if (e.deltaY < 0 && volume < 100) setVolume((current) => current + 1);
+		else if (e.deltaY > 0 && volume > 0) setVolume((current) => current - 1);
 	};
 
 	const handleVolumeChange = (e: ChangeEvent<HTMLInputElement>) => {

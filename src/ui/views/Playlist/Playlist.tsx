@@ -60,7 +60,7 @@ const Playlist: FC = memo(function Playlist() {
 	const [isDialogVisible, setDialogVisibility] = useState(false);
 
 	const [visibility, setVisibility, position, setPosition] = useContextMenu();
-	const [usingContextMenuId, setUsingContextMenuId] = useState('');
+	const [usingContextMenuId, setUsingContextMenuId] = useState(-1);
 
 	const lottieShowMenuRef = useRef<LottieRefCurrentProps>(null);
 	const lottieAddTracksRef = useRef<LottieRefCurrentProps>(null);
@@ -146,7 +146,7 @@ const Playlist: FC = memo(function Playlist() {
 		e?.current?.play();
 	};
 
-	const handleTrackRemove = (id: string) => {
+	const handleTrackRemove = (id: number) => {
 		if (!playlist) return;
 
 		const updateData: PlaylistData = {
@@ -163,7 +163,7 @@ const Playlist: FC = memo(function Playlist() {
 		setTracks(updateData.tracks);
 	};
 
-	const handlePlayNext = (id: string) => {
+	const handlePlayNext = (id: number) => {
 		if (!playlist) return;
 
 		const updateData: TrackData[] = [...queue];
@@ -175,7 +175,7 @@ const Playlist: FC = memo(function Playlist() {
 		dispatch(updateQueue(updateData));
 	};
 
-	const handlePlayLast = (id: string) => {
+	const handlePlayLast = (id: number) => {
 		if (!playlist) return;
 
 		const updateData: TrackData[] = [...queue];
@@ -186,8 +186,8 @@ const Playlist: FC = memo(function Playlist() {
 
 		dispatch(updateQueue(updateData));
 	};
-  
-  const handleRename = (data: string) => {
+
+	const handleRename = (data: string) => {
 		if (playlist) dispatch(updatePlaylist({ ...playlist, name: data } as PlaylistData));
 	};
 

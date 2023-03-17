@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/media-has-caption */
-import { FC, SyntheticEvent, useEffect, useRef, useState } from 'react';
+import { FC, SyntheticEvent, useEffect, useRef, useState, useCallback } from 'react';
 import { play, playNext, playPrevious, selectCurrentTrack, selectIsPlaying, selectOutputDeviceId } from '../../../state/slices/playerSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { AudioMetadata, TrackData } from '../../../typings/playlist';
@@ -36,9 +36,9 @@ const AudioPlayer: FC = () => {
 		setMetadata(JSON.parse(metadataJSON) as AudioMetadata);
 	};
 
-	const handlePlayPause = () => {
+	const handlePlayPause = useCallback(() => {
 		dispatch(play());
-	};
+	}, [dispatch]);
 
 	const handlePlayNext = () => {
 		dispatch(playNext());
@@ -69,6 +69,25 @@ const AudioPlayer: FC = () => {
 			audioRef.current.pause();
 		}
 	}, [audioRef, isPlaying, currentTrack]);
+
+	// Adds keyboard shortcuts for play/pause. Maybe more in the future?
+	useEffect(() => {
+		// Spacebar for play/pause.
+		document.addEventListener('keydown', (e) => {
+			if (e.code === 'Space') {
+				// Don't trigger if the user is typing in a text field.
+				if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+
+				e.preventDefault();
+				handlePlayPause();
+			}
+		});
+
+		// Cleanup
+		return () => {
+			document.removeEventListener('keydown', () => {});
+		};
+	}, [handlePlayPause]);
 
 	useMediaSession({
 		title: metadata?.info?.title,

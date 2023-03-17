@@ -8,11 +8,13 @@ import deleteIcon from '../../../../../assets/ui-icons/trash-2.svg';
 
 interface QueueTrackProps {
 	track: TrackData;
+	index: number;
+	removeTrack: (id: number) => void;
 	setCurrentTrack?: (track: TrackData) => void;
 }
 
 const QueueTrack: FC<QueueTrackProps> = (props) => {
-	const { track, setCurrentTrack } = props;
+	const { track, setCurrentTrack, removeTrack, index } = props;
 
 	const [metadata, setMetadata] = useState<AudioMetadata>();
 
@@ -42,9 +44,9 @@ const QueueTrack: FC<QueueTrackProps> = (props) => {
 						<div className="info queue-track-artist">{metadata.info?.artist}</div>
 					</div>
 					<div className="queue-track-overlay" />
-					<div className="queue-track-remove">
+					<button className="queue-track-remove" type="button" onClick={() => removeTrack(index)}>
 						<img src={deleteIcon} alt="" />
-					</div>
+					</button>
 				</div>
 			)}
 		</>

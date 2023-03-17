@@ -46,7 +46,7 @@ export interface AudioPicture {
 export interface AudioFormat {
 	container?: string;
 	codec?: string;
-	losless: boolean;
+	lossless: boolean;
 	numOfChannels?: number;
 	sampleRate?: number;
 	bitrate?: number;

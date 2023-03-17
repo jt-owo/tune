@@ -18,7 +18,7 @@ const ContextMenuExample: FC = () => {
 
 	return (
 		<div>
-			<Dialog text="Do you really want to delete this playlist?" onClose={() => setDialogVisibility(false)} isOpen={isDialogVisible} />
+			<Dialog heading="Delete?" description="You are about to delete this playlist. This action cannot be undone!" onClose={() => setDialogVisibility(false)} isOpen={isDialogVisible} type="danger" confirmText="Delete" rejectText="Keep" />
 			{playlists.map((playlist) => (
 				<div
 					key={playlist.id}

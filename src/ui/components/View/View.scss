@@ -3,6 +3,7 @@
 
 #view {
 	background-color: $floating-component-color;
+	padding: 30px 40px;
 	position: absolute;
 	top: 40px;
 	bottom: 85px;
@@ -19,9 +20,8 @@
 	box-sizing: border-box;
 	font-size: 35px;
 	font-family: Quicksand-700;
-	font-weight: 800;
 	color: rgb(255, 255, 255);
-	padding: 2px 0 0 20px;
+	margin-bottom: 20px;
 }
 
 #divider {
@@ -31,9 +31,4 @@
 	position: absolute;
 	left: 15px;
 	right: 15px;
-}
-
-.view-content {
-	padding-top: 15px;
-	padding-left: 15px;
 }

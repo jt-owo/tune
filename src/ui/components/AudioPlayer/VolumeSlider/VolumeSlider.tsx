@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, RefObject, useCallback, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, FC, RefObject, useCallback, useEffect, useRef, useState, WheelEvent } from 'react';
 import Lottie, { LottieRefCurrentProps } from 'lottie-react';
 
 import './VolumeSlider.scss';
@@ -29,7 +29,7 @@ const VolumeSlider: FC<VolumeSliderProps> = (props) => {
 	const { audioRef } = props;
 	const volumeSliderProgressRef = useRef<HTMLDivElement>(null);
 	const lottieRef = useRef<LottieRefCurrentProps>(null);
-	const [volume, setVolume] = useState(window.api.config.get('volume') as number);
+	const [volume, setVolume] = useState(+window.api.config.get('volume'));
 
 	const updateVolumeSliderProgress = useCallback(() => {
 		if (volumeSliderProgressRef.current) {
@@ -38,7 +38,7 @@ const VolumeSlider: FC<VolumeSliderProps> = (props) => {
 	}, [volumeSliderProgressRef, volume]);
 
 	const setInitialVolumeSliderState = () => {
-		const initialVolume = window.api.config.get('volume') as number;
+		const initialVolume = +window.api.config.get('volume');
 
 		if (initialVolume <= 1) {
 			volumeSliderState = VOLUME_SLIDER_STATES.MUTE;
@@ -67,18 +67,23 @@ const VolumeSlider: FC<VolumeSliderProps> = (props) => {
 			} else if (volume > 1 && volume <= 35 && volumeSliderState >= VOLUME_SLIDER_STATES.MID_VOLUME) {
 				lottieRef.current.playSegments([LOTTIE_VOLUME_FRAMES.MID_VOLUME, LOTTIE_VOLUME_FRAMES.MIN_VOLUME + 1], true);
 				volumeSliderState = VOLUME_SLIDER_STATES.MIN_VOLUME;
-			} else if (volume > 35 && volume <= 70 && volumeSliderState <= VOLUME_SLIDER_STATES.MIN_VOLUME) {
+			} else if (volume > 35 && volume <= 65 && volumeSliderState <= VOLUME_SLIDER_STATES.MIN_VOLUME) {
 				lottieRef.current.playSegments([LOTTIE_VOLUME_FRAMES.MIN_VOLUME - 1, LOTTIE_VOLUME_FRAMES.MID_VOLUME], true);
 				volumeSliderState = VOLUME_SLIDER_STATES.MID_VOLUME;
-			} else if (volume > 35 && volume <= 70 && volumeSliderState === VOLUME_SLIDER_STATES.MAX_VOLUME) {
+			} else if (volume > 35 && volume <= 65 && volumeSliderState === VOLUME_SLIDER_STATES.MAX_VOLUME) {
 				lottieRef.current.playSegments([LOTTIE_VOLUME_FRAMES.MAX_VOLUME, LOTTIE_VOLUME_FRAMES.MID_VOLUME], true);
 				volumeSliderState = VOLUME_SLIDER_STATES.MID_VOLUME;
-			} else if (volume > 70 && volumeSliderState <= VOLUME_SLIDER_STATES.MID_VOLUME) {
+			} else if (volume > 65 && volumeSliderState <= VOLUME_SLIDER_STATES.MID_VOLUME) {
 				lottieRef.current.playSegments([LOTTIE_VOLUME_FRAMES.MID_VOLUME, LOTTIE_VOLUME_FRAMES.MAX_VOLUME], true);
 				volumeSliderState = VOLUME_SLIDER_STATES.MAX_VOLUME;
 			}
 		}
 	}, [lottieRef, volume]);
+
+	const handleScroll = (e: WheelEvent<HTMLInputElement>) => {
+		if (e.deltaY < 0 && volume < 100) setVolume((current) => current + 1);
+		else if (e.deltaY > 0 && volume > 0) setVolume((current) => current - 1);
+	};
 
 	const handleVolumeChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const newVolume = parseInt(e.target.value, 10);
@@ -108,7 +113,7 @@ const VolumeSlider: FC<VolumeSliderProps> = (props) => {
 		<div className="volume-slider-container">
 			<div id="volume-slider-progress" ref={volumeSliderProgressRef} />
 			<Lottie animationData={volumeIcon} loop={false} lottieRef={lottieRef} id="volume-slider-icon" />
-			<input type="range" min="0" max="100" value={volume} className="volume-slider" onChange={handleVolumeChange} />
+			<input type="range" min="0" max="100" value={volume} className="volume-slider" onChange={handleVolumeChange} onWheel={handleScroll} />
 			<div id="volume-slider-percentage">{volume}%</div>
 		</div>
 	);

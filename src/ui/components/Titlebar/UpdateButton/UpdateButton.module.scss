@@ -1,0 +1,28 @@
+@import '../../../styles/colors';
+
+.update-button {
+	/* Layout */
+	position: fixed;
+	display: flex;
+	width: 58px;
+	height: 25px;
+	margin: 7px 0 0 12px;
+	align-items: center;
+	justify-content: center;
+
+	/* Font */
+	font-family: Quicksand-600;
+	font-size: 14px;
+
+	/* Color */
+	background-image: linear-gradient(to bottom right, #87ebff, #d587ff);
+	background-color: #fff;
+	color: #000;
+
+	/* Animation */
+	transition: all ease-in-out 0.1s;
+
+	/* Misc */
+	border-radius: 32px;
+	-webkit-app-region: no-drag;
+}

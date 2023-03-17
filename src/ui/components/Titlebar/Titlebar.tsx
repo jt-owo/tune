@@ -7,6 +7,7 @@ import './Titlebar.scss';
 import maximizeIcon from '../../../../assets/ui-icons/titlebar-win/square-regular.svg';
 import minimizeIcon from '../../../../assets/ui-icons/titlebar-win/minus-solid.svg';
 import closeIcon from '../../../../assets/ui-icons/titlebar-win/x-solid.svg';
+import UpdateButton from './UpdateButton/UpdateButton';
 
 const Titlebar: FC = () => {
 	const minimize = () => {
@@ -23,6 +24,7 @@ const Titlebar: FC = () => {
 
 	return (
 		<nav id="titlebar">
+			<UpdateButton />
 			<div id="buttons">
 				<div id="minimize" role="button" onClick={minimize}>
 					<img src={minimizeIcon} alt="" />

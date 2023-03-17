@@ -5,11 +5,11 @@ import Portal from '../Portal/Portal';
 import './ToolTip.scss';
 
 // in ms
-const DELAY_UNTIL_FADE_IN_START = 150;
+const DELAY_UNTIL_FADE_IN_START = 500;
 
 interface ToolTipProps {
 	/**
-	 * Text the tooltip should displays.
+	 * Text the tooltip should display.
 	 */
 	text: string;
 	/**
@@ -44,7 +44,7 @@ const ToolTip: FC<ToolTipProps> = (props) => {
 	return (
 		<div className="tooltip-container" onMouseEnter={mouseEnter} onMouseLeave={mouseLeave}>
 			{children}
-			{active && (
+			{active && fadeIn && (
 				<Portal wrapperID="tooltip-wrapper">
 					<div style={{ left: mousePosition.x, top: mousePosition.y - (offsetY || 50) }} className={`tooltip-text ${fadeIn && 'fadeIn'}`}>
 						{text}

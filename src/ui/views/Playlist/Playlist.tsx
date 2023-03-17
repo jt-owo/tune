@@ -1,18 +1,17 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable @typescript-eslint/no-shadow */
-import { FC, memo, RefObject, useCallback, useEffect, useRef, useState } from 'react';
+import { FC, memo, RefObject, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core';
+import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import Lottie, { LottieRefCurrentProps } from 'lottie-react';
-import { useDrop } from 'react-dnd';
-import update from 'immutability-helper';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { removePlaylist, selectPlaylists, updatePlaylist } from '../../../state/slices/playlistSlice';
 import { PlaylistData, TrackData } from '../../../typings/playlist';
 import { selectQueue, setQueue, updateQueue } from '../../../state/slices/playerSlice';
 import useContextMenu from '../../hooks/useContextMenu';
-import ItemTypes from '../../../typings/dnd-types';
-import newGuid from '../../util';
 import AppRoutes from '../../routes';
 
 import PlaylistTrack from './PlaylistTrack/PlaylistTrack';
@@ -47,7 +46,14 @@ const Playlist: FC = memo(function Playlist() {
 	const playlists = useAppSelector(selectPlaylists);
 	const queue = useAppSelector(selectQueue);
 	const [playlist, setPlaylist] = useState(playlists.find((x) => x.id === id));
+
 	const [tracks, setTracks] = useState<TrackData[]>([]);
+	const sensors = useSensors(
+		useSensor(PointerSensor),
+		useSensor(KeyboardSensor, {
+			coordinateGetter: sortableKeyboardCoordinates
+		})
+	);
 
 	const [renameVisibility, setRenameVisibility] = useState(false);
 	const [hamburgerVisibility, setHamburgerVisibility] = useState(false);
@@ -63,6 +69,24 @@ const Playlist: FC = memo(function Playlist() {
 	if (!playlist) {
 		navigate(AppRoutes.Library);
 	}
+
+	const handleDragEnd = (event: DragEndEvent) => {
+		const { active, over } = event;
+
+		if (over && active.id !== over.id) {
+			setTracks((tracks) => {
+				const oldIndex = tracks.indexOf(tracks.find((x) => x.id === active.id)!);
+				const newIndex = tracks.indexOf(tracks.find((x) => x.id === over.id)!);
+				const newArray = arrayMove(tracks, oldIndex, newIndex);
+				const updateData: PlaylistData = {
+					...playlist!,
+					tracks: newArray
+				};
+				dispatch(updatePlaylist(updateData));
+				return newArray;
+			});
+		}
+	};
 
 	const deletePlaylist = (confirm: boolean) => {
 		if (!playlist?.id) return;
@@ -89,19 +113,16 @@ const Playlist: FC = memo(function Playlist() {
 
 		const paths = await window.api.system.selectFiles();
 
-		let index = 0;
+		let index = 1;
 		paths.forEach((path) => {
 			if (updateData.tracks.length > 0) {
-				const values = updateData.tracks.map((p) => p.sortIndex);
+				const values = updateData.tracks.map((p) => p.id);
 				index = Math.max(...values) + 1;
 			}
 
 			updateData.tracks.push({
-				filePath: path,
-				fileName: '',
-				fileExt: '',
-				id: newGuid(),
-				sortIndex: index
+				id: index,
+				filePath: path
 			});
 		});
 
@@ -119,43 +140,11 @@ const Playlist: FC = memo(function Playlist() {
 		e?.current?.setDirection(1);
 		e?.current?.play();
 	};
+
 	const stopAnimation = (e: RefObject<LottieRefCurrentProps>) => {
 		e?.current?.setDirection(-1);
 		e?.current?.play();
 	};
-
-	const findTrack = useCallback(
-		(id: string) => {
-			const card = tracks?.filter((c) => `${c.id}` === id)[0] as TrackData;
-			return {
-				card,
-				index: tracks?.indexOf(card)
-			};
-		},
-		[tracks]
-	);
-
-	const moveTrack = useCallback(
-		(id: string, atIndex: number) => {
-			const { card, index } = findTrack(id);
-			const updateData = update(tracks, {
-				$splice: [
-					[index, 1],
-					[atIndex, 0, card]
-				]
-			});
-			setTracks(updateData);
-			dispatch(
-				updatePlaylist({
-					...playlist,
-					tracks: updateData
-				} as PlaylistData)
-			);
-		},
-		[findTrack, tracks, dispatch, playlist]
-	);
-
-	const [, drop] = useDrop(() => ({ accept: ItemTypes.TRACK }));
 
 	const handleTrackRemove = (id: string) => {
 		if (!playlist) return;
@@ -197,6 +186,10 @@ const Playlist: FC = memo(function Playlist() {
 
 		dispatch(updateQueue(updateData));
 	};
+  
+  const handleRename = (data: string) => {
+		if (playlist) dispatch(updatePlaylist({ ...playlist, name: data } as PlaylistData));
+	};
 
 	useEffect(() => {
 		const playlistFound = playlists.find((x) => x.id === id);
@@ -216,10 +209,6 @@ const Playlist: FC = memo(function Playlist() {
 			}
 		}
 	}, [hamburgerVisibility]);
-
-	const handleRename = (data: string) => {
-		if (playlist) dispatch(updatePlaylist({ ...playlist, name: data } as PlaylistData));
-	};
 
 	return (
 		<div key={id} id="playlist-container">
@@ -260,16 +249,14 @@ const Playlist: FC = memo(function Playlist() {
 			<div id="divider" />
 			<div id="playlist-content">
 				{tracks.length > 0 && (
-					<div ref={drop}>
-						<ul>
+					<DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+						<SortableContext items={tracks} strategy={verticalListSortingStrategy}>
 							{tracks &&
 								tracks.map((track) => (
 									<PlaylistTrack
 										key={track.id}
-										id={`${track.id}`}
+										id={track.id}
 										track={track}
-										moveTrack={moveTrack}
-										findTrack={findTrack}
 										onContextMenu={(e) => {
 											e.preventDefault();
 											setUsingContextMenuId(track.id);
@@ -283,8 +270,8 @@ const Playlist: FC = memo(function Playlist() {
 										}}
 									/>
 								))}
-						</ul>
-					</div>
+						</SortableContext>
+					</DndContext>
 				)}
 				{visibility && (
 					<ContextMenu y={position.y} x={position.x}>

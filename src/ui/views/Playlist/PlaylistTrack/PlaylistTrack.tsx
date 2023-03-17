@@ -1,63 +1,31 @@
+/* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/jsx-no-useless-fragment */
-/* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable react/prop-types */
-import { FC, MouseEvent, memo, useEffect, useState } from 'react';
-import { useDrag, useDrop } from 'react-dnd';
+import { FC, memo, MouseEvent, useEffect, useState } from 'react';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import { AudioMetadata, TrackData } from '../../../../typings/playlist';
-import ItemTypes from '../../../../typings/dnd-types';
 
 import defaultAlbumCover from '../../../../../assets/images/tune_no_artwork.svg';
 
 interface PlaylistTrackProps {
-	id: string;
+	id: number;
 	track: TrackData;
 	setCurrentTrack?: (track: TrackData) => void;
-	moveTrack: (id: string, to: number) => void;
-	findTrack: (id: string) => { index: number };
 	onContextMenu: (event: MouseEvent<HTMLElement>) => void;
 }
 
-interface Item {
-	id: string;
-	originalIndex: number;
-}
-
 const PlaylistTrack: FC<PlaylistTrackProps> = memo((props) => {
-	const { id, track, moveTrack, findTrack, onContextMenu } = props;
-
-	const originalIndex = findTrack(id).index;
-	const [{ isDragging }, drag] = useDrag(
-		() => ({
-			type: ItemTypes.TRACK,
-			item: { id, originalIndex },
-			collect: (monitor) => ({
-				isDragging: monitor.isDragging()
-			}),
-			end: (item, monitor) => {
-				const { id: droppedId, originalIndex } = item;
-				const didDrop = monitor.didDrop();
-				if (!didDrop) {
-					moveTrack(droppedId, originalIndex);
-				}
-			}
-		}),
-		[id, originalIndex, moveTrack]
-	);
-
-	const [, drop] = useDrop(
-		() => ({
-			accept: ItemTypes.TRACK,
-			hover({ id: draggedId }: Item) {
-				if (draggedId !== id) {
-					const { index: overIndex } = findTrack(id);
-					moveTrack(draggedId, overIndex);
-				}
-			}
-		}),
-		[findTrack, moveTrack]
-	);
+	const { id, track, onContextMenu } = props;
 
 	const [metadata, setMetadata] = useState<AudioMetadata>();
+
+	const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id });
+
+	const style = {
+		transform: CSS.Transform.toString(transform),
+		transition
+	};
 
 	useEffect(() => {
 		const getMetadata = async () => {
@@ -89,18 +57,17 @@ const PlaylistTrack: FC<PlaylistTrackProps> = memo((props) => {
 		return NaN;
 	};
 
-	const opacity = isDragging ? 0 : 1;
 	return (
 		<>
 			{metadata && (
-				<li ref={(node) => drag(drop(node))} style={{ opacity }} className="song-item btn-hover-animation" onContextMenu={onContextMenu}>
+				<div ref={setNodeRef} style={style} className="song-item" onContextMenu={onContextMenu} {...listeners} {...attributes}>
 					<img src={getAlbumCover()} alt="" draggable={false} />
 					<div>
-						<div className="song-title">{metadata?.info?.title}</div>
-						<div className="song-artist">{metadata?.info?.artist}</div>
+						<div className="song-title">{metadata.info?.title}</div>
+						<div className="song-artist">{metadata.info?.artist}</div>
 					</div>
 					<div className="song-duration">{getDuration()}</div>
-				</li>
+				</div>
 			)}
 		</>
 	);

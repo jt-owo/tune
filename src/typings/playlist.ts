@@ -6,11 +6,8 @@ export interface PlaylistData {
 }
 
 export interface TrackData {
+	id: number;
 	filePath: string;
-	fileName: string;
-	fileExt: string;
-	id: string;
-	sortIndex: number;
 	metadata?: AudioMetadata;
 }
 

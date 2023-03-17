@@ -16,7 +16,7 @@
 }
 
 #playlist-container:hover {
-	overflow-y: auto;
+	overflow-y: hidden;
 }
 
 #playlist-heading {
@@ -27,7 +27,7 @@
 	padding: 2px 0 0 20px;
 }
 
-#playlist-heading > img {
+#playlist-heading>img {
 	height: 30px;
 	width: 30px;
 	margin-top: 5px;

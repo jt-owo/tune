@@ -9,7 +9,7 @@ export default class FileParser {
 	 */
 	private static parseMetadata(rawMetadata: mm.IAudioMetadata): AudioMetadata {
 		const metadata: AudioMetadata = {};
-		metadata.format = { losless: false };
+		metadata.format = { lossless: false };
 		metadata.info = { artist: '', title: '' };
 		metadata.info.track = {};
 
@@ -58,7 +58,7 @@ export default class FileParser {
 			codec: rawMetadata.format.codec,
 			numOfChannels: rawMetadata.format.numberOfChannels,
 			bitrate: rawMetadata.format.bitrate,
-			losless: rawMetadata.format.lossless ? rawMetadata.format.lossless : false
+			lossless: rawMetadata.format.lossless ? rawMetadata.format.lossless : false
 		};
 
 		return metadata;

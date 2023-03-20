@@ -4,8 +4,9 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 import { FC, memo, RefObject, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core';
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent, DragStartEvent, DragOverlay, UniqueIdentifier } from '@dnd-kit/core';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { restrictToWindowEdges } from '@dnd-kit/modifiers';
 import Lottie, { LottieRefCurrentProps } from 'lottie-react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { removePlaylist, selectPlaylists, updatePlaylist } from '../../../state/slices/playlistSlice';
@@ -30,6 +31,7 @@ import editIcon from '../../../../assets/ui-icons/edit-3.svg';
 import addTopIcon from '../../../../assets/ui-icons/add-top.svg';
 import addBottomIcon from '../../../../assets/ui-icons/add-bottom.svg';
 import imageIcon from '../../../../assets/ui-icons/image-regular.svg';
+import lockIcon from '../../../../assets/animations/lock.json';
 
 import './Playlist.scss';
 import RenameDialog from '../../components/RenameDialog/RenameDialog';
@@ -49,11 +51,17 @@ const Playlist: FC = memo(function Playlist() {
 
 	const [tracks, setTracks] = useState<TrackData[]>([]);
 	const sensors = useSensors(
-		useSensor(PointerSensor),
+		useSensor(PointerSensor, {
+			activationConstraint: {
+				distance: 10
+			}
+		}),
 		useSensor(KeyboardSensor, {
 			coordinateGetter: sortableKeyboardCoordinates
 		})
 	);
+	const [isDraggingId, setIsDraggingId] = useState<UniqueIdentifier>();
+	const [isSortingLocked, setIsSortingLocked] = useState(false);
 
 	const [renameVisibility, setRenameVisibility] = useState(false);
 	const [hamburgerVisibility, setHamburgerVisibility] = useState(false);
@@ -70,7 +78,14 @@ const Playlist: FC = memo(function Playlist() {
 		navigate(AppRoutes.Library);
 	}
 
+	const handleDragStart = (event: DragStartEvent) => {
+		const { active } = event;
+		setIsDraggingId(active.id);
+	};
+
 	const handleDragEnd = (event: DragEndEvent) => {
+		setIsDraggingId(undefined);
+		if (isSortingLocked) return;
 		const { active, over } = event;
 
 		if (over && active.id !== over.id) {
@@ -191,6 +206,10 @@ const Playlist: FC = memo(function Playlist() {
 		if (playlist) dispatch(updatePlaylist({ ...playlist, name: data } as PlaylistData));
 	};
 
+	const handleLockPlaylist = () => {
+		setIsSortingLocked(() => !isSortingLocked);
+	};
+
 	useEffect(() => {
 		const playlistFound = playlists.find((x) => x.id === id);
 		if (playlistFound) {
@@ -223,6 +242,7 @@ const Playlist: FC = memo(function Playlist() {
 					<HamburgerMenu onClose={() => setHamburgerVisibility(false)} visible={hamburgerVisibility} positionX={25} positionY={100}>
 						<HamburgerMenuItem title="Edit" icon={editIcon} />
 						<HamburgerMenuItem title="Choose image" icon={imageIcon} />
+						<HamburgerMenuItem title={isSortingLocked ? 'Unlock playlist' : 'Lock playlist'} lottieIcon={lockIcon} onClick={handleLockPlaylist} isActive={isSortingLocked} lottieActiveFrame={1} lottieInactiveFrame={9} useLottie />
 					</HamburgerMenu>
 					<ToolTip text="Play Playlist">
 						<div id="playlist-play-btn" className="playlist-heading-btn btn-hover-animation" onClick={playPlaylist}>
@@ -249,28 +269,33 @@ const Playlist: FC = memo(function Playlist() {
 			<div id="divider" />
 			<div id="playlist-content">
 				{tracks.length > 0 && (
-					<DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+					<DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
 						<SortableContext items={tracks} strategy={verticalListSortingStrategy}>
 							{tracks &&
-								tracks.map((track) => (
-									<PlaylistTrack
-										key={track.id}
-										id={track.id}
-										track={track}
-										onContextMenu={(e) => {
-											e.preventDefault();
-											setUsingContextMenuId(track.id);
-											setVisibility(true);
-											setPosition({
-												x: e.pageX,
-												y: e.pageY
-											});
-											// FIXME: not sure if e.pageX/Y returns the correct value.
-											// console.log('right click', e.pageX, e.pageY);
-										}}
-									/>
-								))}
+								tracks.map((track) =>
+									isDraggingId !== track.id ? (
+										<PlaylistTrack
+											key={track.id}
+											id={track.id}
+											track={track}
+											onContextMenu={(e) => {
+												e.preventDefault();
+												setUsingContextMenuId(track.id);
+												setVisibility(true);
+												setPosition({
+													x: e.pageX,
+													y: e.pageY
+												});
+												// FIXME: not sure if e.pageX/Y returns the correct value.
+												// console.log('right click', e.pageX, e.pageY);
+											}}
+										/>
+									) : (
+										<PlaylistTrack key={track.id} id={track.id} track={track} onContextMenu={() => {}} isDragging />
+									)
+								)}
 						</SortableContext>
+						<DragOverlay modifiers={[restrictToWindowEdges]}>{isDraggingId ? <PlaylistTrack id={tracks.findIndex((x) => x.id === isDraggingId)} track={tracks[tracks.findIndex((x) => x.id === isDraggingId)]} onContextMenu={() => {}} /> : null}</DragOverlay>
 					</DndContext>
 				)}
 				{visibility && (

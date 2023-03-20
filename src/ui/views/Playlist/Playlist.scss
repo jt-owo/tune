@@ -27,7 +27,7 @@
 	padding: 2px 0 0 20px;
 }
 
-#playlist-heading>img {
+#playlist-heading > img {
 	height: 30px;
 	width: 30px;
 	margin-top: 5px;
@@ -95,6 +95,21 @@
 #playlist-container #divider {
 	border-top: 2px solid rgb(43, 43, 43);
 	border-radius: 10px;
+}
+
+/* PLAYLIST ITEM */
+.song-item-container {
+	opacity: 1;
+	:hover {
+		background-color: $hover-color-dark;
+	}
+	:active {
+		background-color: $hover-color-medium;
+	}
+}
+
+.song-item-container.hide {
+	opacity: 0;
 }
 
 .song-item {

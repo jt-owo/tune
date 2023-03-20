@@ -11,12 +11,13 @@ import defaultAlbumCover from '../../../../../assets/images/tune_no_artwork.svg'
 interface PlaylistTrackProps {
 	id: number;
 	track: TrackData;
+	isDragging?: boolean;
 	setCurrentTrack?: (track: TrackData) => void;
 	onContextMenu: (event: MouseEvent<HTMLElement>) => void;
 }
 
 const PlaylistTrack: FC<PlaylistTrackProps> = memo((props) => {
-	const { id, track, onContextMenu } = props;
+	const { id, track, isDragging, onContextMenu } = props;
 
 	const [metadata, setMetadata] = useState<AudioMetadata>();
 
@@ -58,7 +59,7 @@ const PlaylistTrack: FC<PlaylistTrackProps> = memo((props) => {
 	};
 
 	return (
-		<>
+		<div className={`song-item-container ${isDragging ? 'hide' : ''}`}>
 			{metadata && (
 				<div ref={setNodeRef} style={style} className="song-item" onContextMenu={onContextMenu} {...listeners} {...attributes}>
 					<img src={getAlbumCover()} alt="" draggable={false} />
@@ -69,7 +70,7 @@ const PlaylistTrack: FC<PlaylistTrackProps> = memo((props) => {
 					<div className="song-duration">{getDuration()}</div>
 				</div>
 			)}
-		</>
+		</div>
 	);
 });
 

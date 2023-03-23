@@ -2,12 +2,12 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import { FC } from 'react';
 
-import './Titlebar.scss';
-
 import maximizeIcon from '../../../../assets/ui-icons/titlebar-win/square-regular.svg';
 import minimizeIcon from '../../../../assets/ui-icons/titlebar-win/minus-solid.svg';
 import closeIcon from '../../../../assets/ui-icons/titlebar-win/x-solid.svg';
 import UpdateButton from './UpdateButton/UpdateButton';
+
+import './Titlebar.scss';
 
 const Titlebar: FC = () => {
 	const minimize = () => {

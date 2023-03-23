@@ -33,11 +33,12 @@ import addBottomIcon from '../../../../assets/ui-icons/add-bottom.svg';
 import imageIcon from '../../../../assets/ui-icons/image-regular.svg';
 import lockIcon from '../../../../assets/animations/lock.json';
 
-import './Playlist.scss';
 import RenameDialog from '../../components/RenameDialog/RenameDialog';
 import Dialog from '../../components/Dialog/Dialog';
 import HamburgerMenu from '../../components/HamburgerMenu/HamburgerMenu';
 import HamburgerMenuItem from '../../components/HamburgerMenu/HamburgerMenuItem/HamburgerMenuItem';
+
+import './Playlist.scss';
 
 const Playlist: FC = memo(function Playlist() {
 	const { id } = useParams();
@@ -186,7 +187,6 @@ const Playlist: FC = memo(function Playlist() {
 		const index = playlist.tracks.findIndex((x) => x.id === id);
 		const track = playlist.tracks[index];
 		updateData.splice(1, 0, track);
-
 		dispatch(updateQueue(updateData));
 	};
 
@@ -198,7 +198,6 @@ const Playlist: FC = memo(function Playlist() {
 		const index = playlist.tracks.findIndex((x) => x.id === id);
 		const track = playlist.tracks[index];
 		updateData.push(track);
-
 		dispatch(updateQueue(updateData));
 	};
 

@@ -77,6 +77,22 @@
 	border-radius: 12px;
 }
 
+.queue-item-container {
+	opacity: 1;
+
+	:hover {
+		background-color: $hover-color-dark;
+	}
+
+	:active {
+		background-color: $hover-color-medium;
+	}
+}
+
+.queue-item-container.hide {
+	opacity: 0;
+}
+
 .queue-track img {
 	/* Layout */
 	height: 45px;
@@ -213,6 +229,7 @@
 	0% {
 		right: -10px;
 	}
+
 	100% {
 		right: 20px;
 	}

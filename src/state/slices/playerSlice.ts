@@ -33,7 +33,18 @@ export const playerSlice = createSlice({
 			state.isPlaying = true;
 		},
 		updateQueue: (state, action: PayloadAction<TrackData[]>) => {
-			state.queue = action.payload;
+			const fixedIds: TrackData[] = [];
+
+			let id = 1;
+			action.payload.forEach((track) => {
+				fixedIds.push({
+					...track,
+					id
+				});
+				id += 1;
+			});
+
+			state.queue = fixedIds;
 		},
 		setTrack: (state, action: PayloadAction<TrackData>) => {
 			state.currentTrack = action.payload;

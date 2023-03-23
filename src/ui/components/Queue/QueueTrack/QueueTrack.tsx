@@ -1,31 +1,40 @@
+/* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/jsx-no-useless-fragment */
 import { FC, useEffect, useState } from 'react';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import { AudioMetadata, TrackData } from '../../../../typings/playlist';
-
 import defaultAlbumCover from '../../../../../assets/images/tune_no_artwork.svg';
 import deleteIcon from '../../../../../assets/ui-icons/trash-2.svg';
 
 interface QueueTrackProps {
+	id: number;
 	track: TrackData;
 	index: number;
-	removeTrack: (id: number) => void;
-	setCurrentTrack?: (track: TrackData) => void;
+	isDragging?: boolean;
+	removeTrack?: (id: number) => void;
 }
 
 const QueueTrack: FC<QueueTrackProps> = (props) => {
-	const { track, setCurrentTrack, removeTrack, index } = props;
+	const { id, track, removeTrack, index, isDragging } = props;
 
 	const [metadata, setMetadata] = useState<AudioMetadata>();
 
-	const getMetadata = async () => {
-		const metadataJSON = await window.api.system.readMetadata(track.filePath);
-		setMetadata(JSON.parse(metadataJSON) as AudioMetadata);
+	const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id });
+
+	const style = {
+		transform: CSS.Transform.toString(transform),
+		transition
 	};
 
 	useEffect(() => {
+		const getMetadata = async () => {
+			const metadataJSON = await window.api.system.readMetadata(track.filePath);
+			setMetadata(JSON.parse(metadataJSON) as AudioMetadata);
+		};
 		getMetadata();
-	});
+	}, [track.filePath]);
 
 	const getAlbumCover = () => {
 		if (metadata?.info?.cover) {
@@ -37,16 +46,20 @@ const QueueTrack: FC<QueueTrackProps> = (props) => {
 	return (
 		<>
 			{metadata && (
-				<div className="queue-track">
+				<div ref={setNodeRef} style={style} className="queue-track" {...listeners} {...attributes}>
 					<img src={getAlbumCover()} alt="" />
 					<div className="queue-track-info">
 						<div className="info queue-track-title">{metadata.info?.title}</div>
 						<div className="info queue-track-artist">{metadata.info?.artist}</div>
 					</div>
-					<div className="queue-track-overlay" />
-					<button className="queue-track-remove" type="button" onClick={() => removeTrack(index)}>
-						<img src={deleteIcon} alt="" />
-					</button>
+					{removeTrack && (
+						<>
+							<div className="queue-track-overlay" />
+							<button className="queue-track-remove" type="button" onClick={() => removeTrack(index)}>
+								<img src={deleteIcon} alt="" />
+							</button>
+						</>
+					)}
 				</div>
 			)}
 		</>

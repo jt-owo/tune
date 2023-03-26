@@ -1,0 +1,65 @@
+@import '../../styles/colors';
+
+.player-container {
+	position: absolute;
+	bottom: 10px;
+	left: 10px;
+	right: 10px;
+	height: 65px;
+	background: rgb(0, 0, 0);
+	border-radius: 20px;
+	border-style: solid;
+	border-color: $border-color;
+	overflow: hidden;
+	display: block;
+}
+
+.player-controls-container {
+	display: flex;
+	flex-direction: row;
+	height: 100%;
+}
+
+.player-icon-service {
+	max-height: 20px;
+	margin: 18px 0 0 20px;
+	float: left;
+}
+
+.player-control-icon {
+	border-radius: 10px;
+	transition: ease-in-out 0.08s;
+	z-index: 3;
+}
+
+.player-control-icon:hover {
+	background-color: rgba($color: #ffffff, $alpha: 0.15);
+}
+
+.play-btn {
+	height: 38px;
+	position: absolute;
+	top: 12px;
+	right: 54px;
+}
+
+.skip-back-btn {
+	height: 38px;
+	position: absolute;
+	top: 12px;
+	right: 100px;
+	padding: 3px;
+}
+
+.skip-forward-btn {
+	height: 38px;
+	position: absolute;
+	top: 12px;
+	right: 10px;
+	padding: 3px;
+}
+
+.player-control-divider {
+	border-left: 1px solid rgba(255, 255, 255, 0.2);
+	margin: 7px 3px 7px 0px;
+}

@@ -1,13 +1,13 @@
 import { FC } from 'react';
 import View from '../../components/View/View';
 
-import './Browse.scss';
+import style from './Browse.module.scss';
 
 const Browse: FC = () => {
 	return (
 		<View title="Browse" id="browse">
-			<div className="content"> </div>
-			<input type="text" className="text-input-3" />
+			<div className={style.content}> </div>
+			<input type="text" className={style['text-input-3']} />
 		</View>
 	);
 };

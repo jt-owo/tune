@@ -7,7 +7,7 @@ import minimizeIcon from '../../../../assets/ui-icons/titlebar-win/minus-solid.s
 import closeIcon from '../../../../assets/ui-icons/titlebar-win/x-solid.svg';
 import UpdateButton from './UpdateButton/UpdateButton';
 
-import './Titlebar.scss';
+import style from './Titlebar.module.scss';
 
 const Titlebar: FC = () => {
 	const minimize = () => {
@@ -23,16 +23,16 @@ const Titlebar: FC = () => {
 	};
 
 	return (
-		<nav id="titlebar">
+		<nav className={style.titlebar}>
 			<UpdateButton />
-			<div id="buttons">
-				<div id="minimize" role="button" onClick={minimize}>
+			<div className={style.buttons}>
+				<div className={style.minimize} role="button" onClick={minimize}>
 					<img src={minimizeIcon} alt="" />
 				</div>
-				<div id="maximize" role="button" onClick={maximize}>
+				<div className={style.maximize} role="button" onClick={maximize}>
 					<img src={maximizeIcon} alt="" />
 				</div>
-				<div id="close" role="button" onClick={close}>
+				<div className={style.close} role="button" onClick={close}>
 					<img src={closeIcon} alt="" />
 				</div>
 			</div>

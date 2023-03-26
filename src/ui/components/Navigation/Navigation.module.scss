@@ -1,7 +1,7 @@
 @import '../../styles/colors';
 @import '../../styles/fonts';
 
-#nav-bar {
+.nav-bar {
 	position: absolute;
 	top: 40px;
 	bottom: 85px;
@@ -20,11 +20,11 @@
 	//box-shadow: 3px 3px 3px 3px rgb(4, 4, 4);
 }
 
-#nav-bar > :last-child {
+.nav-bar > :last-child {
 	margin-top: auto;
 }
 
-#nav-bar-logo {
+.nav-bar-logo {
 	max-width: 45%;
 	display: block;
 	margin: auto;
@@ -87,11 +87,11 @@
 	box-shadow: 0 0 5px #fff;
 }
 
-#settings-btn {
+.settings-btn {
 	margin-bottom: 10px;
 }
 
-#pinned-playlist-section {
+.pinned-playlist-section {
 	font-family: Quicksand-700;
 	float: left;
 	margin-left: 20px;
@@ -103,7 +103,7 @@
 	flex-direction: row;
 }
 
-#pinned-playlist-section h2 {
+.pinned-playlist-section h2 {
 	margin-top: 5px;
 	font-size: 14px;
 }

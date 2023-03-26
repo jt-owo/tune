@@ -8,7 +8,7 @@
 	margin: 0;
 }
 
-#queue-container {
+.queue-container {
 	/* Layout */
 	position: absolute;
 	display: flex;
@@ -34,7 +34,7 @@
 	border-radius: 20px;
 }
 
-#queue-title {
+.queue-title {
 	/* Layout */
 	margin: 10px 0 5px 0;
 	text-align: center;
@@ -47,7 +47,7 @@
 	transition: all ease-in-out 0.2s;
 }
 
-#queue {
+.queue {
 	/* Layout */
 	display: flex;
 	flex-direction: column;
@@ -182,15 +182,15 @@
 	margin-left: 10px;
 }
 
-#queue::-webkit-scrollbar-thumb {
+.queue::-webkit-scrollbar-thumb {
 	width: 5px;
 	background-color: rgb(0, 0, 0);
 }
 
-#queue-container:hover {
+.queue-container:hover {
 	width: 260px;
 
-	#queue-title {
+	.queue-title {
 		font-size: 16px;
 	}
 

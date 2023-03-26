@@ -1,7 +1,7 @@
 @import '../../styles/colors';
 @import '../../styles/fonts';
 
-#view {
+.view {
 	background-color: $floating-component-color;
 	padding: 30px 40px;
 	position: absolute;
@@ -16,7 +16,7 @@
 	overflow: hidden;
 }
 
-#view-heading {
+.view-heading {
 	box-sizing: border-box;
 	font-size: 35px;
 	font-family: Quicksand-700;
@@ -24,7 +24,7 @@
 	margin-bottom: 20px;
 }
 
-#divider {
+.divider {
 	border-top: 2px solid rgb(43, 43, 43);
 	border-radius: 10px;
 	margin-top: 5px;

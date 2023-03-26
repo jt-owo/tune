@@ -5,7 +5,7 @@ import { addAlert, AlertType } from '../../../state/slices/alertSlice';
 
 import View from '../../components/View/View';
 
-import './Library.scss';
+import style from './Library.module.scss';
 
 const Library: FC = () => {
 	const dispatch = useAppDispatch();
@@ -22,7 +22,7 @@ const Library: FC = () => {
 
 	return (
 		<View title="Library" id="library">
-			<div className="content">
+			<div className={style.content}>
 				<button type="button" onClick={() => testAlert('This is a info message', 'info')}>
 					Info Alert
 				</button>

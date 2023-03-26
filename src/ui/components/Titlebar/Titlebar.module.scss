@@ -1,6 +1,6 @@
 @import '../../styles/colors';
 
-#titlebar {
+.titlebar {
 	display: block;
 	display: flex;
 	width: 100%;
@@ -8,7 +8,7 @@
 	background-color: transparent;
 	-webkit-app-region: drag;
 
-	#title {
+	.title {
 		width: 30%;
 		height: 100%;
 		line-height: 30px;
@@ -20,7 +20,7 @@
 		padding: 0 0 0 1em;
 	}
 
-	#buttons {
+	.buttons {
 		margin-left: auto;
 		width: 150px;
 		height: 100%;
@@ -30,10 +30,10 @@
 	}
 }
 
-#buttons {
-	#minimize,
-	#maximize,
-	#close {
+.buttons {
+	.minimize,
+	.maximize,
+	.close {
 		float: left;
 		height: 100%;
 		width: 33%;
@@ -43,29 +43,29 @@
 		cursor: default;
 	}
 
-	#minimize:hover,
-	#maximize:hover {
+	.minimize:hover,
+	.maximize:hover {
 		background-color: $hover-color-medium;
 	}
 
-	#close:hover {
+	.close:hover {
 		background-color: #f04747;
 	}
 }
 
-#maximize img {
+.maximize img {
 	height: 12px;
 	margin-top: 10px;
 	filter: invert(1);
 }
 
-#minimize img {
+.minimize img {
 	height: 12px;
 	margin-top: 15px;
 	filter: invert(1);
 }
 
-#close img {
+.close img {
 	height: 12px;
 	margin-top: 10px;
 	filter: invert(1);

@@ -11,7 +11,7 @@ import { useAppSelector, useAppDispatch } from '../../hooks';
 
 import QueueTrack from './QueueTrack/QueueTrack';
 
-import './Queue.scss';
+import style from './Queue.module.scss';
 
 const Queue: FC = () => {
 	const queue = useAppSelector(selectQueue);
@@ -64,9 +64,9 @@ const Queue: FC = () => {
 	}, [queue]);
 
 	return (
-		<div id="queue-container">
-			<header id="queue-title">Up Next</header>
-			<div id="queue">
+		<div className={style['queue-container']}>
+			<header className={style['queue-title']}>Up Next</header>
+			<div className={style.queue}>
 				<DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
 					<SortableContext items={queue} strategy={verticalListSortingStrategy}>
 						{tracks && tracks.slice(queueIndex + 1, tracks.length).map((track, index) => (isDraggingId !== track.id ? <QueueTrack key={track.id} id={track.id} track={track} index={index} removeTrack={handleTrackRemove} /> : <QueueTrack key={track.id} id={track.id} track={track} index={index} isDragging />))}

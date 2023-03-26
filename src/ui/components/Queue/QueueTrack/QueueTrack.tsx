@@ -8,6 +8,8 @@ import { AudioMetadata, TrackData } from '../../../../typings/playlist';
 import defaultAlbumCover from '../../../../../assets/images/tune_no_artwork.svg';
 import deleteIcon from '../../../../../assets/ui-icons/trash-2.svg';
 
+import queueStyle from '../Queue.module.scss';
+
 interface QueueTrackProps {
 	id: number;
 	track: TrackData;
@@ -46,16 +48,16 @@ const QueueTrack: FC<QueueTrackProps> = (props) => {
 	return (
 		<>
 			{metadata && (
-				<div ref={setNodeRef} style={style} className="queue-track" {...listeners} {...attributes}>
+				<div ref={setNodeRef} style={style} className={queueStyle['queue-track']} {...listeners} {...attributes}>
 					<img src={getAlbumCover()} alt="" />
-					<div className="queue-track-info">
-						<div className="info queue-track-title">{metadata.info?.title}</div>
-						<div className="info queue-track-artist">{metadata.info?.artist}</div>
+					<div className={queueStyle['queue-track-info']}>
+						<div className={`${queueStyle.info} ${queueStyle['queue-track-title']}`}>{metadata.info?.title}</div>
+						<div className={`${queueStyle.info} ${queueStyle['queue-track-artist']}`}>{metadata.info?.artist}</div>
 					</div>
 					{removeTrack && (
 						<>
-							<div className="queue-track-overlay" />
-							<button className="queue-track-remove" type="button" onClick={() => removeTrack(index)}>
+							<div className={queueStyle['queue-track-overlay']} />
+							<button className={queueStyle['queue-track-remove']} type="button" onClick={() => removeTrack(index)}>
 								<img src={deleteIcon} alt="" />
 							</button>
 						</>

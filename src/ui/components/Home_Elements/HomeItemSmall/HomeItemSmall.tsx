@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import './HomeItemSmall.scss';
+import style from './HomeItemSmall.module.scss';
 
 interface HomeItemSmallProps {
 	title: string;
@@ -11,11 +11,11 @@ interface HomeItemSmallProps {
 const HomeItemSmall: FC<HomeItemSmallProps> = (props) => {
 	const { title, artist, image } = props;
 	return (
-		<div id="home-item-small-container">
-			<img src={image} alt="" draggable={false} id="home-item-small-img" />
-			<div id="home-item-small-info">
-				<div id="home-item-small-title">{title}</div>
-				<div id="home-item-small-artist">{artist}</div>
+		<div className={style['home-item-small-container']}>
+			<img src={image} alt="" draggable={false} className={style['home-item-small-img']} />
+			<div className={style['home-item-small-info']}>
+				<div className={style['home-item-small-title']}>{title}</div>
+				<div className={style['home-item-small-artist']}>{artist}</div>
 			</div>
 		</div>
 	);

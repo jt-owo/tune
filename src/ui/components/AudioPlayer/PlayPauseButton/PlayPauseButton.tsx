@@ -3,6 +3,9 @@
 import Lottie, { LottieRefCurrentProps } from 'lottie-react';
 import { FC, RefObject, useEffect, useRef } from 'react';
 
+import audioPlayerStyle from '../AudioPlayer.module.scss';
+import style from './PlayPauseButton.module.scss';
+
 interface PlayPauseButtonProps {
 	animationData: unknown;
 	isPlaying: boolean;
@@ -31,8 +34,8 @@ const PlayPauseButton: FC<PlayPauseButtonProps> = (props) => {
 	}, []);
 
 	return (
-		<div className="player-control-container" onClick={() => onClick(lottieRef)}>
-			<Lottie id="play-btn" className="player-control-icon" animationData={animationData} loop={false} lottieRef={lottieRef} autoplay={false} />
+		<div className={audioPlayerStyle['player-control-container']} onClick={() => onClick(lottieRef)}>
+			<Lottie className={`${audioPlayerStyle['player-control-icon']} ${audioPlayerStyle['play-btn']}`} animationData={animationData} loop={false} lottieRef={lottieRef} autoplay={false} />
 		</div>
 	);
 };

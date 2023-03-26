@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks';
 import { AlertData, removeAlert, selectAlerts } from '../../../state/slices/alertSlice';
 import AlertIcon from './AlertIcon/AlertIcon';
 
-import './Alert.scss';
+import style from './Alert.module.scss';
 
 interface AlertProps {
 	alert: AlertData;
@@ -42,12 +42,12 @@ const Alert: FC<AlertProps> = (props) => {
 	}, [handleRemove]);
 
 	return (
-		<div className={`${isFadingOut ? 'alert fade-out' : 'alert'} ${alert.type}`}>
-			<div className="type-icon">
+		<div className={`${isFadingOut ? style['fade-out'] : ''} ${style[`${alert.type}`]} ${style.alert}`}>
+			<div className={style['type-icon']}>
 				<AlertIcon type={alert.type} />
 			</div>
-			<div className="message">{alert.message}</div>
-			<div className="closebtn" role="button" tabIndex={0} onClick={() => fadeOut(handleRemove)}>
+			<div className={style.message}>{alert.message}</div>
+			<div className={style.closebtn} role="button" tabIndex={0} onClick={() => fadeOut(handleRemove)}>
 				X
 			</div>
 		</div>
@@ -57,7 +57,7 @@ const Alert: FC<AlertProps> = (props) => {
 export const AlertContainer: FC = () => {
 	const alerts = useAppSelector(selectAlerts);
 	const nextAlert = alerts && alerts[0];
-	return <div id="alerts-container">{nextAlert && <Alert alert={nextAlert} key={nextAlert.id} />}</div>;
+	return <div className={style['alerts-container']}>{nextAlert && <Alert alert={nextAlert} key={nextAlert.id} />}</div>;
 };
 
 export default AlertContainer;

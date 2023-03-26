@@ -2,7 +2,7 @@ import { FC, useState } from 'react';
 import useMousePosition from '../../hooks/useMousePosition';
 import Portal from '../Portal/Portal';
 
-import './ToolTip.scss';
+import style from './ToolTip.module.scss';
 
 // in ms
 const DELAY_UNTIL_FADE_IN_START = 500;
@@ -42,11 +42,11 @@ const ToolTip: FC<ToolTipProps> = (props) => {
 	};
 
 	return (
-		<div className="tooltip-container" onMouseEnter={mouseEnter} onMouseLeave={mouseLeave}>
+		<div className={style['tooltip-container']} onMouseEnter={mouseEnter} onMouseLeave={mouseLeave}>
 			{children}
 			{active && fadeIn && (
 				<Portal wrapperID="tooltip-wrapper">
-					<div style={{ left: mousePosition.x, top: mousePosition.y - (offsetY || 50) }} className={`tooltip-text ${fadeIn && 'fadeIn'}`}>
+					<div style={{ left: mousePosition.x, top: mousePosition.y - (offsetY || 50) }} className={`${style['tooltip-text']} ${fadeIn && style.fadeIn}`}>
 						{text}
 					</div>
 				</Portal>

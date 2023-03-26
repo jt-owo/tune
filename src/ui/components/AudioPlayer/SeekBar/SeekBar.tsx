@@ -1,5 +1,8 @@
 import { ChangeEvent, FC, RefObject, useEffect, useRef, useState } from 'react';
 
+import audioPlayerStyle from '../AudioPlayer.module.scss';
+import style from './SeekBar.module.scss';
+
 interface SeekBarProps {
 	audioRef: RefObject<HTMLAudioElement>;
 }
@@ -91,14 +94,14 @@ const SeekBar: FC<SeekBarProps> = (props) => {
 
 	return (
 		<>
-			<div id="duration-floater">
+			<div className={style['duration-floater']}>
 				{currentTime} / {totalDuration}
 			</div>
-			<div className="slider-container" onMouseEnter={handleProgressBarEnter} onMouseLeave={handleProgressBarLeave}>
-				<div id="progress-bar" ref={progressBarRef} />
-				<div className="current-time">{currentTime}</div>
-				<input type="range" min="0" max="100" className="seek-slider" value={seekPosition} onChange={handleSeekTo} />
-				<div className="total-duration">{totalDuration}</div>
+			<div className={audioPlayerStyle['slider-container']} onMouseEnter={handleProgressBarEnter} onMouseLeave={handleProgressBarLeave}>
+				<div className={style['progress-bar']} ref={progressBarRef} />
+				<div className={style['current-time']}>{currentTime}</div>
+				<input type="range" min="0" max="100" className={style['seek-slider']} value={seekPosition} onChange={handleSeekTo} />
+				<div className={style['total-duration']}>{totalDuration}</div>
 			</div>
 		</>
 	);

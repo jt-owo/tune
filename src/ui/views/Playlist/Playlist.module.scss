@@ -2,7 +2,7 @@
 @import '../../styles/animations';
 @import '../../styles/fonts';
 
-#playlist-container {
+.playlist-container {
 	background-color: $floating-component-color;
 	position: absolute;
 	top: 40px;
@@ -15,11 +15,11 @@
 	overflow-x: hidden;
 }
 
-#playlist-container:hover {
+.playlist-container:hover {
 	overflow-y: hidden;
 }
 
-#playlist-heading {
+.playlist-heading {
 	display: flex;
 	align-items: center;
 	box-sizing: border-box;
@@ -27,7 +27,7 @@
 	padding: 2px 0 0 20px;
 }
 
-#playlist-heading > img {
+.playlist-heading > img {
 	height: 30px;
 	width: 30px;
 	margin-top: 5px;
@@ -44,31 +44,31 @@
 	border-radius: 10px;
 }
 
-#playlist-play-btn #play-icon {
+.playlist-play-btn .play-icon {
 	width: 25px;
 	// padding: 0px 0 7px 4px;
 }
 
-#playlist-import-btn #import-icon {
+.playlist-import-btn .import-icon {
 	margin-top: 5px;
 	width: 29px;
 }
 
-#playlist-delete-btn #delete-icon {
+.playlist-delete-btn .delete-icon {
 	margin-top: 1px;
 	width: 27px;
 }
 
-#playlist-menu-btn #menu-icon {
+.playlist-menu-btn .menu-icon {
 	margin-top: 3px;
 	width: 36px;
 }
 
-#playlist-heading #playlist-delete-btn:hover {
+.playlist-heading .playlist-delete-btn:hover {
 	background-color: $danger-color;
 }
 
-#playlist-heading-text {
+.playlist-heading-text {
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -80,11 +80,11 @@
 	transition: all ease-in-out 0.08s;
 }
 
-#playlist-heading-text:hover {
+.playlist-heading-text:hover {
 	background-color: $hover-color-light;
 }
 
-#playlist-controls {
+.playlist-controls {
 	display: flex;
 	flex-direction: row;
 	padding-left: 10px;
@@ -92,8 +92,9 @@
 	margin-left: auto;
 }
 
-#playlist-container #divider {
-	border-top: 2px solid rgb(43, 43, 43);
+.playlist-container .divider {
+	margin: 0px 10px;
+	border-bottom: 1.5px solid rgb(43, 43, 43);
 	border-radius: 10px;
 }
 
@@ -143,7 +144,7 @@
 }
 
 /* CONTEXT MENU */
-#menu {
+.menu {
 	display: block;
 	background-color: white;
 	padding: 10px 0px;
@@ -159,7 +160,7 @@
 	transition: transform 0.2s, opacity 0.2s;
 }
 
-#menu.show {
+.menu.show {
 	opacity: 1;
 	transform: scale(1);
 	transform-origin: top right;
@@ -177,7 +178,7 @@
 	cursor: pointer;
 }
 
-#out-click {
+.out-click {
 	height: 100vh;
 	width: 100vw;
 	position: fixed;
@@ -187,16 +188,16 @@
 	display: none;
 }
 
-#out-click.show {
+.out-click.show {
 	display: block;
 }
 
-#playlist-content {
+.playlist-content {
 	position: relative;
 	top: 10px;
 }
 
-#playlist-menu {
+.playlist-menu {
 	position: absolute;
 	visibility: hidden;
 }

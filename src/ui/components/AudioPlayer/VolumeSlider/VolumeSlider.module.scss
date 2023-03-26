@@ -26,7 +26,7 @@
 	z-index: 1;
 }
 
-#volume-slider-progress {
+.volume-slider-progress {
 	position: relative;
 	right: 50%;
 	background-color: $light-gray-1;
@@ -36,14 +36,14 @@
 	transition: opacity ease-in-out 0.1s;
 }
 
-#volume-slider-icon {
+.volume-slider-icon {
 	position: absolute;
 	top: 0px;
 	left: 5px;
 	height: 25px;
 }
 
-#volume-slider-percentage {
+.volume-slider-percentage {
 	position: absolute;
 	top: 4px;
 	right: 7px;
@@ -54,13 +54,13 @@
 
 .volume-slider-container:hover,
 .volume-slider:hover {
-	#volume-slider-progress {
+	.volume-slider-progress {
 		opacity: 0.4;
 	}
 }
 
 .volume-slider-container:active {
-	#volume-slider-progress {
+	.volume-slider-progress {
 		opacity: 0.6;
 	}
 }

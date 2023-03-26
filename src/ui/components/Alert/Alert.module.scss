@@ -3,30 +3,42 @@
 @import '../../styles/fonts';
 
 .alert {
+	/* Layout */
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	color: $font-white;
 	position: absolute;
 	margin-left: auto;
 	margin-right: auto;
 	left: 0;
 	right: 0;
 	top: 50px;
-	text-align: center;
-	border-radius: 30px;
 	width: 450px;
 	height: 50px;
 	margin-top: 10px;
+	text-align: center;
+
+	/* Color */
+	color: $font-white;
+
+	/* Font */
 	font-family: Quicksand-700;
+
+	/* Animation */
 	animation: alertEnter 0.8s;
+
+	/* Misc */
+	border-radius: 30px;
 }
 
 .message {
+	/* Layout */
 	width: 350px;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
+
+	/* Animation */
 	animation: messageEnter 0.5s;
 }
 
@@ -51,20 +63,39 @@
 }
 
 .closebtn {
+	/* Layout */
 	padding: 5px 10px 5px 10px;
 	margin-right: 2px;
+
+	/* Color */
 	color: $font-white;
+
+	/* Font */
 	font-weight: bold;
 	line-height: 20px;
-	cursor: pointer;
+
+	/* Animation */
 	transition: 0.3s;
+
+	/* Misc */
+	cursor: pointer;
 	border-radius: 15px;
 }
 
 .type-icon {
+	/* Layout */
+	margin-top: 5px;
+
+	/* Color */
 	color: $font-white;
+
+	/* Font */
 	font-weight: bold;
+
+	/* Animation */
 	transition: 0.3s;
+
+	/* Misc */
 	user-select: none;
 }
 

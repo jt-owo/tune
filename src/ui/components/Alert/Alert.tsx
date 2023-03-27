@@ -42,7 +42,7 @@ const Alert: FC<AlertProps> = (props) => {
 	}, [handleRemove]);
 
 	return (
-		<div className={`${isFadingOut ? style['fade-out'] : ''} ${style[`${alert.type}`]} ${style.alert}`}>
+		<div className={`${isFadingOut ? style['fade-out'] : ''} ${style[alert.type]} ${style.alert}`}>
 			<div className={style['type-icon']}>
 				<AlertIcon type={alert.type} />
 			</div>

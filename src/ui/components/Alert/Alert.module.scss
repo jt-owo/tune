@@ -33,7 +33,7 @@
 
 .message {
 	/* Layout */
-	width: 350px;
+	width: 360px;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -65,7 +65,7 @@
 .closebtn {
 	/* Layout */
 	padding: 5px 10px 5px 10px;
-	margin-right: 2px;
+	margin-left: 5px;
 
 	/* Color */
 	color: $font-white;

@@ -6,6 +6,8 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { AudioMetadata, TrackData } from '../../../../typings/playlist';
 
+import playlistStyle from '../Playlist.module.scss';
+
 import defaultAlbumCover from '../../../../../assets/images/tune_no_artwork.svg';
 
 interface PlaylistTrackProps {
@@ -59,15 +61,15 @@ const PlaylistTrack: FC<PlaylistTrackProps> = memo((props) => {
 	};
 
 	return (
-		<div className={`song-item-container ${isDragging ? 'hide' : ''}`}>
+		<div className={`${playlistStyle['song-item-container']} ${isDragging ? playlistStyle.hide : ''}`}>
 			{metadata && (
-				<div ref={setNodeRef} style={style} className="song-item" onContextMenu={onContextMenu} {...listeners} {...attributes}>
+				<div ref={setNodeRef} style={style} className={playlistStyle['song-item']} onContextMenu={onContextMenu} {...listeners} {...attributes}>
 					<img src={getAlbumCover()} alt="" draggable={false} />
 					<div>
-						<div className="song-title">{metadata.info?.title}</div>
-						<div className="song-artist">{metadata.info?.artist}</div>
+						<div className={playlistStyle['song-title']}>{metadata.info?.title}</div>
+						<div className={playlistStyle['song-artist']}>{metadata.info?.artist}</div>
 					</div>
-					<div className="song-duration">{getDuration()}</div>
+					<div className={playlistStyle['song-duration']}>{getDuration()}</div>
 				</div>
 			)}
 		</div>

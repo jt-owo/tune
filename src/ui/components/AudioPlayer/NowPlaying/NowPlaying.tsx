@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { AudioMetadata } from '../../../../typings/playlist';
 import defaultAlbumCover from '../../../../../assets/images/tune_no_artwork.svg';
 
-import './NowPlaying.scss';
+import style from './NowPlaying.module.scss';
 
 interface NowPlayingProps {
 	metadata: AudioMetadata;
@@ -19,11 +19,11 @@ const NowPlaying: FC<NowPlayingProps> = (props) => {
 	};
 
 	return (
-		<div id="track">
-			<img src={getAlbumCover()} alt="" id="current-album-cover" />
-			<div id="track-info">
-				<div id="current-track">{metadata.info?.title}</div>
-				<div id="current-artist">{metadata.info?.artist}</div>
+		<div className={style.track}>
+			<img src={getAlbumCover()} alt="" className={style['current-album-cover']} />
+			<div className={style['track-info']}>
+				<div className={style['current-track']}>{metadata.info?.title}</div>
+				<div className={style['current-artist']}>{metadata.info?.artist}</div>
 			</div>
 		</div>
 	);

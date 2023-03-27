@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import { FC, KeyboardEvent, useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { addPlaylist, selectPlaylists } from '../../../state/slices/playlistSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { addAlert } from '../../../state/slices/alertSlice';
@@ -19,11 +19,13 @@ import settingsIcon from '../../../../assets/animations/settings.json';
 
 import defaultAlbumCover from '../../../../assets/images/tune_no_artwork.svg';
 
-import './Navigation.scss';
+import style from './Navigation.module.scss';
 
 const Navigation: FC = () => {
 	const [createNew, setCreateNew] = useState(false);
 	const [newPlaylistName, setNewPlaylistName] = useState('');
+
+	const location = useLocation();
 
 	const playlists = useAppSelector(selectPlaylists);
 	const pinnedPlaylists = playlists.filter((x) => x.pinned);
@@ -45,52 +47,52 @@ const Navigation: FC = () => {
 	};
 
 	return (
-		<nav id="nav-bar-container">
-			<ul id="nav-bar">
+		<nav className={style['nav-bar-container']}>
+			<ul className={style['nav-bar']}>
 				<li>
-					<img src={logo} alt="logo" id="nav-bar-logo" draggable="false" />
+					<img src={logo} alt="logo" className={style['nav-bar-logo']} draggable="false" />
 				</li>
 				<li>
-					<NavLink to={AppRoutes.Home} className="nav-btn btn-hover-animation" id="home-btn" draggable="false">
+					<NavLink to={AppRoutes.Home} className={`${style['nav-btn']} ${style['btn-hover-animation']} ${style['home-btn']} ${location.pathname === AppRoutes.Home ? style.active : ''}`} draggable="false">
 						<NavlistButton animation={homeIcon} doLoop={false} title="Home" />
 					</NavLink>
 				</li>
 				<li>
-					<NavLink to={AppRoutes.Browse} className="nav-btn btn-hover-animation" id="browse-btn" draggable="false">
+					<NavLink to={AppRoutes.Browse} className={`${style['nav-btn']} ${style['btn-hover-animation']} ${style['browse-btn']} ${location.pathname === AppRoutes.Browse ? style.active : ''}`} draggable="false">
 						<NavlistButton animation={browseIcon} doLoop={false} title="Browse" />
 					</NavLink>
 				</li>
 				<li>
-					<NavLink to={AppRoutes.Library} className="nav-btn btn-hover-animation" id="library-btn" draggable="false">
+					<NavLink to={AppRoutes.Library} className={`${style['nav-btn']} ${style['btn-hover-animation']} ${style['library-btn']} ${location.pathname === AppRoutes.Library ? style.active : ''}`} draggable="false">
 						<NavlistButton animation={libraryIcon} doLoop={false} title="Library" />
 					</NavLink>
 				</li>
-				<li id="pinned-playlist-section">
+				<li className={style['pinned-playlist-section']}>
 					<h2>PLAYLISTS</h2>
-					<div className="new-playlist-btn" onClick={() => setCreateNew(true)}>
+					<div className={style['new-playlist-btn']} onClick={() => setCreateNew(true)}>
 						<img src={iconPlus} alt="" />
 						New
 					</div>
 				</li>
 				<li>
-					<div className="spacer" />
+					<div className={style.spacer} />
 				</li>
 				<li>
-					{createNew && <input type="text" placeholder="Name..." className="new-playlist-name-field" autoFocus onBlur={() => setCreateNew(false)} onChange={(e) => setNewPlaylistName(e.target.value)} onKeyPress={handleKeyPress} />}
+					{createNew && <input type="text" placeholder="Name..." className={style['new-playlist-name-field']} autoFocus onBlur={() => setCreateNew(false)} onChange={(e) => setNewPlaylistName(e.target.value)} onKeyPress={handleKeyPress} />}
 					{pinnedPlaylists?.map((playlist) => {
 						return (
-							<NavLink to={`${AppRoutes.Playlist}/${playlist.id}`} title={playlist.name} key={playlist.id} className="playlist-btn btn-hover-animation" draggable="false">
-								<div className="playlist-navitem">
-									<img src={defaultAlbumCover} alt="" className="playlist-navitem-img" />
+							<NavLink to={`${AppRoutes.Playlist}/${playlist.id}`} title={playlist.name} key={playlist.id} className={`${style['playlist-btn']} ${style['btn-hover-animation']} ${location.pathname === `${AppRoutes.Playlist}/${playlist.id}` ? style.active : ''}`} draggable="false">
+								<div className={style['playlist-navitem']}>
+									<img src={defaultAlbumCover} alt="" className={style['playlist-navitem-img']} />
 
-									<div className="playlist-navitem-name">{playlist.name}</div>
+									<div className={style['playlist-navitem-name']}>{playlist.name}</div>
 								</div>
 							</NavLink>
 						);
 					})}
 				</li>
 				<li>
-					<NavLink to={AppRoutes.Settings} className="nav-btn btn-hover-animation" id="settings-btn" draggable="false">
+					<NavLink to={AppRoutes.Settings} className={`${style['nav-btn']} ${style['btn-hover-animation']} ${style['settings-btn']} ${location.pathname === AppRoutes.Settings ? style.active : ''}`} draggable="false">
 						<NavlistButton animation={settingsIcon} doLoop={false} title="Settings" />
 					</NavLink>
 				</li>

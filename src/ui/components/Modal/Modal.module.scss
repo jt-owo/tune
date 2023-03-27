@@ -27,28 +27,28 @@
 	border-radius: 40px;
 }
 
-#modal-heading {
+.modal-heading {
 	font-family: Quicksand-500;
 	font-size: 28px;
 }
 
-#modal-description {
+.modal-description {
 	font-family: Quicksand-500;
 	color: #bebebe;
 	font-size: 18px;
 	margin-top: 15px;
 }
 
-#modal-buttons-container {
+.modal-buttons-container {
 	margin-top: auto;
 }
 
-#modal-buttons-container .danger {
+.modal-buttons-container .danger {
 	background-color: #ff4444;
 	color: #ffffff;
 }
 
-#modal-buttons-container button {
+.modal-buttons-container button {
 	height: 45px;
 	min-width: 100px;
 	max-width: 50%;
@@ -62,11 +62,11 @@
 	transition: all ease-in-out 0.05s;
 }
 
-#modal-buttons-container .danger:hover {
+.modal-buttons-container .danger:hover {
 	background-color: #cd3636;
 }
 
-#modal-buttons-container button:hover {
+.modal-buttons-container button:hover {
 	background-color: #d2d2d2;
 }
 

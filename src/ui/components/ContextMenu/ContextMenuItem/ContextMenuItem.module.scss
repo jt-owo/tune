@@ -1,6 +1,6 @@
 @import '../../../styles/colors';
 
-#context-menu-item {
+.context-menu-item {
 	/* Layout */
 	display: flex;
 	align-items: center;
@@ -15,7 +15,7 @@
 	list-style: none;
 }
 
-#context-menu-item:hover {
+.context-menu-item:hover {
 	/* Color */
 	background-color: rgba($color: #ffffff, $alpha: 0.15);
 
@@ -23,7 +23,7 @@
 	transition: all ease-in-out 0.05s;
 }
 
-#context-menu-item-text {
+.context-menu-item-text {
 	/* Layout */
 	margin: 0 0 0 4px;
 
@@ -32,20 +32,20 @@
 	font-size: 14px;
 }
 
-#context-menu-item > img {
+.context-menu-item > img {
 	/* Layout */
 	height: 16px;
 	margin-right: 5px;
 }
 
-#context-menu-item > .lottie {
+.context-menu-item > .lottie {
 	/* Layout */
 	height: 20px;
 	margin: 0;
 	padding: 0;
 }
 
-#context-menu-item.danger:hover {
+.context-menu-item.danger:hover {
 	/* Color */
 	background-color: $danger-color;
 }

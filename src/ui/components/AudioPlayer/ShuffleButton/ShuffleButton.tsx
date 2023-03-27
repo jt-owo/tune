@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import { useState, useRef, FC } from 'react';
 
-import './ShuffleButton.scss';
+import style from './ShuffleButton.module.scss';
 
 import shuffleIcon from '../../../../../assets/ui-icons/shuffle.svg';
 
@@ -13,13 +13,13 @@ const ShuffleButton: FC = () => {
 
 	const handleShuffle = () => {
 		setIsShuffle(!isShuffle);
-		shuffleRef.current?.classList.toggle('active');
+		shuffleRef.current?.classList.toggle(style.active);
 	};
 
 	return (
-		<div id="shuffle-btn" ref={shuffleRef} onClick={handleShuffle}>
-			<img src={shuffleIcon} alt="" id="shuffle-btn-img" />
-			<div id="shuffle-btn-text">Shuffle</div>
+		<div className={style['shuffle-btn']} ref={shuffleRef} onClick={handleShuffle}>
+			<img src={shuffleIcon} alt="" className={style['shuffle-btn-img']} />
+			<div className={style['shuffle-btn-text']}>Shuffle</div>
 		</div>
 	);
 };

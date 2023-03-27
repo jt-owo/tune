@@ -3,7 +3,7 @@
 import { FC, useEffect } from 'react';
 import Portal from '../Portal/Portal';
 
-import './Modal.scss';
+import style from './Modal.module.scss';
 
 export interface ModalProps {
 	isOpen: boolean;
@@ -27,9 +27,9 @@ const Modal: FC<ModalProps> = (props) => {
 
 	return (
 		<Portal wrapperID="portal-modal-container">
-			<div className="modal">
+			<div className={style.modal}>
 				{/* <div onClick={onClose} className="close-btn">Close</div> */}
-				<div className={`${'modal-content'} ${isFading ? 'fading' : 'visible'}`}>{children}</div>
+				<div className={`${style['modal-content']} ${isFading ? style.fading : style.visible}`}>{children}</div>
 			</div>
 		</Portal>
 	);

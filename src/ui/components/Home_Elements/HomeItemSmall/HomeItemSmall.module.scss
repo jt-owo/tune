@@ -1,6 +1,6 @@
 @import '../../../styles/colors';
 
-#home-item-small-container {
+.home-item-small-container {
 	display: flex;
 	align-items: center;
 	width: 280px;
@@ -12,7 +12,7 @@
 	cursor: pointer;
 }
 
-#home-item-small-img {
+.home-item-small-img {
 	height: 60px;
 	width: 60px;
 	margin: 0 15px 0 0px;
@@ -21,11 +21,11 @@
 	transition: all ease-in-out 0.2s;
 }
 
-#home-item-small-info {
+.home-item-small-info {
 	transition: all ease-in-out 0.2s;
 }
 
-#home-item-small-title {
+.home-item-small-title {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	display: -webkit-box;
@@ -35,7 +35,7 @@
 	margin-bottom: 5px;
 }
 
-#home-item-small-artist {
+.home-item-small-artist {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	display: -webkit-box;
@@ -45,10 +45,10 @@
 	color: rgba($color: #ffffff, $alpha: 0.5);
 }
 
-#home-item-small-container:hover {
+.home-item-small-container:hover {
 	background-color: $hover-color-light;
 
-	#home-item-small-img {
+	.home-item-small-img {
 		transform: translateY(-2px);
 	}
 }

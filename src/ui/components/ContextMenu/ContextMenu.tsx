@@ -1,7 +1,7 @@
 import { FC, ReactElement } from 'react';
 import { Props } from './ContextMenuItem/ContextMenuItem';
 
-import './ContextMenu.scss';
+import style from './ContextMenu.module.scss';
 
 interface ContextMenuProps {
 	children?: ReactElement<Props>[];
@@ -12,7 +12,7 @@ interface ContextMenuProps {
 const ContextMenu: FC<ContextMenuProps> = (props) => {
 	const { children, x, y } = props;
 	return (
-		<div style={{ top: y, left: x }} id="context-menu">
+		<div style={{ top: y, left: x }} className={style['context-menu']}>
 			<ul>{children}</ul>
 		</div>
 	);

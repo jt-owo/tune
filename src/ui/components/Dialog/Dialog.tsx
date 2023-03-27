@@ -4,6 +4,8 @@
 import { FC, useState } from 'react';
 import Modal, { ModalProps } from '../Modal/Modal';
 
+import modalStyle from '../Modal/Modal.module.scss';
+
 interface DialogProps extends ModalProps {
 	type: 'default' | 'danger';
 	confirmCallback?: (confirm: boolean) => void;
@@ -38,10 +40,10 @@ const Dialog: FC<DialogProps> = (props) => {
 
 	return (
 		<Modal isOpen={isOpen} onClose={onClose} isFading={isFading}>
-			<span id="modal-heading">{heading}</span>
-			<span id="modal-description">{description}</span>
-			<div id="modal-buttons-container">
-				<button onClick={handleYesClick} className={type}>
+			<span className={modalStyle['modal-heading']}>{heading}</span>
+			<span className={modalStyle['modal-description']}>{description}</span>
+			<div className={modalStyle['modal-buttons-container']}>
+				<button onClick={handleYesClick} className={modalStyle[type]}>
 					{confirmText}
 				</button>
 				<button onClick={handleNoClick}>{rejectText}</button>

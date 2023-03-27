@@ -18,7 +18,7 @@ import playBtn from '../../../../assets/animations/playPause.json';
 import skipBackBtn from '../../../../assets/animations/skipBack.json';
 import skipForwardBtn from '../../../../assets/animations/skipForward.json';
 
-import './AudioPlayer.scss';
+import style from './AudioPlayer.module.scss';
 
 const AudioPlayer: FC = () => {
 	const audioRef = useRef<HTMLAudioElement & { setSinkId(deviceId: string): void; volume: number }>(null);
@@ -107,10 +107,10 @@ const AudioPlayer: FC = () => {
 	});
 
 	return (
-		<div id="player-container">
-			<div id="player-controls-container">
+		<div className={style['player-container']}>
+			<div className={style['player-controls-container']}>
 				<ServiceSelector />
-				<div id="player-control-divider" />
+				<div className={style['player-control-divider']} />
 				{metadata && <NowPlaying metadata={metadata} />}
 				<VolumeSlider audioRef={audioRef} />
 				<SeekBar audioRef={audioRef} />

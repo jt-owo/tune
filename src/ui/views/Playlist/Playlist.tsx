@@ -38,7 +38,7 @@ import Dialog from '../../components/Dialog/Dialog';
 import HamburgerMenu from '../../components/HamburgerMenu/HamburgerMenu';
 import HamburgerMenuItem from '../../components/HamburgerMenu/HamburgerMenuItem/HamburgerMenuItem';
 
-import './Playlist.scss';
+import style from './Playlist.module.scss';
 
 const Playlist: FC = memo(function Playlist() {
 	const { id } = useParams();
@@ -229,44 +229,44 @@ const Playlist: FC = memo(function Playlist() {
 	}, [hamburgerVisibility]);
 
 	return (
-		<div key={id} id="playlist-container">
+		<div key={id} className={style['playlist-container']}>
 			<Dialog heading="Delete?" description="You are about to delete this playlist. This action cannot be undone!" onClose={() => setDialogVisibility(false)} isOpen={isDialogVisible} type="danger" confirmText="Delete" rejectText="Keep" confirmCallback={deletePlaylist} />
-			<div id="playlist-heading">
+			<div className={style['playlist-heading']}>
 				<RenameDialog value={playlist?.name} nameCB={handleRename} visible={renameVisibility} onClose={() => setRenameVisibility(false)} />
 				<img src={defaultAlbumCover} alt="" />
-				<div id="playlist-heading-text" onClick={() => setRenameVisibility(true)}>
+				<div className={style['playlist-heading-text']} onClick={() => setRenameVisibility(true)}>
 					{playlist?.name}
 				</div>
-				<div id="playlist-controls">
+				<div className={style['playlist-controls']}>
 					<HamburgerMenu onClose={() => setHamburgerVisibility(false)} visible={hamburgerVisibility} positionX={25} positionY={100}>
 						<HamburgerMenuItem title="Edit" icon={editIcon} />
 						<HamburgerMenuItem title="Choose image" icon={imageIcon} />
 						<HamburgerMenuItem title={isSortingLocked ? 'Unlock playlist' : 'Lock playlist'} lottieIcon={lockIcon} onClick={handleLockPlaylist} isActive={isSortingLocked} lottieActiveFrame={1} lottieInactiveFrame={9} useLottie />
 					</HamburgerMenu>
 					<ToolTip text="Play Playlist">
-						<div id="playlist-play-btn" className="playlist-heading-btn btn-hover-animation" onClick={playPlaylist}>
-							<img id="play-icon" src={playIcon} alt="" draggable="false" />
+						<div className={`${style['playlist-heading-btn']} ${style['btn-hover-animation']} ${style['playlist-play-btn']}`} onClick={playPlaylist}>
+							<img className={style['play-icon']} src={playIcon} alt="" draggable="false" />
 						</div>
 					</ToolTip>
 					<ToolTip text="Import Tracks">
-						<div id="playlist-import-btn" className="playlist-heading-btn btn-hover-animation" onClick={handleAddTracks} onMouseEnter={() => startAnimation(lottieAddTracksRef)} onMouseLeave={() => stopAnimation(lottieAddTracksRef)}>
-							<Lottie id="import-icon" animationData={folderIcon} lottieRef={lottieAddTracksRef} loop={false} autoplay={false} />
+						<div className={`${style['playlist-heading-btn']} ${style['btn-hover-animation']} ${style['playlist-import-btn']}`} onClick={handleAddTracks} onMouseEnter={() => startAnimation(lottieAddTracksRef)} onMouseLeave={() => stopAnimation(lottieAddTracksRef)}>
+							<Lottie className={style['import-icon']} animationData={folderIcon} lottieRef={lottieAddTracksRef} loop={false} autoplay={false} />
 						</div>
 					</ToolTip>
 					<ToolTip text="Delete Playlist">
-						<div id="playlist-delete-btn" className="playlist-heading-btn btn-hover-animation" onClick={() => setDialogVisibility(true)} onMouseEnter={() => startAnimation(lottieDeletePlaylistRef)} onMouseLeave={() => stopAnimation(lottieDeletePlaylistRef)}>
-							<Lottie id="delete-icon" animationData={trashIcon} lottieRef={lottieDeletePlaylistRef} loop={false} autoplay={false} />
+						<div className={`${style['playlist-heading-btn']} ${style['btn-hover-animation']} ${style['playlist-delete-btn']}`} onClick={() => setDialogVisibility(true)} onMouseEnter={() => startAnimation(lottieDeletePlaylistRef)} onMouseLeave={() => stopAnimation(lottieDeletePlaylistRef)}>
+							<Lottie className={style['delete-icon']} animationData={trashIcon} lottieRef={lottieDeletePlaylistRef} loop={false} autoplay={false} />
 						</div>
 					</ToolTip>
 					<ToolTip text="Options">
-						<div id="playlist-menu-btn" className="playlist-heading-btn btn-hover-animation" onClick={() => setHamburgerVisibility(true)}>
-							<Lottie id="menu-icon" animationData={menuIcon} lottieRef={lottieShowMenuRef} loop={false} autoplay={false} />
+						<div className={`${style['playlist-heading-btn']} ${style['btn-hover-animation']} ${style['playlist-menu-btn']}`} onClick={() => setHamburgerVisibility(true)}>
+							<Lottie className={style['menu-icon']} animationData={menuIcon} lottieRef={lottieShowMenuRef} loop={false} autoplay={false} />
 						</div>
 					</ToolTip>
 				</div>
 			</div>
-			<div id="divider" />
-			<div id="playlist-content">
+			<div className={style.divider} />
+			<div className={style['playlist-content']}>
 				{tracks.length > 0 && (
 					<DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
 						<SortableContext items={tracks} strategy={verticalListSortingStrategy}>

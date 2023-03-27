@@ -1,7 +1,7 @@
 import { ChangeEvent, FC, RefObject, useCallback, useEffect, useRef, useState, WheelEvent } from 'react';
 import Lottie, { LottieRefCurrentProps } from 'lottie-react';
 
-import './VolumeSlider.scss';
+import style from './VolumeSlider.module.scss';
 
 import volumeIcon from '../../../../../assets/animations/volume.json';
 
@@ -110,11 +110,11 @@ const VolumeSlider: FC<VolumeSliderProps> = (props) => {
 	}, [updateVolumeSliderProgress, handleAnimation]);
 
 	return (
-		<div className="volume-slider-container">
-			<div id="volume-slider-progress" ref={volumeSliderProgressRef} />
-			<Lottie animationData={volumeIcon} loop={false} lottieRef={lottieRef} id="volume-slider-icon" />
-			<input type="range" min="0" max="100" value={volume} className="volume-slider" onChange={handleVolumeChange} onWheel={handleScroll} />
-			<div id="volume-slider-percentage">{volume}%</div>
+		<div className={style['volume-slider-container']}>
+			<div className={style['volume-slider-progress']} ref={volumeSliderProgressRef} />
+			<Lottie animationData={volumeIcon} loop={false} lottieRef={lottieRef} className={style['volume-slider-icon']} />
+			<input type="range" min="0" max="100" value={volume} className={style['volume-slider']} onChange={handleVolumeChange} onWheel={handleScroll} />
+			<div className={style['volume-slider-percentage']}>{volume}%</div>
 		</div>
 	);
 };

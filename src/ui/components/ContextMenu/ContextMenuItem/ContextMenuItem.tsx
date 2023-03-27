@@ -3,7 +3,7 @@
 import { FC } from 'react';
 import Lottie, { LottieComponentProps } from 'lottie-react';
 
-import './ContextMenuItem.scss';
+import style from './ContextMenuItem.module.scss';
 
 interface ContextMenuItemDefaultProps {
 	type: 'default' | 'danger';
@@ -28,18 +28,18 @@ const ContextMenuItem: FC<Props> = (props) => {
 
 	if (staticIcon && !lottieIcon) {
 		return (
-			<li onClick={onClick} id="context-menu-item" className={type}>
+			<li onClick={onClick} className={`${style['context-menu-item']} ${style[type]}`}>
 				<img src={staticIcon} alt="" />
-				<div id="context-menu-item-text">{header}</div>
+				<div className={style['context-menu-item-text']}>{header}</div>
 			</li>
 		);
 	}
 
 	if (lottieIcon && !staticIcon) {
 		return (
-			<li onClick={onClick} id="context-menu-item" className={type}>
-				<Lottie className="lottie" animationData={lottieIcon} loop={false} />
-				<div id="context-menu-item-text">{header}</div>
+			<li onClick={onClick} className={`${style['context-menu-item']} ${style[type]}`}>
+				<Lottie className={style.lottie} animationData={lottieIcon} loop={false} />
+				<div className={style['context-menu-item-text']}>{header}</div>
 			</li>
 		);
 	}

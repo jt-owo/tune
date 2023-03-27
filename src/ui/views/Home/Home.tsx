@@ -6,7 +6,7 @@ import TabItem from '../../components/TabControl/TabItem/TabItem';
 import HomeItemSmall from '../../components/Home_Elements/HomeItemSmall/HomeItemSmall';
 import HomeItemMedium from '../../components/Home_Elements/HomeItemMedium/HomeItemMedium';
 
-import './Home.scss';
+import style from './Home.module.scss';
 
 import image1 from '../../../../assets/images/tune_no_artwork.svg';
 

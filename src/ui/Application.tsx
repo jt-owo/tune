@@ -1,8 +1,10 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
+import { updateSpotifyToken } from '../state/slices/playerSlice';
 import { useAppDispatch } from './hooks';
 import { loadPlaylists } from '../state/slices/playlistSlice';
 import AppRoutes, { AppRoutesParams } from './routes';
+import SpotifyAPI from './util/spotifyAPI';
 import Titlebar from './components/Titlebar/Titlebar';
 import Home from './views/Home/Home';
 import Library from './views/Library/Library';
@@ -19,6 +21,12 @@ import './Application.scss';
 const Application: FC = () => {
 	const dispatch = useAppDispatch();
 	dispatch(loadPlaylists());
+
+	useEffect(() => {
+		const token = SpotifyAPI.getToken();
+
+		if (token) dispatch(updateSpotifyToken(token));
+	}, [dispatch]);
 
 	return (
 		<div id="app-container">

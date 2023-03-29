@@ -11,6 +11,7 @@ export interface PlayerState {
 	currentTrack?: TrackData;
 	outputDeviceId?: string;
 	isPlaying: boolean;
+	spotifyToken?: string;
 }
 
 const initialState: PlayerState = {
@@ -73,16 +74,20 @@ export const playerSlice = createSlice({
 				state.currentTrack = state.queue[state.queueIndex];
 				state.isPlaying = true;
 			}
+		},
+		updateSpotifyToken: (state, action: PayloadAction<string>) => {
+			state.spotifyToken = action.payload;
 		}
 	}
 });
 
-export const { setTrack, setQueue, updateQueue, setOutputDevice, play, playNext, playPrevious } = playerSlice.actions;
+export const { setTrack, setQueue, updateQueue, setOutputDevice, play, playNext, playPrevious, updateSpotifyToken } = playerSlice.actions;
 
 export const selectIsPlaying = (state: RootState) => state.player.isPlaying;
 export const selectQueue = (state: RootState) => state.player.queue;
 export const selectQueueIndex = (state: RootState) => state.player.queueIndex;
 export const selectCurrentTrack = (state: RootState) => state.player.currentTrack;
 export const selectOutputDeviceId = (state: RootState) => state.player.outputDeviceId;
+export const selectSpotifyToken = (state: RootState) => state.player.spotifyToken;
 
 export default playerSlice.reducer;

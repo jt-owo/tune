@@ -58,13 +58,13 @@ const VolumeSlider: FC<VolumeSliderProps> = (props) => {
 	const handleAnimation = useCallback(() => {
 		// Handle animation of lottie icon - sry for this mess
 		if (lottieRef.current) {
-			if (volume >= 0 && volume <= 1 && volumeSliderState >= VOLUME_SLIDER_STATES.MIN_VOLUME) {
+			if (volume >= 0 && volume < 1 && volumeSliderState >= VOLUME_SLIDER_STATES.MIN_VOLUME) {
 				lottieRef.current.playSegments([LOTTIE_VOLUME_FRAMES.MIN_VOLUME, LOTTIE_VOLUME_FRAMES.MUTE], true);
 				volumeSliderState = VOLUME_SLIDER_STATES.MUTE;
-			} else if (volume > 1 && volume <= 35 && volumeSliderState === VOLUME_SLIDER_STATES.MUTE) {
+			} else if (volume >= 1 && volume <= 35 && volumeSliderState === VOLUME_SLIDER_STATES.MUTE) {
 				lottieRef.current.playSegments([LOTTIE_VOLUME_FRAMES.MUTE, LOTTIE_VOLUME_FRAMES.MIN_VOLUME], true);
 				volumeSliderState = VOLUME_SLIDER_STATES.MIN_VOLUME;
-			} else if (volume > 1 && volume <= 35 && volumeSliderState >= VOLUME_SLIDER_STATES.MID_VOLUME) {
+			} else if (volume >= 1 && volume <= 35 && volumeSliderState >= VOLUME_SLIDER_STATES.MID_VOLUME) {
 				lottieRef.current.playSegments([LOTTIE_VOLUME_FRAMES.MID_VOLUME, LOTTIE_VOLUME_FRAMES.MIN_VOLUME + 1], true);
 				volumeSliderState = VOLUME_SLIDER_STATES.MIN_VOLUME;
 			} else if (volume > 35 && volume <= 65 && volumeSliderState <= VOLUME_SLIDER_STATES.MIN_VOLUME) {

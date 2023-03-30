@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, RefObject, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, FC, RefObject, useEffect, useRef, useState, useCallback } from 'react';
 
 import audioPlayerStyle from '../AudioPlayer.module.scss';
 import style from './SeekBar.module.scss';
@@ -11,6 +11,7 @@ const SeekBar: FC<SeekBarProps> = (props) => {
 	const { audioRef } = props;
 
 	const progressBarRef = useRef<HTMLDivElement>(null);
+	const durationHoverRef = useRef<HTMLDivElement>(null);
 
 	const [seekPosition, setSeekPosition] = useState(0);
 	const [currentTime, setCurrentTime] = useState('00:00');
@@ -24,11 +25,31 @@ const SeekBar: FC<SeekBarProps> = (props) => {
 		setSeekPosition(seekTo);
 	};
 
+	const handleDurationOnHover = (show: boolean) => {
+		if (durationHoverRef.current) {
+			durationHoverRef.current.style.visibility = show ? 'visible' : 'hidden';
+			durationHoverRef.current.style.opacity = show ? '1' : '0';
+		}
+	};
+
+	const updateDurationFloaterPosition = useCallback(() => {
+		if (durationHoverRef.current && audioRef.current) {
+			const width = window.innerWidth;
+			const left = (audioRef.current.currentTime / audioRef.current.duration) * width;
+			const floaterWidth = durationHoverRef.current.offsetWidth;
+
+			if (left < width - floaterWidth) {
+				durationHoverRef.current.style.left = `${left}px`;
+			}
+		}
+	}, [audioRef]);
+
 	// Called on mouseEnter of Progress Bar
 	const handleProgressBarEnter = () => {
 		if (progressBarRef.current) {
 			progressBarRef.current.style.opacity = '0.3';
 		}
+		handleDurationOnHover(true);
 	};
 
 	// Called on mouseLeave of Progress Bar
@@ -36,6 +57,7 @@ const SeekBar: FC<SeekBarProps> = (props) => {
 		if (progressBarRef.current) {
 			progressBarRef.current.style.opacity = '0.2';
 		}
+		handleDurationOnHover(false);
 	};
 
 	useEffect(() => {
@@ -92,9 +114,20 @@ const SeekBar: FC<SeekBarProps> = (props) => {
 		};
 	});
 
+	useEffect(() => {
+		if (durationHoverRef.current && audioRef.current) {
+			const width = window.innerWidth;
+			durationHoverRef.current.style.left = `${(audioRef.current.currentTime / audioRef.current.duration) * width}px`;
+			updateDurationFloaterPosition();
+		}
+	}, [audioRef, audioRef.current?.currentTime, updateDurationFloaterPosition]);
+
 	return (
 		<>
 			<div className={style['duration-floater']}>
+				{currentTime} / {totalDuration}
+			</div>
+			<div className={style['duration-hover-floater']} ref={durationHoverRef}>
 				{currentTime} / {totalDuration}
 			</div>
 			<div className={audioPlayerStyle['slider-container']} onMouseEnter={handleProgressBarEnter} onMouseLeave={handleProgressBarLeave}>

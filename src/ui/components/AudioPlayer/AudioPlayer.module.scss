@@ -63,3 +63,17 @@
 	border-left: 1px solid rgba(255, 255, 255, 0.2);
 	margin: 7px 3px 7px 0px;
 }
+
+.duration-floater {
+	position: fixed;
+	top: 5px;
+	left: 50%;
+	width: 150px;
+	transform: translateX(-50%);
+	text-align: center;
+	background-color: $dark-gray-3;
+	padding: 5px;
+	border-radius: 20px;
+	font-family: Quicksand-400;
+	z-index: 4;
+}

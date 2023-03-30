@@ -1,4 +1,5 @@
 @import '../../../styles/colors';
+@import '../../../styles/fonts';
 
 .progress-bar {
 	background-color: #e2e5ff;
@@ -47,4 +48,32 @@
 .total-duration {
 	padding: 10px;
 	display: none;
+}
+
+.duration-hover-floater {
+	/* Layout */
+	position: fixed;
+	bottom: 80px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	max-height: 40px;
+	min-width: 130px;
+	padding: 10px;
+	transform: translateX(-50%);
+
+	/* Font */
+	font-family: Quicksand-500;
+
+	/* Color */
+	background-color: $dark-gray-2;
+
+	/* Animation */
+	transition: opacity ease-in-out 0.1s;
+
+	/* Misc */
+	opacity: 0;
+	visibility: hidden;
+	border-radius: 10px;
+	z-index: 4;
 }

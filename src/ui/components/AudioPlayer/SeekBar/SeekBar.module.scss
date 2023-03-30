@@ -53,13 +53,12 @@
 .duration-hover-floater {
 	/* Layout */
 	position: fixed;
-	// left: 70px;
 	bottom: 80px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	max-height: 40px;
-	min-width: fit-content;
+	min-width: 130px;
 	padding: 10px;
 	transform: translateX(-50%);
 
@@ -68,6 +67,9 @@
 
 	/* Color */
 	background-color: $dark-gray-2;
+
+	/* Animation */
+	transition: opacity ease-in-out 0.1s;
 
 	/* Misc */
 	opacity: 0;

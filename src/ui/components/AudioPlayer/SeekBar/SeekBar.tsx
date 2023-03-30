@@ -21,7 +21,7 @@ const SeekBar: FC<SeekBarProps> = (props) => {
 		if (!audioRef.current || !audioRef.current.duration) return;
 
 		const seekTo = parseInt(e.target.value, 10);
-		audioRef.current.currentTime = audioRef.current.duration * (seekTo / 100);
+		audioRef.current.currentTime = audioRef.current.duration * (seekTo / 1000);
 		setSeekPosition(seekTo);
 	};
 
@@ -35,11 +35,16 @@ const SeekBar: FC<SeekBarProps> = (props) => {
 	const updateDurationFloaterPosition = useCallback(() => {
 		if (durationHoverRef.current && audioRef.current) {
 			const width = window.innerWidth;
-			const left = (audioRef.current.currentTime / audioRef.current.duration) * width;
+			const left = (audioRef.current.currentTime / audioRef.current.duration) * width * 0.98 + 10; // 0.98 + 10 is to keep the floater centered over the drag handle while moving
 			const floaterWidth = durationHoverRef.current.offsetWidth;
+			const clearance = 10; // min distance the floater should stay away from the window borders in pixels
 
-			if (left < width - floaterWidth) {
+			if (left < width - (floaterWidth / 2 + clearance) && left > floaterWidth / 2 + clearance) {
 				durationHoverRef.current.style.left = `${left}px`;
+			} else if (left < width - (floaterWidth / 2 + clearance)) {
+				durationHoverRef.current.style.left = `${floaterWidth / 2 + clearance}px`;
+			} else if (left > floaterWidth / 2 + clearance) {
+				durationHoverRef.current.style.left = `${width - (floaterWidth / 2 + clearance)}px`;
 			}
 		}
 	}, [audioRef]);
@@ -68,7 +73,7 @@ const SeekBar: FC<SeekBarProps> = (props) => {
 			let seekPositionLocal = 0;
 
 			if (audioRef.current.duration) {
-				seekPositionLocal = audioRef.current.currentTime * (100 / audioRef.current.duration);
+				seekPositionLocal = audioRef.current.currentTime * (1000 / audioRef.current.duration);
 				setSeekPosition(seekPositionLocal);
 
 				// Calculate the time left and the total duration
@@ -107,7 +112,7 @@ const SeekBar: FC<SeekBarProps> = (props) => {
 		updateProgressDiv();
 
 		if (interval) clearTimeout(interval);
-		interval = setInterval(seekUpdate, 1000);
+		interval = setInterval(seekUpdate, 500);
 
 		return () => {
 			if (interval) clearInterval(interval);
@@ -115,12 +120,8 @@ const SeekBar: FC<SeekBarProps> = (props) => {
 	});
 
 	useEffect(() => {
-		if (durationHoverRef.current && audioRef.current) {
-			const width = window.innerWidth;
-			durationHoverRef.current.style.left = `${(audioRef.current.currentTime / audioRef.current.duration) * width}px`;
-			updateDurationFloaterPosition();
-		}
-	}, [audioRef, audioRef.current?.currentTime, updateDurationFloaterPosition]);
+		updateDurationFloaterPosition();
+	}, [audioRef.current?.currentTime, updateDurationFloaterPosition]);
 
 	return (
 		<>
@@ -133,7 +134,7 @@ const SeekBar: FC<SeekBarProps> = (props) => {
 			<div className={audioPlayerStyle['slider-container']} onMouseEnter={handleProgressBarEnter} onMouseLeave={handleProgressBarLeave}>
 				<div className={style['progress-bar']} ref={progressBarRef} />
 				<div className={style['current-time']}>{currentTime}</div>
-				<input type="range" min="0" max="100" className={style['seek-slider']} value={seekPosition} onChange={handleSeekTo} />
+				<input type="range" min="0" max="1000" className={style['seek-slider']} value={seekPosition} onChange={handleSeekTo} />
 				<div className={style['total-duration']}>{totalDuration}</div>
 			</div>
 		</>

@@ -1,5 +1,5 @@
-import { ArtistItem, AlbumItem, TrackItem, SearchResult } from '../../typings/spotifyAPI';
-import { IArtist, IAlbum, ITrack } from '../../typings/types';
+import { ArtistItem, AlbumItem, TrackItem, SearchResult, UserProfileResult } from '../../typings/spotifyAPI';
+import { IArtist, IAlbum, ITrack, IUser } from '../../typings/types';
 
 class SpotifyParser {
 	static parseArtists(artists: ArtistItem[]): IArtist[] {
@@ -31,15 +31,24 @@ class SpotifyParser {
 			name: track.name,
 			album: SpotifyParser.parseAlbum(track.album),
 			artists: SpotifyParser.parseArtists(track.artists),
-			duration: track.duration_ms
+			duration: track.duration_ms,
+			isLocal: false
+		};
+	}
+
+	static parseUser(user: UserProfileResult): IUser {
+		return {
+			name: user.display_name,
+			email: user.email,
+			avatar: user.images[0]
 		};
 	}
 
 	static parseSearch(data: SearchResult) {
-		const albums: IAlbum[] = [];
+		let albums: IAlbum[] = [];
 		if (data.albums) {
-			data.albums.items.forEach((album: AlbumItem) => {
-				albums.push(SpotifyParser.parseAlbum(album));
+			albums = data.albums.items.map((album: AlbumItem) => {
+				return SpotifyParser.parseAlbum(album);
 			});
 		}
 
@@ -48,10 +57,10 @@ class SpotifyParser {
 			artists = SpotifyParser.parseArtists(data.artists.items);
 		}
 
-		const tracks: ITrack[] = [];
+		let tracks: ITrack[] = [];
 		if (data.tracks) {
-			data.tracks.items.forEach((track: TrackItem) => {
-				tracks.push(SpotifyParser.parseTrack(track));
+			tracks = data.tracks.items.map((track: TrackItem) => {
+				return SpotifyParser.parseTrack(track);
 			});
 		}
 

@@ -2,8 +2,10 @@ import { FC, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { selectSpotifyToken } from '../../../state/slices/playerSlice';
 import { addAlert } from '../../../state/slices/alertSlice';
+import { IAlbum, IArtist, ITrack } from '../../../typings/types';
 import SpotifyAPI from '../../util/spotifyAPI';
 import newGuid from '../../util';
+
 import View from '../../components/View/View';
 
 import style from './Browse.module.scss';
@@ -14,6 +16,12 @@ const Browse: FC = () => {
 	const dispatch = useAppDispatch();
 
 	const [query, setQuery] = useState('');
+
+	const [foundItems, setFoundItems] = useState<{
+		albums: IAlbum[];
+		tracks: ITrack[];
+		artists: IArtist[];
+	}>();
 
 	const handleSearch = async (event: React.KeyboardEvent) => {
 		if (query !== '' && event.key === 'Enter') {
@@ -29,7 +37,7 @@ const Browse: FC = () => {
 			}
 
 			const { albums, artists, tracks } = await SpotifyAPI.search(spotifyToken, query);
-			console.log({ albums, artists, tracks });
+			setFoundItems({ albums, tracks, artists });
 		}
 	};
 

@@ -17,6 +17,11 @@ interface Followers {
 	total: number;
 }
 
+interface ExplicitContent {
+	filter_enabled: boolean;
+	filter_locked: boolean;
+}
+
 type AlbumType = 'single' | 'album';
 
 type ReleaseDatePrecision = 'day' | 'year';
@@ -142,4 +147,34 @@ export interface UserTopArtistsResult {
 	href: string;
 	next: null;
 	previous: null;
+}
+
+export interface SavedTracksResult {
+	href: string;
+	limit: number;
+	next: string;
+	offset: number;
+	previous: string;
+	total: number;
+	items: SavedTracksResultItem[];
+}
+
+export interface SavedTracksResultItem {
+	addedAt: string;
+	track: TrackItem;
+}
+
+export interface UserProfileResult {
+	country: string;
+	display_name: string;
+	email: string;
+	explicit_content: ExplicitContent;
+	external_urls: ExternalUrls;
+	followers: Followers;
+	href: string;
+	id: string;
+	images: Image[];
+	product: string;
+	type: string;
+	uri: string;
 }

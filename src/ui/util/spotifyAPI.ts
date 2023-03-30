@@ -1,5 +1,5 @@
 /* eslint-disable compat/compat */
-import { SavedAlbumsResult, SearchResult, TrackItem, UserTopArtistsResult, UserTopTracksResult } from '../../typings/spotifyAPI';
+import { SavedAlbumsResult, SavedTracksResult, SearchResult, TrackItem, UserProfileResult, UserTopArtistsResult, UserTopTracksResult } from '../../typings/spotifyAPI';
 import { IAlbum, ITrack } from '../../typings/types';
 import SpotifyParser from './spotifyParser';
 
@@ -52,9 +52,21 @@ class SpotifyAPI {
 	}
 
 	/**
+	 * Fetches profile information of the user.
+	 * https://developer.spotify.com/documentation/web-api/reference/get-current-users-profile
+	 * @param token Access Token.
+	 * @returns A user.
+	 */
+	static async fetchUserProfile(token: string) {
+		const result = await this.callAPI(token, 'https://api.spotify.com/v1/me');
+		const data: UserProfileResult = await result.json();
+		return SpotifyParser.parseUser(data);
+	}
+
+	/**
 	 * Fetches a list of albums saved in the user's library.
 	 * https://developer.spotify.com/documentation/web-api/reference/get-users-saved-albums
-	 * @param token Acess Token.
+	 * @param token Access Token.
 	 * @param limit The maximum number of items to return. Range: 0 - 50
 	 * @param offset The index of the first item to return. Default: 0
 	 * @returns A list of albums.
@@ -73,6 +85,30 @@ class SpotifyAPI {
 		});
 
 		return savedAlbums;
+	}
+
+	/**
+	 * Fetches a list of tracks saved in the user's library.
+	 * https://developer.spotify.com/documentation/web-api/reference/get-users-saved-tracks
+	 * @param token Access Token.
+	 * @param limit The maximum number of items to return. Range: 0 - 50
+	 * @param offset The index of the first item to return. Default: 0
+	 * @returns A list of tracks.
+	 */
+	static async fetchSavedTracks(token: string, limit = 20, offset = 0) {
+		const params = new URLSearchParams();
+		params.append('limit', limit.toString());
+		if (offset && offset > 0) params.append('offset', offset.toString());
+
+		const result = await this.callAPI(token, 'https://api.spotify.com/v1/me/tracks', params);
+		const data: SavedTracksResult = await result.json();
+
+		const savedTracks: ITrack[] = [];
+		data.items.forEach((item) => {
+			savedTracks.push(SpotifyParser.parseTrack(item.track));
+		});
+
+		return savedTracks;
 	}
 
 	/**

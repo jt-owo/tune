@@ -4,6 +4,12 @@ interface CoverImage {
 	url: string;
 }
 
+export interface IUser {
+	name: string;
+	email: string;
+	avatar: CoverImage;
+}
+
 export interface PlaylistData {
 	id: string;
 	name: string;

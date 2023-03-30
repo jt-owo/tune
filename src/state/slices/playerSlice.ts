@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ITrack } from '../../typings/types';
+import { ITrack, IUser } from '../../typings/types';
 import type { RootState } from '../store';
 
 export interface PlayerState {
@@ -11,6 +11,7 @@ export interface PlayerState {
 	outputDeviceId?: string;
 	isPlaying: boolean;
 	spotifyToken?: string;
+	user?: IUser; // FIXME: Move to seperate reducer.
 }
 
 const initialState: PlayerState = {
@@ -76,11 +77,14 @@ export const playerSlice = createSlice({
 		},
 		updateSpotifyToken: (state, action: PayloadAction<string>) => {
 			state.spotifyToken = action.payload;
+		},
+		updateUser: (state, action: PayloadAction<IUser>) => {
+			state.user = action.payload;
 		}
 	}
 });
 
-export const { setTrack, setQueue, updateQueue, setOutputDevice, play, playNext, playPrevious, updateSpotifyToken } = playerSlice.actions;
+export const { setTrack, setQueue, updateQueue, setOutputDevice, play, playNext, playPrevious, updateSpotifyToken, updateUser } = playerSlice.actions;
 
 export const selectIsPlaying = (state: RootState) => state.player.isPlaying;
 export const selectQueue = (state: RootState) => state.player.queue;
@@ -88,5 +92,6 @@ export const selectQueueIndex = (state: RootState) => state.player.queueIndex;
 export const selectCurrentTrack = (state: RootState) => state.player.currentTrack;
 export const selectOutputDeviceId = (state: RootState) => state.player.outputDeviceId;
 export const selectSpotifyToken = (state: RootState) => state.player.spotifyToken;
+export const selectUser = (state: RootState) => state.player.user;
 
 export default playerSlice.reducer;

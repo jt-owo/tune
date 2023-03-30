@@ -2,7 +2,8 @@
 import { FC, SyntheticEvent, useEffect, useRef, useState, useCallback } from 'react';
 import { play, playNext, playPrevious, selectCurrentTrack, selectIsPlaying, selectOutputDeviceId } from '../../../state/slices/playerSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { AudioMetadata, TrackData } from '../../../typings/playlist';
+import { AudioMetadata } from '../../../typings/playlist';
+import { ITrack } from '../../../typings/spotifyTypes';
 
 import AudioControlButton from './AudioControlButton/AudioControlButton';
 import PlayPauseButton from './PlayPauseButton/PlayPauseButton';
@@ -31,8 +32,8 @@ const AudioPlayer: FC = () => {
 
 	const dispatch = useAppDispatch();
 
-	const getMetadata = async (track: TrackData) => {
-		const metadataJSON = await window.api.system.readMetadata(track.filePath);
+	const getMetadata = async (track: ITrack) => {
+		const metadataJSON = await window.api.system.readMetadata(track.name);
 		setMetadata(JSON.parse(metadataJSON) as AudioMetadata);
 	};
 
@@ -64,7 +65,7 @@ const AudioPlayer: FC = () => {
 
 		if (isPlaying) {
 			audioRef.current.play().catch(() => {});
-			if (currentTrack) getMetadata(currentTrack);
+			if (currentTrack && currentTrack.isLocal) getMetadata(currentTrack);
 		} else {
 			audioRef.current.pause();
 		}
@@ -120,7 +121,7 @@ const AudioPlayer: FC = () => {
 				<ShuffleButton />
 				<RepeatButton />
 			</div>
-			<audio src={currentTrack?.filePath} ref={audioRef} onEnded={onEnded} crossOrigin="anonymous" />
+			<audio src={currentTrack?.name} ref={audioRef} onEnded={onEnded} crossOrigin="anonymous" />
 		</div>
 	);
 };

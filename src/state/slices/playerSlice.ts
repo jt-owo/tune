@@ -1,13 +1,13 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { ITrack } from '../../typings/spotifyTypes';
 import type { RootState } from '../store';
-import { TrackData } from '../../typings/playlist';
 
 export interface PlayerState {
-	queue: TrackData[];
+	queue: ITrack[];
 	queueIndex: number;
-	history: TrackData[];
-	currentTrack?: TrackData;
+	history: ITrack[];
+	currentTrack?: ITrack;
 	outputDeviceId?: string;
 	isPlaying: boolean;
 	spotifyToken?: string;
@@ -25,15 +25,15 @@ export const playerSlice = createSlice({
 	name: 'player',
 	initialState,
 	reducers: {
-		setQueue: (state, action: PayloadAction<TrackData[]>) => {
+		setQueue: (state, action: PayloadAction<ITrack[]>) => {
 			state.queue = action.payload;
 
 			state.queueIndex = 0;
 			state.currentTrack = state.queue[state.queueIndex];
 			state.isPlaying = true;
 		},
-		updateQueue: (state, action: PayloadAction<TrackData[]>) => {
-			const fixedIds: TrackData[] = [];
+		updateQueue: (state, action: PayloadAction<ITrack[]>) => {
+			const fixedIds: ITrack[] = [];
 
 			let id = 1;
 			action.payload.forEach((track) => {
@@ -46,7 +46,7 @@ export const playerSlice = createSlice({
 
 			state.queue = fixedIds;
 		},
-		setTrack: (state, action: PayloadAction<TrackData>) => {
+		setTrack: (state, action: PayloadAction<ITrack>) => {
 			state.currentTrack = action.payload;
 			state.isPlaying = true;
 		},

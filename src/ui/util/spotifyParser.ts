@@ -27,7 +27,7 @@ class SpotifyParser {
 
 	static parseTrack(track: TrackItem): ITrack {
 		return {
-			number: track.track_number,
+			id: track.track_number,
 			name: track.name,
 			album: SpotifyParser.parseAlbum(track.album),
 			artists: SpotifyParser.parseArtists(track.artists),

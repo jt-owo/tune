@@ -10,7 +10,8 @@ import { restrictToWindowEdges } from '@dnd-kit/modifiers';
 import Lottie, { LottieRefCurrentProps } from 'lottie-react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { removePlaylist, selectPlaylists, updatePlaylist } from '../../../state/slices/playlistSlice';
-import { PlaylistData, TrackData } from '../../../typings/playlist';
+import { PlaylistData } from '../../../typings/playlist';
+import { ITrack } from '../../../typings/spotifyTypes';
 import { selectQueue, setQueue, updateQueue } from '../../../state/slices/playerSlice';
 import useContextMenu from '../../hooks/useContextMenu';
 import AppRoutes from '../../routes';
@@ -50,7 +51,7 @@ const Playlist: FC = memo(function Playlist() {
 	const queue = useAppSelector(selectQueue);
 	const [playlist, setPlaylist] = useState(playlists.find((x) => x.id === id));
 
-	const [tracks, setTracks] = useState<TrackData[]>([]);
+	const [tracks, setTracks] = useState<ITrack[]>([]);
 	const sensors = useSensors(
 		useSensor(PointerSensor, {
 			activationConstraint: {
@@ -138,7 +139,10 @@ const Playlist: FC = memo(function Playlist() {
 
 			updateData.tracks.push({
 				id: index,
-				filePath: path
+				name: path,
+				isLocal: true,
+				artists: [],
+				duration: 0
 			});
 		});
 
@@ -182,7 +186,7 @@ const Playlist: FC = memo(function Playlist() {
 	const handlePlayNext = (id: number) => {
 		if (!playlist) return;
 
-		const updateData: TrackData[] = [...queue];
+		const updateData: ITrack[] = [...queue];
 
 		const index = playlist.tracks.findIndex((x) => x.id === id);
 		const track = playlist.tracks[index];
@@ -193,7 +197,7 @@ const Playlist: FC = memo(function Playlist() {
 	const handlePlayLast = (id: number) => {
 		if (!playlist) return;
 
-		const updateData: TrackData[] = [...queue];
+		const updateData: ITrack[] = [...queue];
 
 		const index = playlist.tracks.findIndex((x) => x.id === id);
 		const track = playlist.tracks[index];

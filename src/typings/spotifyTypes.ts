@@ -19,12 +19,16 @@ export interface IAlbum {
 }
 
 export interface ITrack {
-	number: number;
+	id: number;
+	/**
+	 * Name is the file path if isLocal is true.
+	 */
 	name: string;
 	album?: IAlbum;
-	artists: IArtist[];
+	artists?: IArtist[];
 	/**
 	 * Duration in ms.
 	 */
-	duration: number;
+	duration?: number;
+	isLocal: boolean;
 }

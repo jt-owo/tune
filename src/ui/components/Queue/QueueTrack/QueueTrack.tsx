@@ -4,7 +4,8 @@
 import { FC, useEffect, useState } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { AudioMetadata, TrackData } from '../../../../typings/playlist';
+import { ITrack } from '../../../../typings/spotifyTypes';
+import { AudioMetadata } from '../../../../typings/playlist';
 import defaultAlbumCover from '../../../../../assets/images/tune_no_artwork.svg';
 import deleteIcon from '../../../../../assets/ui-icons/trash-2.svg';
 
@@ -12,7 +13,7 @@ import queueStyle from '../Queue.module.scss';
 
 interface QueueTrackProps {
 	id: number;
-	track: TrackData;
+	track: ITrack;
 	index: number;
 	isDragging?: boolean;
 	removeTrack?: (id: number) => void;
@@ -31,12 +32,14 @@ const QueueTrack: FC<QueueTrackProps> = (props) => {
 	};
 
 	useEffect(() => {
-		const getMetadata = async () => {
-			const metadataJSON = await window.api.system.readMetadata(track.filePath);
-			setMetadata(JSON.parse(metadataJSON) as AudioMetadata);
-		};
-		getMetadata();
-	}, [track.filePath]);
+		if (track.isLocal) {
+			const getMetadata = async () => {
+				const metadataJSON = await window.api.system.readMetadata(track.name);
+				setMetadata(JSON.parse(metadataJSON) as AudioMetadata);
+			};
+			getMetadata();
+		}
+	}, [track.isLocal, track.name]);
 
 	const getAlbumCover = () => {
 		if (metadata?.info?.cover) {

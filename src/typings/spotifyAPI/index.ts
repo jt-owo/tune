@@ -1,36 +1,25 @@
-export interface Image {
+interface Image {
 	url: string;
 	height: number;
 	width: number;
 }
 
-export interface ExternalUrls {
+interface ExternalUrls {
 	spotify: string;
 }
 
-export interface ExternalIDS {
+interface ExternalIDS {
 	isrc: string;
 }
 
-export interface Copyright {
-	text: string;
-	type: string;
-}
-
-export interface Restrictions {
-	reason: string;
-}
-
-export interface Followers {
+interface Followers {
 	href: null;
 	total: number;
 }
 
-export type AlbumType = 'ALBUM' | 'SINGLE';
+type AlbumType = 'single' | 'album';
 
-export type AlbumGroup = 'single' | 'album';
-
-export type ReleaseDatePrecision = 'day' | 'year';
+type ReleaseDatePrecision = 'day' | 'year';
 
 export interface AlbumsQuery {
 	href: string;
@@ -43,8 +32,8 @@ export interface AlbumsQuery {
 }
 
 export interface AlbumItem {
-	album_group: AlbumGroup;
-	album_type: AlbumGroup;
+	album_group: AlbumType;
+	album_type: AlbumType;
 	artists: ArtistItem[];
 	available_markets: string[];
 	external_urls: ExternalUrls;
@@ -56,7 +45,7 @@ export interface AlbumItem {
 	release_date: string;
 	release_date_precision: ReleaseDatePrecision;
 	total_tracks: number;
-	type: AlbumGroup;
+	type: AlbumType;
 	uri: string;
 }
 

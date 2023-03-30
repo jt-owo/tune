@@ -17,7 +17,7 @@ contextBridge.exposeInMainWorld('api', {
 		async readMetadata(file: string) {
 			const metadata = await ipcRenderer.invoke(Channels.READ_METADATA, file);
 
-			return metadata as string;
+			return metadata.toString();
 		},
 		openURL(url: string) {
 			ipcRenderer.invoke(Channels.OPEN_URL, url);

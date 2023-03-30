@@ -6,8 +6,8 @@ import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, us
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { restrictToWindowEdges } from '@dnd-kit/modifiers';
 import { selectQueue, selectQueueIndex, updateQueue } from '../../../state/slices/playerSlice';
-import { TrackData } from '../../../typings/playlist';
 import { useAppSelector, useAppDispatch } from '../../hooks';
+import { ITrack } from '../../../typings/types';
 
 import QueueTrack from './QueueTrack/QueueTrack';
 
@@ -18,7 +18,7 @@ const Queue: FC = () => {
 	const queueIndex = useAppSelector(selectQueueIndex);
 	const dispatch = useAppDispatch();
 
-	const [tracks, setTracks] = useState<TrackData[]>([]);
+	const [tracks, setTracks] = useState<ITrack[]>([]);
 	const [isDraggingId, setIsDraggingId] = useState<UniqueIdentifier>();
 
 	const sensors = useSensors(
@@ -52,7 +52,7 @@ const Queue: FC = () => {
 	};
 
 	const handleTrackRemove = (index: number) => {
-		const updateData: TrackData[] = [...queue];
+		const updateData: ITrack[] = [...queue];
 		updateData.splice(index + 1, 1);
 		dispatch(updateQueue(updateData));
 	};

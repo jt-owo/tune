@@ -1,16 +1,3 @@
-export interface PlaylistData {
-	id: string;
-	name: string;
-	tracks: TrackData[];
-	pinned: boolean;
-}
-
-export interface TrackData {
-	id: number;
-	filePath: string;
-	metadata?: AudioMetadata;
-}
-
 export interface AudioMetadata {
 	format?: AudioFormat;
 	info?: AudioInfo;

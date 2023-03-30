@@ -1,84 +1,24 @@
-export interface SearchResult {
-	albums: Albums;
-	artists: Artists;
-	tracks: Tracks;
-}
-
-export interface Albums {
-	href: string;
-	items: AlbumElement[];
-	limit: number;
-	next: string;
-	offset: number;
-	previous: null;
-	total: number;
-}
-
-export interface AlbumElement {
-	albumGroup: AlbumGroup;
-	albumType: AlbumGroup;
-	artists: Artist[];
-	availableMarkets: string[];
-	externalUrls: ExternalUrls;
-	href: string;
-	id: string;
-	images: Image[];
-	isPlayable: boolean;
-	name: string;
-	releaseDate: string;
-	releaseDatePrecision: ReleaseDatePrecision;
-	totalTracks: number;
-	type: AlbumGroup;
-	uri: string;
-}
-
-export type AlbumGroup = 'single' | 'album';
-
-export interface Artist {
-	externalUrls: ExternalUrls;
-	href: string;
-	id: string;
-	name: string;
-	type: ArtistType;
-	uri: string;
-	images: Image[];
+export interface Image {
+	url: string;
+	height: number;
+	width: number;
 }
 
 export interface ExternalUrls {
 	spotify: string;
 }
 
-export type ArtistType = 'artist';
-
-export interface Image {
-	height: number;
-	url: string;
-	width: number;
+export interface ExternalIDS {
+	isrc: string;
 }
 
-export type ReleaseDatePrecision = 'day' | 'year';
-
-export interface Artists {
-	href: string;
-	items: ArtistsItem[];
-	limit: number;
-	next: string;
-	offset: number;
-	previous: null;
-	total: number;
+export interface Copyright {
+	text: string;
+	type: string;
 }
 
-export interface ArtistsItem {
-	externalUrls: ExternalUrls;
-	followers: Followers;
-	genres: string[];
-	href: string;
-	id: string;
-	images: Image[];
-	name: string;
-	popularity: number;
-	type: ArtistType;
-	uri: string;
+export interface Restrictions {
+	reason: string;
 }
 
 export interface Followers {
@@ -86,9 +26,15 @@ export interface Followers {
 	total: number;
 }
 
-export interface Tracks {
+export type AlbumType = 'ALBUM' | 'SINGLE';
+
+export type AlbumGroup = 'single' | 'album';
+
+export type ReleaseDatePrecision = 'day' | 'year';
+
+export interface AlbumsQuery {
 	href: string;
-	items: TracksItem[];
+	items: AlbumItem[];
 	limit: number;
 	next: string;
 	offset: number;
@@ -96,28 +42,115 @@ export interface Tracks {
 	total: number;
 }
 
-export interface TracksItem {
-	album: AlbumElement;
-	artists: Artist[];
-	availableMarkets: string[];
+export interface AlbumItem {
+	album_group: AlbumGroup;
+	album_type: AlbumGroup;
+	artists: ArtistItem[];
+	available_markets: string[];
+	external_urls: ExternalUrls;
+	href: string;
+	id: string;
+	images: Image[];
+	is_playable: boolean;
+	name: string;
+	release_date: string;
+	release_date_precision: ReleaseDatePrecision;
+	total_tracks: number;
+	type: AlbumGroup;
+	uri: string;
+}
+
+export interface ArtistsQuery {
+	href: string;
+	items: ArtistItem[];
+	limit: number;
+	next: string;
+	offset: number;
+	previous: null;
+	total: number;
+}
+
+export interface ArtistItem {
+	external_urls: ExternalUrls;
+	followers: Followers;
+	genres: string[];
+	href: string;
+	id: string;
+	images: Image[];
+	name: string;
+	popularity: number;
+	type: 'artist';
+	uri: string;
+}
+
+export interface TracksQuery {
+	href: string;
+	items: TrackItem[];
+	limit: number;
+	next: string;
+	offset: number;
+	previous: null;
+	total: number;
+}
+
+export interface TrackItem {
+	album: AlbumItem;
+	artists: ArtistItem[];
+	available_markets: string[];
 	discNumber: number;
-	durationMS: number;
+	duration_ms: number;
 	explicit: boolean;
 	externalIDS: ExternalIDS;
 	externalUrls: ExternalUrls;
 	href: string;
 	id: string;
-	isLocal: boolean;
+	is_local: boolean;
 	name: string;
 	popularity: number;
-	previewURL: null | string;
-	trackNumber: number;
-	type: PurpleType;
+	preview_url: null | string;
+	track_number: number;
+	type: 'track';
 	uri: string;
 }
 
-export interface ExternalIDS {
-	isrc: string;
+// RESULTS
+export interface SearchResult {
+	albums: AlbumsQuery;
+	artists: ArtistsQuery;
+	tracks: TracksQuery;
 }
 
-export type PurpleType = 'track';
+export interface SavedAlbumsResult {
+	href: string;
+	limit: number;
+	next: string;
+	offset: number;
+	previous: string;
+	total: number;
+	items: SavedAlbumsResultItem[];
+}
+
+export interface SavedAlbumsResultItem {
+	addedAt: string;
+	album: AlbumItem;
+}
+
+export interface UserTopTracksResult {
+	items: TrackItem[];
+	total: number;
+	limit: number;
+	offset: number;
+	href: string;
+	next: string;
+	previous: null;
+}
+
+export interface UserTopArtistsResult {
+	items: ArtistItem[];
+	total: number;
+	limit: number;
+	offset: number;
+	href: string;
+	next: null;
+	previous: null;
+}

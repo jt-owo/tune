@@ -21,7 +21,6 @@ const createEnvObj = (envByLines) => {
 };
 
 const writeEnvToDistApp = ({ path, env }) => {
-	// TODO: Should make it so that the code read by chunks instead of loading entire file, may encounter memory shortage if file too big atm
 	let mainJs = fs.readFileSync(path).toString();
 	env.forEach(({ key, values }) => {
 		mainJs = mainJs.replace(`process.env.${key}`, `"${values}"`);

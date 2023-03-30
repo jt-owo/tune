@@ -21,7 +21,10 @@ export interface IAlbum {
 export interface ITrack {
 	number: number;
 	name: string;
-	album?: IAlbum; // FIXME: add album parser
+	album?: IAlbum;
 	artists: IArtist[];
-	duration: number; // Duration in ms
+	/**
+	 * Duration in ms.
+	 */
+	duration: number;
 }

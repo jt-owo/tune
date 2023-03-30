@@ -28,7 +28,7 @@ const Browse: FC = () => {
 				return;
 			}
 
-			const { albums, artists, tracks } = await SpotifyAPI.search(query, spotifyToken);
+			const { albums, artists, tracks } = await SpotifyAPI.search(spotifyToken, query);
 			console.log({ albums, artists, tracks });
 		}
 	};

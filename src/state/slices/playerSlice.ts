@@ -1,4 +1,3 @@
-/* eslint-disable prefer-destructuring */
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../store';
@@ -19,7 +18,7 @@ const initialState: PlayerState = {
 	queueIndex: 0,
 	history: [],
 	isPlaying: false,
-	outputDeviceId: window.api.config.get('outputDeviceId') as string
+	outputDeviceId: window.api.config.get('outputDeviceId').toString()
 };
 
 export const playerSlice = createSlice({

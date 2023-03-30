@@ -75,21 +75,10 @@
 
 	/* Misc */
 	border-radius: 12px;
-}
-
-.queue-item-container {
 	opacity: 1;
-
-	:hover {
-		background-color: $hover-color-dark;
-	}
-
-	:active {
-		background-color: $hover-color-medium;
-	}
 }
 
-.queue-item-container.hide {
+.queue-track.hide {
 	opacity: 0;
 }
 

@@ -128,9 +128,11 @@ const SeekBar: FC<SeekBarProps> = (props) => {
 			<div className={style['duration-floater']}>
 				{currentTime} / {totalDuration}
 			</div>
-			<div className={style['duration-hover-floater']} ref={durationHoverRef}>
-				{currentTime} / {totalDuration}
-			</div>
+			{audioRef.current?.currentTime ? (
+				<div className={style['duration-hover-floater']} ref={durationHoverRef}>
+					{currentTime} / {totalDuration}
+				</div>
+			) : null}
 			<div className={audioPlayerStyle['slider-container']} onMouseEnter={handleProgressBarEnter} onMouseLeave={handleProgressBarLeave}>
 				<div className={style['progress-bar']} ref={progressBarRef} />
 				<div className={style['current-time']}>{currentTime}</div>

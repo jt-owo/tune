@@ -1,5 +1,5 @@
 import { ArtistItem, AlbumItem, TrackItem, SearchResult } from '../../typings/spotifyAPI';
-import { IArtist, IAlbum, ITrack } from '../../typings/spotifyTypes';
+import { IArtist, IAlbum, ITrack } from '../../typings/types';
 
 class SpotifyParser {
 	static parseArtists(artists: ArtistItem[]): IArtist[] {

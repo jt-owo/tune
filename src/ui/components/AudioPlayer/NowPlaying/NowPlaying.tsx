@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { AudioMetadata } from '../../../../typings/playlist';
+import { AudioMetadata } from '../../../../typings/metadata';
 import defaultAlbumCover from '../../../../../assets/images/tune_no_artwork.svg';
 
 import style from './NowPlaying.module.scss';

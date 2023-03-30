@@ -1,6 +1,6 @@
 /* eslint-disable compat/compat */
 import { SavedAlbumsResult, SearchResult, TrackItem, UserTopArtistsResult, UserTopTracksResult } from '../../typings/spotifyAPI';
-import { IAlbum, ITrack } from '../../typings/spotifyTypes';
+import { IAlbum, ITrack } from '../../typings/types';
 import SpotifyParser from './spotifyParser';
 
 export const CLIENT_ID = '5ca32668f6564c6595cdb0a0b315af28';

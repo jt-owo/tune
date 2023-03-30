@@ -4,8 +4,8 @@
 import { FC, useEffect, useState } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { ITrack } from '../../../../typings/spotifyTypes';
-import { AudioMetadata } from '../../../../typings/playlist';
+import { ITrack } from '../../../../typings/types';
+import { AudioMetadata } from '../../../../typings/metadata';
 import defaultAlbumCover from '../../../../../assets/images/tune_no_artwork.svg';
 import deleteIcon from '../../../../../assets/ui-icons/trash-2.svg';
 

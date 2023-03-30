@@ -1,7 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { PlaylistData } from '../../typings/playlist';
-import { ITrack } from '../../typings/spotifyTypes';
+import { ITrack, PlaylistData } from '../../typings/types';
 import newGuid from '../../ui/util';
 import type { RootState } from '../store';
 

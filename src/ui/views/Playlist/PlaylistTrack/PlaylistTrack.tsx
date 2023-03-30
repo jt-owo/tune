@@ -4,8 +4,8 @@
 import { FC, memo, MouseEvent, useEffect, useState } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { AudioMetadata } from '../../../../typings/playlist';
-import { ITrack } from '../../../../typings/spotifyTypes';
+import { AudioMetadata } from '../../../../typings/metadata';
+import { ITrack } from '../../../../typings/types';
 
 import playlistStyle from '../Playlist.module.scss';
 

@@ -4,6 +4,13 @@ interface CoverImage {
 	url: string;
 }
 
+export interface PlaylistData {
+	id: string;
+	name: string;
+	tracks: ITrack[];
+	pinned: boolean;
+}
+
 export interface IArtist {
 	name: string;
 	images: CoverImage[];

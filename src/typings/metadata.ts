@@ -1,12 +1,3 @@
-import { ITrack } from './spotifyTypes';
-
-export interface PlaylistData {
-	id: string;
-	name: string;
-	tracks: ITrack[];
-	pinned: boolean;
-}
-
 export interface AudioMetadata {
 	format?: AudioFormat;
 	info?: AudioInfo;

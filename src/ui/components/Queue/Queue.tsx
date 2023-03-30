@@ -7,7 +7,7 @@ import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSo
 import { restrictToWindowEdges } from '@dnd-kit/modifiers';
 import { selectQueue, selectQueueIndex, updateQueue } from '../../../state/slices/playerSlice';
 import { useAppSelector, useAppDispatch } from '../../hooks';
-import { ITrack } from '../../../typings/spotifyTypes';
+import { ITrack } from '../../../typings/types';
 
 import QueueTrack from './QueueTrack/QueueTrack';
 

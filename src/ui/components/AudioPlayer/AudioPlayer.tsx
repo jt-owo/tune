@@ -2,8 +2,8 @@
 import { FC, SyntheticEvent, useEffect, useRef, useState, useCallback } from 'react';
 import { play, playNext, playPrevious, selectCurrentTrack, selectIsPlaying, selectOutputDeviceId } from '../../../state/slices/playerSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { AudioMetadata } from '../../../typings/playlist';
-import { ITrack } from '../../../typings/spotifyTypes';
+import { AudioMetadata } from '../../../typings/metadata';
+import { ITrack } from '../../../typings/types';
 
 import AudioControlButton from './AudioControlButton/AudioControlButton';
 import PlayPauseButton from './PlayPauseButton/PlayPauseButton';

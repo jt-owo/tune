@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import { useAppSelector } from '../../hooks';
 import { selectSpotifyToken } from '../../../state/slices/playerSlice';
 import SpotifyAPI from '../../util/spotifyAPI';
-import { IAlbum, IArtist, ITrack } from '../../../typings/spotifyTypes';
+import { IAlbum, IArtist, ITrack } from '../../../typings/types';
 
 import View from '../../components/View/View';
 import HomeItemSmall from '../../components/Home_Elements/HomeItemSmall/HomeItemSmall';

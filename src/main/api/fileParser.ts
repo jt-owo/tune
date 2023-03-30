@@ -1,6 +1,6 @@
 /* eslint-disable no-plusplus */
 import * as mm from 'music-metadata';
-import { AudioMetadata } from '../../typings/playlist';
+import { AudioMetadata } from '../../typings/metadata';
 
 export default class FileParser {
 	/**

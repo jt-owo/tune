@@ -1,5 +1,5 @@
-import { ArtistItem, AlbumItem, TrackItem, SearchResult, UserProfileResult } from '../../typings/spotifyAPI';
-import { IArtist, IAlbum, ITrack, IUser } from '../../typings/types';
+import { ArtistItem, AlbumItem, TrackItem, SearchResult, UserProfileResult, PlaybackStateResult } from '../../typings/spotifyAPI';
+import { IArtist, IAlbum, ITrack, IUser, IPlaybackState } from '../../typings/types';
 
 class SpotifyParser {
 	static parseArtists(artists: ArtistItem[]): IArtist[] {
@@ -19,7 +19,7 @@ class SpotifyParser {
 			name: album.name,
 			artists: SpotifyParser.parseArtists(album.artists),
 			images: album.images,
-			releaseDate: new Date(album.release_date),
+			releaseDate: album.release_date,
 			totalTracks: album.total_tracks,
 			type: 'album'
 		};
@@ -65,6 +65,22 @@ class SpotifyParser {
 		}
 
 		return { albums, artists, tracks };
+	}
+
+	static parsePlaybackState(playbackState: PlaybackStateResult): IPlaybackState {
+		let track: ITrack | undefined;
+		if (playbackState.item) {
+			track = this.parseTrack(playbackState.item);
+		}
+
+		return {
+			volume: playbackState.device.volume_percent,
+			progress: playbackState.progress_ms,
+			isPlaying: playbackState.is_playing,
+			isRepeat: playbackState.repeat_state === 'on',
+			isShuffle: playbackState.shuffle_state,
+			track
+		};
 	}
 }
 

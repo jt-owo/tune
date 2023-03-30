@@ -22,6 +22,32 @@ interface ExplicitContent {
 	filter_locked: boolean;
 }
 
+interface Actions {
+	disallows: Disallows;
+}
+
+interface Disallows {
+	resuming: boolean;
+	skipping_prev: boolean;
+}
+
+interface Context {
+	external_urls: ExternalUrls;
+	href: string;
+	type: string;
+	uri: string;
+}
+
+interface Device {
+	id: string;
+	is_active: boolean;
+	is_private_session: boolean;
+	is_restricted: boolean;
+	name: string;
+	type: string;
+	volume_percent: number;
+}
+
 type AlbumType = 'single' | 'album';
 
 type ReleaseDatePrecision = 'day' | 'year';
@@ -177,4 +203,17 @@ export interface UserProfileResult {
 	product: string;
 	type: string;
 	uri: string;
+}
+
+export interface PlaybackStateResult {
+	device: Device;
+	shuffle_state: boolean;
+	repeat_state: string;
+	timestamp: number;
+	context: Context;
+	progress_ms: number;
+	item?: TrackItem;
+	currently_playing_type: string;
+	actions: Actions;
+	is_playing: boolean;
 }

@@ -1,15 +1,24 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ITrack, IUser } from '../../typings/types';
+import { IPlaybackState, ITrack, IUser } from '../../typings/types';
 import type { RootState } from '../store';
 
 export interface PlayerState {
+	/** Queue */
 	queue: ITrack[];
 	queueIndex: number;
 	history: ITrack[];
+
+	/** Playback info */
 	currentTrack?: ITrack;
-	outputDeviceId?: string;
 	isPlaying: boolean;
+	isShuffle: boolean;
+	isRepeat: boolean;
+	volume: number;
+	progress: number;
+
+	/** Misc. */
+	outputDeviceId?: string;
 	spotifyToken?: string;
 	user?: IUser; // FIXME: Move to seperate reducer.
 }
@@ -19,6 +28,10 @@ const initialState: PlayerState = {
 	queueIndex: 0,
 	history: [],
 	isPlaying: false,
+	isShuffle: false,
+	isRepeat: false,
+	volume: +window.api.config.get('volume'),
+	progress: 0,
 	outputDeviceId: window.api.config.get('outputDeviceId').toString()
 };
 
@@ -26,6 +39,14 @@ export const playerSlice = createSlice({
 	name: 'player',
 	initialState,
 	reducers: {
+		updatePlaybackState: (state, action: PayloadAction<IPlaybackState>) => {
+			state.currentTrack = action.payload.track;
+			state.isPlaying = action.payload.isPlaying;
+			state.isShuffle = action.payload.isShuffle;
+			state.isRepeat = action.payload.isRepeat;
+			state.volume = action.payload.volume / 1000;
+			state.progress = action.payload.progress;
+		},
 		setQueue: (state, action: PayloadAction<ITrack[]>) => {
 			state.queue = action.payload;
 
@@ -84,12 +105,18 @@ export const playerSlice = createSlice({
 	}
 });
 
-export const { setTrack, setQueue, updateQueue, setOutputDevice, play, playNext, playPrevious, updateSpotifyToken, updateUser } = playerSlice.actions;
+export const { setTrack, setQueue, updateQueue, setOutputDevice, play, playNext, playPrevious, updateSpotifyToken, updateUser, updatePlaybackState } = playerSlice.actions;
 
-export const selectIsPlaying = (state: RootState) => state.player.isPlaying;
 export const selectQueue = (state: RootState) => state.player.queue;
 export const selectQueueIndex = (state: RootState) => state.player.queueIndex;
+
+export const selectIsPlaying = (state: RootState) => state.player.isPlaying;
+export const selectIsShuffle = (state: RootState) => state.player.isShuffle;
+export const selectIsRepeat = (state: RootState) => state.player.isRepeat;
 export const selectCurrentTrack = (state: RootState) => state.player.currentTrack;
+export const selectVolume = (state: RootState) => state.player.volume;
+export const selectProgress = (state: RootState) => state.player.progress;
+
 export const selectOutputDeviceId = (state: RootState) => state.player.outputDeviceId;
 export const selectSpotifyToken = (state: RootState) => state.player.spotifyToken;
 export const selectUser = (state: RootState) => state.player.user;

@@ -26,7 +26,7 @@ export interface IAlbum {
 	name: string;
 	artists: IArtist[];
 	images: CoverImage[];
-	releaseDate: Date;
+	releaseDate: string;
 	totalTracks: number;
 	type: 'album';
 }
@@ -45,3 +45,14 @@ export interface ITrack {
 	duration?: number;
 	isLocal: boolean;
 }
+
+export interface IPlaybackState {
+	track?: ITrack;
+	isPlaying: boolean;
+	isShuffle: boolean;
+	isRepeat: boolean;
+	volume: number;
+	progress: number;
+}
+
+export type RepeatMode = 'off' | 'on' | 'all';

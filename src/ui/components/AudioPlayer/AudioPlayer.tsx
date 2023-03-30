@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/media-has-caption */
 import { FC, SyntheticEvent, useEffect, useRef, useState, useCallback } from 'react';
-import { play, playNext, playPrevious, selectCurrentTrack, selectIsPlaying, selectOutputDeviceId } from '../../../state/slices/playerSlice';
+import { play, playNext, playPrevious, selectCurrentTrack, selectIsPlaying, selectOutputDeviceId, selectSpotifyToken, updatePlaybackState } from '../../../state/slices/playerSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { AudioMetadata } from '../../../typings/metadata';
 import { ITrack } from '../../../typings/types';
@@ -20,6 +20,7 @@ import skipBackBtn from '../../../../assets/animations/skipBack.json';
 import skipForwardBtn from '../../../../assets/animations/skipForward.json';
 
 import style from './AudioPlayer.module.scss';
+import SpotifyAPI from '../../util/spotifyAPI';
 
 const AudioPlayer: FC = () => {
 	const audioRef = useRef<HTMLAudioElement & { setSinkId(deviceId: string): void; volume: number }>(null);
@@ -27,10 +28,23 @@ const AudioPlayer: FC = () => {
 	const currentTrack = useAppSelector(selectCurrentTrack);
 	const isPlaying = useAppSelector(selectIsPlaying);
 	const outputDeviceId = useAppSelector(selectOutputDeviceId);
+	const spotifyToken = useAppSelector(selectSpotifyToken);
 
 	const [metadata, setMetadata] = useState<AudioMetadata>();
 
 	const dispatch = useAppDispatch();
+
+	const getArtists = () => {
+		let artists = '';
+		if (currentTrack?.artists) {
+			currentTrack.artists.forEach((artist) => {
+				if (artists === '') artists += artist.name;
+				else artists += `, ${artist.name}`;
+			});
+		}
+
+		return artists;
+	};
 
 	const getMetadata = async (track: ITrack) => {
 		const metadataJSON = await window.api.system.readMetadata(track.name);
@@ -53,6 +67,15 @@ const AudioPlayer: FC = () => {
 	const onEnded = (_e: SyntheticEvent<HTMLAudioElement>) => {
 		handlePlayNext();
 	};
+
+	useEffect(() => {
+		const getPlaybackState = async (accessToken: string) => {
+			const playbackState = await SpotifyAPI.fetchPlaybackState(accessToken);
+			dispatch(updatePlaybackState(playbackState));
+		};
+
+		if (spotifyToken) getPlaybackState(spotifyToken);
+	}, [dispatch, spotifyToken]);
 
 	useEffect(() => {
 		if (audioRef.current && outputDeviceId) {
@@ -112,7 +135,8 @@ const AudioPlayer: FC = () => {
 			<div className={style['player-controls-container']}>
 				<ServiceSelector />
 				<div className={style['player-control-divider']} />
-				{metadata && <NowPlaying metadata={metadata} />}
+				{metadata && <NowPlaying artists={metadata.info?.artist ?? ''} title={metadata.info?.title ?? ''} image={metadata.info?.cover} />}
+				{currentTrack && !currentTrack.isLocal && <NowPlaying title={currentTrack?.name ?? ''} artists={getArtists()} image={currentTrack?.album?.images[0].url} />}
 				<VolumeSlider audioRef={audioRef} />
 				<SeekBar audioRef={audioRef} />
 				<AudioControlButton id="skip-back-btn" onClick={handlePlayPrev} animationData={skipBackBtn} />
@@ -121,7 +145,7 @@ const AudioPlayer: FC = () => {
 				<ShuffleButton />
 				<RepeatButton />
 			</div>
-			<audio src={currentTrack?.name} ref={audioRef} onEnded={onEnded} crossOrigin="anonymous" />
+			{currentTrack?.isLocal && <audio src={currentTrack?.name} ref={audioRef} onEnded={onEnded} crossOrigin="anonymous" />}
 		</div>
 	);
 };

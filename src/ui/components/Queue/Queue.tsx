@@ -5,7 +5,7 @@ import { FC, useEffect, useState } from 'react';
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent, DragStartEvent, DragOverlay, UniqueIdentifier } from '@dnd-kit/core';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { restrictToWindowEdges } from '@dnd-kit/modifiers';
-import { selectQueue, selectQueueIndex, updateQueue } from '../../../state/slices/playerSlice';
+import { selectQueue, selectQueueIndex, updateQueue, setQueue } from '../../../state/slices/playerSlice';
 import { TrackData } from '../../../typings/playlist';
 import { useAppSelector, useAppDispatch } from '../../hooks';
 
@@ -47,7 +47,7 @@ const Queue: FC = () => {
 			const newArray = arrayMove(tracks, oldIndex, newIndex);
 
 			setTracks(newArray);
-			dispatch(updateQueue(newArray));
+			dispatch(setQueue(newArray));
 		}
 	};
 

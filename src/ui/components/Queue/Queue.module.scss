@@ -70,15 +70,12 @@
 	font-family: Quicksand-700;
 	font-size: 14px;
 
-	/* Animation */
-	transition: all ease-in-out 0.1s;
-
 	/* Misc */
 	border-radius: 12px;
 	opacity: 1;
 }
 
-.queue-track.hide {
+.queue-track-container.hide {
 	opacity: 0;
 }
 

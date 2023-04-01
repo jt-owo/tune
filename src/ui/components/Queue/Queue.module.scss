@@ -70,26 +70,12 @@
 	font-family: Quicksand-700;
 	font-size: 14px;
 
-	/* Animation */
-	transition: all ease-in-out 0.1s;
-
 	/* Misc */
 	border-radius: 12px;
-}
-
-.queue-item-container {
 	opacity: 1;
-
-	:hover {
-		background-color: $hover-color-dark;
-	}
-
-	:active {
-		background-color: $hover-color-medium;
-	}
 }
 
-.queue-item-container.hide {
+.queue-track-container.hide {
 	opacity: 0;
 }
 

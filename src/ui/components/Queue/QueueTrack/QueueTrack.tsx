@@ -49,7 +49,7 @@ const QueueTrack: FC<QueueTrackProps> = (props) => {
 	};
 
 	return (
-		<>
+		<div className={`${queueStyle['queue-track-container']} ${isDragging ? queueStyle.hide : ''}`}>
 			{metadata && (
 				<div ref={setNodeRef} style={style} className={queueStyle['queue-track']} {...listeners} {...attributes}>
 					<img src={getAlbumCover()} alt="" />
@@ -67,7 +67,7 @@ const QueueTrack: FC<QueueTrackProps> = (props) => {
 					)}
 				</div>
 			)}
-		</>
+		</div>
 	);
 };
 

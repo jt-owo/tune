@@ -1,10 +1,11 @@
 /* eslint-disable class-methods-use-this */
 /* eslint @typescript-eslint/no-var-requires: off, global-require: off */
-import { app, ipcMain, protocol } from 'electron';
-import { IpcChannel } from './ipc/types';
+import { app, dialog, ipcMain, protocol } from 'electron';
+import dotenv from 'dotenv';
 import Window from './window/window';
 import Database from './api/database';
 import { OpenUrlChannel, ReadMetadataChannel, SelectFileChannel, WindowControlChannel } from './ipc';
+import { IpcChannel } from './ipc/types';
 import Channels from './ipc/channel';
 import { DynamicStore } from './api/dynamicStore';
 import { UserConfig } from '../typings/config';
@@ -43,6 +44,9 @@ class Main {
 	private configFile!: DynamicStore;
 
 	constructor() {
+		// Load contents from .env file into process.env.
+		dotenv.config();
+
 		app.on('ready', () => {
 			this.onReady();
 		});
@@ -102,6 +106,9 @@ class Main {
 		this.database = new Database(app.getPath('userData'));
 		this.configFile = new DynamicStore('userConfig', USER_CONFIG_DEFAULTS);
 		this.mainWindow = new Window(this.configFile);
+
+		const clientId = process.env.TUNE_DISCORD_CLIENT_ID;
+		dialog.showMessageBox({ message: clientId?.toString() ?? '' });
 
 		app.on('activate', () => {
 			this.onActivate();

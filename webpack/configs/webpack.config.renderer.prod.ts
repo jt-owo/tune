@@ -11,7 +11,8 @@ import { merge } from 'webpack-merge';
 import TerserPlugin from 'terser-webpack-plugin';
 import baseConfig from './webpack.config.base';
 import webpackPaths from './webpack.paths';
-import { checkNodeEnv, deleteSourceMaps } from '../scripts/util';
+import checkNodeEnv from '../scripts/checkNodeEnv';
+import deleteSourceMaps from '../scripts/deleteSourceMaps';
 
 checkNodeEnv('production');
 deleteSourceMaps();
@@ -64,8 +65,28 @@ const configuration: webpack.Configuration = {
 			},
 			// Images
 			{
-				test: /\.(png|svg|jpg|jpeg|gif)$/i,
+				test: /\.(png|jpg|jpeg|gif)$/i,
 				type: 'asset/resource'
+			},
+			// SVG
+			{
+				test: /\.svg$/,
+				use: [
+					{
+						loader: '@svgr/webpack',
+						options: {
+							prettier: false,
+							svgo: false,
+							svgoConfig: {
+								plugins: [{ removeViewBox: false }]
+							},
+							titleProp: true,
+							ref: true,
+							throwIfNamespace: false
+						}
+					},
+					'url-loader'
+				]
 			}
 		]
 	},
@@ -100,7 +121,8 @@ const configuration: webpack.Configuration = {
 		}),
 
 		new BundleAnalyzerPlugin({
-			analyzerMode: process.env.ANALYZE === 'true' ? 'server' : 'disabled'
+			analyzerMode: process.env.ANALYZE === 'true' ? 'server' : 'disabled',
+			analyzerPort: 8889
 		}),
 
 		new HtmlWebpackPlugin({
@@ -113,6 +135,10 @@ const configuration: webpack.Configuration = {
 			},
 			isBrowser: false,
 			isDevelopment: process.env.NODE_ENV !== 'production'
+		}),
+
+		new webpack.DefinePlugin({
+			'process.type': '"renderer"'
 		})
 	]
 };

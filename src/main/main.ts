@@ -1,9 +1,9 @@
-/* eslint-disable class-methods-use-this */
-/* eslint @typescript-eslint/no-var-requires: off, global-require: off */
+/* eslint @typescript-eslint/no-var-requires: off, global-require: off, class-methods-use-this: off, no-new: off */
 import { app, dialog, ipcMain, protocol } from 'electron';
 import dotenv from 'dotenv';
 import Window from './window/window';
 import Database from './api/database';
+import DiscordClient from './api/discordClient';
 import { OpenUrlChannel, ReadMetadataChannel, SelectFileChannel, WindowControlChannel } from './ipc';
 import { IpcChannel } from './ipc/types';
 import Channels from './ipc/channel';
@@ -16,10 +16,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 const isDebug = process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
-
-if (isDebug) {
-	require('electron-debug')();
-}
+if (isDebug) require('electron-debug')();
 
 const USER_CONFIG_DEFAULTS: UserConfig = {
 	windowBounds: {
@@ -43,11 +40,13 @@ class Main {
 	/** Config file instance */
 	private configFile!: DynamicStore;
 
-	constructor() {
-		// Load contents from .env file into process.env.
-		dotenv.config();
+	/** Discord Client instance */
+	private discord?: DiscordClient;
 
+	constructor() {
 		app.on('ready', () => {
+			// Load contents from .env file into process.env.
+			dotenv.config();
 			this.onReady();
 		});
 
@@ -108,6 +107,11 @@ class Main {
 		this.mainWindow = new Window(this.configFile);
 
 		const clientId = process.env.TUNE_DISCORD_CLIENT_ID;
+		if (clientId) {
+			this.discord = new DiscordClient(clientId);
+			this.discord.setActivity();
+		}
+
 		dialog.showMessageBox({ message: clientId?.toString() ?? '' });
 
 		app.on('activate', () => {
@@ -139,5 +143,4 @@ class Main {
 	}
 }
 
-// eslint-disable-next-line no-new
 new Main();

@@ -14,7 +14,7 @@
 	"main": "./src/main/main.ts",
 	"scripts": {
 		"start": "ts-node ./webpack/scripts/checkPort.js && npm run start:renderer",
-		"package": "ts-node ./webpack/scripts/clean.js dist && npm run build && npm run package:env && electron-builder build --publish never",
+		"package": "ts-node ./webpack/scripts/clean.js dist && npm run build && ts-node ./webpack/scripts/packageEnv.js && electron-builder build --publish never",
 		"test": "jest",
 		"lint": "cross-env NODE_ENV=development eslint . --ext .js,.jsx,.ts,.tsx",
 		"build": "concurrently \"npm run build:main\" \"npm run build:renderer\"",
@@ -24,8 +24,7 @@
 		"start:main": "cross-env NODE_ENV=development electronmon -r ts-node/register/transpile-only .",
 		"start:preload": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./webpack/configs/webpack.config.preload.dev.ts",
 		"start:renderer": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack serve --config ./webpack/configs/webpack.config.renderer.dev.ts",
-		"postinstall": "ts-node webpack/scripts/checkNativeDeps.js && electron-builder install-app-deps && cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./webpack/configs/webpack.config.renderer.dev.dll.ts",
-		"package:env": "ts-node ./webpack/scripts/packageEnv.js"
+		"postinstall": "ts-node webpack/scripts/checkNativeDeps.js && electron-builder install-app-deps && cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./webpack/configs/webpack.config.renderer.dev.dll.ts"
 	},
 	"browserslist": [],
 	"jest": {
@@ -83,6 +82,7 @@
 		"@teamsupercell/typings-for-css-modules-loader": "^2.5.2",
 		"@testing-library/jest-dom": "^5.16.5",
 		"@testing-library/react": "^13.4.0",
+		"@types/discord-rpc": "^4.0.4",
 		"@types/jest": "^29.4.0",
 		"@types/node": "18.13.0",
 		"@types/react": "^18.0.27",

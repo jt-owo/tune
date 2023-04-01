@@ -13,5 +13,7 @@
 		"postinstall": "npm run rebuild && npm run link-modules",
 		"link-modules": "node -r ts-node/register ../../webpack/scripts/linkModules.ts"
 	},
-	"dependencies": {}
+	"dependencies": {
+		"discord-rpc": "^4.0.1"
+	}
 }

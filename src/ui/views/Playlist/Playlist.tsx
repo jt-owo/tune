@@ -183,22 +183,24 @@ const Playlist: FC = memo(function Playlist() {
 		if (!playlist) return;
 
 		const updateData: TrackData[] = [...queue];
+		const track = playlist.tracks.find((x) => x.id === id);
 
-		const index = playlist.tracks.findIndex((x) => x.id === id);
-		const track = playlist.tracks[index];
-		updateData.splice(1, 0, track);
-		dispatch(updateQueue(updateData));
+		if (track) {
+			updateData.splice(1, 0, track);
+			dispatch(updateQueue(updateData));
+		}
 	};
 
 	const handlePlayLast = (id: number) => {
 		if (!playlist) return;
 
 		const updateData: TrackData[] = [...queue];
+		const track = playlist.tracks.find((x) => x.id === id);
 
-		const index = playlist.tracks.findIndex((x) => x.id === id);
-		const track = playlist.tracks[index];
-		updateData.push(track);
-		dispatch(updateQueue(updateData));
+		if (track) {
+			updateData.push(track);
+			dispatch(updateQueue(updateData));
+		}
 	};
 
 	const handleRename = (data: string) => {

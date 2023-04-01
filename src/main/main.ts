@@ -1,5 +1,5 @@
 /* eslint @typescript-eslint/no-var-requires: off, global-require: off, class-methods-use-this: off, no-new: off */
-import { app, dialog, ipcMain, protocol } from 'electron';
+import { app, ipcMain, protocol } from 'electron';
 import dotenv from 'dotenv';
 import Window from './window/window';
 import Database from './api/database';

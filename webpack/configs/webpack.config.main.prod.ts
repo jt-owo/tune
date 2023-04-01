@@ -1,6 +1,7 @@
 /**
  * Webpack config for production electron main process
  */
+
 import path from 'path';
 import webpack from 'webpack';
 import { merge } from 'webpack-merge';
@@ -8,7 +9,8 @@ import TerserPlugin from 'terser-webpack-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import baseConfig from './webpack.config.base';
 import webpackPaths from './webpack.paths';
-import { checkNodeEnv, deleteSourceMaps } from '../scripts/util';
+import checkNodeEnv from '../scripts/checkNodeEnv';
+import deleteSourceMaps from '../scripts/deleteSourceMaps';
 
 checkNodeEnv('production');
 deleteSourceMaps();
@@ -27,7 +29,10 @@ const configuration: webpack.Configuration = {
 
 	output: {
 		path: webpackPaths.distMainPath,
-		filename: '[name].js'
+		filename: '[name].js',
+		library: {
+			type: 'umd'
+		}
 	},
 
 	optimization: {
@@ -40,7 +45,8 @@ const configuration: webpack.Configuration = {
 
 	plugins: [
 		new BundleAnalyzerPlugin({
-			analyzerMode: process.env.ANALYZE === 'true' ? 'server' : 'disabled'
+			analyzerMode: process.env.ANALYZE === 'true' ? 'server' : 'disabled',
+			analyzerPort: 8888
 		}),
 
 		/**
@@ -56,6 +62,10 @@ const configuration: webpack.Configuration = {
 			NODE_ENV: 'production',
 			DEBUG_PROD: false,
 			START_MINIMIZED: false
+		}),
+
+		new webpack.DefinePlugin({
+			'process.type': '"browser"'
 		})
 	],
 

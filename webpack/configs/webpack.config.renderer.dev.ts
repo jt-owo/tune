@@ -1,7 +1,3 @@
-/* eslint-disable global-require */
-/* eslint-disable import/no-dynamic-require */
-/* eslint-disable no-console */
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import 'webpack-dev-server';
 import path from 'path';
 import fs from 'fs';
@@ -13,8 +9,7 @@ import { execSync, spawn } from 'child_process';
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 import baseConfig from './webpack.config.base';
 import webpackPaths from './webpack.paths';
-import { checkNodeEnv } from '../scripts/util';
-
+import checkNodeEnv from '../scripts/checkNodeEnv';
 // When an ESLint server is running, we can't set the NODE_ENV so we'll check if it's
 // at the dev webpack config is not accidentally run in a production environment
 if (process.env.NODE_ENV === 'production') {
@@ -23,13 +18,12 @@ if (process.env.NODE_ENV === 'production') {
 
 const port = process.env.PORT || 9100;
 const manifest = path.resolve(webpackPaths.dllPath, 'renderer.json');
-// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-const requiredByDLLConfig = module.parent!.filename.includes('webpack.config.renderer.dev.dll');
+const skipDLLs = module.parent?.filename.includes('webpack.config.renderer.dev.dll') || module.parent?.filename.includes('webpack.config.eslint');
 
 /**
  * Warn if the DLL is not built
  */
-if (!requiredByDLLConfig && !(fs.existsSync(webpackPaths.dllPath) && fs.existsSync(manifest))) {
+if (!skipDLLs && !(fs.existsSync(webpackPaths.dllPath) && fs.existsSync(manifest))) {
 	console.log(chalk.black.bgYellow.bold('The DLL files are missing. Sit back while we build them for you with "npm run build-dll"'));
 	execSync('npm run postinstall');
 }
@@ -55,7 +49,7 @@ const configuration: webpack.Configuration = {
 	module: {
 		rules: [
 			{
-				test: /\.s?css$/,
+				test: /\.s?(c|a)ss$/,
 				use: [
 					'style-loader',
 					{
@@ -82,13 +76,33 @@ const configuration: webpack.Configuration = {
 			},
 			// Images
 			{
-				test: /\.(png|svg|jpg|jpeg|gif)$/i,
+				test: /\.(png|jpg|jpeg|gif)$/i,
 				type: 'asset/resource'
+			},
+			// SVG
+			{
+				test: /\.svg$/,
+				use: [
+					{
+						loader: '@svgr/webpack',
+						options: {
+							prettier: false,
+							svgo: false,
+							svgoConfig: {
+								plugins: [{ removeViewBox: false }]
+							},
+							titleProp: true,
+							ref: true,
+							throwIfNamespace: false
+						}
+					},
+					'url-loader'
+				]
 			}
 		]
 	},
 	plugins: [
-		...(requiredByDLLConfig
+		...(skipDLLs
 			? []
 			: [
 					new webpack.DllReferencePlugin({

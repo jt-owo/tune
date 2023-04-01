@@ -28,9 +28,10 @@ import menuIcon from '../../../../assets/animations/menuV4.json';
 import defaultAlbumCover from '../../../../assets/images/tune_no_artwork.svg';
 import deleteIcon from '../../../../assets/ui-icons/trash-2.svg';
 import editIcon from '../../../../assets/ui-icons/edit-3.svg';
-import addTopIcon from '../../../../assets/ui-icons/add-top.svg';
-import addBottomIcon from '../../../../assets/ui-icons/add-bottom.svg';
-import imageIcon from '../../../../assets/ui-icons/image-regular.svg';
+// TODO: @tobytaken fix svg.
+/* import addTopIcon from '../../../../assets/ui-icons/add-top.svg'; */
+/* import addBottomIcon from '../../../../assets/ui-icons/add-bottom.svg'; */
+/* import imageIcon from '../../../../assets/ui-icons/image-regular.svg'; */
 import lockIcon from '../../../../assets/animations/lock.json';
 
 import RenameDialog from '../../components/RenameDialog/RenameDialog';
@@ -245,7 +246,7 @@ const Playlist: FC = memo(function Playlist() {
 				<div className={style['playlist-controls']}>
 					<HamburgerMenu onClose={() => setHamburgerVisibility(false)} visible={hamburgerVisibility} positionX={25} positionY={100}>
 						<HamburgerMenuItem title="Edit" icon={editIcon} />
-						<HamburgerMenuItem title="Choose image" icon={imageIcon} />
+						<HamburgerMenuItem title="Choose image" icon={undefined} />
 						<HamburgerMenuItem title={isSortingLocked ? 'Unlock playlist' : 'Lock playlist'} lottieIcon={lockIcon} onClick={handleLockPlaylist} isActive={isSortingLocked} lottieActiveFrame={1} lottieInactiveFrame={9} useLottie />
 					</HamburgerMenu>
 					<ToolTip text="Play Playlist">
@@ -304,8 +305,8 @@ const Playlist: FC = memo(function Playlist() {
 				)}
 				{visibility && (
 					<ContextMenu y={position.y} x={position.x}>
-						<ContextMenuItem header="Play Next" staticIcon={addTopIcon} type="default" onClick={() => handlePlayNext(usingContextMenuId)} />
-						<ContextMenuItem header="Play Last" staticIcon={addBottomIcon} type="default" onClick={() => handlePlayLast(usingContextMenuId)} />
+						<ContextMenuItem header="Play Next" staticIcon={undefined} type="default" onClick={() => handlePlayNext(usingContextMenuId)} />
+						<ContextMenuItem header="Play Last" staticIcon={undefined} type="default" onClick={() => handlePlayLast(usingContextMenuId)} />
 						<ContextMenuItem header="Delete from Playlist" staticIcon={deleteIcon} type="danger" onClick={() => handleTrackRemove(usingContextMenuId)} />
 					</ContextMenu>
 				)}

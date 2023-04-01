@@ -109,10 +109,7 @@ class Main {
 		const clientId = process.env.TUNE_DISCORD_CLIENT_ID;
 		if (clientId) {
 			this.discord = new DiscordClient(clientId);
-			this.discord.setActivity();
 		}
-
-		dialog.showMessageBox({ message: clientId?.toString() ?? '' });
 
 		app.on('activate', () => {
 			this.onActivate();

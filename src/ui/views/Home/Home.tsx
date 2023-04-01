@@ -1,28 +1,42 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
+import { selectSpotifyToken, selectUser } from '../../../state/slices/playerSlice';
+import { IArtist } from '../../../typings/types';
+import { useAppSelector } from '../../hooks';
+import SpotifyAPI from '../../util/spotifyAPI';
+
 import View from '../../components/View/View';
-import ContextMenuExample from '../../components/ContextMenu/ContextMenuExample';
-import TabControl from '../../components/TabControl/TabControl';
-import TabItem from '../../components/TabControl/TabItem/TabItem';
-import HomeItemSmall from '../../components/Home_Elements/HomeItemSmall/HomeItemSmall';
 import HomeItemMedium from '../../components/Home_Elements/HomeItemMedium/HomeItemMedium';
 
-import style from './Home.module.scss';
-
-import image1 from '../../../../assets/images/tune_no_artwork.svg';
-
 const Home: FC = () => {
+	const user = useAppSelector(selectUser);
+	const spotifyToken = useAppSelector(selectSpotifyToken);
+
+	const [topArtists, setTopArtists] = useState<IArtist[]>([]);
+
+	const title = user ? `Hello, ${user.name}` : 'Home';
+
+	useEffect(() => {
+		const loadTopItems = async (accessToken: string) => {
+			const artists = (await SpotifyAPI.fetchUserTopItems(accessToken, 'artists')) as IArtist[];
+			setTopArtists(artists);
+		};
+
+		if (spotifyToken) {
+			loadTopItems(spotifyToken);
+		}
+	}, [spotifyToken]);
+
 	return (
-		<View title="Home" id="home">
+		<View title={title} id="home">
 			<div className="content">
-				<TabControl>
-					<TabItem label="Tab 1">
-						<ContextMenuExample />
-					</TabItem>
-					<TabItem label="Tab 2">
-						<HomeItemSmall image={image1} title="Awesome Album" artist="TUNE" />
-						<HomeItemMedium image={image1} title="Awesome Album" artist="TUNE" />
-					</TabItem>
-				</TabControl>
+				{topArtists.length > 1 && (
+					<div>
+						<h3>You top artists</h3>
+						{topArtists.map((artist) => {
+							return <HomeItemMedium key={artist.name} title={artist.name} image={artist.images[0].url} />;
+						})}
+					</div>
+				)}
 			</div>
 		</View>
 	);

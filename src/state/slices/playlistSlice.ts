@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { PlaylistData } from '../../typings/playlist';
+import { ITrack, PlaylistData } from '../../typings/types';
 import newGuid from '../../ui/util';
 import type { RootState } from '../store';
 
@@ -44,7 +44,22 @@ export const playlistSlice = createSlice({
 			const index = state.playlists.indexOf(toUpdate);
 			state.playlists[index] = action.payload;
 
-			window.api.db.set('playlists', JSON.stringify([...state.playlists]));
+			const toSave = state.playlists.map((playlist) => {
+				const tracks: ITrack[] = playlist.tracks.map((track) => {
+					return {
+						id: track.id,
+						isLocal: track.isLocal,
+						name: track.name
+					};
+				});
+
+				return {
+					...playlist,
+					tracks
+				};
+			});
+
+			window.api.db.set('playlists', JSON.stringify(toSave));
 		},
 		loadPlaylists: (state) => {
 			const stored = window.api.db.get('playlists') as PlaylistData[];

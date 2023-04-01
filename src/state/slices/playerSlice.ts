@@ -1,16 +1,26 @@
-/* eslint-disable prefer-destructuring */
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { IPlaybackState, ITrack, IUser } from '../../typings/types';
 import type { RootState } from '../store';
-import { TrackData } from '../../typings/playlist';
 
 export interface PlayerState {
-	queue: TrackData[];
+	/** Queue */
+	queue: ITrack[];
 	queueIndex: number;
-	history: TrackData[];
-	currentTrack?: TrackData;
-	outputDeviceId?: string;
+	history: ITrack[];
+
+	/** Playback info */
+	currentTrack?: ITrack;
 	isPlaying: boolean;
+	isShuffle: boolean;
+	isRepeat: boolean;
+	volume: number;
+	progress: number;
+
+	/** Misc. */
+	outputDeviceId?: string;
+	spotifyToken?: string;
+	user?: IUser; // FIXME: Move to seperate reducer.
 }
 
 const initialState: PlayerState = {
@@ -18,22 +28,34 @@ const initialState: PlayerState = {
 	queueIndex: 0,
 	history: [],
 	isPlaying: false,
-	outputDeviceId: window.api.config.get('outputDeviceId') as string
+	isShuffle: false,
+	isRepeat: false,
+	volume: +window.api.config.get('volume'),
+	progress: 0,
+	outputDeviceId: window.api.config.get('outputDeviceId').toString()
 };
 
 export const playerSlice = createSlice({
 	name: 'player',
 	initialState,
 	reducers: {
-		setQueue: (state, action: PayloadAction<TrackData[]>) => {
+		updatePlaybackState: (state, action: PayloadAction<IPlaybackState>) => {
+			state.currentTrack = action.payload.track;
+			state.isPlaying = action.payload.isPlaying;
+			state.isShuffle = action.payload.isShuffle;
+			state.isRepeat = action.payload.isRepeat;
+			state.volume = action.payload.volume / 1000;
+			state.progress = action.payload.progress;
+		},
+		setQueue: (state, action: PayloadAction<ITrack[]>) => {
 			state.queue = action.payload;
 
 			state.queueIndex = 0;
 			state.currentTrack = state.queue[state.queueIndex];
 			state.isPlaying = true;
 		},
-		updateQueue: (state, action: PayloadAction<TrackData[]>) => {
-			const fixedIds: TrackData[] = [];
+		updateQueue: (state, action: PayloadAction<ITrack[]>) => {
+			const fixedIds: ITrack[] = [];
 
 			let id = 1;
 			action.payload.forEach((track) => {
@@ -46,7 +68,7 @@ export const playerSlice = createSlice({
 
 			state.queue = fixedIds;
 		},
-		setTrack: (state, action: PayloadAction<TrackData>) => {
+		setTrack: (state, action: PayloadAction<ITrack>) => {
 			state.currentTrack = action.payload;
 			state.isPlaying = true;
 		},
@@ -73,16 +95,30 @@ export const playerSlice = createSlice({
 				state.currentTrack = state.queue[state.queueIndex];
 				state.isPlaying = true;
 			}
+		},
+		updateSpotifyToken: (state, action: PayloadAction<string>) => {
+			state.spotifyToken = action.payload;
+		},
+		updateUser: (state, action: PayloadAction<IUser>) => {
+			state.user = action.payload;
 		}
 	}
 });
 
-export const { setTrack, setQueue, updateQueue, setOutputDevice, play, playNext, playPrevious } = playerSlice.actions;
+export const { setTrack, setQueue, updateQueue, setOutputDevice, play, playNext, playPrevious, updateSpotifyToken, updateUser, updatePlaybackState } = playerSlice.actions;
 
-export const selectIsPlaying = (state: RootState) => state.player.isPlaying;
 export const selectQueue = (state: RootState) => state.player.queue;
 export const selectQueueIndex = (state: RootState) => state.player.queueIndex;
+
+export const selectIsPlaying = (state: RootState) => state.player.isPlaying;
+export const selectIsShuffle = (state: RootState) => state.player.isShuffle;
+export const selectIsRepeat = (state: RootState) => state.player.isRepeat;
 export const selectCurrentTrack = (state: RootState) => state.player.currentTrack;
+export const selectVolume = (state: RootState) => state.player.volume;
+export const selectProgress = (state: RootState) => state.player.progress;
+
 export const selectOutputDeviceId = (state: RootState) => state.player.outputDeviceId;
+export const selectSpotifyToken = (state: RootState) => state.player.spotifyToken;
+export const selectUser = (state: RootState) => state.player.user;
 
 export default playerSlice.reducer;

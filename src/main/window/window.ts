@@ -116,8 +116,8 @@ export default class Window {
 		menuBuilder.buildMenu();
 
 		// Open urls in the user's browser
-		this.browserWindow.webContents.setWindowOpenHandler((edata) => {
-			shell.openExternal(edata.url);
+		this.browserWindow.webContents.setWindowOpenHandler(({ url }) => {
+			shell.openExternal(url);
 			return { action: 'deny' };
 		});
 

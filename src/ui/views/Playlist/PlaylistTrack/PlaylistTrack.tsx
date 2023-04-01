@@ -4,7 +4,8 @@
 import { FC, memo, MouseEvent, useEffect, useState } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { AudioMetadata, TrackData } from '../../../../typings/playlist';
+import { AudioMetadata } from '../../../../typings/metadata';
+import { ITrack } from '../../../../typings/types';
 
 import playlistStyle from '../Playlist.module.scss';
 
@@ -12,9 +13,9 @@ import defaultAlbumCover from '../../../../../assets/images/tune_no_artwork.svg'
 
 interface PlaylistTrackProps {
 	id: number;
-	track: TrackData;
+	track: ITrack;
 	isDragging?: boolean;
-	setCurrentTrack?: (track: TrackData) => void;
+	setCurrentTrack?: (track: ITrack) => void;
 	onContextMenu: (event: MouseEvent<HTMLElement>) => void;
 }
 
@@ -31,13 +32,15 @@ const PlaylistTrack: FC<PlaylistTrackProps> = memo((props) => {
 	};
 
 	useEffect(() => {
-		const getMetadata = async () => {
-			const metadataJSON = await window.api.system.readMetadata(track.filePath);
-			setMetadata(JSON.parse(metadataJSON) as AudioMetadata);
-		};
+		if (track.isLocal) {
+			const getMetadata = async () => {
+				const metadataJSON = await window.api.system.readMetadata(track.name);
+				setMetadata(JSON.parse(metadataJSON) as AudioMetadata);
+			};
 
-		getMetadata();
-	}, [track.filePath]);
+			getMetadata();
+		}
+	}, [track.isLocal, track.name]);
 
 	const getAlbumCover = () => {
 		if (metadata?.info?.cover) {

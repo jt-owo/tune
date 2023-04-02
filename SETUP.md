@@ -2,11 +2,11 @@
 
 ## Prerequisites
 
-Code Editor: VSCode <https://code.visualstudio.com>
-nodeJS > v14.x
-npm > 7.x
-git: Always use the latest git version
-OS: Windows 10+ / macOS (x64/ARM) / Linux
+Code Editor: VSCode (Recommended)   
+node: v19.x.x  
+npm: v9.x.x  
+git: Always use the latest git version  
+OS: Windows 10+ / macOS (x64/ARM) / Linux  
 
 ## Project setup
 
@@ -16,7 +16,7 @@ cd tune
 npm i
 ```
 
-If you have access to the ".env" file then add the file to the project root.
+If you have access to the ".env" file add the file to the project root.
 
 ### VSCode Extensions
 

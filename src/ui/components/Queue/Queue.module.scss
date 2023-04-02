@@ -223,16 +223,6 @@
 	background-color: $danger-color;
 }
 
-.queue::-webkit-scrollbar-thumb {
-	width: 5px;
-	background-color: $dark-gray-2;
-	border-radius: 10px;
-}
-
-.queue::-webkit-scrollbar-thumb:hover {
-	background-color: $hover-color-light;
-}
-
 .queue::-webkit-scrollbar {
 	width: 0px;
 	background-color: transparent;

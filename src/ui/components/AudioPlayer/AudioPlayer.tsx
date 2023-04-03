@@ -20,7 +20,7 @@ import skipBackBtn from '../../../../assets/animations/skipBack.json';
 import skipForwardBtn from '../../../../assets/animations/skipForward.json';
 
 import style from './AudioPlayer.module.scss';
-import SpotifyAPI from '../../util/spotifyAPI';
+import SpotifyAPI from '../../api/spotify';
 
 const AudioPlayer: FC = () => {
 	const audioRef = useRef<HTMLAudioElement & { setSinkId(deviceId: string): void; volume: number }>(null);

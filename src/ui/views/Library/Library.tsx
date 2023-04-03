@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import { useAppSelector } from '../../hooks';
 import { selectSpotifyToken } from '../../../state/slices/playerSlice';
-import SpotifyAPI from '../../util/spotifyAPI';
+import SpotifyAPI from '../../api/spotify';
 import { IAlbum, ITrack } from '../../../typings/types';
 
 import View from '../../components/View/View';

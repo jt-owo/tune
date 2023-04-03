@@ -13,6 +13,7 @@ const DEFAULT_DB: Tables = {
 	playlists: []
 };
 
+// TODO: Rewrite to library system.
 export default class Database {
 	private filePath: string;
 

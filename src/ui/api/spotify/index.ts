@@ -1,7 +1,7 @@
-/* eslint-disable compat/compat */
-import { PlaybackStateResult, SavedAlbumsResult, SavedTracksResult, SearchResult, TrackItem, UserProfileResult, UserTopArtistsResult, UserTopTracksResult } from '../../typings/spotifyAPI';
-import { IAlbum, ITrack } from '../../typings/types';
-import SpotifyParser from './spotifyParser';
+import { ArtistItem, TrackItem } from '../../../typings/spotify/items';
+import { UserProfileResult, PlaybackStateResult, SpotifyQueryResult, SavedAlbumsResultItem, SavedTracksResultItem, SearchResult } from '../../../typings/spotify/results';
+import { IAlbum, ITrack } from '../../../typings/types';
+import SpotifyParser from './parser';
 
 export const CLIENT_ID = '5ca32668f6564c6595cdb0a0b315af28';
 export const REDIRECT_URI = 'http://localhost:9100/callback';
@@ -9,7 +9,7 @@ export const REDIRECT_URI = 'http://localhost:9100/callback';
 type TimeRange = 'short_term' | 'medium_term' | 'long_term';
 
 class SpotifyAPI {
-	private static async callAPI(token: string, url: string, params?: URLSearchParams) {
+	private static async callAPI<T>(token: string, url: string, params?: URLSearchParams) {
 		let request = url;
 
 		if (params) {
@@ -21,10 +21,12 @@ class SpotifyAPI {
 			headers: { Authorization: `Bearer ${token}` }
 		}).catch((error) => {
 			// eslint-disable-next-line no-console
-			console.error(error);
+			console.warn(error);
 		});
 
-		return result;
+		const data = (await result?.json()) as T;
+
+		return data;
 	}
 
 	static async authorize() {
@@ -61,8 +63,7 @@ class SpotifyAPI {
 	 * @returns A user.
 	 */
 	static async fetchUserProfile(token: string) {
-		const result = await this.callAPI(token, 'https://api.spotify.com/v1/me');
-		const data: UserProfileResult = await result?.json();
+		const data = await this.callAPI<UserProfileResult>(token, 'https://api.spotify.com/v1/me');
 		return SpotifyParser.parseUser(data);
 	}
 
@@ -73,8 +74,7 @@ class SpotifyAPI {
 	 * @returns Information about playback status.
 	 */
 	static async fetchPlaybackState(token: string) {
-		const result = await this.callAPI(token, 'https://api.spotify.com/v1/me/player');
-		const data: PlaybackStateResult = await result?.json();
+		const data = await this.callAPI<PlaybackStateResult>(token, 'https://api.spotify.com/v1/me/player');
 		return SpotifyParser.parsePlaybackState(data);
 	}
 
@@ -91,9 +91,7 @@ class SpotifyAPI {
 		params.append('limit', limit.toString());
 		if (offset && offset > 0) params.append('offset', offset.toString());
 
-		const result = await this.callAPI(token, 'https://api.spotify.com/v1/me/albums', params);
-		const data: SavedAlbumsResult = await result?.json();
-
+		const data = await this.callAPI<SpotifyQueryResult<SavedAlbumsResultItem>>(token, 'https://api.spotify.com/v1/me/albums', params);
 		const savedAlbums: IAlbum[] = [];
 		data.items.forEach((item) => {
 			savedAlbums.push(SpotifyParser.parseAlbum(item.album));
@@ -115,9 +113,7 @@ class SpotifyAPI {
 		params.append('limit', limit.toString());
 		if (offset && offset > 0) params.append('offset', offset.toString());
 
-		const result = await this.callAPI(token, 'https://api.spotify.com/v1/me/tracks', params);
-		const data: SavedTracksResult = await result?.json();
-
+		const data = await this.callAPI<SpotifyQueryResult<SavedTracksResultItem>>(token, 'https://api.spotify.com/v1/me/tracks', params);
 		const savedTracks: ITrack[] = [];
 		data.items.forEach((item) => {
 			savedTracks.push(SpotifyParser.parseTrack(item.track));
@@ -142,10 +138,10 @@ class SpotifyAPI {
 		params.append('limit', limit.toString());
 		if (offset && offset > 0) params.append('offset', offset.toString());
 
-		const result = await this.callAPI(token, `https://api.spotify.com/v1/me/top/${type}`, params);
+		const result = await this.callAPI<SpotifyQueryResult<TrackItem> | SpotifyQueryResult<ArtistItem>>(token, `https://api.spotify.com/v1/me/top/${type}`, params);
 
 		if (type === 'tracks') {
-			const data: UserTopTracksResult = await result?.json();
+			const data = result as SpotifyQueryResult<TrackItem>;
 
 			const tracks: ITrack[] = [];
 			data.items.forEach((track: TrackItem) => {
@@ -155,7 +151,7 @@ class SpotifyAPI {
 			return tracks;
 		}
 
-		const data: UserTopArtistsResult = await result?.json();
+		const data = result as SpotifyQueryResult<ArtistItem>;
 		return SpotifyParser.parseArtists(data.items);
 	}
 
@@ -172,8 +168,7 @@ class SpotifyAPI {
 		params.append('q', query);
 		params.append('type', 'track,album,artist');
 
-		const result = await this.callAPI(token, 'https://api.spotify.com/v1/search', params);
-		const data: SearchResult = await result?.json();
+		const data = await this.callAPI<SearchResult>(token, 'https://api.spotify.com/v1/search', params);
 		return SpotifyParser.parseSearch(data);
 	}
 }

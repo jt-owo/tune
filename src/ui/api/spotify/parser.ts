@@ -1,7 +1,16 @@
-import { ArtistItem, AlbumItem, TrackItem, SearchResult, UserProfileResult, PlaybackStateResult } from '../../typings/spotifyAPI';
-import { IArtist, IAlbum, ITrack, IUser, IPlaybackState } from '../../typings/types';
+import { ArtistItem, AlbumItem, TrackItem } from '../../../typings/spotify/items';
+import { UserProfileResult, SearchResult, PlaybackStateResult } from '../../../typings/spotify/results';
+import { IArtist, IAlbum, ITrack, IUser, IPlaybackState } from '../../../typings/types';
 
+/**
+ * The SpotifyParser class contains all functions to parse spotify items into the tune format.
+ */
 class SpotifyParser {
+	/**
+	 * Parses a spotify artist object array into the tune format.
+	 * @param artists Array of artists. (From spotify result)
+	 * @returns An array of artists in the tune format.
+	 */
 	static parseArtists(artists: ArtistItem[]): IArtist[] {
 		const artistsParsed: IArtist[] = [];
 		artists.forEach((artist) => {
@@ -14,17 +23,26 @@ class SpotifyParser {
 		return artistsParsed;
 	}
 
+	/**
+	 * Parses a spotify album object into the tune format.
+	 * @param album Album object. (From spotify result)
+	 * @returns An album object in the tune format.
+	 */
 	static parseAlbum(album: AlbumItem): IAlbum {
 		return {
 			name: album.name,
 			artists: SpotifyParser.parseArtists(album.artists),
 			images: album.images,
 			releaseDate: album.release_date,
-			totalTracks: album.total_tracks,
-			type: 'album'
+			totalTracks: album.total_tracks
 		};
 	}
 
+	/**
+	 * Parses a spotify track object into the tune format.
+	 * @param track Track object. (From spotify result)
+	 * @returns A track object in the tune format.
+	 */
 	static parseTrack(track: TrackItem): ITrack {
 		return {
 			id: track.track_number,
@@ -44,6 +62,11 @@ class SpotifyParser {
 		};
 	}
 
+	/**
+	 * Parses a spotify search result into seperate arrays of objects in the tune format.
+	 * @param data Result object. (From spotify result)
+	 * @returns Arrays for each search type. (e.g. album array)
+	 */
 	static parseSearch(data: SearchResult) {
 		let albums: IAlbum[] = [];
 		if (data.albums) {
@@ -67,6 +90,11 @@ class SpotifyParser {
 		return { albums, artists, tracks };
 	}
 
+	/**
+	 * Parses the spotify playback state result into the tune format.
+	 * @param playbackState PlaybackState result object. (From spotify result)
+	 * @returns A playback state object in the tune format.
+	 */
 	static parsePlaybackState(playbackState: PlaybackStateResult): IPlaybackState {
 		let track: ITrack | undefined;
 		if (playbackState.item) {
@@ -77,7 +105,7 @@ class SpotifyParser {
 			volume: playbackState.device.volume_percent,
 			progress: playbackState.progress_ms,
 			isPlaying: playbackState.is_playing,
-			isRepeat: playbackState.repeat_state === 'on',
+			repeatMode: playbackState.repeat_state,
 			isShuffle: playbackState.shuffle_state,
 			track
 		};

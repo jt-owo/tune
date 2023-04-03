@@ -43,7 +43,7 @@ export const playerSlice = createSlice({
 			state.currentTrack = action.payload.track;
 			state.isPlaying = action.payload.isPlaying;
 			state.isShuffle = action.payload.isShuffle;
-			state.isRepeat = action.payload.isRepeat;
+			state.isRepeat = action.payload.repeatMode;
 			state.volume = action.payload.volume / 1000;
 			state.progress = action.payload.progress;
 		},

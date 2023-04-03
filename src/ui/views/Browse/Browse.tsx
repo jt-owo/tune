@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks';
 import { selectSpotifyToken } from '../../../state/slices/playerSlice';
 import { addAlert } from '../../../state/slices/alertSlice';
 import { IAlbum, IArtist, ITrack } from '../../../typings/types';
-import SpotifyAPI from '../../util/spotifyAPI';
+import SpotifyAPI from '../../api/spotify';
 import newGuid from '../../util';
 
 import View from '../../components/View/View';

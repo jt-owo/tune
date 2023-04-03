@@ -1,13 +1,7 @@
-interface CoverImage {
-	height: number;
-	width: number;
+export interface Image {
+	height?: number;
+	width?: number;
 	url: string;
-}
-
-export interface IUser {
-	name: string;
-	email: string;
-	avatar: CoverImage;
 }
 
 export interface PlaylistData {
@@ -17,32 +11,45 @@ export interface PlaylistData {
 	pinned: boolean;
 }
 
+export interface IUser {
+	name: string;
+	email: string;
+	avatar: Image;
+}
+
 export interface IArtist {
 	name: string;
-	images: CoverImage[];
+	images: Image[];
 }
 
 export interface IAlbum {
 	name: string;
 	artists: IArtist[];
-	images: CoverImage[];
+	images: Image[];
 	releaseDate: string;
 	totalTracks: number;
-	type: 'album';
 }
 
 export interface ITrack {
 	id: number;
 	/**
-	 * Name is the file path if isLocal is true.
+	 * Name of the track.
+	 *
+	 * Stores the is the file path if the track is a local audio file.
 	 */
 	name: string;
+	/**
+	 * Album the track belongs to. Contains information like images.
+	 */
 	album?: IAlbum;
 	artists?: IArtist[];
 	/**
 	 * Duration in ms.
 	 */
 	duration?: number;
+	/**
+	 * If the track is a local audio file.
+	 */
 	isLocal: boolean;
 }
 
@@ -50,7 +57,7 @@ export interface IPlaybackState {
 	track?: ITrack;
 	isPlaying: boolean;
 	isShuffle: boolean;
-	isRepeat: boolean;
+	repeatMode: RepeatMode;
 	volume: number;
 	progress: number;
 }

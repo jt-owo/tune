@@ -4,7 +4,7 @@ import { updateSpotifyToken, updateUser } from '../state/slices/playerSlice';
 import { useAppDispatch } from './hooks';
 import { loadPlaylists } from '../state/slices/playlistSlice';
 import AppRoutes, { AppRoutesParams } from './routes';
-import SpotifyAPI from './util/spotifyAPI';
+import SpotifyAPI from './api/spotify';
 import Titlebar from './components/Titlebar/Titlebar';
 import Home from './views/Home/Home';
 import Library from './views/Library/Library';

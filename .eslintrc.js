@@ -3,6 +3,7 @@ module.exports = {
 	rules: {
 		'react/function-component-definition': 'off',
 		'react/react-in-jsx-scope': 'off',
+		'react/jsx-props-no-spreading': 'off',
 		'react/require-default-props': 'off',
 		'import/no-unresolved': 'error',
 		'import/no-extraneous-dependencies': 'off',

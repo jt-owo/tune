@@ -2,7 +2,7 @@ import { FC, useEffect } from 'react';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import { updateSpotifyToken, updateUser } from '../state/slices/playerSlice';
 import { useAppDispatch } from './hooks';
-import { loadPlaylists, loadSP } from '../state/slices/playlistSlice';
+import { loadPlaylists, loadSpotifyPlaylists } from '../state/slices/playlistSlice';
 import AppRoutes, { AppRoutesParams } from './routes';
 import SpotifyAPI from './api/spotify';
 import Titlebar from './components/Titlebar/Titlebar';
@@ -23,22 +23,18 @@ const Application: FC = () => {
 	dispatch(loadPlaylists());
 
 	useEffect(() => {
-		const loadUser = async (accessToken: string) => {
+		const loadSpotifyContent = async (accessToken: string) => {
 			const user = await SpotifyAPI.fetchUserProfile(accessToken);
-			dispatch(updateUser(user));
-		};
-
-		const loadSpotifyPlaylists = async (accessToken: string) => {
 			const playlists = await SpotifyAPI.fetchUserPlaylists(accessToken);
-			dispatch(loadSP(playlists));
+			dispatch(loadSpotifyPlaylists(playlists));
+			dispatch(updateUser(user));
 		};
 
 		const token = SpotifyAPI.getToken();
 
 		if (token) {
 			dispatch(updateSpotifyToken(token));
-			loadUser(token);
-			loadSpotifyPlaylists(token);
+			loadSpotifyContent(token);
 		}
 	}, [dispatch]);
 

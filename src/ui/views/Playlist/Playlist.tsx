@@ -10,63 +10,73 @@ import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSo
 import { restrictToWindowEdges } from '@dnd-kit/modifiers';
 import Lottie, { LottieRefCurrentProps } from 'lottie-react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { removePlaylist, selectPlaylists, updatePlaylist } from '../../../state/slices/playlistSlice';
-import { IPlaylist, ITrack, PlaylistData } from '../../../typings/types';
+import { removePlaylist, updatePlaylist } from '../../../state/slices/playlistSlice';
+import { IPlaylist, ITrack } from '../../../typings/types';
 import { selectQueue, selectSpotifyToken, setQueue, updateQueue } from '../../../state/slices/playerSlice';
+import { getServices } from '../../util/serviceHelper';
+import { getAlbumCover } from '../../util/formatHelper';
 import useContextMenu from '../../hooks/useContextMenu';
+import SpotifyAPI from '../../api/spotify';
 import AppRoutes from '../../routes';
 
 import PlaylistTrack from './PlaylistTrack/PlaylistTrack';
 import ToolTip from '../../components/ToolTip/ToolTip';
 import ContextMenu from '../../components/ContextMenu/ContextMenu';
 import ContextMenuItem from '../../components/ContextMenu/ContextMenuItem/ContextMenuItem';
+import RenameDialog from '../../components/RenameDialog/RenameDialog';
+import Dialog from '../../components/Dialog/Dialog';
+import HamburgerMenu from '../../components/HamburgerMenu/HamburgerMenu';
+import HamburgerMenuItem from '../../components/HamburgerMenu/HamburgerMenuItem/HamburgerMenuItem';
 
 import playIcon from '../../../../assets/ui-icons/play.svg';
 import folderIcon from '../../../../assets/animations/folder.json';
 import trashIcon from '../../../../assets/animations/trash.json';
 import menuIcon from '../../../../assets/animations/menuV4.json';
 
-import defaultAlbumCover from '../../../../assets/images/tune_no_artwork.svg';
 import deleteIcon from '../../../../assets/ui-icons/trash-2.svg';
 import editIcon from '../../../../assets/ui-icons/edit-3.svg';
-// TODO: @tobytaken fix svg.
+// FIXME: @tobytaken fix svg.
 /* import addTopIcon from '../../../../assets/ui-icons/add-top.svg'; */
 /* import addBottomIcon from '../../../../assets/ui-icons/add-bottom.svg'; */
 /* import imageIcon from '../../../../assets/ui-icons/image-regular.svg'; */
 import lockIcon from '../../../../assets/animations/lock.json';
 
-import RenameDialog from '../../components/RenameDialog/RenameDialog';
-import Dialog from '../../components/Dialog/Dialog';
-import HamburgerMenu from '../../components/HamburgerMenu/HamburgerMenu';
-import HamburgerMenuItem from '../../components/HamburgerMenu/HamburgerMenuItem/HamburgerMenuItem';
-
 import style from './Playlist.module.scss';
-import SpotifyAPI from '../../api/spotify';
 
-const Playlist: FC = memo(function Playlist() {
-	const { id, service } = useParams();
+type PlaylistParams = {
+	id: string;
+	service: string;
+};
 
-	const isLocal = service === 'local';
+const Playlist: FC = memo(() => {
+	const { id, service } = useParams<PlaylistParams>();
+
+	const { isLocal, isSpotify } = getServices(service ?? '');
 
 	const navigate = useNavigate();
 	const dispatch = useAppDispatch();
 
 	const spotifyToken = useAppSelector(selectSpotifyToken);
-	const playlists = useAppSelector(selectPlaylists);
-	const spotifyPlaylists = useAppSelector((state) => state.playlist.spotifyPlaylists);
+	const playlists = useAppSelector((state) => state.playlists.local);
+	const spotifyPlaylists = useAppSelector((state) => state.playlists.spotify);
 	const queue = useAppSelector(selectQueue);
 
-	const localPlaylist = playlists.find((x) => x.id === id);
-	const spotifyPlaylist = spotifyPlaylists.find((x) => x.id === id);
+	let found: IPlaylist | undefined;
+	if (isLocal) {
+		found = playlists.find((x) => x.id === id);
+	} else if (isSpotify) {
+		found = spotifyPlaylists.find((x) => x.id === id);
+	}
 
-	if (!spotifyPlaylist) {
+	if (!found) {
 		navigate(AppRoutes.Library);
 		return null;
 	}
 
-	const [playlist, setPlaylist] = useState<IPlaylist>(spotifyPlaylist);
-
+	const [playlist, setPlaylist] = useState<IPlaylist>(found);
 	const [tracks, setTracks] = useState<ITrack[]>([]);
+
+	// Drag and drop hooks
 	const sensors = useSensors(
 		useSensor(PointerSensor, {
 			activationConstraint: {
@@ -80,13 +90,16 @@ const Playlist: FC = memo(function Playlist() {
 	const [isDraggingId, setIsDraggingId] = useState<UniqueIdentifier>();
 	const [isSortingLocked, setIsSortingLocked] = useState(false);
 
+	// Other ui states.
 	const [renameVisibility, setRenameVisibility] = useState(false);
 	const [hamburgerVisibility, setHamburgerVisibility] = useState(false);
 	const [isDialogVisible, setDialogVisibility] = useState(false);
 
+	// Context Menu states.
 	const [visibility, setVisibility, position, setPosition] = useContextMenu();
 	const [usingContextMenuId, setUsingContextMenuId] = useState(-1);
 
+	// Lottie refs.
 	const lottieShowMenuRef = useRef<LottieRefCurrentProps>(null);
 	const lottieAddTracksRef = useRef<LottieRefCurrentProps>(null);
 	const lottieDeletePlaylistRef = useRef<LottieRefCurrentProps>(null);
@@ -107,8 +120,8 @@ const Playlist: FC = memo(function Playlist() {
 				const newIndex = tracks.indexOf(tracks.find((x) => x.id === over.id)!);
 				const newArray = arrayMove(tracks, oldIndex, newIndex);
 				if (isLocal) {
-					const updateData: PlaylistData = {
-						...playlist!,
+					const updateData: IPlaylist = {
+						...playlist,
 						tracks: newArray
 					};
 					dispatch(updatePlaylist(updateData));
@@ -119,8 +132,6 @@ const Playlist: FC = memo(function Playlist() {
 	};
 
 	const deletePlaylist = (confirm: boolean) => {
-		if (!isLocal) return;
-
 		if (confirm) {
 			dispatch(removePlaylist(playlist.id));
 			navigate(AppRoutes.Library);
@@ -128,17 +139,9 @@ const Playlist: FC = memo(function Playlist() {
 	};
 
 	const handleAddTracks = async () => {
-		if (!isLocal) return;
-
-		if (!playlist.tracks) {
-			playlist.tracks = [];
-		}
-
-		const updateData: PlaylistData = {
-			id: playlist.id,
-			name: playlist.name,
-			tracks: [...playlist.tracks],
-			pinned: playlist.pinned
+		const updateData: IPlaylist = {
+			...playlist,
+			tracks: [...playlist.tracks]
 		};
 
 		const paths = await window.api.system.selectFiles();
@@ -153,9 +156,7 @@ const Playlist: FC = memo(function Playlist() {
 			updateData.tracks.push({
 				id: index,
 				name: path,
-				isLocal: true,
-				artists: [],
-				duration: 0
+				service: 'local'
 			});
 		});
 
@@ -163,28 +164,15 @@ const Playlist: FC = memo(function Playlist() {
 		setTracks(updateData.tracks);
 	};
 
-	const playPlaylist = () => {
+	const handlePlay = () => {
 		dispatch(setQueue(playlist.tracks));
-	};
-
-	const startAnimation = (e: RefObject<LottieRefCurrentProps>) => {
-		e?.current?.setDirection(1);
-		e?.current?.play();
-	};
-
-	const stopAnimation = (e: RefObject<LottieRefCurrentProps>) => {
-		e?.current?.setDirection(-1);
-		e?.current?.play();
 	};
 
 	const handleTrackRemove = (id: number) => {
 		if (!playlist) return;
 
-		const updateData: PlaylistData = {
-			id: playlist.id,
-			name: playlist.name,
-			tracks: [...playlist.tracks],
-			pinned: playlist.pinned
+		const updateData: IPlaylist = {
+			...playlist
 		};
 
 		const index = updateData.tracks.findIndex((x) => x.id === id);
@@ -218,6 +206,11 @@ const Playlist: FC = memo(function Playlist() {
 		}
 	};
 
+	const handleToggleRename = () => {
+		if (!isLocal) return;
+		setRenameVisibility(true);
+	};
+
 	const handleRename = (data: string) => {
 		if (playlist) dispatch(updatePlaylist({ ...playlist, name: data }));
 	};
@@ -226,26 +219,42 @@ const Playlist: FC = memo(function Playlist() {
 		setIsSortingLocked(() => !isSortingLocked);
 	};
 
-	const handleToggleRename = () => {
-		if (!isLocal) return;
-		setRenameVisibility(true);
+	const startAnimation = (e: RefObject<LottieRefCurrentProps>) => {
+		e?.current?.setDirection(1);
+		e?.current?.play();
+	};
+
+	const stopAnimation = (e: RefObject<LottieRefCurrentProps>) => {
+		e?.current?.setDirection(-1);
+		e?.current?.play();
 	};
 
 	useEffect(() => {
-		const loadTracks = async (token: string, url: string) => {
+		const loadPlaylistTracks = async (token: string, url: string) => {
 			const tracksLoaded = await SpotifyAPI.fetchPlaylistTracks(token, url);
 			setTracks(tracksLoaded);
 		};
 
-		// const playlistFound = playlists.find((x) => x.id === id);
-		const spotifyPlaylistFound = spotifyPlaylists.find((x) => x.id === id);
-		if (spotifyPlaylistFound) {
-			setPlaylist(spotifyPlaylistFound);
-			if (spotifyPlaylistFound.tracksHref) {
-				if (spotifyToken) loadTracks(spotifyToken, spotifyPlaylistFound.tracksHref);
+		let query: IPlaylist[] | undefined;
+		if (isLocal) {
+			query = playlists;
+		} else if (isSpotify) {
+			query = spotifyPlaylists;
+		}
+
+		// Cursed if else mess for now, sorry.
+		if (query) {
+			const found = query.find((x) => x.id === id);
+			if (found) {
+				setPlaylist(found);
+				if (isLocal) {
+					if (found.tracks) setTracks(found.tracks);
+				} else if (isSpotify) {
+					if (found.tracksHref && spotifyToken) loadPlaylistTracks(spotifyToken, found.tracksHref);
+				}
 			}
 		}
-	}, [spotifyPlaylists, id, spotifyToken]);
+	}, [id, isLocal, isSpotify, playlists, spotifyPlaylists, spotifyToken]);
 
 	useEffect(() => {
 		if (lottieShowMenuRef.current) {
@@ -263,7 +272,7 @@ const Playlist: FC = memo(function Playlist() {
 			<Dialog heading="Delete?" description="You are about to delete this playlist. This action cannot be undone!" onClose={() => setDialogVisibility(false)} isOpen={isDialogVisible} type="danger" confirmText="Delete" rejectText="Keep" confirmCallback={deletePlaylist} />
 			<div className={style['playlist-heading']}>
 				<RenameDialog value={playlist?.name} nameCB={handleRename} visible={renameVisibility} onClose={() => setRenameVisibility(false)} />
-				<img src={defaultAlbumCover} alt="" />
+				<img src={getAlbumCover(playlist.images.length > 0 ? playlist.images[0].url : undefined)} alt="" />
 				<div className={style['playlist-heading-text']} onClick={handleToggleRename}>
 					{playlist?.name}
 				</div>
@@ -273,10 +282,10 @@ const Playlist: FC = memo(function Playlist() {
 						<HamburgerMenuItem title="Choose image" icon={undefined} />
 						<HamburgerMenuItem title={isSortingLocked ? 'Unlock playlist' : 'Lock playlist'} lottieIcon={lockIcon} onClick={handleLockPlaylist} isActive={isSortingLocked} lottieActiveFrame={1} lottieInactiveFrame={9} useLottie />
 					</HamburgerMenu>
-					{playlist.service === 'local' && (
+					{isLocal && (
 						<>
 							<ToolTip text="Play Playlist">
-								<div className={`${style['playlist-heading-btn']} ${style['btn-hover-animation']} ${style['playlist-play-btn']}`} onClick={playPlaylist}>
+								<div className={`${style['playlist-heading-btn']} ${style['btn-hover-animation']} ${style['playlist-play-btn']}`} onClick={handlePlay}>
 									<img className={style['play-icon']} src={playIcon} alt="" draggable="false" />
 								</div>
 							</ToolTip>

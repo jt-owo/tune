@@ -15,7 +15,7 @@ import AppRoutes from '../../routes';
 
 const Library: FC = () => {
 	const spotifyToken = useAppSelector(selectSpotifyToken);
-	const spotifyPlaylists = useAppSelector((state) => state.playlist.spotifyPlaylists);
+	const spotifyPlaylists = useAppSelector((state) => state.playlists.spotify);
 
 	const [savedAlbums, setSavedAlbums] = useState<IAlbum[]>([]);
 	const [savedTracks, setSavedTracks] = useState<ITrack[]>([]);

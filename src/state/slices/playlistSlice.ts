@@ -1,57 +1,64 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IPlaylist, ITrack, PlaylistData } from '../../typings/types';
+import { IPlaylist, ITrack } from '../../typings/types';
 import newGuid from '../../ui/util';
-import type { RootState } from '../store';
 
-export interface PlaylistState {
-	playlists: PlaylistData[];
-	spotifyPlaylists: IPlaylist[];
+export interface PlaylistsState {
+	/** Local playlists */
+	local: IPlaylist[];
+	/** Spotify playlists */
+	spotify: IPlaylist[];
 }
 
-const initialState: PlaylistState = {
-	playlists: [],
-	spotifyPlaylists: []
+const initialState: PlaylistsState = {
+	local: [],
+	spotify: []
 };
 
-export const playlistSlice = createSlice({
-	name: 'playlist',
+export const playlistsSlice = createSlice({
+	name: 'playlists',
 	initialState,
 	reducers: {
 		addPlaylist: (state, action: PayloadAction<string>) => {
-			const playlist: PlaylistData = {
+			const playlist: IPlaylist = {
 				id: newGuid(),
 				name: action.payload,
+				description: '',
 				tracks: [],
-				pinned: true
+				pinned: true,
+				images: [],
+				locked: false,
+				service: 'local',
+				collaborative: false,
+				public: false
 			};
 
-			state.playlists.push(playlist);
-			window.api.db.set('playlists', JSON.stringify([...state.playlists]));
+			state.local.push(playlist);
+			window.api.db.set('playlists', JSON.stringify([...state.local]));
 		},
 		removePlaylist: (state, action: PayloadAction<string>) => {
-			state.playlists = state.playlists.filter((playlist) => {
+			state.local = state.local.filter((playlist) => {
 				if (playlist.id === action.payload) {
 					return false;
 				}
 				return true;
 			});
 
-			window.api.db.set('playlists', JSON.stringify([...state.playlists]));
+			window.api.db.set('playlists', JSON.stringify([...state.local]));
 		},
-		updatePlaylist: (state, action: PayloadAction<PlaylistData>) => {
-			const toUpdate = state.playlists.find((p) => p.id === action.payload.id);
+		updatePlaylist: (state, action: PayloadAction<IPlaylist>) => {
+			const toUpdate = state.local.find((p) => p.id === action.payload.id);
 			if (!toUpdate) return;
 
-			const index = state.playlists.indexOf(toUpdate);
-			state.playlists[index] = action.payload;
+			const index = state.local.indexOf(toUpdate);
+			state.local[index] = action.payload;
 
-			const toSave = state.playlists.map((playlist) => {
+			const toSave = state.local.map((playlist) => {
 				const tracks: ITrack[] = playlist.tracks.map((track) => {
 					return {
 						id: track.id,
-						isLocal: track.isLocal,
-						name: track.name
+						name: track.name,
+						service: track.service
 					};
 				});
 
@@ -64,17 +71,15 @@ export const playlistSlice = createSlice({
 			window.api.db.set('playlists', JSON.stringify(toSave));
 		},
 		loadPlaylists: (state) => {
-			const stored = window.api.db.get('playlists') as PlaylistData[];
-			state.playlists = stored;
+			const stored = window.api.db.get('playlists') as IPlaylist[];
+			state.local = stored;
 		},
-		loadSP: (state, action: PayloadAction<IPlaylist[]>) => {
-			state.spotifyPlaylists = action.payload;
+		loadSpotifyPlaylists: (state, action: PayloadAction<IPlaylist[]>) => {
+			state.spotify = action.payload;
 		}
 	}
 });
 
-export const { addPlaylist, removePlaylist, updatePlaylist, loadPlaylists, loadSP } = playlistSlice.actions;
+export const { addPlaylist, removePlaylist, updatePlaylist, loadPlaylists, loadSpotifyPlaylists } = playlistsSlice.actions;
 
-export const selectPlaylists = (state: RootState) => state.playlist.playlists;
-
-export default playlistSlice.reducer;
+export default playlistsSlice.reducer;

@@ -4,13 +4,6 @@ export interface Image {
 	url: string;
 }
 
-export interface PlaylistData {
-	id: string;
-	name: string;
-	tracks: ITrack[];
-	pinned: boolean;
-}
-
 export interface IUser {
 	name: string;
 	email: string;
@@ -25,11 +18,11 @@ export interface IPlaylist {
 	tracks: ITrack[];
 	pinned: boolean;
 	locked: boolean;
-	service: 'local' | 'spotify';
+	service: StreamingService;
 
 	// Streaming services related stuff
-	collaborative: boolean;
-	public: boolean;
+	collaborative?: boolean;
+	public?: boolean;
 	owner?: IUser;
 	/** If the playlist is a spotify playlist the tracks can be requested via this url */
 	tracksHref?: string;
@@ -53,7 +46,7 @@ export interface ITrack {
 	/**
 	 * Name of the track.
 	 *
-	 * Stores the is the file path if the track is a local audio file.
+	 * Stores the file path if the track is a local audio file.
 	 */
 	name: string;
 	/** Album the track belongs to. Contains information like images. */
@@ -61,8 +54,8 @@ export interface ITrack {
 	artists?: IArtist[];
 	/** Duration in ms.	*/
 	duration?: number;
-	/** If the track is a local audio file. */
-	isLocal: boolean;
+	/** The service the track comes from. local is an audio file. */
+	service: StreamingService;
 }
 
 export interface IPlaybackState {
@@ -75,3 +68,5 @@ export interface IPlaybackState {
 }
 
 export type RepeatMode = 'off' | 'on' | 'all';
+
+export type StreamingService = 'local' | 'spotify';

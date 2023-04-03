@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/media-has-caption */
 import { FC, SyntheticEvent, useEffect, useRef, useState, useCallback } from 'react';
-import { play, playNext, playPrevious, selectCurrentTrack, selectIsPlaying, selectOutputDeviceId, selectSpotifyToken, updatePlaybackState } from '../../../state/slices/playerSlice';
+import { play, playNext, playPrevious, selectCurrentTrack, selectIsPlaying, selectOutputDeviceId } from '../../../state/slices/playerSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { AudioMetadata } from '../../../typings/metadata';
 import { ITrack } from '../../../typings/types';
@@ -27,7 +27,6 @@ const AudioPlayer: FC = () => {
 	const currentTrack = useAppSelector(selectCurrentTrack);
 	const isPlaying = useAppSelector(selectIsPlaying);
 	const outputDeviceId = useAppSelector(selectOutputDeviceId);
-	const spotifyToken = useAppSelector(selectSpotifyToken);
 
 	const [metadata, setMetadata] = useState<AudioMetadata>();
 
@@ -68,15 +67,6 @@ const AudioPlayer: FC = () => {
 	};
 
 	useEffect(() => {
-		const getPlaybackState = async (accessToken: string) => {
-			// const playbackState = await SpotifyAPI.fetchPlaybackState(accessToken);
-			// dispatch(updatePlaybackState(playbackState));
-		};
-
-		if (spotifyToken) getPlaybackState(spotifyToken);
-	}, [dispatch, spotifyToken]);
-
-	useEffect(() => {
 		if (audioRef.current && outputDeviceId) {
 			audioRef.current.setSinkId(outputDeviceId);
 		}
@@ -87,7 +77,7 @@ const AudioPlayer: FC = () => {
 
 		if (isPlaying) {
 			audioRef.current.play().catch(() => {});
-			if (currentTrack && currentTrack.isLocal) getMetadata(currentTrack);
+			if (currentTrack && currentTrack.service === 'local') getMetadata(currentTrack);
 		} else {
 			audioRef.current.pause();
 		}
@@ -135,7 +125,7 @@ const AudioPlayer: FC = () => {
 				<ServiceSelector />
 				<div className={style['player-control-divider']} />
 				{metadata && <NowPlaying artists={metadata.info?.artist ?? ''} title={metadata.info?.title ?? ''} image={metadata.info?.cover} />}
-				{currentTrack && !currentTrack.isLocal && <NowPlaying title={currentTrack?.name ?? ''} artists={getArtists()} image={currentTrack?.album?.images[0].url} />}
+				{currentTrack && currentTrack.service !== 'local' && <NowPlaying title={currentTrack?.name ?? ''} artists={getArtists()} image={currentTrack?.album?.images[0].url} />}
 				<VolumeSlider audioRef={audioRef} />
 				<SeekBar audioRef={audioRef} />
 				<AudioControlButton id="skip-back-btn" onClick={handlePlayPrev} animationData={skipBackBtn} />
@@ -144,7 +134,7 @@ const AudioPlayer: FC = () => {
 				<ShuffleButton />
 				<RepeatButton />
 			</div>
-			{currentTrack?.isLocal && <audio src={currentTrack?.name} ref={audioRef} onEnded={onEnded} crossOrigin="anonymous" />}
+			{currentTrack?.service === 'local' && <audio src={currentTrack?.name} ref={audioRef} onEnded={onEnded} crossOrigin="anonymous" />}
 		</div>
 	);
 };

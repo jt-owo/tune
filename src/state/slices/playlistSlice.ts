@@ -1,15 +1,17 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ITrack, PlaylistData } from '../../typings/types';
+import { IPlaylist, ITrack, PlaylistData } from '../../typings/types';
 import newGuid from '../../ui/util';
 import type { RootState } from '../store';
 
 export interface PlaylistState {
 	playlists: PlaylistData[];
+	spotifyPlaylists: IPlaylist[];
 }
 
 const initialState: PlaylistState = {
-	playlists: []
+	playlists: [],
+	spotifyPlaylists: []
 };
 
 export const playlistSlice = createSlice({
@@ -64,11 +66,14 @@ export const playlistSlice = createSlice({
 		loadPlaylists: (state) => {
 			const stored = window.api.db.get('playlists') as PlaylistData[];
 			state.playlists = stored;
+		},
+		loadSP: (state, action: PayloadAction<IPlaylist[]>) => {
+			state.spotifyPlaylists = action.payload;
 		}
 	}
 });
 
-export const { addPlaylist, removePlaylist, updatePlaylist, loadPlaylists } = playlistSlice.actions;
+export const { addPlaylist, removePlaylist, updatePlaylist, loadPlaylists, loadSP } = playlistSlice.actions;
 
 export const selectPlaylists = (state: RootState) => state.playlist.playlists;
 

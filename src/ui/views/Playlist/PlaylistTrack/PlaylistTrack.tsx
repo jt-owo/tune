@@ -42,18 +42,15 @@ const PlaylistTrack: FC<PlaylistTrackProps> = memo((props) => {
 		}
 	}, [track.isLocal, track.name]);
 
-	const getAlbumCover = () => {
-		if (metadata?.info?.cover) {
-			return metadata.info.cover;
-		}
+	const getAlbumCover = (url?: string) => {
+		if (url) return url;
 		return defaultAlbumCover;
 	};
 
-	const getDuration = () => {
-		if (metadata?.info?.duration) {
-			const total = metadata.info.duration;
-			const minutes = Math.floor(total / 60);
-			const seconds = Math.floor(total - minutes * 60);
+	const getDuration = (duration?: number) => {
+		if (duration) {
+			const minutes = Math.floor(duration / 60);
+			const seconds = Math.floor(duration - minutes * 60);
 
 			if (seconds < 10) {
 				return `${minutes}:0${seconds}`;
@@ -63,16 +60,37 @@ const PlaylistTrack: FC<PlaylistTrackProps> = memo((props) => {
 		return NaN;
 	};
 
+	const getArtists = () => {
+		let artists = '';
+		if (track.artists) {
+			track.artists.forEach((artist) => {
+				if (artists === '') artists += artist.name;
+				else artists += `, ${artist.name}`;
+			});
+		}
+
+		return artists;
+	};
+
 	return (
 		<div className={`${playlistStyle['song-item-container']} ${isDragging ? playlistStyle.hide : ''}`}>
-			{metadata && (
+			{track.isLocal && metadata ? (
 				<div ref={setNodeRef} style={style} className={playlistStyle['song-item']} onContextMenu={onContextMenu} {...listeners} {...attributes}>
-					<img src={getAlbumCover()} alt="" draggable={false} />
+					<img src={getAlbumCover(metadata?.info?.cover)} alt="" draggable={false} />
 					<div>
 						<div className={playlistStyle['song-title']}>{metadata.info?.title}</div>
 						<div className={playlistStyle['song-artist']}>{metadata.info?.artist}</div>
 					</div>
-					<div className={playlistStyle['song-duration']}>{getDuration()}</div>
+					<div className={playlistStyle['song-duration']}>{getDuration(metadata?.info?.duration)}</div>
+				</div>
+			) : (
+				<div ref={setNodeRef} style={style} className={playlistStyle['song-item']} onContextMenu={onContextMenu} {...listeners} {...attributes}>
+					<img src={getAlbumCover(track.album?.images[0].url)} alt="" draggable={false} />
+					<div>
+						<div className={playlistStyle['song-title']}>{track.name}</div>
+						<div className={playlistStyle['song-artist']}>{getArtists()}</div>
+					</div>
+					<div className={playlistStyle['song-duration']}>{getDuration((track.duration ?? 0) / 1000)}</div>
 				</div>
 			)}
 		</div>

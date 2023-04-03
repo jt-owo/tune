@@ -50,9 +50,9 @@ class SpotifyParser {
 	 * @param track Track object. (From spotify result)
 	 * @returns A track object in the tune format.
 	 */
-	static parseTrack(track: TrackItem): ITrack {
+	static parseTrack(track: TrackItem, id: number): ITrack {
 		return {
-			id: track.track_number,
+			id,
 			name: track.name,
 			album: this.parseAlbum(track.album),
 			artists: this.parseArtists(track.artists),
@@ -67,7 +67,10 @@ class SpotifyParser {
 	 * @returns A track array in the tune format.
 	 */
 	static parseTracks(tracks: TrackItem[]): ITrack[] {
-		return tracks.map((track) => this.parseTrack(track));
+		return tracks.map((track, index) => {
+			const parsed = this.parseTrack(track, index + 1);
+			return parsed;
+		});
 	}
 
 	/**
@@ -81,11 +84,13 @@ class SpotifyParser {
 			name: playlist.name,
 			description: playlist.description,
 			images: playlist.images,
+			tracks: [],
 			pinned: false,
 			locked: false,
 			service: 'spotify',
 			collaborative: playlist.collaborative,
-			public: playlist.public
+			public: playlist.public,
+			tracksHref: playlist.tracks.href
 		};
 	}
 
@@ -138,7 +143,7 @@ class SpotifyParser {
 	static parsePlaybackState(playbackState: PlaybackStateResult): IPlaybackState {
 		let track: ITrack | undefined;
 		if (playbackState.item) {
-			track = this.parseTrack(playbackState.item);
+			track = this.parseTrack(playbackState.item, -1);
 		}
 
 		return {

@@ -1,4 +1,4 @@
-import { ArtistItem, PlaylistItem, TrackItem } from '../../../typings/spotify/items';
+import { ArtistItem, PlaylistItem, PlaylistTrackItem, TrackItem } from '../../../typings/spotify/items';
 import { UserProfileResult, PlaybackStateResult, SpotifyQueryResult, SavedAlbumsResultItem, SavedTracksResultItem, SearchResult } from '../../../typings/spotify/results';
 import SpotifyParser from './parser';
 
@@ -24,7 +24,6 @@ class SpotifyAPI {
 		});
 
 		const data = (await result?.json()) as T;
-
 		return data;
 	}
 
@@ -108,7 +107,7 @@ class SpotifyAPI {
 		if (offset && offset > 0) params.append('offset', offset.toString());
 
 		const data = await this.callAPI<SpotifyQueryResult<SavedTracksResultItem>>(token, 'https://api.spotify.com/v1/me/tracks', params);
-		return data.items.map((item) => SpotifyParser.parseTrack(item.track));
+		return data.items.map((item, index) => SpotifyParser.parseTrack(item.track, index + 1));
 	}
 
 	/**
@@ -153,6 +152,19 @@ class SpotifyAPI {
 
 		const data = await this.callAPI<SpotifyQueryResult<PlaylistItem>>(token, 'https://api.spotify.com/v1/me/playlists', params);
 		return SpotifyParser.parsePlaylists(data.items);
+	}
+
+	/**
+	 * Fetches a list of the playlists owned or followed by the authorized user.
+	 * https://developer.spotify.com/documentation/web-api/reference/get-a-list-of-current-users-playlists
+	 * @param token Access Token.
+	 * @param limit The maximum number of items to return. Range: 0 - 50
+	 * @param offset The index of the first item to return. Default: 0
+	 * @returns A list of playlists.
+	 */
+	static async fetchPlaylistTracks(token: string, url: string) {
+		const data = await this.callAPI<SpotifyQueryResult<PlaylistTrackItem>>(token, url);
+		return data.items.map((item, index) => SpotifyParser.parseTrack(item.track, index + 1));
 	}
 
 	/**

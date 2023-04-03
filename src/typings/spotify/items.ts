@@ -68,3 +68,8 @@ export interface PlaylistItem {
 	type: string;
 	uri: string;
 }
+
+export interface PlaylistTrackItem {
+	added_at: Date;
+	track: TrackItem;
+}

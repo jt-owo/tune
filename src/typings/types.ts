@@ -22,6 +22,7 @@ export interface IPlaylist {
 	name: string;
 	description: string;
 	images: Image[];
+	tracks: ITrack[];
 	pinned: boolean;
 	locked: boolean;
 	service: 'local' | 'spotify';

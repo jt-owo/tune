@@ -1,8 +1,9 @@
 import { FC, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../hooks';
 import { selectSpotifyToken } from '../../../state/slices/playerSlice';
 import SpotifyAPI from '../../api/spotify';
-import { IAlbum, IPlaylist, ITrack } from '../../../typings/types';
+import { IAlbum, ITrack } from '../../../typings/types';
 
 import View from '../../components/View/View';
 import HomeItemSmall from '../../components/Home_Elements/HomeItemSmall/HomeItemSmall';
@@ -10,13 +11,20 @@ import TabControl from '../../components/TabControl/TabControl';
 import TabItem from '../../components/TabControl/TabItem/TabItem';
 
 import style from './Library.module.scss';
+import AppRoutes from '../../routes';
 
 const Library: FC = () => {
 	const spotifyToken = useAppSelector(selectSpotifyToken);
+	const spotifyPlaylists = useAppSelector((state) => state.playlist.spotifyPlaylists);
 
 	const [savedAlbums, setSavedAlbums] = useState<IAlbum[]>([]);
 	const [savedTracks, setSavedTracks] = useState<ITrack[]>([]);
-	const [userPlaylists, setPlaylists] = useState<IPlaylist[]>([]);
+
+	const navigate = useNavigate();
+
+	const navigateToPlaylist = (id: string, service: string) => {
+		navigate(`${AppRoutes.Playlist}/${id}/${service}`);
+	};
 
 	useEffect(() => {
 		const loadAlbums = async (accessToken: string) => {
@@ -29,15 +37,9 @@ const Library: FC = () => {
 			setSavedTracks(tracks);
 		};
 
-		const loadPlaylists = async (accessToken: string) => {
-			const playlists = await SpotifyAPI.fetchUserPlaylists(accessToken);
-			setPlaylists(playlists);
-		};
-
 		if (spotifyToken) {
 			loadAlbums(spotifyToken);
 			loadTracks(spotifyToken);
-			loadPlaylists(spotifyToken);
 		}
 	}, [spotifyToken]);
 
@@ -47,9 +49,19 @@ const Library: FC = () => {
 				<TabControl>
 					<TabItem label="Playlists">
 						<div>
-							{userPlaylists.length > 1 &&
-								userPlaylists.map((playlist) => {
-									return <HomeItemSmall key={playlist.name} title={playlist.name} image={playlist.images[0].url} artist={playlist.description} />;
+							{spotifyPlaylists.length > 1 &&
+								spotifyPlaylists.map((playlist) => {
+									return (
+										<HomeItemSmall
+											key={playlist.name}
+											title={playlist.name}
+											image={playlist.images[0].url}
+											artist={playlist.description}
+											onClick={() => {
+												navigateToPlaylist(playlist.id, playlist.service);
+											}}
+										/>
+									);
 								})}
 						</div>
 					</TabItem>

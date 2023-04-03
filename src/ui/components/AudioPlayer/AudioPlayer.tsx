@@ -20,7 +20,6 @@ import skipBackBtn from '../../../../assets/animations/skipBack.json';
 import skipForwardBtn from '../../../../assets/animations/skipForward.json';
 
 import style from './AudioPlayer.module.scss';
-import SpotifyAPI from '../../api/spotify';
 
 const AudioPlayer: FC = () => {
 	const audioRef = useRef<HTMLAudioElement & { setSinkId(deviceId: string): void; volume: number }>(null);
@@ -70,8 +69,8 @@ const AudioPlayer: FC = () => {
 
 	useEffect(() => {
 		const getPlaybackState = async (accessToken: string) => {
-			const playbackState = await SpotifyAPI.fetchPlaybackState(accessToken);
-			dispatch(updatePlaybackState(playbackState));
+			// const playbackState = await SpotifyAPI.fetchPlaybackState(accessToken);
+			// dispatch(updatePlaybackState(playbackState));
 		};
 
 		if (spotifyToken) getPlaybackState(spotifyToken);

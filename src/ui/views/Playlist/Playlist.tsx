@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
@@ -10,8 +11,8 @@ import { restrictToWindowEdges } from '@dnd-kit/modifiers';
 import Lottie, { LottieRefCurrentProps } from 'lottie-react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { removePlaylist, selectPlaylists, updatePlaylist } from '../../../state/slices/playlistSlice';
-import { ITrack, PlaylistData } from '../../../typings/types';
-import { selectQueue, setQueue, updateQueue } from '../../../state/slices/playerSlice';
+import { IPlaylist, ITrack, PlaylistData } from '../../../typings/types';
+import { selectQueue, selectSpotifyToken, setQueue, updateQueue } from '../../../state/slices/playerSlice';
 import useContextMenu from '../../hooks/useContextMenu';
 import AppRoutes from '../../routes';
 
@@ -40,16 +41,30 @@ import HamburgerMenu from '../../components/HamburgerMenu/HamburgerMenu';
 import HamburgerMenuItem from '../../components/HamburgerMenu/HamburgerMenuItem/HamburgerMenuItem';
 
 import style from './Playlist.module.scss';
+import SpotifyAPI from '../../api/spotify';
 
 const Playlist: FC = memo(function Playlist() {
-	const { id } = useParams();
+	const { id, service } = useParams();
+
+	const isLocal = service === 'local';
 
 	const navigate = useNavigate();
 	const dispatch = useAppDispatch();
 
+	const spotifyToken = useAppSelector(selectSpotifyToken);
 	const playlists = useAppSelector(selectPlaylists);
+	const spotifyPlaylists = useAppSelector((state) => state.playlist.spotifyPlaylists);
 	const queue = useAppSelector(selectQueue);
-	const [playlist, setPlaylist] = useState(playlists.find((x) => x.id === id));
+
+	const localPlaylist = playlists.find((x) => x.id === id);
+	const spotifyPlaylist = spotifyPlaylists.find((x) => x.id === id);
+
+	if (!spotifyPlaylist) {
+		navigate(AppRoutes.Library);
+		return null;
+	}
+
+	const [playlist, setPlaylist] = useState<IPlaylist>(spotifyPlaylist);
 
 	const [tracks, setTracks] = useState<ITrack[]>([]);
 	const sensors = useSensors(
@@ -76,10 +91,6 @@ const Playlist: FC = memo(function Playlist() {
 	const lottieAddTracksRef = useRef<LottieRefCurrentProps>(null);
 	const lottieDeletePlaylistRef = useRef<LottieRefCurrentProps>(null);
 
-	if (!playlist) {
-		navigate(AppRoutes.Library);
-	}
-
 	const handleDragStart = (event: DragStartEvent) => {
 		const { active } = event;
 		setIsDraggingId(active.id);
@@ -95,18 +106,20 @@ const Playlist: FC = memo(function Playlist() {
 				const oldIndex = tracks.indexOf(tracks.find((x) => x.id === active.id)!);
 				const newIndex = tracks.indexOf(tracks.find((x) => x.id === over.id)!);
 				const newArray = arrayMove(tracks, oldIndex, newIndex);
-				const updateData: PlaylistData = {
-					...playlist!,
-					tracks: newArray
-				};
-				dispatch(updatePlaylist(updateData));
+				if (isLocal) {
+					const updateData: PlaylistData = {
+						...playlist!,
+						tracks: newArray
+					};
+					dispatch(updatePlaylist(updateData));
+				}
 				return newArray;
 			});
 		}
 	};
 
 	const deletePlaylist = (confirm: boolean) => {
-		if (!playlist?.id) return;
+		if (!isLocal) return;
 
 		if (confirm) {
 			dispatch(removePlaylist(playlist.id));
@@ -115,7 +128,7 @@ const Playlist: FC = memo(function Playlist() {
 	};
 
 	const handleAddTracks = async () => {
-		if (!playlist?.id) return;
+		if (!isLocal) return;
 
 		if (!playlist.tracks) {
 			playlist.tracks = [];
@@ -151,8 +164,6 @@ const Playlist: FC = memo(function Playlist() {
 	};
 
 	const playPlaylist = () => {
-		if (!playlist) return;
-
 		dispatch(setQueue(playlist.tracks));
 	};
 
@@ -215,13 +226,26 @@ const Playlist: FC = memo(function Playlist() {
 		setIsSortingLocked(() => !isSortingLocked);
 	};
 
+	const handleToggleRename = () => {
+		if (!isLocal) return;
+		setRenameVisibility(true);
+	};
+
 	useEffect(() => {
-		const playlistFound = playlists.find((x) => x.id === id);
-		if (playlistFound) {
-			setPlaylist(playlistFound);
-			if (playlistFound.tracks) setTracks(playlistFound.tracks);
+		const loadTracks = async (token: string, url: string) => {
+			const tracksLoaded = await SpotifyAPI.fetchPlaylistTracks(token, url);
+			setTracks(tracksLoaded);
+		};
+
+		// const playlistFound = playlists.find((x) => x.id === id);
+		const spotifyPlaylistFound = spotifyPlaylists.find((x) => x.id === id);
+		if (spotifyPlaylistFound) {
+			setPlaylist(spotifyPlaylistFound);
+			if (spotifyPlaylistFound.tracksHref) {
+				if (spotifyToken) loadTracks(spotifyToken, spotifyPlaylistFound.tracksHref);
+			}
 		}
-	}, [playlists, id]);
+	}, [spotifyPlaylists, id, spotifyToken]);
 
 	useEffect(() => {
 		if (lottieShowMenuRef.current) {
@@ -235,12 +259,12 @@ const Playlist: FC = memo(function Playlist() {
 	}, [hamburgerVisibility]);
 
 	return (
-		<div key={id} className={style['playlist-container']}>
+		<div className={style['playlist-container']}>
 			<Dialog heading="Delete?" description="You are about to delete this playlist. This action cannot be undone!" onClose={() => setDialogVisibility(false)} isOpen={isDialogVisible} type="danger" confirmText="Delete" rejectText="Keep" confirmCallback={deletePlaylist} />
 			<div className={style['playlist-heading']}>
 				<RenameDialog value={playlist?.name} nameCB={handleRename} visible={renameVisibility} onClose={() => setRenameVisibility(false)} />
 				<img src={defaultAlbumCover} alt="" />
-				<div className={style['playlist-heading-text']} onClick={() => setRenameVisibility(true)}>
+				<div className={style['playlist-heading-text']} onClick={handleToggleRename}>
 					{playlist?.name}
 				</div>
 				<div className={style['playlist-controls']}>
@@ -249,26 +273,30 @@ const Playlist: FC = memo(function Playlist() {
 						<HamburgerMenuItem title="Choose image" icon={undefined} />
 						<HamburgerMenuItem title={isSortingLocked ? 'Unlock playlist' : 'Lock playlist'} lottieIcon={lockIcon} onClick={handleLockPlaylist} isActive={isSortingLocked} lottieActiveFrame={1} lottieInactiveFrame={9} useLottie />
 					</HamburgerMenu>
-					<ToolTip text="Play Playlist">
-						<div className={`${style['playlist-heading-btn']} ${style['btn-hover-animation']} ${style['playlist-play-btn']}`} onClick={playPlaylist}>
-							<img className={style['play-icon']} src={playIcon} alt="" draggable="false" />
-						</div>
-					</ToolTip>
-					<ToolTip text="Import Tracks">
-						<div className={`${style['playlist-heading-btn']} ${style['btn-hover-animation']} ${style['playlist-import-btn']}`} onClick={handleAddTracks} onMouseEnter={() => startAnimation(lottieAddTracksRef)} onMouseLeave={() => stopAnimation(lottieAddTracksRef)}>
-							<Lottie className={style['import-icon']} animationData={folderIcon} lottieRef={lottieAddTracksRef} loop={false} autoplay={false} />
-						</div>
-					</ToolTip>
-					<ToolTip text="Delete Playlist">
-						<div className={`${style['playlist-heading-btn']} ${style['btn-hover-animation']} ${style['playlist-delete-btn']}`} onClick={() => setDialogVisibility(true)} onMouseEnter={() => startAnimation(lottieDeletePlaylistRef)} onMouseLeave={() => stopAnimation(lottieDeletePlaylistRef)}>
-							<Lottie className={style['delete-icon']} animationData={trashIcon} lottieRef={lottieDeletePlaylistRef} loop={false} autoplay={false} />
-						</div>
-					</ToolTip>
-					<ToolTip text="Options">
-						<div className={`${style['playlist-heading-btn']} ${style['btn-hover-animation']} ${style['playlist-menu-btn']}`} onClick={() => setHamburgerVisibility(true)}>
-							<Lottie className={style['menu-icon']} animationData={menuIcon} lottieRef={lottieShowMenuRef} loop={false} autoplay={false} />
-						</div>
-					</ToolTip>
+					{playlist.service === 'local' && (
+						<>
+							<ToolTip text="Play Playlist">
+								<div className={`${style['playlist-heading-btn']} ${style['btn-hover-animation']} ${style['playlist-play-btn']}`} onClick={playPlaylist}>
+									<img className={style['play-icon']} src={playIcon} alt="" draggable="false" />
+								</div>
+							</ToolTip>
+							<ToolTip text="Import Tracks">
+								<div className={`${style['playlist-heading-btn']} ${style['btn-hover-animation']} ${style['playlist-import-btn']}`} onClick={handleAddTracks} onMouseEnter={() => startAnimation(lottieAddTracksRef)} onMouseLeave={() => stopAnimation(lottieAddTracksRef)}>
+									<Lottie className={style['import-icon']} animationData={folderIcon} lottieRef={lottieAddTracksRef} loop={false} autoplay={false} />
+								</div>
+							</ToolTip>
+							<ToolTip text="Delete Playlist">
+								<div className={`${style['playlist-heading-btn']} ${style['btn-hover-animation']} ${style['playlist-delete-btn']}`} onClick={() => setDialogVisibility(true)} onMouseEnter={() => startAnimation(lottieDeletePlaylistRef)} onMouseLeave={() => stopAnimation(lottieDeletePlaylistRef)}>
+									<Lottie className={style['delete-icon']} animationData={trashIcon} lottieRef={lottieDeletePlaylistRef} loop={false} autoplay={false} />
+								</div>
+							</ToolTip>
+							<ToolTip text="Options">
+								<div className={`${style['playlist-heading-btn']} ${style['btn-hover-animation']} ${style['playlist-menu-btn']}`} onClick={() => setHamburgerVisibility(true)}>
+									<Lottie className={style['menu-icon']} animationData={menuIcon} lottieRef={lottieShowMenuRef} loop={false} autoplay={false} />
+								</div>
+							</ToolTip>
+						</>
+					)}
 				</div>
 			</div>
 			<div className={style.divider} />

@@ -4,7 +4,6 @@ import { selectSpotifyToken } from '../../../state/slices/playerSlice';
 import { addAlert } from '../../../state/slices/alertSlice';
 import { IAlbum, IArtist, ITrack } from '../../../typings/types';
 import SpotifyAPI from '../../api/spotify';
-import newGuid from '../../util';
 
 import View from '../../components/View/View';
 
@@ -24,21 +23,19 @@ const Browse: FC = () => {
 	}>();
 
 	const handleSearch = async (event: React.KeyboardEvent) => {
-		if (query !== '' && event.key === 'Enter') {
-			if (!spotifyToken) {
-				dispatch(
-					addAlert({
-						id: newGuid(),
-						message: 'Spotify is not connected',
-						type: 'error'
-					})
-				);
-				return;
-			}
-
-			const { albums, artists, tracks } = await SpotifyAPI.search(spotifyToken, query);
-			setFoundItems({ albums, tracks, artists });
+		if (event.key !== 'Enter' || query === '') return;
+		if (!spotifyToken) {
+			dispatch(
+				addAlert({
+					message: 'Spotify is not connected',
+					type: 'error'
+				})
+			);
+			return;
 		}
+
+		const { albums, artists, tracks } = await SpotifyAPI.search(spotifyToken, query);
+		setFoundItems({ albums, tracks, artists });
 	};
 
 	return (

@@ -1,7 +1,8 @@
 import { FC, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../hooks';
 import { selectSpotifyToken } from '../../../state/slices/playerSlice';
-import SpotifyAPI from '../../util/spotifyAPI';
+import SpotifyAPI from '../../api/spotify';
 import { IAlbum, ITrack } from '../../../typings/types';
 
 import View from '../../components/View/View';
@@ -10,12 +11,20 @@ import TabControl from '../../components/TabControl/TabControl';
 import TabItem from '../../components/TabControl/TabItem/TabItem';
 
 import style from './Library.module.scss';
+import AppRoutes from '../../routes';
 
 const Library: FC = () => {
 	const spotifyToken = useAppSelector(selectSpotifyToken);
+	const spotifyPlaylists = useAppSelector((state) => state.playlists.spotify);
 
 	const [savedAlbums, setSavedAlbums] = useState<IAlbum[]>([]);
 	const [savedTracks, setSavedTracks] = useState<ITrack[]>([]);
+
+	const navigate = useNavigate();
+
+	const navigateToPlaylist = (id: string, service: string) => {
+		navigate(`${AppRoutes.Playlist}/${id}/${service}`);
+	};
 
 	useEffect(() => {
 		const loadAlbums = async (accessToken: string) => {
@@ -38,6 +47,24 @@ const Library: FC = () => {
 		<View title="Library" id="library">
 			<div className={style.content}>
 				<TabControl>
+					<TabItem label="Playlists">
+						<div>
+							{spotifyPlaylists.length > 1 &&
+								spotifyPlaylists.map((playlist) => {
+									return (
+										<HomeItemSmall
+											key={playlist.name}
+											title={playlist.name}
+											image={playlist.images[0].url}
+											artist={playlist.description}
+											onClick={() => {
+												navigateToPlaylist(playlist.id, playlist.service);
+											}}
+										/>
+									);
+								})}
+						</div>
+					</TabItem>
 					<TabItem label="Liked Albums">
 						<div>
 							{savedAlbums.length > 1 &&

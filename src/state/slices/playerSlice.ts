@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IPlaybackState, ITrack, IUser } from '../../typings/types';
+import { IPlaybackState, ITrack, IUser, RepeatMode } from '../../typings/types';
 import type { RootState } from '../store';
 
 export interface PlayerState {
@@ -13,7 +13,7 @@ export interface PlayerState {
 	currentTrack?: ITrack;
 	isPlaying: boolean;
 	isShuffle: boolean;
-	isRepeat: boolean;
+	repeatMode: RepeatMode;
 	volume: number;
 	progress: number;
 
@@ -29,7 +29,7 @@ const initialState: PlayerState = {
 	history: [],
 	isPlaying: false,
 	isShuffle: false,
-	isRepeat: false,
+	repeatMode: 'off',
 	volume: +window.api.config.get('volume'),
 	progress: 0,
 	outputDeviceId: window.api.config.get('outputDeviceId').toString()
@@ -43,7 +43,7 @@ export const playerSlice = createSlice({
 			state.currentTrack = action.payload.track;
 			state.isPlaying = action.payload.isPlaying;
 			state.isShuffle = action.payload.isShuffle;
-			state.isRepeat = action.payload.isRepeat;
+			state.repeatMode = action.payload.repeatMode;
 			state.volume = action.payload.volume / 1000;
 			state.progress = action.payload.progress;
 		},
@@ -112,7 +112,7 @@ export const selectQueueIndex = (state: RootState) => state.player.queueIndex;
 
 export const selectIsPlaying = (state: RootState) => state.player.isPlaying;
 export const selectIsShuffle = (state: RootState) => state.player.isShuffle;
-export const selectIsRepeat = (state: RootState) => state.player.isRepeat;
+export const selectIsRepeat = (state: RootState) => state.player.repeatMode;
 export const selectCurrentTrack = (state: RootState) => state.player.currentTrack;
 export const selectVolume = (state: RootState) => state.player.volume;
 export const selectProgress = (state: RootState) => state.player.progress;

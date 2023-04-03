@@ -4,7 +4,7 @@
 import { useState, useEffect, FC, ChangeEvent } from 'react';
 import { selectOutputDeviceId, selectSpotifyToken, setOutputDevice, updateSpotifyToken } from '../../../state/slices/playerSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import SpotifyAPI from '../../util/spotifyAPI';
+import SpotifyAPI from '../../api/spotify';
 
 import View from '../../components/View/View';
 import TabControl from '../../components/TabControl/TabControl';

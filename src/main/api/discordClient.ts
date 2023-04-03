@@ -15,6 +15,7 @@ class DiscordClient {
 			}, 15e3);
 		});
 
+		// eslint-disable-next-line no-console
 		this.rpc.login({ clientId }).catch(console.error);
 	}
 

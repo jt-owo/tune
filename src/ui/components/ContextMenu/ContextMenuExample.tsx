@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 import { selectPlaylists } from '../../../state/slices/playlistSlice';
 import { useAppSelector } from '../../hooks';
-import { PlaylistData } from '../../../typings/types';
+import { IPlaylist } from '../../../typings/types';
 import useContextMenu from '../../hooks/useContextMenu';
 import Dialog from '../Dialog/Dialog';
 import ContextMenu from './ContextMenu';
@@ -11,7 +11,7 @@ import editIcon from '../../../../assets/ui-icons/edit-3.svg';
 import deleteIcon from '../../../../assets/ui-icons/trash-2.svg';
 
 const ContextMenuExample: FC = () => {
-	const playlists: PlaylistData[] = useAppSelector(selectPlaylists);
+	const playlists: IPlaylist[] = useAppSelector(selectPlaylists);
 	const [isDialogVisible, setDialogVisibility] = useState(false);
 
 	const [visibility, setVisibility, position, setPosition] = useContextMenu();

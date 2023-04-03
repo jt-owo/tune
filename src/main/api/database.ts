@@ -1,8 +1,8 @@
 import fs from 'fs';
 import path from 'path';
-import { PlaylistData } from '../../typings/types';
+import { IPlaylist } from '../../typings/types';
 
-export type DatabaseValue = PlaylistData[] | undefined;
+export type DatabaseValue = IPlaylist[] | undefined;
 export type DatabaseKey = 'playlists';
 
 export type Tables = {
@@ -13,6 +13,7 @@ const DEFAULT_DB: Tables = {
 	playlists: []
 };
 
+// TODO: Rewrite to library system.
 export default class Database {
 	private filePath: string;
 

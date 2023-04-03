@@ -6,10 +6,10 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { AudioMetadata } from '../../../../typings/metadata';
 import { ITrack } from '../../../../typings/types';
+import { getServices } from '../../../util/serviceHelper';
+import { getAlbumCover, getDuration, getArtists } from '../../../util/formatHelper';
 
 import playlistStyle from '../Playlist.module.scss';
-
-import defaultAlbumCover from '../../../../../assets/images/tune_no_artwork.svg';
 
 interface PlaylistTrackProps {
 	id: number;
@@ -22,6 +22,7 @@ interface PlaylistTrackProps {
 const PlaylistTrack: FC<PlaylistTrackProps> = memo((props) => {
 	const { id, track, isDragging, onContextMenu } = props;
 
+	const { isLocal, isSpotify } = getServices(track.service);
 	const [metadata, setMetadata] = useState<AudioMetadata>();
 
 	const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id });
@@ -32,51 +33,48 @@ const PlaylistTrack: FC<PlaylistTrackProps> = memo((props) => {
 	};
 
 	useEffect(() => {
-		if (track.isLocal) {
-			const getMetadata = async () => {
+		if (isLocal) {
+			const loadMetadata = async () => {
 				const metadataJSON = await window.api.system.readMetadata(track.name);
 				setMetadata(JSON.parse(metadataJSON) as AudioMetadata);
 			};
 
-			getMetadata();
+			loadMetadata();
 		}
-	}, [track.isLocal, track.name]);
+	}, [isLocal, track.name]);
 
-	const getAlbumCover = () => {
-		if (metadata?.info?.cover) {
-			return metadata.info.cover;
-		}
-		return defaultAlbumCover;
-	};
-
-	const getDuration = () => {
-		if (metadata?.info?.duration) {
-			const total = metadata.info.duration;
-			const minutes = Math.floor(total / 60);
-			const seconds = Math.floor(total - minutes * 60);
-
-			if (seconds < 10) {
-				return `${minutes}:0${seconds}`;
-			}
-			return `${minutes}:${seconds}`;
-		}
-		return NaN;
-	};
-
-	return (
-		<div className={`${playlistStyle['song-item-container']} ${isDragging ? playlistStyle.hide : ''}`}>
-			{metadata && (
+	// FIXME: Remove with library and metadata parse rework.
+	const render = () => {
+		if (isLocal && metadata) {
+			return (
 				<div ref={setNodeRef} style={style} className={playlistStyle['song-item']} onContextMenu={onContextMenu} {...listeners} {...attributes}>
-					<img src={getAlbumCover()} alt="" draggable={false} />
+					<img src={getAlbumCover(metadata?.info?.cover)} alt="" draggable={false} />
 					<div>
 						<div className={playlistStyle['song-title']}>{metadata.info?.title}</div>
 						<div className={playlistStyle['song-artist']}>{metadata.info?.artist}</div>
 					</div>
-					<div className={playlistStyle['song-duration']}>{getDuration()}</div>
+					<div className={playlistStyle['song-duration']}>{getDuration(metadata?.info?.duration)}</div>
 				</div>
-			)}
-		</div>
-	);
+			);
+		}
+
+		if (isSpotify) {
+			return (
+				<div ref={setNodeRef} style={style} className={playlistStyle['song-item']} onContextMenu={onContextMenu} {...listeners} {...attributes}>
+					<img src={getAlbumCover(track.album?.images[0].url)} alt="" draggable={false} />
+					<div>
+						<div className={playlistStyle['song-title']}>{track.name}</div>
+						<div className={playlistStyle['song-artist']}>{getArtists(track.artists)}</div>
+					</div>
+					<div className={playlistStyle['song-duration']}>{getDuration((track.duration ?? 0) / 1000)}</div>
+				</div>
+			);
+		}
+
+		return null;
+	};
+
+	return <div className={`${playlistStyle['song-item-container']} ${isDragging ? playlistStyle.hide : ''}`}>{render()}</div>;
 });
 
 export default PlaylistTrack;

@@ -1,6 +1,7 @@
-import { ArtistItem, AlbumItem, TrackItem } from '../../../typings/spotify/items';
+import { ArtistItem, AlbumItem, TrackItem, PlaylistItem } from '../../../typings/spotify/items';
 import { UserProfileResult, SearchResult, PlaybackStateResult } from '../../../typings/spotify/results';
-import { IArtist, IAlbum, ITrack, IUser, IPlaybackState } from '../../../typings/types';
+import { IArtist, IAlbum, ITrack, IUser, IPlaybackState, IPlaylist } from '../../../typings/types';
+import newGuid from '../../util';
 
 /**
  * The SpotifyParser class contains all functions to parse spotify items into the tune format.
@@ -12,15 +13,12 @@ class SpotifyParser {
 	 * @returns An array of artists in the tune format.
 	 */
 	static parseArtists(artists: ArtistItem[]): IArtist[] {
-		const artistsParsed: IArtist[] = [];
-		artists.forEach((artist) => {
-			artistsParsed.push({
+		return artists.map((artist) => {
+			return {
 				name: artist.name,
 				images: artist.images
-			});
+			};
 		});
-
-		return artistsParsed;
 	}
 
 	/**
@@ -31,11 +29,20 @@ class SpotifyParser {
 	static parseAlbum(album: AlbumItem): IAlbum {
 		return {
 			name: album.name,
-			artists: SpotifyParser.parseArtists(album.artists),
+			artists: this.parseArtists(album.artists),
 			images: album.images,
 			releaseDate: album.release_date,
 			totalTracks: album.total_tracks
 		};
+	}
+
+	/**
+	 * Parses a spotify album array into the tune format.
+	 * @param albums Album array. (From spotify result)
+	 * @returns An album array in the tune format.
+	 */
+	static parseAlbums(albums: AlbumItem[]): IAlbum[] {
+		return albums.map((album) => this.parseAlbum(album));
 	}
 
 	/**
@@ -47,11 +54,48 @@ class SpotifyParser {
 		return {
 			id: track.track_number,
 			name: track.name,
-			album: SpotifyParser.parseAlbum(track.album),
-			artists: SpotifyParser.parseArtists(track.artists),
+			album: this.parseAlbum(track.album),
+			artists: this.parseArtists(track.artists),
 			duration: track.duration_ms,
 			isLocal: false
 		};
+	}
+
+	/**
+	 * Parses a spotify track array into the tune format.
+	 * @param tracks Track array. (From spotify result)
+	 * @returns A track array in the tune format.
+	 */
+	static parseTracks(tracks: TrackItem[]): ITrack[] {
+		return tracks.map((track) => this.parseTrack(track));
+	}
+
+	/**
+	 * Parses a spotify playlist object into the tune format.
+	 * @param playlist Playlist object. (From spotify result)
+	 * @returns A playlist object in the tune format.
+	 */
+	static parsePlaylist(playlist: PlaylistItem): IPlaylist {
+		return {
+			id: newGuid(),
+			name: playlist.name,
+			description: playlist.description,
+			images: playlist.images,
+			pinned: false,
+			locked: false,
+			service: 'spotify',
+			collaborative: playlist.collaborative,
+			public: playlist.public
+		};
+	}
+
+	/**
+	 * Parses a spotify playlist array into the tune format.
+	 * @param playlists Playlist array. (From spotify result)
+	 * @returns A playlist array in the tune format.
+	 */
+	static parsePlaylists(playlists: PlaylistItem[]): IPlaylist[] {
+		return playlists.map((playlist) => this.parsePlaylist(playlist));
 	}
 
 	static parseUser(user: UserProfileResult): IUser {
@@ -70,21 +114,17 @@ class SpotifyParser {
 	static parseSearch(data: SearchResult) {
 		let albums: IAlbum[] = [];
 		if (data.albums) {
-			albums = data.albums.items.map((album: AlbumItem) => {
-				return SpotifyParser.parseAlbum(album);
-			});
+			albums = this.parseAlbums(data.albums.items);
 		}
 
 		let artists: IArtist[] = [];
 		if (data.artists) {
-			artists = SpotifyParser.parseArtists(data.artists.items);
+			artists = this.parseArtists(data.artists.items);
 		}
 
 		let tracks: ITrack[] = [];
 		if (data.tracks) {
-			tracks = data.tracks.items.map((track: TrackItem) => {
-				return SpotifyParser.parseTrack(track);
-			});
+			tracks = this.parseTracks(data.tracks.items);
 		}
 
 		return { albums, artists, tracks };

@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import { useAppSelector } from '../../hooks';
 import { selectSpotifyToken } from '../../../state/slices/playerSlice';
 import SpotifyAPI from '../../api/spotify';
-import { IAlbum, ITrack } from '../../../typings/types';
+import { IAlbum, IPlaylist, ITrack } from '../../../typings/types';
 
 import View from '../../components/View/View';
 import HomeItemSmall from '../../components/Home_Elements/HomeItemSmall/HomeItemSmall';
@@ -16,6 +16,7 @@ const Library: FC = () => {
 
 	const [savedAlbums, setSavedAlbums] = useState<IAlbum[]>([]);
 	const [savedTracks, setSavedTracks] = useState<ITrack[]>([]);
+	const [userPlaylists, setPlaylists] = useState<IPlaylist[]>([]);
 
 	useEffect(() => {
 		const loadAlbums = async (accessToken: string) => {
@@ -28,9 +29,15 @@ const Library: FC = () => {
 			setSavedTracks(tracks);
 		};
 
+		const loadPlaylists = async (accessToken: string) => {
+			const playlists = await SpotifyAPI.fetchUserPlaylists(accessToken);
+			setPlaylists(playlists);
+		};
+
 		if (spotifyToken) {
 			loadAlbums(spotifyToken);
 			loadTracks(spotifyToken);
+			loadPlaylists(spotifyToken);
 		}
 	}, [spotifyToken]);
 
@@ -38,6 +45,14 @@ const Library: FC = () => {
 		<View title="Library" id="library">
 			<div className={style.content}>
 				<TabControl>
+					<TabItem label="Playlists">
+						<div>
+							{userPlaylists.length > 1 &&
+								userPlaylists.map((playlist) => {
+									return <HomeItemSmall key={playlist.name} title={playlist.name} image={playlist.images[0].url} artist={playlist.description} />;
+								})}
+						</div>
+					</TabItem>
 					<TabItem label="Liked Albums">
 						<div>
 							{savedAlbums.length > 1 &&

@@ -1,5 +1,6 @@
 *       text    eol=lf
 *.js linguist-vendored
+*.ejs linguist-vendored
 *.plist linguist-venodored
 *.md linguist-venodored
 *.png   binary

@@ -22,13 +22,13 @@ const Browse: FC = () => {
 		artists: IArtist[];
 	}>();
 
-	const handleSearch = async (event: React.KeyboardEvent) => {
-		if (event.key !== 'Enter' || query === '') return;
+	const handleSearch = async () => {
+		if (query === '') return;
 		if (!spotifyToken) {
 			dispatch(
 				addAlert({
 					message: 'Spotify is not connected',
-					type: 'error'
+					type: 'warn'
 				})
 			);
 			return;
@@ -38,10 +38,16 @@ const Browse: FC = () => {
 		setFoundItems({ albums, tracks, artists });
 	};
 
+	const handleEnterKey = (event: React.KeyboardEvent) => {
+		if (event.key !== 'Enter') return;
+
+		handleSearch();
+	};
+
 	return (
 		<View title="Browse" id="browse">
 			<div className={style.content}> </div>
-			<input type="text" className={style['text-input-3']} value={query} onChange={(e) => setQuery(e.currentTarget.value)} onKeyDown={handleSearch} />
+			<input type="text" className={style['text-input-3']} value={query} onChange={(e) => setQuery(e.currentTarget.value)} onKeyDown={handleEnterKey} />
 		</View>
 	);
 };

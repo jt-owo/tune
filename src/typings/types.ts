@@ -70,3 +70,11 @@ export interface IPlaybackState {
 export type RepeatMode = 'off' | 'on' | 'all';
 
 export type StreamingService = 'local' | 'spotify';
+
+export type AlertType = 'info' | 'error' | 'warn' | 'success';
+
+export interface IAlert {
+	id?: string;
+	message: string;
+	type: AlertType;
+}

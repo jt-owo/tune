@@ -55,9 +55,7 @@ class SpotifyParser {
 			id,
 			name: track.name,
 			album: this.parseAlbum(track.album),
-			artists: this.parseArtists(track.artists),
-			duration: track.duration_ms,
-			isLocal: false,
+			duration: track.duration_ms / 1000,
 			service: 'spotify'
 		};
 	}

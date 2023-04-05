@@ -1,38 +1,44 @@
 import fs from 'fs';
 import path from 'path';
-import { IPlaylist } from '../../typings/types';
+import { IPlaylist } from '../typings/types';
 
-export type DatabaseValue = IPlaylist[] | undefined;
-export type DatabaseKey = 'playlists';
+export type DatabaseValue = IPlaylist[] | string | number | undefined;
+export type DatabaseKey = 'playlists' | 'version' | 'libPath';
 
-export type Tables = {
+type Data = {
 	[key in DatabaseKey]: DatabaseValue;
 };
 
-const DEFAULT_DB: Tables = {
+const DATA_FILE_VERSION = 0;
+
+const DEFAULT_DATA: Data = {
+	version: DATA_FILE_VERSION,
+	libPath: '',
 	playlists: []
 };
 
-// TODO: Rewrite to library system.
-export default class Database {
+export default class TuneLibrary {
 	private filePath: string;
 
-	private data: Tables;
+	private data: Data;
 
 	/**
 	 * Initializes the db.
 	 * @param dir Path where the db file is located.
 	 */
 	constructor(dir: string) {
-		this.filePath = path.join(dir, 'db');
+		this.filePath = path.join(dir, 'data');
 
 		if (!fs.existsSync(this.filePath)) {
-			fs.writeFileSync(this.filePath, JSON.stringify(DEFAULT_DB));
+			fs.writeFileSync(this.filePath, JSON.stringify(DEFAULT_DATA));
 		}
 
 		const rawJson = fs.readFileSync(this.filePath, 'utf-8');
-		if (Database.validate(rawJson)) {
+		if (TuneLibrary.validate(rawJson)) {
 			this.data = JSON.parse(rawJson);
+
+			// Overwrite file if version doesn't match. Mainly used for development.
+			if (this.data.version !== DATA_FILE_VERSION) this.data = DEFAULT_DATA;
 		} else {
 			throw new Error('Error initializing database.');
 		}
@@ -74,6 +80,7 @@ export default class Database {
 		}
 	}
 
+	// TODO: Move to seperate file.
 	static validate(json: string) {
 		try {
 			JSON.parse(json);

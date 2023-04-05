@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer } from 'electron';
-import { DatabaseKey, DatabaseValue } from './api/database';
+import { DatabaseKey, DatabaseValue } from './library';
 import { StoreValue } from './api/dynamicStore';
 import Channels from './ipc/channel';
 
@@ -14,10 +14,10 @@ contextBridge.exposeInMainWorld('api', {
 
 			return paths as string[];
 		},
-		async readMetadata(file: string) {
-			const metadata = await ipcRenderer.invoke(Channels.READ_METADATA, file);
+		async loadMetadata(trackJSON: string) {
+			const trackMD = await ipcRenderer.invoke(Channels.LOAD_METADATA, trackJSON);
 
-			return metadata.toString();
+			return trackMD.toString();
 		},
 		openURL(url: string) {
 			ipcRenderer.invoke(Channels.OPEN_URL, url);

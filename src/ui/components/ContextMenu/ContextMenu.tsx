@@ -1,10 +1,9 @@
-import { FC, ReactElement } from 'react';
-import { Props } from './ContextMenuItem/ContextMenuItem';
+import { FC } from 'react';
 
 import style from './ContextMenu.module.scss';
 
 interface ContextMenuProps {
-	children?: ReactElement<Props>[];
+	children?: JSX.Element | JSX.Element[];
 	x: number;
 	y: number;
 }

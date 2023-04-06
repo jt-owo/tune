@@ -1,6 +1,7 @@
 import { FC, SyntheticEvent, useEffect, useRef, useCallback } from 'react';
 import { play, playNext, playPrevious } from '../../../state/slices/playerSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks';
+import { getFilePath } from '../../util';
 
 import AudioControlButton from './AudioControlButton/AudioControlButton';
 import PlayPauseButton from './PlayPauseButton/PlayPauseButton';
@@ -83,7 +84,7 @@ const AudioPlayer: FC = () => {
 				<ShuffleButton />
 				<RepeatButton />
 			</div>
-			{currentTrack?.service === 'local' && <audio src={currentTrack?.filePath} ref={audioRef} onEnded={onEnded} crossOrigin="anonymous" />}
+			{currentTrack?.service === 'local' && currentTrack.filePath && <audio src={getFilePath(currentTrack.filePath)} ref={audioRef} onEnded={onEnded} crossOrigin="anonymous" />}
 		</div>
 	);
 };

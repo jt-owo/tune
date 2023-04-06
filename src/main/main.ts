@@ -117,7 +117,7 @@ class Main {
 		});
 
 		protocol.registerFileProtocol('tune', (request, callback) => {
-			const url = request.url.replace('tune://getMediaFile/', '');
+			const url = request.url.replace('tune://file/', '');
 			try {
 				return callback(url);
 			} catch (error) {

@@ -1,6 +1,5 @@
 import { FC, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { selectSpotifyToken } from '../../../state/slices/playerSlice';
 import { addAlert } from '../../../state/slices/alertSlice';
 import { IAlbum, IArtist, ITrack } from '../../../typings/types';
 import SpotifyAPI from '../../api/spotify';
@@ -10,7 +9,7 @@ import View from '../../components/View/View';
 import style from './Browse.module.scss';
 
 const Browse: FC = () => {
-	const spotifyToken = useAppSelector(selectSpotifyToken);
+	const spotifyToken = useAppSelector((state) => state.user.spotifyToken);
 
 	const dispatch = useAppDispatch();
 

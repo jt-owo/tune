@@ -1,5 +1,5 @@
 import { FC, SyntheticEvent, useEffect, useRef, useCallback } from 'react';
-import { play, playNext, playPrevious, selectCurrentTrack, selectIsPlaying, selectOutputDeviceId } from '../../../state/slices/playerSlice';
+import { play, playNext, playPrevious } from '../../../state/slices/playerSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 
 import AudioControlButton from './AudioControlButton/AudioControlButton';
@@ -20,9 +20,9 @@ import style from './AudioPlayer.module.scss';
 const AudioPlayer: FC = () => {
 	const audioRef = useRef<HTMLAudioElement & { setSinkId(deviceId: string): void; volume: number }>(null);
 
-	const currentTrack = useAppSelector(selectCurrentTrack);
-	const isPlaying = useAppSelector(selectIsPlaying);
-	const outputDeviceId = useAppSelector(selectOutputDeviceId);
+	const currentTrack = useAppSelector((state) => state.player.currentTrack);
+	const isPlaying = useAppSelector((state) => state.player.isPlaying);
+	const outputDeviceId = useAppSelector((state) => state.player.outputDeviceId);
 
 	const dispatch = useAppDispatch();
 

@@ -4,7 +4,7 @@ import { FC, useEffect, useState } from 'react';
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent, DragStartEvent, DragOverlay, UniqueIdentifier } from '@dnd-kit/core';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { restrictToWindowEdges } from '@dnd-kit/modifiers';
-import { selectQueue, selectQueueIndex, updateQueue, setQueue } from '../../../state/slices/playerSlice';
+import { updateQueue, setQueue } from '../../../state/slices/playerSlice';
 import { useAppSelector, useAppDispatch } from '../../hooks';
 import { loadTracksMetadata } from '../../util';
 import { ITrack } from '../../../typings/types';
@@ -14,8 +14,8 @@ import QueueTrack from './QueueTrack/QueueTrack';
 import style from './Queue.module.scss';
 
 const Queue: FC = () => {
-	const queue = useAppSelector(selectQueue);
-	const queueIndex = useAppSelector(selectQueueIndex);
+	const queue = useAppSelector((state) => state.player.queue);
+	const queueIndex = useAppSelector((state) => state.player.queueIndex);
 	const dispatch = useAppDispatch();
 
 	const [tracks, setTracks] = useState<ITrack[]>([]);

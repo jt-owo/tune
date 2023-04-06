@@ -8,6 +8,7 @@ import { OpenUrlChannel, LoadMetadataChannel, SelectFileChannel, WindowControlCh
 import { IpcChannel } from './ipc/types';
 import Channels from './ipc/channel';
 import { DynamicStore } from './api/dynamicStore';
+import Json from '../util/jsonHelper';
 import { UserConfig } from '../typings/config';
 
 if (process.env.NODE_ENV === 'production') {
@@ -83,7 +84,7 @@ class Main {
 			const key = args[0];
 			const value = args[1];
 
-			if (TuneLibrary.validate(value)) this.database.set(key, JSON.parse(value));
+			if (Json.validate(value)) this.database.set(key, JSON.parse(value));
 		});
 
 		ipcMain.on(Channels.CONFIG_GET, (event, args) => {
@@ -97,7 +98,7 @@ class Main {
 			const key = args[0];
 			const value = args[1];
 
-			if (TuneLibrary.validate(value)) this.configFile.set(key, JSON.parse(value));
+			if (Json.validate(value)) this.configFile.set(key, JSON.parse(value));
 		});
 	}
 

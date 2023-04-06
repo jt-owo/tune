@@ -1,9 +1,10 @@
 import { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../hooks';
-import { selectSpotifyToken } from '../../../state/slices/playerSlice';
 import SpotifyAPI from '../../api/spotify';
+import AppRoutes from '../../routes';
 import { IAlbum, ITrack } from '../../../typings/types';
+import { getTrackFormatted } from '../../util/formatHelper';
 
 import View from '../../components/View/View';
 import HomeItemSmall from '../../components/Home_Elements/HomeItemSmall/HomeItemSmall';
@@ -11,10 +12,9 @@ import TabControl from '../../components/TabControl/TabControl';
 import TabItem from '../../components/TabControl/TabItem/TabItem';
 
 import style from './Library.module.scss';
-import AppRoutes from '../../routes';
 
 const Library: FC = () => {
-	const spotifyToken = useAppSelector(selectSpotifyToken);
+	const spotifyToken = useAppSelector((state) => state.user.spotifyToken);
 	const spotifyPlaylists = useAppSelector((state) => state.playlists.spotify);
 
 	const [savedAlbums, setSavedAlbums] = useState<IAlbum[]>([]);
@@ -77,7 +77,8 @@ const Library: FC = () => {
 						<div>
 							{savedTracks.length > 1 &&
 								savedTracks.map((track) => {
-									return <HomeItemSmall key={track.name} title={track.name} image={track.album?.images[0].url ?? ''} artist={(track.artists && track.artists[0].name) ?? ''} />;
+									const { name, artists, image } = getTrackFormatted(track);
+									return <HomeItemSmall key={track.name} title={name} image={image} artist={artists} />;
 								})}
 						</div>
 					</TabItem>

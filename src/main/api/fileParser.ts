@@ -1,8 +1,8 @@
 import fs from 'fs';
 import * as mm from 'music-metadata';
-import { AudioMetadata } from '../../typings/metadata';
+import Json from '../../util/jsonHelper';
 import { ITrack } from '../../typings/types';
-import TuneLibrary from '../library';
+import { AudioMetadata } from '../../typings/metadata';
 
 export default class FileParser {
 	/**
@@ -75,7 +75,7 @@ export default class FileParser {
 	 */
 	public static async loadMetadata(trackJSON: string): Promise<string> {
 		let track: ITrack;
-		if (TuneLibrary.validate(trackJSON)) {
+		if (Json.validate(trackJSON)) {
 			track = JSON.parse(trackJSON);
 		} else {
 			return '';

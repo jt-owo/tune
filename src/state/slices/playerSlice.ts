@@ -1,9 +1,8 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IPlaybackState, ITrack, IUser, RepeatMode } from '../../typings/types';
-import type { RootState } from '../store';
+import { IPlaybackState, ITrack, RepeatMode } from '../../typings/types';
 
-export interface PlayerState {
+export type PlayerState = {
 	/** Queue */
 	queue: ITrack[];
 	queueIndex: number;
@@ -19,9 +18,7 @@ export interface PlayerState {
 
 	/** Misc. */
 	outputDeviceId?: string;
-	spotifyToken?: string;
-	user?: IUser; // FIXME: Move to seperate reducer.
-}
+};
 
 const initialState: PlayerState = {
 	queue: [],
@@ -30,9 +27,8 @@ const initialState: PlayerState = {
 	isPlaying: false,
 	isShuffle: false,
 	repeatMode: 'off',
-	volume: +window.api.config.get('volume'),
-	progress: 0,
-	outputDeviceId: window.api.config.get('outputDeviceId').toString()
+	volume: 0,
+	progress: 0
 };
 
 export const playerSlice = createSlice({
@@ -49,10 +45,9 @@ export const playerSlice = createSlice({
 		},
 		setQueue: (state, action: PayloadAction<ITrack[]>) => {
 			state.queue = action.payload;
-
-			state.queueIndex = 0;
 			state.currentTrack = state.queue[state.queueIndex];
 			state.isPlaying = true;
+			state.queueIndex = 0;
 		},
 		updateQueue: (state, action: PayloadAction<ITrack[]>) => {
 			const fixedIds: ITrack[] = [];
@@ -67,10 +62,6 @@ export const playerSlice = createSlice({
 			});
 
 			state.queue = fixedIds;
-		},
-		setTrack: (state, action: PayloadAction<ITrack>) => {
-			state.currentTrack = action.payload;
-			state.isPlaying = true;
 		},
 		setOutputDevice: (state, action: PayloadAction<string>) => {
 			state.outputDeviceId = action.payload;
@@ -95,30 +86,10 @@ export const playerSlice = createSlice({
 				state.currentTrack = state.queue[state.queueIndex];
 				state.isPlaying = true;
 			}
-		},
-		updateSpotifyToken: (state, action: PayloadAction<string>) => {
-			state.spotifyToken = action.payload;
-		},
-		updateUser: (state, action: PayloadAction<IUser>) => {
-			state.user = action.payload;
 		}
 	}
 });
 
-export const { setTrack, setQueue, updateQueue, setOutputDevice, play, playNext, playPrevious, updateSpotifyToken, updateUser, updatePlaybackState } = playerSlice.actions;
-
-export const selectQueue = (state: RootState) => state.player.queue;
-export const selectQueueIndex = (state: RootState) => state.player.queueIndex;
-
-export const selectIsPlaying = (state: RootState) => state.player.isPlaying;
-export const selectIsShuffle = (state: RootState) => state.player.isShuffle;
-export const selectIsRepeat = (state: RootState) => state.player.repeatMode;
-export const selectCurrentTrack = (state: RootState) => state.player.currentTrack;
-export const selectVolume = (state: RootState) => state.player.volume;
-export const selectProgress = (state: RootState) => state.player.progress;
-
-export const selectOutputDeviceId = (state: RootState) => state.player.outputDeviceId;
-export const selectSpotifyToken = (state: RootState) => state.player.spotifyToken;
-export const selectUser = (state: RootState) => state.player.user;
+export const { setQueue, updateQueue, setOutputDevice, play, playNext, playPrevious, updatePlaybackState } = playerSlice.actions;
 
 export default playerSlice.reducer;

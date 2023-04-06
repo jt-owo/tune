@@ -108,6 +108,8 @@ export interface IFormattedTrack {
 	image: string;
 	/**
 	 * True if all track is ready for display.
+	 *
+	 * Only neccessary for local audio files.
 	 */
 	isLoaded: boolean;
 }

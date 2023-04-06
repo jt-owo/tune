@@ -6,13 +6,13 @@ import { IArtist, IFormattedTrack, ITrack, Image } from '../../typings/types';
  * Returns the image url or the default album cover if there are no images.
  * @param images Image array
  */
-export const getAlbumCover = (images?: Image[]) => {
+export const getImageUrl = (images?: Image[]) => {
 	if (!images || images.length < 1) return defaultAlbumCover;
 
 	return images[0].url;
 };
 
-export const getDuration = (duration?: number) => {
+const getDuration = (duration?: number) => {
 	if (duration) {
 		const minutes = Math.floor(duration / 60);
 		const seconds = Math.floor(duration - minutes * 60);
@@ -25,7 +25,7 @@ export const getDuration = (duration?: number) => {
 	return NaN.toString();
 };
 
-export const getArtists = (artists?: IArtist[]) => {
+const getArtists = (artists?: IArtist[]) => {
 	let artistsStr = '';
 	if (artists) {
 		artists.forEach((artist) => {
@@ -42,7 +42,7 @@ export const getTrackFormatted = (track: ITrack): IFormattedTrack => {
 		name: track.name!,
 		artists: getArtists(track.album?.artists),
 		duration: getDuration(track.duration),
-		image: getAlbumCover(track.album?.images),
+		image: getImageUrl(track.album?.images),
 		isLoaded: track.album !== undefined
 	};
 };

@@ -3,12 +3,12 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IPlaylist, ITrack } from '../../typings/types';
 import newGuid from '../../ui/util';
 
-export interface PlaylistsState {
+export type PlaylistsState = {
 	/** Local playlists */
 	local: IPlaylist[];
 	/** Spotify playlists */
 	spotify: IPlaylist[];
-}
+};
 
 const initialState: PlaylistsState = {
 	local: [],

@@ -10,11 +10,11 @@ import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSo
 import { restrictToWindowEdges } from '@dnd-kit/modifiers';
 import Lottie, { LottieRefCurrentProps } from 'lottie-react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { removePlaylist, updatePlaylist } from '../../../state/slices/playlistSlice';
+import { removePlaylist, updatePlaylist } from '../../../state/slices/playlistsSlice';
 import { IPlaylist, ITrack } from '../../../typings/types';
-import { selectQueue, selectSpotifyToken, setQueue, updateQueue } from '../../../state/slices/playerSlice';
+import { setQueue, updateQueue } from '../../../state/slices/playerSlice';
 import { getServices } from '../../util/serviceHelper';
-import { getAlbumCover } from '../../util/formatHelper';
+import { getImageUrl } from '../../util/formatHelper';
 import useContextMenu from '../../hooks/useContextMenu';
 import SpotifyAPI from '../../api/spotify';
 import AppRoutes from '../../routes';
@@ -57,10 +57,11 @@ const Playlist: FC = memo(() => {
 	const navigate = useNavigate();
 	const dispatch = useAppDispatch();
 
-	const spotifyToken = useAppSelector(selectSpotifyToken);
+	const spotifyToken = useAppSelector((state) => state.user.spotifyToken);
+
 	const playlists = useAppSelector((state) => state.playlists.local);
 	const spotifyPlaylists = useAppSelector((state) => state.playlists.spotify);
-	const queue = useAppSelector(selectQueue);
+	const queue = useAppSelector((state) => state.player.queue);
 
 	let found: IPlaylist | undefined;
 	if (isLocal) {
@@ -272,7 +273,7 @@ const Playlist: FC = memo(() => {
 			<Dialog heading="Delete?" description="You are about to delete this playlist. This action cannot be undone!" onClose={() => setDialogVisibility(false)} isOpen={isDialogVisible} type="danger" confirmText="Delete" rejectText="Keep" confirmCallback={deletePlaylist} />
 			<div className={style['playlist-heading']}>
 				<RenameDialog value={playlist?.name} nameCB={handleRename} visible={renameVisibility} onClose={() => setRenameVisibility(false)} />
-				<img src={getAlbumCover(playlist.images)} alt="" />
+				<img src={getImageUrl(playlist.images)} alt="" />
 				<div className={style['playlist-heading-text']} onClick={handleToggleRename}>
 					{playlist?.name}
 				</div>

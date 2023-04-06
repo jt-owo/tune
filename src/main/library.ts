@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import Json from '../util/jsonHelper';
 import { IPlaylist } from '../typings/types';
 
 export type DatabaseValue = IPlaylist[] | string | number | undefined;
@@ -34,7 +35,7 @@ export default class TuneLibrary {
 		}
 
 		const rawJson = fs.readFileSync(this.filePath, 'utf-8');
-		if (TuneLibrary.validate(rawJson)) {
+		if (Json.validate(rawJson)) {
 			this.data = JSON.parse(rawJson);
 
 			// Overwrite file if version doesn't match. Mainly used for development.
@@ -78,16 +79,5 @@ export default class TuneLibrary {
 		} catch (err) {
 			throw new Error(`Cannot access file: ${this.filePath}`);
 		}
-	}
-
-	// TODO: Move to seperate file.
-	static validate(json: string) {
-		try {
-			JSON.parse(json);
-		} catch (err) {
-			return false;
-		}
-
-		return true;
 	}
 }

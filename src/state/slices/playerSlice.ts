@@ -65,7 +65,7 @@ export const playerSlice = createSlice({
 		},
 		setOutputDevice: (state, action: PayloadAction<string>) => {
 			state.outputDeviceId = action.payload;
-			window.api.config.set('outputDeviceId', JSON.stringify(action.payload));
+			window.api?.config.set('outputDeviceId', JSON.stringify(action.payload));
 		},
 		play: (state) => {
 			state.isPlaying = !state.isPlaying;

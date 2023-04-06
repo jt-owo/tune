@@ -32,12 +32,12 @@ export const playlistsSlice = createSlice({
 			};
 
 			state.local.push(playlist);
-			window.api.db.set('playlists', JSON.stringify([...state.local]));
+			window.api?.db.set('playlists', JSON.stringify([...state.local]));
 		},
 		removePlaylist: (state, action: PayloadAction<string>) => {
 			state.local = state.local.filter((playlist) => !(playlist.id === action.payload));
 
-			window.api.db.set('playlists', JSON.stringify([...state.local]));
+			window.api?.db.set('playlists', JSON.stringify([...state.local]));
 		},
 		updatePlaylist: (state, action: PayloadAction<IPlaylist>) => {
 			const toUpdate = state.local.find((p) => p.id === action.payload.id);
@@ -61,11 +61,13 @@ export const playlistsSlice = createSlice({
 				};
 			});
 
-			window.api.db.set('playlists', JSON.stringify(toSave));
+			window.api?.db.set('playlists', JSON.stringify(toSave));
 		},
 		loadPlaylists: (state) => {
-			const stored = window.api.db.get('playlists') as IPlaylist[];
-			state.local = stored;
+			if (window.api) {
+				const stored = window.api?.db.get('playlists') as IPlaylist[];
+				state.local = stored;
+			}
 		},
 		loadSpotifyPlaylists: (state, action: PayloadAction<IPlaylist[]>) => {
 			state.spotify = action.payload;

@@ -1,4 +1,4 @@
-import { DatabaseKey, DatabaseValue } from '../main/api/database';
+import { DatabaseKey, DatabaseValue } from '../main/library';
 import { StoreValue } from '../main/api/dynamicStore';
 
 interface TuneAPI {
@@ -21,7 +21,7 @@ interface TuneAPI {
 	};
 	system: {
 		selectFiles(): Promise<string[]>;
-		readMetadata(file: string): Promise<string>;
+		loadMetadata(trackJSON: string): Promise<string>;
 		openURL(url: string): Promise<void>;
 	};
 	config: {

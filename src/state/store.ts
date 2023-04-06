@@ -1,13 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit';
 import alertReducer from './slices/alertSlice';
-import playlistsReducer from './slices/playlistSlice';
+import playlistsReducer from './slices/playlistsSlice';
 import playerReducer from './slices/playerSlice';
+import userReducer from './slices/userSlice';
 
 const store = configureStore({
 	reducer: {
 		player: playerReducer,
 		alerts: alertReducer,
-		playlists: playlistsReducer
+		playlists: playlistsReducer,
+		user: userReducer
 	}
 });
 

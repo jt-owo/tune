@@ -3,7 +3,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import { FC, KeyboardEvent, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { addPlaylist } from '../../../state/slices/playlistSlice';
+import { addPlaylist } from '../../../state/slices/playlistsSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { addAlert } from '../../../state/slices/alertSlice';
 import AppRoutes from '../../routes';

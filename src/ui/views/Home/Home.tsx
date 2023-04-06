@@ -1,5 +1,4 @@
 import { FC, useEffect, useState } from 'react';
-import { selectSpotifyToken, selectUser } from '../../../state/slices/playerSlice';
 import { IArtist } from '../../../typings/types';
 import { useAppSelector } from '../../hooks';
 import SpotifyAPI from '../../api/spotify';
@@ -8,8 +7,8 @@ import View from '../../components/View/View';
 import HomeItemMedium from '../../components/Home_Elements/HomeItemMedium/HomeItemMedium';
 
 const Home: FC = () => {
-	const user = useAppSelector(selectUser);
-	const spotifyToken = useAppSelector(selectSpotifyToken);
+	const user = useAppSelector((state) => state.user.data);
+	const spotifyToken = useAppSelector((state) => state.user.spotifyToken);
 
 	const [topArtists, setTopArtists] = useState<IArtist[]>([]);
 

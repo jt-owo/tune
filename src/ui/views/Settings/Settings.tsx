@@ -2,8 +2,9 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import { useState, useEffect, FC, ChangeEvent } from 'react';
-import { selectOutputDeviceId, selectSpotifyToken, setOutputDevice, updateSpotifyToken } from '../../../state/slices/playerSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks';
+import { setOutputDevice } from '../../../state/slices/playerSlice';
+import { updateSpotifyToken } from '../../../state/slices/userSlice';
 import SpotifyAPI from '../../api/spotify';
 
 import View from '../../components/View/View';
@@ -17,8 +18,8 @@ import './Settings.scss';
 import '../../styles/_components.scss';
 
 const Settings: FC = () => {
-	const selectedOutputDevice = useAppSelector(selectOutputDeviceId);
-	const spotifyToken = useAppSelector(selectSpotifyToken);
+	const outputDeviceId = useAppSelector((state) => state.player.outputDeviceId);
+	const spotifyToken = useAppSelector((state) => state.user.spotifyToken);
 
 	const [audioDevices, setOutputDevices] = useState<MediaDeviceInfo[]>();
 
@@ -46,7 +47,7 @@ const Settings: FC = () => {
 			<div className="content">
 				<TabControl>
 					<TabItem label="Audio Settings">
-						<select className="dropdown-select-1" onChange={onOutputDeviceChange} value={selectedOutputDevice || 'default'}>
+						<select className="dropdown-select-1" onChange={onOutputDeviceChange} value={outputDeviceId || 'default'}>
 							{audioDevices &&
 								audioDevices.map((device) => {
 									return (

@@ -1,12 +1,18 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import defaultAlbumCover from '../../../assets/images/tune_no_artwork.svg';
-import { IArtist } from '../../typings/types';
+import { IArtist, IFormattedTrack, ITrack, Image } from '../../typings/types';
 
-export const getAlbumCover = (url?: string) => {
-	if (url) return url;
-	return defaultAlbumCover;
+/**
+ * Returns the image url or the default album cover if there are no images.
+ * @param images Image array
+ */
+export const getImageUrl = (images?: Image[]) => {
+	if (!images || images.length < 1) return defaultAlbumCover;
+
+	return images[0].url;
 };
 
-export const getDuration = (duration?: number) => {
+const getDuration = (duration?: number) => {
 	if (duration) {
 		const minutes = Math.floor(duration / 60);
 		const seconds = Math.floor(duration - minutes * 60);
@@ -16,10 +22,10 @@ export const getDuration = (duration?: number) => {
 		}
 		return `${minutes}:${seconds}`;
 	}
-	return NaN;
+	return NaN.toString();
 };
 
-export const getArtists = (artists?: IArtist[]) => {
+const getArtists = (artists?: IArtist[]) => {
 	let artistsStr = '';
 	if (artists) {
 		artists.forEach((artist) => {
@@ -29,4 +35,14 @@ export const getArtists = (artists?: IArtist[]) => {
 	}
 
 	return artistsStr;
+};
+
+export const getTrackFormatted = (track: ITrack): IFormattedTrack => {
+	return {
+		name: track.name!,
+		artists: getArtists(track.album?.artists),
+		duration: getDuration(track.duration),
+		image: getImageUrl(track.album?.images),
+		isLoaded: track.album !== undefined
+	};
 };

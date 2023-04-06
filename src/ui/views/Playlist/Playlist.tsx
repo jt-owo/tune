@@ -1,8 +1,8 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable @typescript-eslint/no-shadow */
+/* eslint-disable react-hooks/rules-of-hooks */
 import { FC, memo, RefObject, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent, DragStartEvent, DragOverlay, UniqueIdentifier } from '@dnd-kit/core';
@@ -10,11 +10,11 @@ import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSo
 import { restrictToWindowEdges } from '@dnd-kit/modifiers';
 import Lottie, { LottieRefCurrentProps } from 'lottie-react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { removePlaylist, updatePlaylist } from '../../../state/slices/playlistSlice';
+import { removePlaylist, updatePlaylist } from '../../../state/slices/playlistsSlice';
 import { IPlaylist, ITrack } from '../../../typings/types';
-import { selectQueue, selectSpotifyToken, setQueue, updateQueue } from '../../../state/slices/playerSlice';
+import { setQueue, updateQueue } from '../../../state/slices/playerSlice';
 import { getServices } from '../../util/serviceHelper';
-import { getAlbumCover } from '../../util/formatHelper';
+import { getImageUrl } from '../../util/formatHelper';
 import useContextMenu from '../../hooks/useContextMenu';
 import SpotifyAPI from '../../api/spotify';
 import AppRoutes from '../../routes';
@@ -42,6 +42,7 @@ import editIcon from '../../../../assets/ui-icons/edit-3.svg';
 import lockIcon from '../../../../assets/animations/lock.json';
 
 import style from './Playlist.module.scss';
+import { loadTracksMetadata } from '../../util';
 
 type PlaylistParams = {
 	id: string;
@@ -56,10 +57,11 @@ const Playlist: FC = memo(() => {
 	const navigate = useNavigate();
 	const dispatch = useAppDispatch();
 
-	const spotifyToken = useAppSelector(selectSpotifyToken);
+	const spotifyToken = useAppSelector((state) => state.user.spotifyToken);
+
 	const playlists = useAppSelector((state) => state.playlists.local);
 	const spotifyPlaylists = useAppSelector((state) => state.playlists.spotify);
-	const queue = useAppSelector(selectQueue);
+	const queue = useAppSelector((state) => state.player.queue);
 
 	let found: IPlaylist | undefined;
 	if (isLocal) {
@@ -155,7 +157,8 @@ const Playlist: FC = memo(() => {
 
 			updateData.tracks.push({
 				id: index,
-				name: path,
+				name: '',
+				filePath: path,
 				service: 'local'
 			});
 		});
@@ -169,8 +172,6 @@ const Playlist: FC = memo(() => {
 	};
 
 	const handleTrackRemove = (id: number) => {
-		if (!playlist) return;
-
 		const updateData: IPlaylist = {
 			...playlist
 		};
@@ -183,8 +184,6 @@ const Playlist: FC = memo(() => {
 	};
 
 	const handlePlayNext = (id: number) => {
-		if (!playlist) return;
-
 		const updateData: ITrack[] = [...queue];
 		const track = playlist.tracks.find((x) => x.id === id);
 
@@ -195,8 +194,6 @@ const Playlist: FC = memo(() => {
 	};
 
 	const handlePlayLast = (id: number) => {
-		if (!playlist) return;
-
 		const updateData: ITrack[] = [...queue];
 		const track = playlist.tracks.find((x) => x.id === id);
 
@@ -212,7 +209,7 @@ const Playlist: FC = memo(() => {
 	};
 
 	const handleRename = (data: string) => {
-		if (playlist) dispatch(updatePlaylist({ ...playlist, name: data }));
+		dispatch(updatePlaylist({ ...playlist, name: data }));
 	};
 
 	const handleLockPlaylist = () => {
@@ -230,8 +227,13 @@ const Playlist: FC = memo(() => {
 	};
 
 	useEffect(() => {
-		const loadPlaylistTracks = async (token: string, url: string) => {
+		const loadSpotifyTracks = async (token: string, url: string) => {
 			const tracksLoaded = await SpotifyAPI.fetchPlaylistTracks(token, url);
+			setTracks(tracksLoaded);
+		};
+
+		const loadLocalTracks = async (tracks: ITrack[]) => {
+			const tracksLoaded = await loadTracksMetadata(tracks);
 			setTracks(tracksLoaded);
 		};
 
@@ -242,15 +244,14 @@ const Playlist: FC = memo(() => {
 			query = spotifyPlaylists;
 		}
 
-		// Cursed if else mess for now, sorry.
 		if (query) {
 			const found = query.find((x) => x.id === id);
 			if (found) {
 				setPlaylist(found);
 				if (isLocal) {
-					if (found.tracks) setTracks(found.tracks);
+					if (found.tracks) loadLocalTracks(found.tracks);
 				} else if (isSpotify) {
-					if (found.tracksHref && spotifyToken) loadPlaylistTracks(spotifyToken, found.tracksHref);
+					if (found.tracksHref && spotifyToken) loadSpotifyTracks(spotifyToken, found.tracksHref);
 				}
 			}
 		}
@@ -272,7 +273,7 @@ const Playlist: FC = memo(() => {
 			<Dialog heading="Delete?" description="You are about to delete this playlist. This action cannot be undone!" onClose={() => setDialogVisibility(false)} isOpen={isDialogVisible} type="danger" confirmText="Delete" rejectText="Keep" confirmCallback={deletePlaylist} />
 			<div className={style['playlist-heading']}>
 				<RenameDialog value={playlist?.name} nameCB={handleRename} visible={renameVisibility} onClose={() => setRenameVisibility(false)} />
-				<img src={getAlbumCover(playlist.images.length > 0 ? playlist.images[0].url : undefined)} alt="" />
+				<img src={getImageUrl(playlist.images)} alt="" />
 				<div className={style['playlist-heading-text']} onClick={handleToggleRename}>
 					{playlist?.name}
 				</div>
@@ -318,7 +319,6 @@ const Playlist: FC = memo(() => {
 									isDraggingId !== track.id ? (
 										<PlaylistTrack
 											key={track.id}
-											id={track.id}
 											track={track}
 											onContextMenu={(e) => {
 												e.preventDefault();
@@ -333,11 +333,11 @@ const Playlist: FC = memo(() => {
 											}}
 										/>
 									) : (
-										<PlaylistTrack key={track.id} id={track.id} track={track} onContextMenu={() => {}} isDragging />
+										<PlaylistTrack key={track.id} track={track} onContextMenu={() => {}} isDragging />
 									)
 								)}
 						</SortableContext>
-						<DragOverlay modifiers={[restrictToWindowEdges]}>{isDraggingId ? <PlaylistTrack id={tracks.findIndex((x) => x.id === isDraggingId)} track={tracks[tracks.findIndex((x) => x.id === isDraggingId)]} onContextMenu={() => {}} /> : null}</DragOverlay>
+						<DragOverlay modifiers={[restrictToWindowEdges]}>{isDraggingId ? <PlaylistTrack track={tracks[tracks.findIndex((x) => x.id === isDraggingId)]} onContextMenu={() => {}} /> : null}</DragOverlay>
 					</DndContext>
 				)}
 				{visibility && (

@@ -2,12 +2,13 @@
 import { app, ipcMain, protocol } from 'electron';
 import dotenv from 'dotenv';
 import Window from './window/window';
-import Database from './api/database';
+import TuneLibrary from './library';
 import DiscordClient from './api/discordClient';
-import { OpenUrlChannel, ReadMetadataChannel, SelectFileChannel, WindowControlChannel } from './ipc';
+import { OpenUrlChannel, LoadMetadataChannel, SelectFileChannel, WindowControlChannel } from './ipc';
 import { IpcChannel } from './ipc/types';
 import Channels from './ipc/channel';
 import { DynamicStore } from './api/dynamicStore';
+import Json from '../util/jsonHelper';
 import { UserConfig } from '../typings/config';
 
 if (process.env.NODE_ENV === 'production') {
@@ -35,7 +36,7 @@ class Main {
 	private mainWindow!: Window;
 
 	/** JSON database instance */
-	private database!: Database;
+	private database!: TuneLibrary;
 
 	/** Config file instance */
 	private configFile!: DynamicStore;
@@ -54,7 +55,7 @@ class Main {
 			this.onWindowAllClosed();
 		});
 
-		this.initIpc([new WindowControlChannel(), new ReadMetadataChannel(), new SelectFileChannel(), new OpenUrlChannel()]);
+		this.initIpc([new WindowControlChannel(), new LoadMetadataChannel(), new SelectFileChannel(), new OpenUrlChannel()]);
 	}
 
 	/**
@@ -83,7 +84,7 @@ class Main {
 			const key = args[0];
 			const value = args[1];
 
-			if (Database.validate(value)) this.database.set(key, JSON.parse(value));
+			if (Json.validate(value)) this.database.set(key, JSON.parse(value));
 		});
 
 		ipcMain.on(Channels.CONFIG_GET, (event, args) => {
@@ -97,12 +98,12 @@ class Main {
 			const key = args[0];
 			const value = args[1];
 
-			if (Database.validate(value)) this.configFile.set(key, JSON.parse(value));
+			if (Json.validate(value)) this.configFile.set(key, JSON.parse(value));
 		});
 	}
 
 	private onReady() {
-		this.database = new Database(app.getPath('userData'));
+		this.database = new TuneLibrary(app.getPath('userData'));
 		this.configFile = new DynamicStore('userConfig', USER_CONFIG_DEFAULTS);
 		this.mainWindow = new Window(this.configFile);
 

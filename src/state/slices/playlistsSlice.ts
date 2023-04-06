@@ -3,12 +3,12 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IPlaylist, ITrack } from '../../typings/types';
 import newGuid from '../../ui/util';
 
-export interface PlaylistsState {
+export type PlaylistsState = {
 	/** Local playlists */
 	local: IPlaylist[];
 	/** Spotify playlists */
 	spotify: IPlaylist[];
-}
+};
 
 const initialState: PlaylistsState = {
 	local: [],
@@ -25,24 +25,17 @@ export const playlistsSlice = createSlice({
 				name: action.payload,
 				description: '',
 				tracks: [],
-				pinned: true,
 				images: [],
+				pinned: true,
 				locked: false,
-				service: 'local',
-				collaborative: false,
-				public: false
+				service: 'local'
 			};
 
 			state.local.push(playlist);
 			window.api.db.set('playlists', JSON.stringify([...state.local]));
 		},
 		removePlaylist: (state, action: PayloadAction<string>) => {
-			state.local = state.local.filter((playlist) => {
-				if (playlist.id === action.payload) {
-					return false;
-				}
-				return true;
-			});
+			state.local = state.local.filter((playlist) => !(playlist.id === action.payload));
 
 			window.api.db.set('playlists', JSON.stringify([...state.local]));
 		},
@@ -57,7 +50,7 @@ export const playlistsSlice = createSlice({
 				const tracks: ITrack[] = playlist.tracks.map((track) => {
 					return {
 						id: track.id,
-						name: track.name,
+						filePath: track.filePath,
 						service: track.service
 					};
 				});

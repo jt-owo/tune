@@ -1,6 +1,5 @@
-import { FC, useEffect, useState } from 'react';
+import { FC } from 'react';
 import { ITrack } from '../../../../typings/types';
-import { getServices } from '../../../util/serviceHelper';
 import { getTrackFormatted } from '../../../util/formatHelper';
 import useMediaSession from '../../../hooks/useMediaSession';
 
@@ -15,23 +14,7 @@ interface NowPlayingProps {
 
 const NowPlaying: FC<NowPlayingProps> = (props) => {
 	const { track, onPlay, onPreviousTrack, onNextTrack } = props;
-
-	const [parsedTrack, setTrack] = useState(track);
-
-	const { isLocal } = getServices(track.service);
-
-	useEffect(() => {
-		if (isLocal) {
-			const loadMetadata = async () => {
-				const metadataJSON = await window.api.system.loadMetadata(JSON.stringify(track));
-				setTrack(JSON.parse(metadataJSON) as ITrack);
-			};
-
-			loadMetadata();
-		}
-	}, [isLocal, track]);
-
-	const { name, artists, image, isLoaded } = getTrackFormatted(parsedTrack);
+	const { name, artists, image, isLoaded } = getTrackFormatted(track);
 
 	useMediaSession({
 		title: name,

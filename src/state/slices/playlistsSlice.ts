@@ -34,7 +34,7 @@ export const playlistsSlice = createSlice({
 			state.local.push(playlist);
 			window.api?.db.set('playlists', JSON.stringify([...state.local]));
 		},
-		removePlaylist: (state, action: PayloadAction<string>) => {
+		deletePlaylist: (state, action: PayloadAction<string>) => {
 			state.local = state.local.filter((playlist) => !(playlist.id === action.payload));
 
 			window.api?.db.set('playlists', JSON.stringify([...state.local]));
@@ -75,6 +75,6 @@ export const playlistsSlice = createSlice({
 	}
 });
 
-export const { addPlaylist, removePlaylist, updatePlaylist, loadPlaylists, loadSpotifyPlaylists } = playlistsSlice.actions;
+export const { addPlaylist, deletePlaylist, updatePlaylist, loadPlaylists, loadSpotifyPlaylists } = playlistsSlice.actions;
 
 export default playlistsSlice.reducer;

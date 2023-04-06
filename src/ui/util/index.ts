@@ -24,3 +24,8 @@ export const loadTracksMetadata = async (tracks: ITrack[]) => {
 
 	return loadedTracks;
 };
+
+export const getNextID = (tracks: ITrack[]) => {
+	const values = tracks.map((x) => x.id);
+	return Math.max(...values) + 1;
+};

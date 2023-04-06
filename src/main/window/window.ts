@@ -69,8 +69,7 @@ export default class Window {
 			webPreferences: {
 				nodeIntegration: false /* DO NOT CHANGE */,
 				contextIsolation: true /* DO NOT CHANGE */,
-				// FIXME: https://github.com/electron/electron/issues/23393
-				webSecurity: false /* DO NOT CHANGE: WebSecurity can't be true, because otherwise local audio files wouldn't work */,
+				webSecurity: true /* DO NOT CHANGE */,
 				devTools: process.env.NODE_ENV !== 'production',
 				preload: app.isPackaged ? path.join(__dirname, 'preload.js') : path.join(__dirname, '../../../webpack/dll/preload.js')
 			}

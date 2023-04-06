@@ -29,3 +29,7 @@ export const getNextID = (tracks: ITrack[]) => {
 	const values = tracks.map((x) => x.id);
 	return Math.max(...values) + 1;
 };
+
+export const getFilePath = (filePath: string) => {
+	return `tune://file/${filePath}`;
+};

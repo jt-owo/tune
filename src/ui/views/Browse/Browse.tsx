@@ -35,6 +35,7 @@ const Browse: FC = () => {
 
 		const { albums, artists, tracks } = await SpotifyAPI.search(spotifyToken, query);
 		setFoundItems({ albums, tracks, artists });
+		console.log(foundItems);
 	};
 
 	const handleEnterKey = (event: React.KeyboardEvent) => {

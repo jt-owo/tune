@@ -5,7 +5,9 @@ import { Provider } from 'react-redux';
 import store from '../state/store';
 import Application from '../ui/Application';
 
-describe('Application', () => {
+// Some components can't be tested simply because of the preload script in the window.
+
+describe('Home', () => {
 	it('should render', () => {
 		expect(
 			render(

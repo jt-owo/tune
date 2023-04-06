@@ -28,7 +28,9 @@ const Application: FC = () => {
 	dispatch(loadPlaylists());
 
 	// Load the saved output device id.
-	dispatch(setOutputDevice(window.api.config.get('outputDeviceId').toString()));
+	if (window.api) {
+		dispatch(setOutputDevice(window.api.config.get('outputDeviceId').toString()));
+	}
 
 	useEffect(() => {
 		const loadSpotifyContent = async (accessToken: string) => {

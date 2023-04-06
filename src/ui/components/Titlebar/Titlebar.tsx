@@ -11,15 +11,15 @@ import style from './Titlebar.module.scss';
 
 const Titlebar: FC = () => {
 	const minimize = () => {
-		window.api.minimize();
+		window.api?.minimize();
 	};
 
 	const maximize = () => {
-		window.api.maximize();
+		window.api?.maximize();
 	};
 
 	const close = () => {
-		window.api.close();
+		window.api?.close();
 	};
 
 	return (

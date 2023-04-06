@@ -146,7 +146,8 @@ const Playlist: FC = memo(() => {
 			tracks: [...playlist.tracks]
 		};
 
-		const paths = await window.api.system.selectFiles();
+		const paths = await window.api?.system.selectFiles();
+		if (!paths) return;
 
 		let index = 1;
 		paths.forEach((path) => {

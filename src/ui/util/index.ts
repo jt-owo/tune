@@ -17,8 +17,8 @@ export default function newGuid() {
 export const loadTracksMetadata = async (tracks: ITrack[]) => {
 	const loadedTracks = await Promise.all(
 		tracks.map(async (track) => {
-			const data = await window.api.system.loadMetadata(JSON.stringify(track));
-			return JSON.parse(data) as ITrack;
+			const data = await window.api?.system.loadMetadata(JSON.stringify(track));
+			return JSON.parse(data ?? '') as ITrack;
 		})
 	);
 

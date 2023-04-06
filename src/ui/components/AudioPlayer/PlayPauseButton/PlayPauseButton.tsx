@@ -4,7 +4,7 @@ import Lottie, { LottieRefCurrentProps } from 'lottie-react';
 import { FC, RefObject, useEffect, useRef } from 'react';
 
 import audioPlayerStyle from '../AudioPlayer.module.scss';
-import style from './PlayPauseButton.module.scss';
+// import style from './PlayPauseButton.module.scss';
 
 interface PlayPauseButtonProps {
 	animationData: unknown;

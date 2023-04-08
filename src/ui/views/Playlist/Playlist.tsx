@@ -116,19 +116,18 @@ const Playlist: FC = memo(() => {
 		const { active, over } = event;
 
 		if (over && active.id !== over.id) {
-			setTracks((tracks) => {
-				const oldIndex = tracks.indexOf(tracks.find((x) => x.id === active.id)!);
-				const newIndex = tracks.indexOf(tracks.find((x) => x.id === over.id)!);
-				const newArray = arrayMove(tracks, oldIndex, newIndex);
-				if (isLocal) {
-					const updateData: IPlaylist = {
+			const oldIndex = tracks.indexOf(tracks.find((x) => x.id === active.id)!);
+			const newIndex = tracks.indexOf(tracks.find((x) => x.id === over.id)!);
+			const newArray = arrayMove(tracks, oldIndex, newIndex);
+			setTracks(newArray);
+			if (isLocal) {
+				dispatch(
+					updatePlaylist({
 						...playlist,
 						tracks: newArray
-					};
-					dispatch(updatePlaylist(updateData));
-				}
-				return newArray;
-			});
+					})
+				);
+			}
 		}
 	};
 

@@ -103,7 +103,9 @@ class Main {
 	}
 
 	private onReady() {
-		this.database = new TuneLibrary(app.getPath('userData'));
+		const appDataPath = app.getPath('userData');
+
+		this.database = new TuneLibrary(appDataPath);
 		this.configFile = new DynamicStore('userConfig', USER_CONFIG_DEFAULTS);
 		this.mainWindow = new Window(this.configFile);
 

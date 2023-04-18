@@ -3,66 +3,62 @@
 name: Packaging
 
 on:
-  push:
-    branches: [ "main" ]
-	paths:
-		- 'src/**'
-  pull_request:
-    branches: [ "main" ]
-	paths:
-		- 'src/**'
+    push:
+        branches: ['main']
+    pull_request:
+        branches: ['main']
 
 jobs:
-  packageLinux:
-    name: Packaging Linux
-    runs-on: ubuntu-latest
+    packageLinux:
+        name: Packaging Linux
+        runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [19.x]
+        strategy:
+            matrix:
+                node-version: [19.x]
 
-    steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run package
+        steps:
+            - uses: actions/checkout@v3
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v3
+              with:
+                  node-version: ${{ matrix.node-version }}
+                  cache: 'npm'
+            - run: npm ci
+            - run: npm run package
 
-  packageMacOX:
-    name: Packaging MacOS
-    runs-on: macos-latest
+    packageMacOX:
+        name: Packaging MacOS
+        runs-on: macos-latest
 
-    strategy:
-      matrix:
-        node-version: [19.x]
+        strategy:
+            matrix:
+                node-version: [19.x]
 
-    steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run package
+        steps:
+            - uses: actions/checkout@v3
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v3
+              with:
+                  node-version: ${{ matrix.node-version }}
+                  cache: 'npm'
+            - run: npm ci
+            - run: npm run package
 
-  packageWin:
-    name: Packaging Windows
-    runs-on: windows-latest
+    packageWin:
+        name: Packaging Windows
+        runs-on: windows-latest
 
-    strategy:
-      matrix:
-        node-version: [19.x]
+        strategy:
+            matrix:
+                node-version: [19.x]
 
-    steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run package
+        steps:
+            - uses: actions/checkout@v3
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v3
+              with:
+                  node-version: ${{ matrix.node-version }}
+                  cache: 'npm'
+            - run: npm ci
+            - run: npm run package

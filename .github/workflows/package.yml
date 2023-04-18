@@ -5,10 +5,8 @@ name: Packaging
 on:
     push:
         branches: ['main']
-		paths: ['src/**']
     pull_request:
         branches: ['main']
-		paths: ['src/**']
 jobs:
     packageLinux:
         name: Packaging Linux

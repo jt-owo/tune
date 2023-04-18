@@ -5,16 +5,10 @@ name: Packaging
 on:
     push:
         branches: ['main']
-		paths:
-			- '**.tsx'
-			- '**.ts'
-			- '**.scss'
+		paths: ['src/**']
     pull_request:
         branches: ['main']
-		paths:
-      		- '**.tsx'
-      		- '**.ts'
-      		- '**.scss'
+		paths: ['src/**']
 jobs:
     packageLinux:
         name: Packaging Linux

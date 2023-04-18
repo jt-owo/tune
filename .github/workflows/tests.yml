@@ -5,16 +5,10 @@ name: Tests & Building
 on:
     push:
         branches: ['main']
-		paths:
-      		- '**.tsx'
-      		- '**.ts'
-      		- '**.scss'
+		paths: ['src/**']
     pull_request:
         branches: ['main']
-		paths:
-      		- '**.tsx'
-      		- '**.ts'
-      		- '**.scss'
+		paths: ['src/**']
 jobs:
     build:
         name: Running tests

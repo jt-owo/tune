@@ -110,7 +110,9 @@ class Main {
 		this.mainWindow = new Window(this.configFile);
 
 		const clientId = process.env.TUNE_DISCORD_CLIENT_ID;
-		if (clientId) this.discord = new DiscordClient(clientId);
+		if (clientId) {
+			this.discord = new DiscordClient(clientId);
+		}
 
 		app.on('activate', () => {
 			this.onActivate();

@@ -11,7 +11,7 @@ on:
 
 jobs:
   packageLinux:
-    name: Package Linux
+    name: Packaging Linux
     runs-on: ubuntu-latest
 
     strategy:
@@ -29,7 +29,7 @@ jobs:
     - run: npm run package
     
   packageMacOX:
-    name: Package MacOS
+    name: Packaging MacOS
     runs-on: macos-latest
 
     strategy:
@@ -47,8 +47,8 @@ jobs:
     - run: npm run package
     
   packageWin:
-    name: Package Windows
-    runs-on: macos-latest
+    name: Packaging Windows
+    runs-on: windows-latest
 
     strategy:
       matrix:

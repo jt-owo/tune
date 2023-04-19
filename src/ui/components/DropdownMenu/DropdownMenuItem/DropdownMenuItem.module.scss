@@ -1,0 +1,19 @@
+@import '../../../styles/colors';
+@import '../../../styles/fonts';
+
+.container {
+	/* Layout */
+	padding: 5px 8px;
+
+	/* Color */
+
+	/* Misc */
+	border-radius: 6px;
+
+	/* Animation */
+	transition: background-color ease-out 0.1s;
+}
+
+.container:hover {
+	background-color: $hover-color-light;
+}

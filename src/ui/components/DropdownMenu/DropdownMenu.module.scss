@@ -1,0 +1,62 @@
+@import '../../styles/animations';
+@import '../../styles/colors';
+@import '../../styles/fonts';
+
+.container {
+	width: fit-content;
+}
+
+.selector {
+	/* Layout */
+	display: flex;
+	padding: 10px 12px;
+
+	/* Color */
+	background-color: $dark-gray-1;
+
+	/* Font */
+	font-family: Quicksand-500;
+
+	/* Misc */
+	border-radius: 10px;
+
+	/* Animation */
+	transition: background-color ease-out 0.1s;
+
+	img {
+		margin-left: auto;
+		padding: 0 2px 0 10px;
+		width: 30px;
+	}
+}
+
+.selector:hover {
+	background-color: $hover-color-medium;
+}
+
+.list {
+	/* Layout */
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	width: fit-content;
+	padding: 8px;
+	margin-top: 10px;
+
+	/* Color */
+	background-color: $dark-gray-1;
+
+	/* Font */
+	font-family: Quicksand-500;
+
+	/* Misc */
+	list-style: none;
+	border-radius: 10px;
+
+	transform-origin: top;
+	animation: showHamburger ease-in-out 0.1s;
+}
+
+.list.hide {
+	animation: hideHamburger ease-in-out 0.1s forwards;
+}

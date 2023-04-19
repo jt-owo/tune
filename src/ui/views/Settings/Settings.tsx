@@ -18,6 +18,8 @@ import xMark from '../../../../assets/ui-icons/x-mark.svg';
 
 import style from './Settings.module.scss';
 import '../../styles/_components.scss';
+import DropdownMenu from '../../components/DropdownMenu/DropdownMenu';
+import DropdownMenuItem from '../../components/DropdownMenu/DropdownMenuItem/DropdownMenuItem';
 
 const Settings: FC = () => {
 	const selectedOutputDevice = useAppSelector(selectOutputDeviceId);
@@ -33,8 +35,8 @@ const Settings: FC = () => {
 		setOutputDevices(mediaDevices.filter((device) => device.kind === 'audiooutput'));
 	};
 
-	const onOutputDeviceChange = (e: ChangeEvent<HTMLSelectElement>) => {
-		dispatch(setOutputDevice(e.currentTarget.value));
+	const onOutputDeviceChange = (e: string) => {
+		dispatch(setOutputDevice(e));
 	};
 
 	const handleSpotifyLogout = () => {
@@ -50,16 +52,12 @@ const Settings: FC = () => {
 			<div className={style.content}>
 				<TabControl>
 					<TabItem label="Audio Settings">
-						<select className="dropdown-select-1" onChange={onOutputDeviceChange} value={selectedOutputDevice || 'default'}>
+						<DropdownMenu className={style['audio-device-dropdown']} value={selectedOutputDevice || 'default'} onChange={onOutputDeviceChange}>
 							{audioDevices &&
 								audioDevices.map((device) => {
-									return (
-										<option key={device.deviceId} value={device.deviceId}>
-											{device.deviceId.toLowerCase() === 'default' ? 'Default Audio Device' : device.label}
-										</option>
-									);
+									return <DropdownMenuItem key={device.deviceId} value={device.deviceId} label={device.deviceId.toLowerCase() === 'default' ? 'Default Audio Device' : device.label} />;
 								})}
-						</select>
+						</DropdownMenu>
 					</TabItem>
 					<TabItem label="Appearance">
 						<div> </div>
@@ -67,13 +65,13 @@ const Settings: FC = () => {
 					<TabItem label="Streaming Services">
 						<div className={style['service-section']}>
 							{!spotifyToken ? (
-								<a onClick={SpotifyAPI.authorize} className={`${style['service-btn']} ${style.spotify}`}>
+								<div onClick={SpotifyAPI.authorize} className={`${style['service-btn']} ${style.spotify}`}>
 									Connect to <img src={spotifyLogo} alt="" />
-								</a>
+								</div>
 							) : (
-								<a onClick={handleSpotifyLogout} className={`${style['service-btn']} ${style.spotify}`}>
+								<div onClick={handleSpotifyLogout} className={`${style['service-btn']} ${style.spotify}`}>
 									Disconnect <img src={spotifyLogo} alt="" />
-								</a>
+								</div>
 							)}
 
 							{!spotifyToken ? (
@@ -90,9 +88,9 @@ const Settings: FC = () => {
 						</div>
 
 						<div className={style['service-section']}>
-							<a href="/" className={`${style['service-btn']} ${style['apple-music']}`}>
+							<div className={`${style['service-btn']} ${style['apple-music']}`}>
 								Connect to <img src={appleMusicIcon} alt="" /> Apple Music
-							</a>
+							</div>
 							<div className={style['connection-status']}>
 								<img className={style['x-mark']} src={xMark} alt="" />
 								Not connected

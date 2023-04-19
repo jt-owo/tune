@@ -1,5 +1,4 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and package the app for all supported operating systems.
-
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across supported node versons
 name: Packaging
 
 on:
@@ -14,7 +13,7 @@ on:
 
 jobs:
   packageLinux:
-    name: Linux
+    name: Package Linux
     runs-on: ubuntu-latest
 
     strategy:
@@ -29,9 +28,11 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm ci
-	- run: npm run package
-  packageMacOS:
-    name: macOS
+    - run: npm run build --if-present
+    - run: npm run package
+
+  packageMac:
+    name: Package macOS
     runs-on: macos-latest
 
     strategy:
@@ -46,9 +47,11 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm ci
-	- run: npm run package
+    - run: npm run build --if-present
+    - run: npm run package
+
   packageWin:
-    name: Windows
+    name: Package Windows
     runs-on: windows-latest
 
     strategy:
@@ -63,4 +66,5 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm ci
-	- run: npm run package
+    - run: npm run build --if-present
+    - run: npm run package

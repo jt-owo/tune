@@ -1,0 +1,7 @@
+# @jt-owo will be requested for
+# review when someone opens a pull request.
+*       @jt-owo
+
+# @tobytaken will be requested for a
+# review when someone opens a pull request that only modifies .scss files
+*.scss    @tobytaken

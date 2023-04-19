@@ -27,7 +27,7 @@ const Application: FC = () => {
 	// Load local playlists.
 	dispatch(loadPlaylists());
 
-	// Load the saved output device id.
+	// Load the saved output device id to the player.
 	if (window.api) {
 		dispatch(setOutputDevice(window.api.config.get('outputDeviceId').toString()));
 	}

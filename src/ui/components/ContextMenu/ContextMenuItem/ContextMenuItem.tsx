@@ -8,6 +8,7 @@ import style from './ContextMenuItem.module.scss';
 interface ContextMenuItemDefaultProps {
 	type: 'default' | 'danger';
 	header: string;
+	hide?: boolean;
 	onClick?: () => void;
 }
 
@@ -24,7 +25,9 @@ type ContextMenuItemConditionalProps =
 export type Props = ContextMenuItemDefaultProps & ContextMenuItemConditionalProps;
 
 const ContextMenuItem: FC<Props> = (props) => {
-	const { onClick, header, staticIcon, lottieIcon, type } = props;
+	const { onClick, hide, header, staticIcon, lottieIcon, type } = props;
+
+	if (hide) return null;
 
 	if (staticIcon && !lottieIcon) {
 		return (

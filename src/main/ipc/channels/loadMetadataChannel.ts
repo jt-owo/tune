@@ -4,14 +4,14 @@ import { IpcChannel } from '../types';
 import FileParser from '../../api/fileParser';
 import Channels from '../channel';
 
-class ReadMetadataChannel implements IpcChannel<string, string> {
+class LoadMetadataChannel implements IpcChannel<string, string> {
 	getName(): string {
-		return Channels.READ_METADATA;
+		return Channels.LOAD_METADATA;
 	}
 
 	handle(_event: IpcMainInvokeEvent, args: string): Promise<string> {
-		return FileParser.getMetadata(args);
+		return FileParser.loadMetadata(args);
 	}
 }
 
-export default ReadMetadataChannel;
+export default LoadMetadataChannel;

@@ -3,7 +3,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import { FC, KeyboardEvent, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { addPlaylist, selectPlaylists } from '../../../state/slices/playlistSlice';
+import { addPlaylist } from '../../../state/slices/playlistsSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { addAlert } from '../../../state/slices/alertSlice';
 import AppRoutes from '../../routes';
@@ -27,7 +27,7 @@ const Navigation: FC = () => {
 
 	const location = useLocation();
 
-	const playlists = useAppSelector(selectPlaylists);
+	const playlists = useAppSelector((state) => state.playlists.local);
 	const pinnedPlaylists = playlists.filter((x) => x.pinned);
 
 	const dispatch = useAppDispatch();
@@ -81,10 +81,9 @@ const Navigation: FC = () => {
 					{createNew && <input type="text" placeholder="Name..." className={style['new-playlist-name-field']} autoFocus onBlur={() => setCreateNew(false)} onChange={(e) => setNewPlaylistName(e.target.value)} onKeyPress={handleKeyPress} />}
 					{pinnedPlaylists?.map((playlist) => {
 						return (
-							<NavLink to={`${AppRoutes.Playlist}/${playlist.id}`} title={playlist.name} key={playlist.id} className={`${style['playlist-btn']} ${style['btn-hover-animation']} ${location.pathname === `${AppRoutes.Playlist}/${playlist.id}` ? style.active : ''}`} draggable="false">
+							<NavLink to={`${AppRoutes.Playlist}/${playlist.id}/${playlist.service}`} title={playlist.name} key={playlist.id} className={`${style['playlist-btn']} ${style['btn-hover-animation']} ${location.pathname === `${AppRoutes.Playlist}/${playlist.id}` ? style.active : ''}`} draggable="false">
 								<div className={style['playlist-navitem']}>
 									<img src={defaultAlbumCover} alt="" className={style['playlist-navitem-img']} />
-
 									<div className={style['playlist-navitem-name']}>{playlist.name}</div>
 								</div>
 							</NavLink>

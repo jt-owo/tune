@@ -1,61 +1,40 @@
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable react/prop-types */
-/* eslint-disable react/jsx-no-useless-fragment */
-import { FC, useEffect, useState } from 'react';
+import { FC } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { ITrack } from '../../../../typings/types';
-import { AudioMetadata } from '../../../../typings/metadata';
-import defaultAlbumCover from '../../../../../assets/images/tune_no_artwork.svg';
+import { getTrackFormatted } from '../../../util/formatHelper';
+
 import deleteIcon from '../../../../../assets/ui-icons/trash-2.svg';
 
 import queueStyle from '../Queue.module.scss';
 
 interface QueueTrackProps {
+	index: number;
 	id: number;
 	track: ITrack;
-	index: number;
 	isDragging?: boolean;
 	removeTrack?: (id: number) => void;
 }
 
 const QueueTrack: FC<QueueTrackProps> = (props) => {
 	const { id, track, removeTrack, index, isDragging } = props;
-
-	const [metadata, setMetadata] = useState<AudioMetadata>();
-
 	const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id });
+
+	const { name, artists, image, isLoaded } = getTrackFormatted(track);
 
 	const style = {
 		transform: CSS.Transform.toString(transform),
 		transition
 	};
 
-	useEffect(() => {
-		if (track.isLocal) {
-			const getMetadata = async () => {
-				const metadataJSON = await window.api.system.readMetadata(track.name);
-				setMetadata(JSON.parse(metadataJSON) as AudioMetadata);
-			};
-			getMetadata();
-		}
-	}, [track.isLocal, track.name]);
-
-	const getAlbumCover = () => {
-		if (metadata?.info?.cover) {
-			return metadata.info.cover;
-		}
-		return defaultAlbumCover;
-	};
-
 	return (
 		<div className={`${queueStyle['queue-track-container']} ${isDragging ? queueStyle.hide : ''}`}>
-			{metadata && (
+			{isLoaded && (
 				<div ref={setNodeRef} style={style} className={queueStyle['queue-track']} {...listeners} {...attributes}>
-					<img src={getAlbumCover()} alt="" />
+					<img src={image} alt="" />
 					<div className={queueStyle['queue-track-info']}>
-						<div className={`${queueStyle.info} ${queueStyle['queue-track-title']}`}>{metadata.info?.title}</div>
-						<div className={`${queueStyle.info} ${queueStyle['queue-track-artist']}`}>{metadata.info?.artist}</div>
+						<div className={`${queueStyle.info} ${queueStyle['queue-track-title']}`}>{name}</div>
+						<div className={`${queueStyle.info} ${queueStyle['queue-track-artist']}`}>{artists}</div>
 					</div>
 					{removeTrack && (
 						<>

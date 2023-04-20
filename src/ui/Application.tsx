@@ -1,10 +1,13 @@
 import { FC, useEffect } from 'react';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
-import { updateSpotifyToken, updateUser } from '../state/slices/playerSlice';
-import { useAppDispatch } from './hooks';
-import { loadPlaylists } from '../state/slices/playlistSlice';
 import AppRoutes, { AppRoutesParams } from './routes';
-import SpotifyAPI from './util/spotifyAPI';
+import { useAppDispatch } from './hooks';
+import { setOutputDevice } from '../state/slices/playerSlice';
+import { loadPlaylists, loadSpotifyPlaylists } from '../state/slices/playlistsSlice';
+import { updateUser, updateSpotifyToken } from '../state/slices/userSlice';
+
+import SpotifyAPI from './api/spotify';
+
 import Titlebar from './components/Titlebar/Titlebar';
 import Home from './views/Home/Home';
 import Library from './views/Library/Library';
@@ -20,11 +23,20 @@ import './Application.scss';
 
 const Application: FC = () => {
 	const dispatch = useAppDispatch();
+
+	// Load local playlists.
 	dispatch(loadPlaylists());
 
+	// Load the saved output device id to the player.
+	if (window.api) {
+		dispatch(setOutputDevice(window.api.config.get('outputDeviceId').toString()));
+	}
+
 	useEffect(() => {
-		const loadUser = async (accessToken: string) => {
+		const loadSpotifyContent = async (accessToken: string) => {
 			const user = await SpotifyAPI.fetchUserProfile(accessToken);
+			const playlists = await SpotifyAPI.fetchUserPlaylists(accessToken);
+			dispatch(loadSpotifyPlaylists(playlists));
 			dispatch(updateUser(user));
 		};
 
@@ -32,7 +44,7 @@ const Application: FC = () => {
 
 		if (token) {
 			dispatch(updateSpotifyToken(token));
-			loadUser(token);
+			loadSpotifyContent(token);
 		}
 	}, [dispatch]);
 

@@ -1,7 +1,7 @@
-import { FC, useRef } from 'react';
+import { useRef } from 'react';
 import Lottie, { LottieRefCurrentProps } from 'lottie-react';
 
-import style from './NavlistButton.module.scss';
+import styles from './NavlistButton.module.scss';
 
 interface NavlistButtonProps {
 	animation: unknown;
@@ -9,9 +9,7 @@ interface NavlistButtonProps {
 	title: string;
 }
 
-const NavlistButton: FC<NavlistButtonProps> = (props) => {
-	const { animation, doLoop, title } = props;
-
+const NavlistButton = ({ animation, doLoop, title }: NavlistButtonProps): JSX.Element => {
 	const lottieRef = useRef<LottieRefCurrentProps>(null);
 
 	const startAnimation = () => {
@@ -24,8 +22,8 @@ const NavlistButton: FC<NavlistButtonProps> = (props) => {
 	};
 
 	return (
-		<div className={style.container} onMouseEnter={startAnimation} onMouseLeave={stopAnimation}>
-			<Lottie className={style.lottie} animationData={animation} loop={doLoop} lottieRef={lottieRef} autoplay={false} />
+		<div className={styles.container} onMouseEnter={startAnimation} onMouseLeave={stopAnimation}>
+			<Lottie className={styles.lottie} animationData={animation} loop={doLoop} lottieRef={lottieRef} autoplay={false} />
 			<div>{title}</div>
 		</div>
 	);

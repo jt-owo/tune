@@ -1,17 +1,17 @@
-import { FC } from 'react';
+import { ReactElement } from 'react';
+import { ContextMenuItemProps } from './ContextMenuItem/ContextMenuItem';
 
-import style from './ContextMenu.module.scss';
+import styles from './ContextMenu.module.scss';
 
 interface ContextMenuProps {
-	children?: JSX.Element | JSX.Element[];
+	children?: ReactElement<ContextMenuItemProps>[];
 	x: number;
 	y: number;
 }
 
-const ContextMenu: FC<ContextMenuProps> = (props) => {
-	const { children, x, y } = props;
+const ContextMenu = ({ children, x, y }: ContextMenuProps): JSX.Element => {
 	return (
-		<div style={{ top: y, left: x }} className={style['context-menu']}>
+		<div style={{ top: y, left: x }} className={styles['context-menu']}>
 			<ul>{children}</ul>
 		</div>
 	);

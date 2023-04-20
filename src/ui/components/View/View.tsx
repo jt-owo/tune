@@ -1,6 +1,4 @@
-import { FC } from 'react';
-
-import style from './View.module.scss';
+import styles from './View.module.scss';
 
 interface ViewProps {
 	id: string;
@@ -8,19 +6,12 @@ interface ViewProps {
 	children?: JSX.Element | JSX.Element[];
 }
 
-const View: FC<ViewProps> = (props) => {
-	const { title, children, id } = props;
-
+const View = ({ title, children, id }: ViewProps): JSX.Element => {
 	return (
-		<div className={style.view}>
-			{title && (
-				<>
-					<div className={style['view-heading']}>{title}</div>
-					{/* <div id="divider" /> */}
-				</>
-			)}
-			<div className={style['view-content']}>
-				<div className={style[`${id}-container`]}>{children}</div>
+		<div className={styles.view}>
+			{title && <div className={styles['view-heading']}>{title}</div>}
+			<div className={styles['view-content']}>
+				<div className={styles[`${id}-container`]}>{children}</div>
 			</div>
 		</div>
 	);

@@ -1,12 +1,10 @@
-import { FC } from 'react';
-
 import tuneLogo from '../../../../../assets/images/logo.png';
 
-import style from './ServiceSelector.module.scss';
+import styles from './ServiceSelector.module.scss';
 
-const ServiceSelector: FC = () => {
+const ServiceSelector = (): JSX.Element => {
 	return (
-		<div className={style['service-selector']}>
+		<div className={styles['service-selector']}>
 			<img src={tuneLogo} alt="" draggable={false} />
 		</div>
 	);

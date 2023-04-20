@@ -1,6 +1,4 @@
-import { FC } from 'react';
-
-import style from './HomeItemMedium.module.scss';
+import styles from './HomeItemMedium.module.scss';
 
 interface HomeItemMediumProps {
 	title: string;
@@ -9,15 +7,14 @@ interface HomeItemMediumProps {
 	description?: string;
 }
 
-const HomeItemMedium: FC<HomeItemMediumProps> = (props) => {
-	const { title, artist, image, description } = props;
+const HomeItemMedium = ({ title, artist, image, description }: HomeItemMediumProps): JSX.Element => {
 	return (
-		<div className={style['home-item-medium-container']}>
-			<img src={image} alt="" draggable={false} className={style['home-item-medium-img']} />
-			<div className={style['home-item-medium-info']}>
-				<div className={style['home-item-medium-title']}>{title}</div>
-				<div className={style['home-item-medium-description']}>{description}</div>
-				<div className={style['home-item-medium-artist']}>{artist}</div>
+		<div className={styles['home-item-medium-container']}>
+			<img src={image} alt="" draggable={false} className={styles['home-item-medium-img']} />
+			<div className={styles['home-item-medium-info']}>
+				<div className={styles['home-item-medium-title']}>{title}</div>
+				<div className={styles['home-item-medium-description']}>{description}</div>
+				<div className={styles['home-item-medium-artist']}>{artist}</div>
 			</div>
 		</div>
 	);

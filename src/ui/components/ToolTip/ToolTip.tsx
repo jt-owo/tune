@@ -1,10 +1,12 @@
-import { FC, useState } from 'react';
+import { ReactNode } from 'react';
 import useMousePosition from '../../hooks/useMousePosition';
+import useToggle from '../../hooks/useToggle';
+
 import Portal from '../Portal/Portal';
 
-import style from './ToolTip.module.scss';
+import styles from './ToolTip.module.scss';
 
-// in ms
+/** @const Amount of miliseconds until the fade in stars. */
 const DELAY_UNTIL_FADE_IN_START = 500;
 
 interface ToolTipProps {
@@ -16,13 +18,12 @@ interface ToolTipProps {
 	 * Number of the y offset which should be subtracted. Default value is 70.
 	 */
 	offsetY?: number;
-	children: JSX.Element | JSX.Element[];
+	children: ReactNode;
 }
 
-const ToolTip: FC<ToolTipProps> = (props) => {
-	const { text, children, offsetY } = props;
-	const [active, setActive] = useState(false);
-	const [fadeIn, setFadeIn] = useState(false);
+const ToolTip = ({ text, children, offsetY }: ToolTipProps): JSX.Element => {
+	const [active, toggleActive] = useToggle();
+	const [fadeIn, toggleFadeIn] = useToggle();
 
 	const mousePosition = useMousePosition();
 
@@ -30,23 +31,23 @@ const ToolTip: FC<ToolTipProps> = (props) => {
 
 	const mouseEnter = () => {
 		timeout = setTimeout(() => {
-			setFadeIn(true);
+			toggleFadeIn();
 		}, DELAY_UNTIL_FADE_IN_START);
-		setActive(true);
+		toggleActive();
 	};
 
 	const mouseLeave = () => {
-		setActive(false);
-		setFadeIn(false);
+		toggleActive();
+		toggleFadeIn();
 		clearTimeout(timeout);
 	};
 
 	return (
-		<div className={style['tooltip-container']} onMouseEnter={mouseEnter} onMouseLeave={mouseLeave}>
+		<div className={styles['tooltip-container']} onMouseEnter={mouseEnter} onMouseLeave={mouseLeave}>
 			{children}
 			{active && fadeIn && (
 				<Portal wrapperID="tooltip-wrapper">
-					<div style={{ left: mousePosition.x, top: mousePosition.y - (offsetY || 50) }} className={`${style['tooltip-text']} ${fadeIn && style.fadeIn}`}>
+					<div style={{ left: mousePosition.x, top: mousePosition.y - (offsetY || 50) }} className={`${styles['tooltip-text']} ${fadeIn && styles.fadeIn}`}>
 						{text}
 					</div>
 				</Portal>

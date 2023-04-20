@@ -1,8 +1,6 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import { FC } from 'react';
-
-import style from './HomeItemSmall.module.scss';
+import styles from './HomeItemSmall.module.scss';
 
 interface HomeItemSmallProps {
 	title: string;
@@ -11,14 +9,13 @@ interface HomeItemSmallProps {
 	onClick?: (e: React.MouseEvent) => void;
 }
 
-const HomeItemSmall: FC<HomeItemSmallProps> = (props) => {
-	const { title, artist, image, onClick } = props;
+const HomeItemSmall = ({ title, artist, image, onClick }: HomeItemSmallProps): JSX.Element => {
 	return (
-		<div className={style['home-item-small-container']} onClick={onClick}>
-			<img src={image} alt="" draggable={false} className={style['home-item-small-img']} />
-			<div className={style['home-item-small-info']}>
-				<div className={style['home-item-small-title']}>{title}</div>
-				<div className={style['home-item-small-artist']}>{artist}</div>
+		<div className={styles['home-item-small-container']} onClick={onClick}>
+			<img src={image} alt="" draggable={false} className={styles['home-item-small-img']} />
+			<div className={styles['home-item-small-info']}>
+				<div className={styles['home-item-small-title']}>{title}</div>
+				<div className={styles['home-item-small-artist']}>{artist}</div>
 			</div>
 		</div>
 	);

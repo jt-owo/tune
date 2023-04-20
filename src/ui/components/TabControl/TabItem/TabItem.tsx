@@ -1,16 +1,14 @@
 /* eslint-disable react/jsx-no-useless-fragment */
-import { FC } from 'react';
+import { ReactNode } from 'react';
 
 export interface TabItemProps {
 	// The label prop is used in the TabControl component
 	// eslint-disable-next-line react/no-unused-prop-types
 	label: string;
-	children: JSX.Element | JSX.Element[];
+	children: ReactNode;
 }
 
-const TabItem: FC<TabItemProps> = (props) => {
-	const { children } = props;
-
+const TabItem = ({ children }: TabItemProps): JSX.Element => {
 	return <>{children}</>;
 };
 

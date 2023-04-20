@@ -1,8 +1,8 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import { useState, useRef, FC } from 'react';
+import { useState, useRef } from 'react';
 
-import style from './RepeatButton.module.scss';
+import styles from './RepeatButton.module.scss';
 
 import repeatIcon from '../../../../../assets/ui-icons/repeat.svg';
 import oneIcon from '../../../../../assets/ui-icons/one-circle.svg';
@@ -13,7 +13,7 @@ const REPEAT_MODE = {
 	ALL: 2
 };
 
-const RepeatButton: FC = () => {
+const RepeatButton = (): JSX.Element => {
 	const [isRepeat, setIsRepeat] = useState(REPEAT_MODE.OFF);
 
 	const repeatRef = useRef<HTMLDivElement>(null);
@@ -22,16 +22,16 @@ const RepeatButton: FC = () => {
 		switch (isRepeat) {
 			case REPEAT_MODE.OFF:
 				setIsRepeat(REPEAT_MODE.ALL);
-				repeatRef.current?.classList.toggle(style.active);
+				repeatRef.current?.classList.toggle(styles.active);
 				break;
 			case REPEAT_MODE.ALL:
 				setIsRepeat(REPEAT_MODE.ONE);
-				repeatRef.current?.classList.toggle(style.one);
+				repeatRef.current?.classList.toggle(styles.one);
 				break;
 			case REPEAT_MODE.ONE:
 				setIsRepeat(REPEAT_MODE.OFF);
-				repeatRef.current?.classList.toggle(style.one);
-				repeatRef.current?.classList.toggle(style.active);
+				repeatRef.current?.classList.toggle(styles.one);
+				repeatRef.current?.classList.toggle(styles.active);
 				break;
 
 			default:
@@ -40,10 +40,10 @@ const RepeatButton: FC = () => {
 	};
 
 	return (
-		<div className={style['repeat-btn']} ref={repeatRef} onClick={handleRepeat}>
-			<img src={repeatIcon} alt="" className={style['repeat-btn-img']} />
-			<img src={oneIcon} alt="" className={style['repeat-btn-one']} />
-			<div className={style['repeat-btn-text']}>Repeat</div>
+		<div className={styles['repeat-btn']} ref={repeatRef} onClick={handleRepeat}>
+			<img src={repeatIcon} alt="" className={styles['repeat-btn-img']} />
+			<img src={oneIcon} alt="" className={styles['repeat-btn-one']} />
+			<div className={styles['repeat-btn-text']}>Repeat</div>
 		</div>
 	);
 };

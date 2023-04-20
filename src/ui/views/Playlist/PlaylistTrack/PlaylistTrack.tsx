@@ -1,11 +1,11 @@
 /* eslint-disable react/jsx-no-useless-fragment */
-import { FC, MouseEvent } from 'react';
+import { MouseEvent } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { ITrack } from '../../../../typings/types';
+import Format from '../../../util/format';
 
 import playlistStyle from '../Playlist.module.scss';
-import { getTrackFormatted } from '../../../util/formatHelper';
 
 interface PlaylistTrackProps {
 	track: ITrack;
@@ -14,11 +14,9 @@ interface PlaylistTrackProps {
 	onContextMenu: (event: MouseEvent<HTMLElement>) => void;
 }
 
-const PlaylistTrack: FC<PlaylistTrackProps> = (props) => {
-	const { track, locked, isDragging, onContextMenu } = props;
+const PlaylistTrack = ({ track, locked, isDragging, onContextMenu }: PlaylistTrackProps): JSX.Element => {
 	const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: track.id });
-
-	const { name, artists, image, duration, isLoaded } = getTrackFormatted(track);
+	const { name, artists, image, duration, isLoaded } = Format.getTrackFormatted(track);
 
 	const style = {
 		transform: CSS.Transform.toString(transform),

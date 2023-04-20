@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IPlaylist, ITrack } from '../../typings/types';
-import newGuid from '../../ui/util';
+import Guid from '../../util/guid';
 
 export type PlaylistsState = {
 	/** Local playlists */
@@ -21,7 +21,7 @@ export const playlistsSlice = createSlice({
 	reducers: {
 		addPlaylist: (state, action: PayloadAction<string>) => {
 			const playlist: IPlaylist = {
-				id: newGuid(),
+				id: Guid.new(),
 				name: action.payload,
 				description: '',
 				tracks: [],

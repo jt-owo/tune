@@ -1,51 +1,46 @@
-import { FC, ReactElement, useCallback, useState, useEffect, useRef } from 'react';
+import { ReactElement, useCallback, useEffect, useRef } from 'react';
+import useToggle from '../../hooks/useToggle';
 
-import style from './HamburgerMenu.module.scss';
-import { Props } from './HamburgerMenuItem/HamburgerMenuItem';
+import { HamburgerMenuItemProps } from './HamburgerMenuItem/HamburgerMenuItem';
+
+import styles from './HamburgerMenu.module.scss';
 
 interface HamburgerMenuProps {
-	children?: ReactElement<Props>[];
+	children?: ReactElement<HamburgerMenuItemProps>[];
 	positionX: number;
 	positionY: number;
 	onClose: () => void;
 	visible: boolean;
 }
 
-const HamburgerMenu: FC<HamburgerMenuProps> = (props) => {
-	const { children, onClose, visible, positionX, positionY } = props;
-
-	const [isFading, setFading] = useState(false);
+const HamburgerMenu = ({ children, onClose, visible, positionX, positionY }: HamburgerMenuProps): JSX.Element | null => {
+	const [isFading, toggleFading] = useToggle();
 
 	const ref = useRef<HTMLDivElement>(null);
 
 	const handleCancel = useCallback(() => {
 		setTimeout(() => {
-			setFading(false);
+			toggleFading();
 			onClose();
 		}, 100);
-		setFading(true);
-	}, [onClose]);
+		toggleFading();
+	}, [onClose, toggleFading]);
 
 	useEffect(() => {
 		const checkIfClickedOutside = (e: Event) => {
 			// If the menu is open and the clicked target is not within the menu, call the cancel callback
-			if (visible && ref.current && !ref.current.contains(e.target as Node)) {
-				handleCancel();
-			}
+			if (visible && ref.current && !ref.current.contains(e.target as Node)) handleCancel();
 		};
 
 		document.addEventListener('mouseup', checkIfClickedOutside);
 
-		return () => {
-			// Clean up the event listener
-			document.removeEventListener('mouseup', checkIfClickedOutside);
-		};
+		return () => document.removeEventListener('mouseup', checkIfClickedOutside);
 	}, [visible, handleCancel, onClose]);
 
 	if (!visible) return null;
 
 	return (
-		<div className={`${style.container} ${isFading ? style.fading : style.visible}`} ref={ref} style={{ top: positionY, right: positionX }}>
+		<div className={`${styles.container} ${isFading ? styles.fading : styles.visible}`} ref={ref} style={{ top: positionY, right: positionX }}>
 			<ul>{children}</ul>
 		</div>
 	);

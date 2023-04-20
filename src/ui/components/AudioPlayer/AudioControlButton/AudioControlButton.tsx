@@ -1,20 +1,18 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import { FC, useRef } from 'react';
+import { useRef } from 'react';
 import Lottie, { LottieRefCurrentProps } from 'lottie-react';
 
-import audioPlayerStyle from '../AudioPlayer.module.scss';
-import style from './AudioControlButton.module.scss';
+import audioPlayerStyles from '../AudioPlayer.module.scss';
+import styles from './AudioControlButton.module.scss';
 
 interface AudioControlButtonProps {
-	animationData: unknown;
 	id: string;
+	animationData: unknown;
 	onClick: () => void;
 }
 
-const AudioControlButton: FC<AudioControlButtonProps> = (props) => {
-	const { animationData, id, onClick } = props;
-
+const AudioControlButton = ({ animationData, id, onClick }: AudioControlButtonProps): JSX.Element => {
 	const lottieRef = useRef<LottieRefCurrentProps>(null);
 
 	const startAnimation = () => {
@@ -23,14 +21,14 @@ const AudioControlButton: FC<AudioControlButtonProps> = (props) => {
 		lottieRef.current?.play();
 	};
 
-	const handleOnClick = () => {
+	const handleClick = () => {
 		startAnimation();
 		onClick();
 	};
 
 	return (
-		<div className={style['player-control-container']} onClick={() => handleOnClick()}>
-			<Lottie className={`${audioPlayerStyle['player-control-icon']} ${audioPlayerStyle[id]}`} animationData={animationData} loop={false} lottieRef={lottieRef} autoplay={false} />
+		<div className={styles['player-control-container']} onClick={handleClick}>
+			<Lottie className={`${audioPlayerStyles['player-control-icon']} ${audioPlayerStyles[id]}`} animationData={animationData} loop={false} lottieRef={lottieRef} autoplay={false} />
 		</div>
 	);
 };

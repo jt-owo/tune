@@ -75,11 +75,8 @@ export default class FileParser {
 	 */
 	public static async loadMetadata(trackJSON: string): Promise<string> {
 		let track: ITrack;
-		if (Json.validate(trackJSON)) {
-			track = JSON.parse(trackJSON);
-		} else {
-			return '';
-		}
+		if (Json.validate<ITrack>(trackJSON)) track = JSON.parse(trackJSON);
+		else return '';
 
 		let metadata: mm.IAudioMetadata | undefined;
 		if (track.filePath && fs.existsSync(track.filePath)) metadata = await mm.parseFile(track.filePath);

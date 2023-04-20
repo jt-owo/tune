@@ -35,7 +35,7 @@ export default class TuneLibrary {
 		}
 
 		const rawJson = fs.readFileSync(this.filePath, 'utf-8');
-		if (Json.validate(rawJson)) {
+		if (Json.validate<Data>(rawJson)) {
 			this.data = JSON.parse(rawJson);
 
 			// Overwrite file if version doesn't match. Mainly used for development.

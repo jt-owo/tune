@@ -1,9 +1,8 @@
-import { FC } from 'react';
 import { ITrack } from '../../../../typings/types';
-import { getTrackFormatted } from '../../../util/formatHelper';
 import useMediaSession from '../../../hooks/useMediaSession';
+import Format from '../../../util/format';
 
-import style from './NowPlaying.module.scss';
+import styles from './NowPlaying.module.scss';
 
 interface NowPlayingProps {
 	track: ITrack;
@@ -12,9 +11,8 @@ interface NowPlayingProps {
 	onNextTrack: () => void;
 }
 
-const NowPlaying: FC<NowPlayingProps> = (props) => {
-	const { track, onPlay, onPreviousTrack, onNextTrack } = props;
-	const { name, artists, image, isLoaded } = getTrackFormatted(track);
+const NowPlaying = ({ track, onPlay, onPreviousTrack, onNextTrack }: NowPlayingProps): JSX.Element => {
+	const { name, artists, image, isLoaded } = Format.getTrackFormatted(track);
 
 	useMediaSession({
 		title: name,
@@ -34,13 +32,13 @@ const NowPlaying: FC<NowPlayingProps> = (props) => {
 	});
 
 	return (
-		<div className={style.track}>
+		<div className={styles.track}>
 			{isLoaded && (
 				<>
-					<img src={image} alt="" className={style['current-album-cover']} />
-					<div className={style['track-info']}>
-						<div className={style['current-track']}>{name}</div>
-						<div className={style['current-artist']}>{artists}</div>
+					<img src={image} alt="" className={styles['current-album-cover']} />
+					<div className={styles['track-info']}>
+						<div className={styles['current-track']}>{name}</div>
+						<div className={styles['current-artist']}>{artists}</div>
 					</div>
 				</>
 			)}

@@ -7,7 +7,7 @@ export enum AppRoutes {
 }
 
 export enum AppRoutesParams {
-	PlaylistID = '/playlist/:id/:service'
+	PlaylistParams = '/playlist/:id/:service'
 }
 
 export default AppRoutes;

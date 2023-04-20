@@ -1,7 +1,8 @@
-import { ChangeEvent, FC, RefObject, useCallback, useEffect, useRef, useState, WheelEvent } from 'react';
+/* eslint-disable no-param-reassign */
+import { ChangeEvent, RefObject, useCallback, useEffect, useRef, useState, WheelEvent } from 'react';
 import Lottie, { LottieRefCurrentProps } from 'lottie-react';
 
-import style from './VolumeSlider.module.scss';
+import styles from './VolumeSlider.module.scss';
 
 import volumeIcon from '../../../../../assets/animations/volume.json';
 
@@ -25,8 +26,7 @@ const VOLUME_SLIDER_STATES = {
 let volumeSliderState: number;
 let lottieInitialFrame: number;
 
-const VolumeSlider: FC<VolumeSliderProps> = (props) => {
-	const { audioRef } = props;
+const VolumeSlider = ({ audioRef }: VolumeSliderProps): JSX.Element => {
 	const volumeSliderProgressRef = useRef<HTMLDivElement>(null);
 	const lottieRef = useRef<LottieRefCurrentProps>(null);
 	const [volume, setVolume] = useState(parseInt(window.api?.config.get('volume').toString() ?? '25', 10));
@@ -110,11 +110,11 @@ const VolumeSlider: FC<VolumeSliderProps> = (props) => {
 	}, [updateVolumeSliderProgress, handleAnimation]);
 
 	return (
-		<div className={style['volume-slider-container']}>
-			<div className={style['volume-slider-progress']} ref={volumeSliderProgressRef} />
-			<Lottie animationData={volumeIcon} loop={false} lottieRef={lottieRef} className={style['volume-slider-icon']} />
-			<input type="range" min="0" max="100" value={volume} className={style['volume-slider']} onChange={handleVolumeChange} onWheel={handleScroll} />
-			<div className={style['volume-slider-percentage']}>{volume}%</div>
+		<div className={styles['volume-slider-container']}>
+			<div className={styles['volume-slider-progress']} ref={volumeSliderProgressRef} />
+			<Lottie animationData={volumeIcon} loop={false} lottieRef={lottieRef} className={styles['volume-slider-icon']} />
+			<input type="range" min="0" max="100" value={volume} className={styles['volume-slider']} onChange={handleVolumeChange} onWheel={handleScroll} />
+			<div className={styles['volume-slider-percentage']}>{volume}%</div>
 		</div>
 	);
 };

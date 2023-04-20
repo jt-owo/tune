@@ -1,0 +1,51 @@
+@import '../../styles/colors';
+
+.text-box {
+	/* Layout */
+	width: 100%;
+
+	/* Color */
+	background-color: $dark-gray-1;
+	color: #ffffff;
+
+	/* Font */
+	font-family: Quicksand-600;
+
+	/* Animation */
+	transition: all ease-in-out 0.1s;
+
+	/* Misc */
+	border: none;
+	outline: none;
+
+	&-small {
+		@extend .text-box;
+		height: 25px;
+		padding: 15px 10px;
+		font-size: 14px;
+		border-radius: 7px;
+	}
+
+	&-medium {
+		@extend .text-box;
+		height: 35px;
+		padding: 15px;
+		font-size: 16px;
+		border-radius: 8px;
+	}
+
+	&-large {
+		@extend .text-box;
+		height: 45px;
+		padding: 15px;
+		font-size: 18px;
+		border-radius: 10px;
+	}
+}
+
+.text-box {
+	&:hover,
+	&:focus {
+		background-color: $hover-color-medium;
+	}
+}

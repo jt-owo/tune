@@ -1,19 +1,20 @@
-import { FC, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../hooks';
 import SpotifyAPI from '../../api/spotify';
 import AppRoutes from '../../routes';
 import { IAlbum, ITrack } from '../../../typings/types';
-import { getTrackFormatted } from '../../util/formatHelper';
+import Format from '../../util/format';
 
 import View from '../../components/View/View';
+
 import HomeItemSmall from '../../components/Home_Elements/HomeItemSmall/HomeItemSmall';
 import TabControl from '../../components/TabControl/TabControl';
 import TabItem from '../../components/TabControl/TabItem/TabItem';
 
-import style from './Library.module.scss';
+import styles from './Library.module.scss';
 
-const Library: FC = () => {
+const Library = (): JSX.Element => {
 	const spotifyToken = useAppSelector((state) => state.user.spotifyToken);
 	const spotifyPlaylists = useAppSelector((state) => state.playlists.spotify);
 
@@ -45,7 +46,7 @@ const Library: FC = () => {
 
 	return (
 		<View title="Library" id="library">
-			<div className={style.content}>
+			<div className={styles.content}>
 				<TabControl>
 					<TabItem label="Playlists">
 						<div>
@@ -77,7 +78,7 @@ const Library: FC = () => {
 						<div>
 							{savedTracks.length > 1 &&
 								savedTracks.map((track) => {
-									const { name, artists, image } = getTrackFormatted(track);
+									const { name, artists, image } = Format.getTrackFormatted(track);
 									return <HomeItemSmall key={track.name} title={name} image={image} artist={artists} />;
 								})}
 						</div>

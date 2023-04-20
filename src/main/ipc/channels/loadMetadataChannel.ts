@@ -1,7 +1,7 @@
 /* eslint-disable class-methods-use-this */
 import { IpcMainInvokeEvent } from 'electron';
 import { IpcChannel } from '../types';
-import FileParser from '../../api/fileParser';
+import FileParser from '../../util/fileParser';
 import Channels from '../channel';
 
 class LoadMetadataChannel implements IpcChannel<string, string> {

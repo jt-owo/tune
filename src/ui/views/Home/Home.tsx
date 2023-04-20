@@ -6,6 +6,8 @@ import SpotifyAPI from '../../api/spotify';
 import View from '../../components/View/View';
 import HomeItemMedium from '../../components/Home_Elements/HomeItemMedium/HomeItemMedium';
 
+import style from './Home.module.scss';
+
 const Home: FC = () => {
 	const user = useAppSelector((state) => state.user.data);
 	const spotifyToken = useAppSelector((state) => state.user.spotifyToken);
@@ -27,13 +29,15 @@ const Home: FC = () => {
 
 	return (
 		<View title={title} id="home">
-			<div className="content">
+			<div className={style.content}>
 				{topArtists.length > 1 && (
 					<div>
 						<h3>You top artists</h3>
-						{topArtists.map((artist) => {
-							return <HomeItemMedium key={artist.name} title={artist.name} image={artist.images[0].url} />;
-						})}
+						<div className={style['top-artists']}>
+							{topArtists.map((artist) => {
+								return <HomeItemMedium key={artist.name} title={artist.name} image={artist.images[0].url} />;
+							})}
+						</div>
 					</div>
 				)}
 			</div>

@@ -7,8 +7,9 @@ $nav-width: 205px;
 	flex-flow: row;
 }
 
-.content {
-	flex: 1 1 auto;
+.top-artists {
+	display: flex;
+	overflow-x: auto;
 }
 
 .placeholder {

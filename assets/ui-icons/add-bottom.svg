@@ -1,41 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   viewBox="0 0 512 512"
-   version="1.1"
-   id="svg4"
-   sodipodi:docname="add-top.svg"
-   inkscape:export-filename="add-bottom.svg"
-   inkscape:export-xdpi="96"
-   inkscape:export-ydpi="96"
-   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
-  <defs
-     id="defs8" />
-  <sodipodi:namedview
-     id="namedview6"
-     pagecolor="#ffffff"
-     bordercolor="#000000"
-     borderopacity="0.25"
-     inkscape:showpageshadow="2"
-     inkscape:pageopacity="0.0"
-     inkscape:pagecheckerboard="0"
-     inkscape:deskcolor="#d1d1d1"
-     showgrid="false"
-     inkscape:zoom="2.0058594"
-     inkscape:cx="109.42941"
-     inkscape:cy="256"
-     inkscape:window-width="3840"
-     inkscape:window-height="2039"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="svg4" />
-  <!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
-  <path
-     d="m 64,96 v 64 H 448 V 96 Z m 0,-64 h 384 c 35.3,0 64,28.7 64,64 v 64 c 0,35.3 -28.7,64 -64,64 H 64 C 28.7,224 0,195.3 0,160 V 96 C 0,60.7 28.7,32 64,32 Z m 160,320 c 0,-35.3 28.7,-64 64,-64 h 160 c 35.3,0 64,28.7 64,64 v 64 c 0,35.3 -28.7,64 -64,64 H 304 288 144 C 99.8,480 64,444.2 64,400 V 384 H 25.9 C 4.5,384 -6.2,358.1 8.9,343 L 79,273 c 9.4,-9.4 24.6,-9.4 33.9,0 l 70.1,70 c 15.1,15.1 4.4,41 -17,41 h -38.1 v 16 c 0,8.8 7.2,16 16,16 h 80 v -64 z"
-     id="path2"
-     style="fill:#ffffff" />
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <path id="path2" d="M64,96L64,160L448,160L448,96L64,96ZM64,32L448,32C483.3,32 512,60.7 512,96L512,160C512,195.3 483.3,224 448,224L64,224C28.7,224 0,195.3 0,160L0,96C0,60.7 28.7,32 64,32ZM224,352C224,316.7 252.7,288 288,288L448,288C483.3,288 512,316.7 512,352L512,416C512,451.3 483.3,480 448,480L144,480C99.8,480 64,444.2 64,400L64,384L25.9,384C4.5,384 -6.2,358.1 8.9,343L79,273C88.4,263.6 103.6,263.6 112.9,273L183,343C198.1,358.1 187.4,384 166,384L127.9,384L127.9,400C127.9,408.8 135.1,416 143.9,416L223.9,416L223.9,352L224,352Z" style="fill:white;fill-rule:nonzero;"/>
 </svg>

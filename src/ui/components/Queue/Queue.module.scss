@@ -70,6 +70,8 @@
 	font-family: Quicksand-700;
 	font-size: 14px;
 
+	transition: background-color ease-in-out 0.1s;
+
 	/* Misc */
 	border-radius: 12px;
 	opacity: 1;
@@ -168,9 +170,63 @@
 	margin-left: 10px;
 }
 
-.queue::-webkit-scrollbar-thumb {
-	width: 5px;
-	background-color: rgb(0, 0, 0);
+.control-section {
+	/* Layout */
+	display: flex;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	height: 40px;
+	align-items: center;
+	justify-content: center;
+
+	background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1));
+
+	/* Animation */
+	animation: controlSectionFade 0.2s forwards;
+}
+
+.btn-clear-queue {
+	/* Layout */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 5px 8px;
+
+	/* Color */
+	color: $font-white;
+	background-color: $dark-gray-2;
+
+	/* Font */
+	font-family: Quicksand-500;
+	font-size: 12px;
+
+	/* Misc */
+	border: none;
+	border-radius: 100px;
+
+	/* Animation */
+	transition: all ease-in-out 0.1s;
+
+	img {
+		height: 12px;
+		margin-right: 4px;
+	}
+}
+
+.btn-clear-queue.shake {
+	animation: shake 0.3s;
+}
+
+.btn-clear-queue:hover {
+	background-color: $danger-color;
+}
+
+.queue::-webkit-scrollbar {
+	width: 0px;
+	background-color: transparent;
+	border-radius: 10px;
 }
 
 .queue-container:hover {
@@ -186,6 +242,16 @@
 
 	.queue-track-info {
 		opacity: 1;
+	}
+
+	.control-section {
+		display: flex;
+		animation: fadeIn 0.25s forwards;
+	}
+
+	.queue::-webkit-scrollbar {
+		width: 5px;
+		background-color: $dark-gray-1;
 	}
 }
 
@@ -218,5 +284,16 @@
 
 	100% {
 		right: 20px;
+	}
+}
+
+@keyframes controlSectionFade {
+	0% {
+		opacity: 1;
+		display: flex;
+	}
+	100% {
+		opacity: 0;
+		display: none;
 	}
 }

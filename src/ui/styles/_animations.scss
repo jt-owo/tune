@@ -119,6 +119,24 @@
 	}
 }
 
+@keyframes shake {
+	0% {
+		transform: translateX(0);
+	}
+	15% {
+		transform: translateX(5px);
+	}
+	45% {
+		transform: translateX(-5px);
+	}
+	75% {
+		transform: translateX(5px);
+	}
+	90% {
+		transform: translateX(0px);
+	}
+}
+
 /* Basic Animations */
 
 .btn-hover-animation {

@@ -1,5 +1,20 @@
 @import '../../styles/fonts';
 
+.service-section {
+	display: flex;
+	align-items: center;
+	margin-bottom: 10px;
+}
+
+.connection-status {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: 0 0 0 10px;
+
+	font-family: Quicksand-500;
+}
+
 .service-btn {
 	display: flex;
 	align-items: center;
@@ -13,7 +28,7 @@
 	border-radius: 15px;
 	height: 30px;
 	width: 220px;
-	margin: 10px 0 0 0;
+	// margin: 10px 0 0 0;
 	transition: all ease-in-out 0.1s;
 }
 
@@ -22,18 +37,31 @@
 	margin: 0 5px 0 5px;
 }
 
-#spotify {
+.spotify {
 	background-color: #1db954;
 }
 
-#spotify:hover {
+.spotify:hover {
 	background-color: #22d561;
 }
 
-#apple-music {
+.apple-music {
 	background-color: #f94c57;
 }
 
-#apple-music:hover {
+.apple-music:hover {
 	background-color: #ff737c;
+}
+
+.lottie {
+	height: 36px;
+}
+
+.x-mark {
+	height: 36px;
+	padding: 8px;
+}
+
+.audio-device-dropdown {
+	width: 450px !important;
 }

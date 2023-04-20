@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { FC, useEffect, useState } from 'react';
+/* eslint-disable react/no-array-index-key */
+import { FC, useEffect, useState, useRef } from 'react';
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent, DragStartEvent, DragOverlay, UniqueIdentifier } from '@dnd-kit/core';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { restrictToWindowEdges } from '@dnd-kit/modifiers';
@@ -12,6 +13,8 @@ import QueueTrack from './QueueTrack/QueueTrack';
 
 import style from './Queue.module.scss';
 
+import trashIcon from '../../../../assets/ui-icons/trash-2.svg';
+
 const Queue: FC = () => {
 	const queue = useAppSelector((state) => state.player.queue);
 	const queueIndex = useAppSelector((state) => state.player.index);
@@ -19,6 +22,8 @@ const Queue: FC = () => {
 
 	const [tracks, setTracks] = useState<ITrack[]>([]);
 	const [isDraggingId, setIsDraggingId] = useState<UniqueIdentifier>();
+
+	const clearBtnRef = useRef<HTMLButtonElement>(null);
 
 	const sensors = useSensors(
 		useSensor(PointerSensor, {
@@ -56,6 +61,23 @@ const Queue: FC = () => {
 		dispatch(updateQueue(updateData));
 	};
 
+	const handleQueueClear = () => {
+		const updateData: ITrack[] = [...queue];
+
+		if (updateData.length <= 1) {
+			if (clearBtnRef.current) {
+				setTimeout(() => {
+					if (clearBtnRef.current) clearBtnRef.current?.classList.remove(style.shake);
+				}, 300);
+				clearBtnRef.current.classList.add(style.shake);
+			}
+			return;
+		}
+
+		updateData.splice(1);
+		dispatch(updateQueue(updateData));
+	};
+
 	useEffect(() => {
 		if (queue.length > 0) {
 			setTracks(queue);
@@ -72,6 +94,12 @@ const Queue: FC = () => {
 					</SortableContext>
 					<DragOverlay modifiers={[restrictToWindowEdges]}>{isDraggingId ? <QueueTrack index={-1} id={tracks.findIndex((x) => x.id === isDraggingId)} track={tracks[tracks.findIndex((x) => x.id === isDraggingId)]} /> : null}</DragOverlay>
 				</DndContext>
+			</div>
+			<div className={style['control-section']}>
+				<button className={style['btn-clear-queue']} type="button" ref={clearBtnRef} onClick={handleQueueClear}>
+					<img src={trashIcon} alt="" />
+					Clear
+				</button>
 			</div>
 		</div>
 	);

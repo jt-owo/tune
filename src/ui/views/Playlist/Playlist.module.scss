@@ -13,10 +13,7 @@
 	border-color: $border-color;
 	border-radius: 20px;
 	overflow-x: hidden;
-}
-
-.playlist-container:hover {
-	overflow-y: hidden;
+	overflow-y: scroll;
 }
 
 .playlist-heading {

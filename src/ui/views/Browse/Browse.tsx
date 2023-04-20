@@ -1,17 +1,15 @@
 import { FC, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { selectSpotifyToken } from '../../../state/slices/playerSlice';
 import { addAlert } from '../../../state/slices/alertSlice';
 import { IAlbum, IArtist, ITrack } from '../../../typings/types';
-import SpotifyAPI from '../../util/spotifyAPI';
-import newGuid from '../../util';
+import SpotifyAPI from '../../api/spotify';
 
 import View from '../../components/View/View';
 
 import style from './Browse.module.scss';
 
 const Browse: FC = () => {
-	const spotifyToken = useAppSelector(selectSpotifyToken);
+	const spotifyToken = useAppSelector((state) => state.user.spotifyToken);
 
 	const dispatch = useAppDispatch();
 
@@ -23,28 +21,33 @@ const Browse: FC = () => {
 		artists: IArtist[];
 	}>();
 
-	const handleSearch = async (event: React.KeyboardEvent) => {
-		if (query !== '' && event.key === 'Enter') {
-			if (!spotifyToken) {
-				dispatch(
-					addAlert({
-						id: newGuid(),
-						message: 'Spotify is not connected',
-						type: 'error'
-					})
-				);
-				return;
-			}
-
-			const { albums, artists, tracks } = await SpotifyAPI.search(spotifyToken, query);
-			setFoundItems({ albums, tracks, artists });
+	const handleSearch = async () => {
+		if (query === '') return;
+		if (!spotifyToken) {
+			dispatch(
+				addAlert({
+					message: 'Spotify is not connected',
+					type: 'warn'
+				})
+			);
+			return;
 		}
+
+		const { albums, artists, tracks } = await SpotifyAPI.search(spotifyToken, query);
+		setFoundItems({ albums, tracks, artists });
+		console.log(foundItems);
+	};
+
+	const handleEnterKey = (event: React.KeyboardEvent) => {
+		if (event.key !== 'Enter') return;
+
+		handleSearch();
 	};
 
 	return (
 		<View title="Browse" id="browse">
 			<div className={style.content}> </div>
-			<input type="text" className={style['text-input-3']} value={query} onChange={(e) => setQuery(e.currentTarget.value)} onKeyDown={handleSearch} />
+			<input type="text" className={style['text-input-3']} value={query} onChange={(e) => setQuery(e.currentTarget.value)} onKeyDown={handleEnterKey} />
 		</View>
 	);
 };

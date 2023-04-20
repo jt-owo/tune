@@ -1,7 +1,6 @@
-/* eslint-disable compat/compat */
-import { PlaybackStateResult, SavedAlbumsResult, SavedTracksResult, SearchResult, TrackItem, UserProfileResult, UserTopArtistsResult, UserTopTracksResult } from '../../typings/spotifyAPI';
-import { IAlbum, ITrack } from '../../typings/types';
-import SpotifyParser from './spotifyParser';
+import { ArtistItem, PlaylistItem, PlaylistTrackItem, TrackItem } from '../../../typings/spotify/items';
+import { UserProfileResult, PlaybackStateResult, SpotifyQueryResult, SavedAlbumsResultItem, SavedTracksResultItem, SearchResult } from '../../../typings/spotify/results';
+import SpotifyParser from './parser';
 
 export const CLIENT_ID = '5ca32668f6564c6595cdb0a0b315af28';
 export const REDIRECT_URI = 'http://localhost:9100/callback';
@@ -9,7 +8,7 @@ export const REDIRECT_URI = 'http://localhost:9100/callback';
 type TimeRange = 'short_term' | 'medium_term' | 'long_term';
 
 class SpotifyAPI {
-	private static async callAPI(token: string, url: string, params?: URLSearchParams) {
+	private static async callAPI<T>(token: string, url: string, params?: URLSearchParams) {
 		let request = url;
 
 		if (params) {
@@ -21,10 +20,11 @@ class SpotifyAPI {
 			headers: { Authorization: `Bearer ${token}` }
 		}).catch((error) => {
 			// eslint-disable-next-line no-console
-			console.error(error);
+			console.warn(error);
 		});
 
-		return result;
+		const data = (await result?.json()) as T;
+		return data;
 	}
 
 	static async authorize() {
@@ -32,7 +32,7 @@ class SpotifyAPI {
 		params.append('client_id', CLIENT_ID);
 		params.append('response_type', 'token');
 		params.append('redirect_uri', REDIRECT_URI);
-		params.append('scope', 'user-read-private user-read-email user-library-read user-top-read user-read-playback-state');
+		params.append('scope', 'user-read-private user-read-email user-library-read user-top-read user-read-playback-state playlist-read-private');
 
 		window.location.href = `https://accounts.spotify.com/authorize?${params.toString()}`;
 	}
@@ -61,8 +61,7 @@ class SpotifyAPI {
 	 * @returns A user.
 	 */
 	static async fetchUserProfile(token: string) {
-		const result = await this.callAPI(token, 'https://api.spotify.com/v1/me');
-		const data: UserProfileResult = await result?.json();
+		const data = await this.callAPI<UserProfileResult>(token, 'https://api.spotify.com/v1/me');
 		return SpotifyParser.parseUser(data);
 	}
 
@@ -73,8 +72,7 @@ class SpotifyAPI {
 	 * @returns Information about playback status.
 	 */
 	static async fetchPlaybackState(token: string) {
-		const result = await this.callAPI(token, 'https://api.spotify.com/v1/me/player');
-		const data: PlaybackStateResult = await result?.json();
+		const data = await this.callAPI<PlaybackStateResult>(token, 'https://api.spotify.com/v1/me/player');
 		return SpotifyParser.parsePlaybackState(data);
 	}
 
@@ -91,15 +89,8 @@ class SpotifyAPI {
 		params.append('limit', limit.toString());
 		if (offset && offset > 0) params.append('offset', offset.toString());
 
-		const result = await this.callAPI(token, 'https://api.spotify.com/v1/me/albums', params);
-		const data: SavedAlbumsResult = await result?.json();
-
-		const savedAlbums: IAlbum[] = [];
-		data.items.forEach((item) => {
-			savedAlbums.push(SpotifyParser.parseAlbum(item.album));
-		});
-
-		return savedAlbums;
+		const data = await this.callAPI<SpotifyQueryResult<SavedAlbumsResultItem>>(token, 'https://api.spotify.com/v1/me/albums', params);
+		return data.items.map((item) => SpotifyParser.parseAlbum(item.album));
 	}
 
 	/**
@@ -115,15 +106,8 @@ class SpotifyAPI {
 		params.append('limit', limit.toString());
 		if (offset && offset > 0) params.append('offset', offset.toString());
 
-		const result = await this.callAPI(token, 'https://api.spotify.com/v1/me/tracks', params);
-		const data: SavedTracksResult = await result?.json();
-
-		const savedTracks: ITrack[] = [];
-		data.items.forEach((item) => {
-			savedTracks.push(SpotifyParser.parseTrack(item.track));
-		});
-
-		return savedTracks;
+		const data = await this.callAPI<SpotifyQueryResult<SavedTracksResultItem>>(token, 'https://api.spotify.com/v1/me/tracks', params);
+		return data.items.map((item, index) => SpotifyParser.parseTrack(item.track, index + 1));
 	}
 
 	/**
@@ -142,21 +126,45 @@ class SpotifyAPI {
 		params.append('limit', limit.toString());
 		if (offset && offset > 0) params.append('offset', offset.toString());
 
-		const result = await this.callAPI(token, `https://api.spotify.com/v1/me/top/${type}`, params);
+		const result = await this.callAPI<SpotifyQueryResult<TrackItem> | SpotifyQueryResult<ArtistItem>>(token, `https://api.spotify.com/v1/me/top/${type}`, params);
 
 		if (type === 'tracks') {
-			const data: UserTopTracksResult = await result?.json();
-
-			const tracks: ITrack[] = [];
-			data.items.forEach((track: TrackItem) => {
-				tracks.push(SpotifyParser.parseTrack(track));
-			});
-
-			return tracks;
+			const data = result as SpotifyQueryResult<TrackItem>;
+			return SpotifyParser.parseTracks(data.items);
 		}
 
-		const data: UserTopArtistsResult = await result?.json();
+		const data = result as SpotifyQueryResult<ArtistItem>;
 		return SpotifyParser.parseArtists(data.items);
+	}
+
+	/**
+	 * Fetches a list of the playlists owned or followed by the authorized user.
+	 * https://developer.spotify.com/documentation/web-api/reference/get-a-list-of-current-users-playlists
+	 * @param token Access Token.
+	 * @param limit The maximum number of items to return. Range: 0 - 50
+	 * @param offset The index of the first item to return. Default: 0
+	 * @returns A list of playlists.
+	 */
+	static async fetchUserPlaylists(token: string, limit = 20, offset = 0) {
+		const params = new URLSearchParams();
+		params.append('limit', limit.toString());
+		if (offset && offset > 0) params.append('offset', offset.toString());
+
+		const data = await this.callAPI<SpotifyQueryResult<PlaylistItem>>(token, 'https://api.spotify.com/v1/me/playlists', params);
+		return SpotifyParser.parsePlaylists(data.items);
+	}
+
+	/**
+	 * Fetches a list of the playlists owned or followed by the authorized user.
+	 * https://developer.spotify.com/documentation/web-api/reference/get-a-list-of-current-users-playlists
+	 * @param token Access Token.
+	 * @param limit The maximum number of items to return. Range: 0 - 50
+	 * @param offset The index of the first item to return. Default: 0
+	 * @returns A list of playlists.
+	 */
+	static async fetchPlaylistTracks(token: string, url: string) {
+		const data = await this.callAPI<SpotifyQueryResult<PlaylistTrackItem>>(token, url);
+		return data.items.map((item, index) => SpotifyParser.parseTrack(item.track, index + 1));
 	}
 
 	/**
@@ -172,8 +180,7 @@ class SpotifyAPI {
 		params.append('q', query);
 		params.append('type', 'track,album,artist');
 
-		const result = await this.callAPI(token, 'https://api.spotify.com/v1/search', params);
-		const data: SearchResult = await result?.json();
+		const data = await this.callAPI<SearchResult>(token, 'https://api.spotify.com/v1/search', params);
 		return SpotifyParser.parseSearch(data);
 	}
 }

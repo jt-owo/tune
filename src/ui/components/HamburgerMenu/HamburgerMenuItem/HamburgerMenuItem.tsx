@@ -13,13 +13,14 @@ interface HamburgerMenuItemProps {
 	lottieIcon?: unknown;
 	lottieActiveFrame?: number;
 	lottieInactiveFrame?: number;
+	hide?: boolean;
 	onClick?: () => void;
 }
 
 export type Props = HamburgerMenuItemProps;
 
 const HamburgerMenuItem: FC<HamburgerMenuItemProps> = (props) => {
-	const { title, icon, useLottie, lottieIcon, isActive, lottieActiveFrame, lottieInactiveFrame, onClick } = props;
+	const { title, icon, useLottie, lottieIcon, isActive, lottieActiveFrame, lottieInactiveFrame, hide, onClick } = props;
 
 	const lottieRef = useRef<LottieRefCurrentProps>(null);
 
@@ -32,6 +33,8 @@ const HamburgerMenuItem: FC<HamburgerMenuItemProps> = (props) => {
 			}
 		}
 	}, [isActive, lottieActiveFrame, lottieInactiveFrame]);
+
+	if (hide) return null;
 
 	return (
 		<div className={`${style.container}`} onClick={onClick}>

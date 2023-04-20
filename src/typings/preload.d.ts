@@ -1,4 +1,4 @@
-import { DatabaseKey, DatabaseValue } from '../main/api/database';
+import { DatabaseKey, DatabaseValue } from '../main/library';
 import { StoreValue } from '../main/api/dynamicStore';
 
 interface TuneAPI {
@@ -21,7 +21,7 @@ interface TuneAPI {
 	};
 	system: {
 		selectFiles(): Promise<string[]>;
-		readMetadata(file: string): Promise<string>;
+		loadMetadata(trackJSON: string): Promise<string>;
 		openURL(url: string): Promise<void>;
 	};
 	config: {
@@ -43,9 +43,21 @@ interface TuneAPI {
 declare global {
 	interface Window {
 		process: {
-			platform: string;
+			/**
+			 * The `window.process.platform` property returns a string identifying the operating system platform.
+			 *
+			 * Currently possible values are:
+			 *
+			 * * `'darwin'`
+			 * * `'linux'`
+			 * * `'win32'`
+			 */
+			readonly platform: string;
 		};
-		api: TuneAPI;
+		/**
+		 * API to access main renderer
+		 */
+		api?: TuneAPI;
 	}
 }
 

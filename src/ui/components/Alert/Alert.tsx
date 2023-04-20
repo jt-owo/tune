@@ -1,53 +1,37 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import { FC, useCallback, useEffect, useState } from 'react';
+import { FC, useCallback } from 'react';
+import { AlertType } from '../../../typings/types';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { AlertData, removeAlert, selectAlerts } from '../../../state/slices/alertSlice';
+import { removeAlert } from '../../../state/slices/alertSlice';
 import AlertIcon from './AlertIcon/AlertIcon';
 
 import style from './Alert.module.scss';
+import useFadeOut from '../../hooks/useFadeOut';
 
 interface AlertProps {
-	alert: AlertData;
+	id?: string;
+	message: string;
+	type: AlertType;
 }
 
 const Alert: FC<AlertProps> = (props) => {
-	const { alert } = props;
-	const [isFadingOut, setFadingOut] = useState(false);
+	const { id, message, type } = props;
 
 	const dispatch = useAppDispatch();
 
-	/**
-	 * Sets {@link isFadingOut} to true and invokes the callback function {@link removeCB} with a 3 secound timeout.
-	 * @param removeCB Function to invoke after fading out.
-	 */
-	const fadeOut = (removeCB: () => void) => {
-		setTimeout(() => {
-			removeCB();
-		}, 300);
-		setFadingOut(true);
-	};
-
 	const handleRemove = useCallback(() => {
-		dispatch(removeAlert(alert.id));
-	}, [alert.id, dispatch]);
+		if (id) dispatch(removeAlert(id));
+	}, [id, dispatch]);
 
-	useEffect(() => {
-		const timeID = setTimeout(() => {
-			fadeOut(handleRemove);
-		}, 3000);
-
-		return () => {
-			clearTimeout(timeID);
-		};
-	}, [handleRemove]);
+	const [isFadingOut, fadeOut] = useFadeOut(handleRemove, true, 3000);
 
 	return (
-		<div className={`${isFadingOut ? style['fade-out'] : ''} ${style[alert.type]} ${style.alert}`}>
+		<div className={`${isFadingOut ? style['fade-out'] : ''} ${style[type]} ${style.alert}`}>
 			<div className={style['type-icon']}>
-				<AlertIcon type={alert.type} />
+				<AlertIcon type={type} />
 			</div>
-			<div className={style.message}>{alert.message}</div>
-			<div className={style.closebtn} role="button" tabIndex={0} onClick={() => fadeOut(handleRemove)}>
+			<div className={style.message}>{message}</div>
+			<div className={style.closebtn} role="button" tabIndex={0} onClick={fadeOut}>
 				X
 			</div>
 		</div>
@@ -55,9 +39,9 @@ const Alert: FC<AlertProps> = (props) => {
 };
 
 export const AlertContainer: FC = () => {
-	const alerts = useAppSelector(selectAlerts);
+	const alerts = useAppSelector((state) => state.alerts.items);
 	const nextAlert = alerts && alerts[0];
-	return <div className={style['alerts-container']}>{nextAlert && <Alert alert={nextAlert} key={nextAlert.id} />}</div>;
+	return <div className={style['alerts-container']}>{nextAlert && nextAlert.id && <Alert key={nextAlert.id} {...nextAlert} />}</div>;
 };
 
 export default AlertContainer;

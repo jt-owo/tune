@@ -5,7 +5,7 @@ import { FC, useEffect, useState, useRef, ButtonHTMLAttributes } from 'react';
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent, DragStartEvent, DragOverlay, UniqueIdentifier } from '@dnd-kit/core';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { restrictToWindowEdges } from '@dnd-kit/modifiers';
-import { selectQueue, selectQueueIndex, updateQueue, setQueue } from '../../../state/slices/playerSlice';
+import { updateQueue } from '../../../state/slices/playerSlice';
 import { useAppSelector, useAppDispatch } from '../../hooks';
 import { ITrack } from '../../../typings/types';
 
@@ -16,8 +16,8 @@ import style from './Queue.module.scss';
 import trashIcon from '../../../../assets/ui-icons/trash-2.svg';
 
 const Queue: FC = () => {
-	const queue = useAppSelector(selectQueue);
-	const queueIndex = useAppSelector(selectQueueIndex);
+	const queue = useAppSelector((state) => state.player.queue);
+	const queueIndex = useAppSelector((state) => state.player.index);
 	const dispatch = useAppDispatch();
 
 	const [tracks, setTracks] = useState<ITrack[]>([]);
@@ -51,12 +51,12 @@ const Queue: FC = () => {
 			const newArray = arrayMove(tracks, oldIndex, newIndex);
 
 			setTracks(newArray);
-			dispatch(setQueue(newArray));
+			dispatch(updateQueue(newArray));
 		}
 	};
 
 	const handleTrackRemove = (index: number) => {
-		const updateData: ITrack[] = [...queue];
+		const updateData = [...queue];
 		updateData.splice(index + 1, 1);
 		dispatch(updateQueue(updateData));
 	};
@@ -89,7 +89,7 @@ const Queue: FC = () => {
 			<header className={style['queue-title']}>Up Next</header>
 			<div className={style.queue}>
 				<DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
-					<SortableContext items={queue} strategy={verticalListSortingStrategy}>
+					<SortableContext items={tracks} strategy={verticalListSortingStrategy}>
 						{tracks && tracks.slice(queueIndex + 1, tracks.length).map((track, index) => (isDraggingId !== track.id ? <QueueTrack key={track.id} id={track.id} track={track} index={index} removeTrack={handleTrackRemove} /> : <QueueTrack key={track.id} id={track.id} track={track} index={index} isDragging />))}
 					</SortableContext>
 					<DragOverlay modifiers={[restrictToWindowEdges]}>{isDraggingId ? <QueueTrack index={-1} id={tracks.findIndex((x) => x.id === isDraggingId)} track={tracks[tracks.findIndex((x) => x.id === isDraggingId)]} /> : null}</DragOverlay>

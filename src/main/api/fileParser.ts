@@ -1,9 +1,13 @@
-/* eslint-disable no-plusplus */
+import fs from 'fs';
 import * as mm from 'music-metadata';
+import Json from '../../util/jsonHelper';
+import { ITrack } from '../../typings/types';
 import { AudioMetadata } from '../../typings/metadata';
 
 export default class FileParser {
 	/**
+	 * @deprecated Please use {@link loadMetadata}
+	 *
 	 * Parses a {@link mm.IAudioMetadata} object into a more compact {@link AudioMetadata} object.
 	 * @param rawMetadata Raw AudioMetadata.
 	 */
@@ -64,29 +68,64 @@ export default class FileParser {
 		return metadata;
 	}
 
-	public static dataURItoBlob(dataURI: string) {
-		// convert base64 to raw binary data from string
-		const buf = Buffer.from(dataURI.split(',')[1], 'base64');
-		const byteString = buf.toString('base64');
-
-		// separate out the mime component
-		const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-
-		const ab = new ArrayBuffer(byteString.length);
-		const ia = new Uint8Array(ab);
-		for (let i = 0; i < byteString.length; i++) {
-			ia[i] = byteString.charCodeAt(i);
+	/**
+	 * Retrieves an ITrack object as a JSON string and returns an ITrack JSON string with loaded metadata.
+	 * @param trackJSON ITrack object as a JSON string.
+	 * @returns ITrack JSON string with loaded metadata.
+	 */
+	public static async loadMetadata(trackJSON: string): Promise<string> {
+		let track: ITrack;
+		if (Json.validate(trackJSON)) {
+			track = JSON.parse(trackJSON);
+		} else {
+			return '';
 		}
 
-		// write the ArrayBuffer to a blob
-		const blob = new Blob([ab], { type: mimeString });
-		return blob;
-	}
+		let metadata: mm.IAudioMetadata | undefined;
+		if (track.filePath && fs.existsSync(track.filePath)) metadata = await mm.parseFile(track.filePath);
+		if (!metadata) return '';
 
-	public static async getMetadata(file: string): Promise<string> {
-		const fileMetadata = await mm.parseFile(file);
-		const parsedMetadata = FileParser.parseMetadata(fileMetadata);
+		const ret: ITrack = {
+			...track,
+			album: {
+				name: 'No metdata',
+				artists: [],
+				images: [],
+				releaseDate: '',
+				totalTracks: 0
+			}
+		};
 
-		return JSON.stringify(parsedMetadata);
+		const cover = mm.selectCover(metadata.common.picture);
+		if (cover !== null) {
+			ret.album?.images.push({
+				url: `data:${cover?.format};base64,${cover?.data.toString('base64')}`
+			});
+		}
+
+		if (metadata.common.artist) {
+			ret.album?.artists.push({
+				name: metadata.common.artist,
+				images: []
+			});
+		}
+
+		if (metadata.common.title) {
+			ret.name = metadata.common.title;
+		}
+
+		if (ret.album && metadata.common.album) {
+			ret.album.name = metadata.common.album;
+		}
+
+		if (metadata.format.duration) {
+			ret.duration = metadata.format.duration;
+		}
+
+		if (ret.album && metadata.common.date) {
+			ret.album.releaseDate = metadata.common.date;
+		}
+
+		return JSON.stringify(ret);
 	}
 }

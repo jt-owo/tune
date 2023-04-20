@@ -3,10 +3,14 @@ module.exports = {
 	rules: {
 		'react/function-component-definition': 'off',
 		'react/react-in-jsx-scope': 'off',
+		'react/jsx-props-no-spreading': 'off',
 		'react/require-default-props': 'off',
+		'react/prop-types': 'off',
 		'import/no-unresolved': 'error',
 		'import/no-extraneous-dependencies': 'off',
-		'import/no-named-as-default': 'off'
+		'import/no-named-as-default': 'off',
+		'compat/compat': 'off',
+		'jsx-a11y/media-has-caption': 'off'
 	},
 	parserOptions: {
 		ecmaVersion: 2020,

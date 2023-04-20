@@ -1,19 +1,11 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import type { RootState } from '../store';
 import newGuid from '../../ui/util';
+import { IAlert } from '../../typings/types';
 
-export type AlertType = 'info' | 'error' | 'warn' | 'success';
-
-export interface AlertData {
-	id: string;
-	message: string;
-	type: AlertType;
-}
-
-export interface AlertState {
-	items: AlertData[];
-}
+export type AlertState = {
+	items: IAlert[];
+};
 
 const initialState: AlertState = {
 	items: []
@@ -23,13 +15,9 @@ export const alertSlice = createSlice({
 	name: 'alert',
 	initialState,
 	reducers: {
-		addAlert: (state, action: PayloadAction<AlertData>) => {
-			if (!action.payload.id) {
-				action.payload.id = newGuid();
-			}
-
+		addAlert: (state, action: PayloadAction<IAlert>) => {
 			state.items.push({
-				id: action.payload.id,
+				id: newGuid(),
 				message: action.payload.message,
 				type: action.payload.type
 			});
@@ -46,7 +34,5 @@ export const alertSlice = createSlice({
 });
 
 export const { addAlert, removeAlert } = alertSlice.actions;
-
-export const selectAlerts = (state: RootState) => state.alerts.items;
 
 export default alertSlice.reducer;

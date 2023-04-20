@@ -3,13 +3,17 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import { useState, useEffect, FC, ChangeEvent } from 'react';
 import Lottie from 'lottie-react';
-import { selectOutputDeviceId, selectSpotifyToken, setOutputDevice, updateSpotifyToken, selectUser } from '../../../state/slices/playerSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import SpotifyAPI from '../../util/spotifyAPI';
+import { setOutputDevice } from '../../../state/slices/playerSlice';
+import { updateSpotifyToken } from '../../../state/slices/userSlice';
+import SpotifyAPI from '../../api/spotify';
 
 import View from '../../components/View/View';
+
 import TabControl from '../../components/TabControl/TabControl';
 import TabItem from '../../components/TabControl/TabItem/TabItem';
+import DropdownMenu from '../../components/DropdownMenu/DropdownMenu';
+import DropdownMenuItem from '../../components/DropdownMenu/DropdownMenuItem/DropdownMenuItem';
 
 import spotifyLogo from '../../../../assets/service-icons/Spotify_Logo_RGB_White.png';
 import appleMusicIcon from '../../../../assets/service-icons/Apple_Music_Icon_W.svg';
@@ -18,13 +22,11 @@ import xMark from '../../../../assets/ui-icons/x-mark.svg';
 
 import style from './Settings.module.scss';
 import '../../styles/_components.scss';
-import DropdownMenu from '../../components/DropdownMenu/DropdownMenu';
-import DropdownMenuItem from '../../components/DropdownMenu/DropdownMenuItem/DropdownMenuItem';
 
 const Settings: FC = () => {
-	const selectedOutputDevice = useAppSelector(selectOutputDeviceId);
-	const spotifyToken = useAppSelector(selectSpotifyToken);
-	const user = useAppSelector(selectUser);
+	const outputDeviceId = useAppSelector((state) => state.player.outputDeviceId);
+	const spotifyToken = useAppSelector((state) => state.user.spotifyToken);
+  const user = useAppSelector((state) => state.user.data);
 
 	const [audioDevices, setOutputDevices] = useState<MediaDeviceInfo[]>();
 

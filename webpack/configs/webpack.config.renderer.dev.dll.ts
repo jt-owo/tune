@@ -1,14 +1,14 @@
-/* eslint-disable global-require */
 /**
  * Builds the DLL for development electron renderer process
  */
+
 import webpack from 'webpack';
 import path from 'path';
 import { merge } from 'webpack-merge';
 import baseConfig from './webpack.config.base';
 import webpackPaths from './webpack.paths';
 import { dependencies } from '../../package.json';
-import { checkNodeEnv } from '../scripts/util';
+import checkNodeEnv from '../scripts/checkNodeEnv';
 
 checkNodeEnv('development');
 

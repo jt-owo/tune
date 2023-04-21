@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
+import useToggle from './useToggle';
 
 /**
  * Returns a fading out state and a function to trigger the fade.
@@ -6,18 +7,18 @@ import { useCallback, useEffect, useState } from 'react';
  * @param autoFade If the fading should start automatically.
  * @param autoFadeTimeout Amount of ms it will take before the auto fade starts.
  */
-const useFadeOut = (callback: () => void, autoFade = false, autoFadeTimeout = 3000): [boolean, () => void] => {
-	const [isFadingOut, setFadingOut] = useState(false);
+const useFadeOut = (callback: () => void, autoFade = false, autoFadeTimeout = 3000) => {
+	const [isFadingOut, toggle] = useToggle();
 
 	/**
-	 * Sets {@link isFadingOut} to true and invokes the callback function {@link cb} with a timeout of 300ms
+	 * Sets {@link isFadingOut} to true and invokes the callback function {@link callback} with a timeout of 300ms
 	 */
 	const fadeOut = useCallback(() => {
 		setTimeout(() => {
 			callback();
 		}, 300);
-		setFadingOut(true);
-	}, [callback]);
+		toggle();
+	}, [callback, toggle]);
 
 	useEffect(() => {
 		if (autoFade) {
@@ -28,7 +29,7 @@ const useFadeOut = (callback: () => void, autoFade = false, autoFadeTimeout = 30
 		return () => {};
 	}, [autoFade, fadeOut, autoFadeTimeout]);
 
-	return [isFadingOut, fadeOut];
+	return [isFadingOut, fadeOut] as const;
 };
 
 export default useFadeOut;

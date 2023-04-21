@@ -1,8 +1,7 @@
-import { FC } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { ITrack } from '../../../../typings/types';
-import { getTrackFormatted } from '../../../util/formatHelper';
+import Format from '../../../util/format';
 
 import deleteIcon from '../../../../../assets/ui-icons/trash-2.svg';
 
@@ -16,11 +15,9 @@ interface QueueTrackProps {
 	removeTrack?: (id: number) => void;
 }
 
-const QueueTrack: FC<QueueTrackProps> = (props) => {
-	const { id, track, removeTrack, index, isDragging } = props;
+const QueueTrack = ({ id, track, removeTrack, index, isDragging }: QueueTrackProps): JSX.Element => {
 	const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id });
-
-	const { name, artists, image, isLoaded } = getTrackFormatted(track);
+	const { name, artists, image, isLoaded } = Format.getTrackFormatted(track);
 
 	const style = {
 		transform: CSS.Transform.toString(transform),

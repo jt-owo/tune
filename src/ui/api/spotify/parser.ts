@@ -1,7 +1,7 @@
 import { ArtistItem, AlbumItem, TrackItem, PlaylistItem } from '../../../typings/spotify/items';
 import { UserProfileResult, SearchResult, PlaybackStateResult } from '../../../typings/spotify/results';
 import { IArtist, IAlbum, ITrack, IUser, IPlaybackState, IPlaylist } from '../../../typings/types';
-import newGuid from '../../util';
+import Guid from '../../../util/guid';
 
 /**
  * The SpotifyParser class contains all functions to parse spotify items into the tune format.
@@ -79,7 +79,7 @@ class SpotifyParser {
 	 */
 	static parsePlaylist(playlist: PlaylistItem): IPlaylist {
 		return {
-			id: newGuid(),
+			id: Guid.new(),
 			name: playlist.name,
 			description: playlist.description,
 			images: playlist.images,

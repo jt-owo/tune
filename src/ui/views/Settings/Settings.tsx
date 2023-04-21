@@ -1,7 +1,6 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import { useState, useEffect, FC } from 'react';
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+import { useState, useEffect } from 'react';
 import Lottie from 'lottie-react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { setOutputDevice } from '../../../state/slices/playerSlice';
@@ -20,41 +19,36 @@ import appleMusicIcon from '../../../../assets/service-icons/Apple_Music_Icon_W.
 import checkmarkGreen from '../../../../assets/animations/checkmark-green.json';
 import xMark from '../../../../assets/ui-icons/x-mark.svg';
 
-import style from './Settings.module.scss';
-import '../../styles/_components.scss';
+import styles from './Settings.module.scss';
 
-const Settings: FC = () => {
+const Settings = (): JSX.Element => {
 	const outputDeviceId = useAppSelector((state) => state.player.outputDeviceId);
 	const spotifyToken = useAppSelector((state) => state.user.spotifyToken);
 	const user = useAppSelector((state) => state.user.data);
 
-	const [audioDevices, setOutputDevices] = useState<MediaDeviceInfo[]>();
+	const [audioDevices, setOutputDevices] = useState<MediaDeviceInfo[]>([]);
 
 	const dispatch = useAppDispatch();
 
-	const getOutputDevices = async () => {
+	const loadOutputDevices = async () => {
 		const mediaDevices = await navigator.mediaDevices.enumerateDevices();
 		setOutputDevices(mediaDevices.filter((device) => device.kind === 'audiooutput'));
 	};
 
-	const onOutputDeviceChange = (e: string) => {
-		dispatch(setOutputDevice(e));
-	};
+	const handleOutputDeviceChange = (e: string) => dispatch(setOutputDevice(e));
 
-	const handleSpotifyLogout = () => {
-		dispatch(updateSpotifyToken(''));
-	};
+	const handleSpotifyLogout = () => dispatch(updateSpotifyToken(''));
 
 	useEffect(() => {
-		getOutputDevices();
+		loadOutputDevices();
 	}, []);
 
 	return (
 		<View title="Settings" id="settings">
-			<div className={style.content}>
+			<div className={styles.content}>
 				<TabControl>
 					<TabItem label="Audio Settings">
-						<DropdownMenu className={style['audio-device-dropdown']} value={outputDeviceId || 'default'} onChange={onOutputDeviceChange}>
+						<DropdownMenu className={styles['audio-device-dropdown']} value={outputDeviceId || 'default'} onChange={handleOutputDeviceChange}>
 							{audioDevices &&
 								audioDevices.map((device) => {
 									return <DropdownMenuItem key={device.deviceId} value={device.deviceId} label={device.deviceId.toLowerCase() === 'default' ? 'Default Audio Device' : device.label} />;
@@ -65,36 +59,36 @@ const Settings: FC = () => {
 						<div> </div>
 					</TabItem>
 					<TabItem label="Streaming Services">
-						<div className={style['service-section']}>
+						<div className={styles['service-section']}>
 							{!spotifyToken ? (
-								<div onClick={SpotifyAPI.authorize} className={`${style['service-btn']} ${style.spotify}`}>
+								<div onClick={SpotifyAPI.authorize} className={`${styles['service-btn']} ${styles.spotify}`}>
 									Connect to <img src={spotifyLogo} alt="" />
 								</div>
 							) : (
-								<div onClick={handleSpotifyLogout} className={`${style['service-btn']} ${style.spotify}`}>
+								<div onClick={handleSpotifyLogout} className={`${styles['service-btn']} ${styles.spotify}`}>
 									Disconnect <img src={spotifyLogo} alt="" />
 								</div>
 							)}
 
 							{!spotifyToken ? (
-								<div className={style['connection-status']}>
-									<img className={style['x-mark']} src={xMark} alt="" />
+								<div className={styles['connection-status']}>
+									<img className={styles['x-mark']} src={xMark} alt="" />
 									Not connected
 								</div>
 							) : (
-								<div className={style['connection-status']}>
-									<Lottie className={style.lottie} animationData={checkmarkGreen} loop={false} />
+								<div className={styles['connection-status']}>
+									<Lottie className={styles.lottie} animationData={checkmarkGreen} loop={false} />
 									Connected as {user?.name}
 								</div>
 							)}
 						</div>
 
-						<div className={style['service-section']}>
-							<div className={`${style['service-btn']} ${style['apple-music']}`}>
+						<div className={styles['service-section']}>
+							<div className={`${styles['service-btn']} ${styles['apple-music']}`}>
 								Connect to <img src={appleMusicIcon} alt="" /> Apple Music
 							</div>
-							<div className={style['connection-status']}>
-								<img className={style['x-mark']} src={xMark} alt="" />
+							<div className={styles['connection-status']}>
+								<img className={styles['x-mark']} src={xMark} alt="" />
 								Not connected
 							</div>
 						</div>

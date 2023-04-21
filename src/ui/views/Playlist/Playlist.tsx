@@ -1,10 +1,8 @@
-/* eslint-disable react/jsx-no-useless-fragment */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable react-hooks/rules-of-hooks */
-import { FC, memo, RefObject, useEffect, useRef, useState } from 'react';
+import { memo, RefObject, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent, DragStartEvent, DragOverlay, UniqueIdentifier } from '@dnd-kit/core';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
@@ -12,14 +10,15 @@ import { restrictToWindowEdges } from '@dnd-kit/modifiers';
 import Lottie, { LottieRefCurrentProps } from 'lottie-react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { deletePlaylist, updatePlaylist } from '../../../state/slices/playlistsSlice';
-import { IPlaylist, ITrack } from '../../../typings/types';
 import { addToQueueLast, addToQueueNext, setQueue } from '../../../state/slices/playerSlice';
-import { getServices } from '../../util/serviceHelper';
-import { getImageUrl } from '../../util/formatHelper';
-import { getNextID, loadTracksMetadata } from '../../util';
 import useContextMenu from '../../hooks/useContextMenu';
+import useToggle from '../../hooks/useToggle';
 import SpotifyAPI from '../../api/spotify';
 import AppRoutes from '../../routes';
+import { IPlaylist, ITrack } from '../../../typings/types';
+import Services from '../../util/services';
+import Format from '../../util/format';
+import TrackHelper from '../../util/trackHelper';
 
 import PlaylistTrack from './PlaylistTrack/PlaylistTrack';
 import ToolTip from '../../components/ToolTip/ToolTip';
@@ -37,24 +36,21 @@ import menuIcon from '../../../../assets/animations/menuV4.json';
 
 import deleteIcon from '../../../../assets/ui-icons/trash-2.svg';
 import editIcon from '../../../../assets/ui-icons/edit-3.svg';
-// FIXME: @tobytaken fix svg.
-/* import addTopIcon from '../../../../assets/ui-icons/add-top.svg'; */
-/* import addBottomIcon from '../../../../assets/ui-icons/add-bottom.svg'; */
-/* import imageIcon from '../../../../assets/ui-icons/image-regular.svg'; */
+import addTopIcon from '../../../../assets/ui-icons/add-top.svg';
+import addBottomIcon from '../../../../assets/ui-icons/add-bottom.svg';
+import imageIcon from '../../../../assets/ui-icons/image-regular.svg';
 import lockIcon from '../../../../assets/animations/lock.json';
 
-import style from './Playlist.module.scss';
+import styles from './Playlist.module.scss';
 
 type PlaylistParams = {
 	id: string;
 	service: string;
 };
 
-const Playlist: FC = memo(() => {
+const Playlist = memo(() => {
 	const { id, service } = useParams<PlaylistParams>();
-
-	const { isLocal, isSpotify } = getServices(service ?? '');
-
+	const { isLocal, isSpotify } = Services.checkServices(service ?? '');
 	const navigate = useNavigate();
 	const dispatch = useAppDispatch();
 
@@ -92,12 +88,12 @@ const Playlist: FC = memo(() => {
 	const [isDraggingId, setIsDraggingId] = useState<UniqueIdentifier>();
 
 	// Other ui states.
-	const [renameVisibility, setRenameVisibility] = useState(false);
-	const [hamburgerVisibility, setHamburgerVisibility] = useState(false);
-	const [isDialogVisible, setDialogVisibility] = useState(false);
+	const [isRenameVisible, toggleRename] = useToggle();
+	const [isHamburgerVisible, setHamburgerVisibility] = useState(false);
+	const [isDialogVisible, toggleDialog, hideDialog] = useToggle(false);
 
 	// Context Menu states.
-	const [visibility, setVisibility, position, setPosition] = useContextMenu();
+	const [isContextMenuVisible, toggleContextMenu, position, setPosition] = useContextMenu();
 	const [usingContextMenuId, setUsingContextMenuId] = useState(-1);
 
 	// Lottie refs.
@@ -147,7 +143,7 @@ const Playlist: FC = memo(() => {
 		let index = 1;
 		paths.forEach((path) => {
 			if (updateData.length > 0) {
-				index = getNextID(updateData);
+				index = TrackHelper.getNextID(updateData);
 			}
 
 			updateData.push({
@@ -169,10 +165,10 @@ const Playlist: FC = memo(() => {
 		dispatch(setQueue(tracks));
 	};
 
-	const handleTrackRemove = (id: number) => {
+	const handleTrackRemove = (trackID: number) => {
 		const updateData = [...playlist.tracks];
 
-		const index = updateData.findIndex((x) => x.id === id);
+		const index = updateData.findIndex((x) => x.id === trackID);
 		updateData.splice(index, 1);
 
 		dispatch(
@@ -183,22 +179,23 @@ const Playlist: FC = memo(() => {
 		);
 	};
 
-	const handlePlayNext = (id: number) => {
-		const track = tracks.find((x) => x.id === id);
+	const handlePlayNext = (trackID: number) => {
+		const track = tracks.find((x) => x.id === trackID);
 		if (track) dispatch(addToQueueNext(track));
 	};
 
-	const handlePlayLast = (id: number) => {
-		const track = tracks.find((x) => x.id === id);
+	const handlePlayLast = (trackID: number) => {
+		const track = tracks.find((x) => x.id === trackID);
 		if (track) dispatch(addToQueueLast(track));
 	};
 
 	const handleToggleRename = () => {
 		if (playlist.locked || !isLocal) return;
-		setRenameVisibility(true);
+		toggleRename();
 	};
 
 	const handleRename = (data: string) => {
+		if (data === '') return;
 		dispatch(updatePlaylist({ ...playlist, name: data }));
 	};
 
@@ -236,8 +233,8 @@ const Playlist: FC = memo(() => {
 			setTracks(tracksLoaded);
 		};
 
-		const loadLocalTracks = async (tracks: ITrack[]) => {
-			const tracksLoaded = await loadTracksMetadata(tracks);
+		const loadLocalTracks = async (localTracks: ITrack[]) => {
+			const tracksLoaded = await TrackHelper.loadTracksMetadata(localTracks);
 			setTracks(tracksLoaded);
 		};
 
@@ -248,78 +245,75 @@ const Playlist: FC = memo(() => {
 			query = spotifyPlaylists;
 		}
 
-		if (query) {
-			const found = query.find((x) => x.id === id);
-			if (found) {
-				setPlaylist(found);
-				if (isLocal) {
-					if (found.tracks) loadLocalTracks(found.tracks);
-				} else if (isSpotify) {
-					if (found.tracksHref && spotifyToken) loadSpotifyTracks(spotifyToken, found.tracksHref);
-				}
-			}
+		if (!query) return;
+
+		const foundPlaylist = query.find((x) => x.id === id);
+		if (!foundPlaylist) return;
+
+		setPlaylist(foundPlaylist);
+		if (isLocal) {
+			if (foundPlaylist.tracks) loadLocalTracks(foundPlaylist.tracks);
+		} else if (isSpotify) {
+			if (foundPlaylist.tracksHref && spotifyToken) loadSpotifyTracks(spotifyToken, foundPlaylist.tracksHref);
 		}
 	}, [id, isLocal, isSpotify, playlists, spotifyPlaylists, spotifyToken]);
 
 	useEffect(() => {
 		if (lottieShowMenuRef.current) {
 			lottieShowMenuRef.current.setSpeed(2);
-			if (!hamburgerVisibility) {
-				stopAnimation(lottieShowMenuRef);
-			} else {
-				startAnimation(lottieShowMenuRef);
-			}
+			if (!isHamburgerVisible) stopAnimation(lottieShowMenuRef);
+			else startAnimation(lottieShowMenuRef);
 		}
-	}, [hamburgerVisibility]);
+	}, [isHamburgerVisible]);
 
 	return (
-		<div className={style['playlist-container']}>
-			<Dialog heading="Delete?" description="You are about to delete this playlist. This action cannot be undone!" onClose={() => setDialogVisibility(false)} isOpen={isDialogVisible} type="danger" confirmText="Delete" rejectText="Keep" confirmCallback={handleDeletePlaylist} />
-			<div className={style['playlist-heading']}>
-				<RenameDialog value={playlist?.name} nameCB={handleRename} visible={renameVisibility} onClose={() => setRenameVisibility(false)} />
-				<img src={getImageUrl(playlist.images)} alt="" />
-				<div className={style['playlist-heading-text']} onClick={handleToggleRename}>
+		<div className={styles['playlist-container']}>
+			<Dialog heading="Delete?" description="You are about to delete this playlist. This action cannot be undone!" onClose={hideDialog} visible={isDialogVisible} type="danger" confirmText="Delete" rejectText="Keep" confirmCallback={handleDeletePlaylist} />
+			<div className={styles['playlist-heading']}>
+				<RenameDialog value={playlist?.name} cb={handleRename} visible={isRenameVisible} onClose={toggleRename} />
+				<img src={Format.getImage(playlist.images)} alt="" />
+				<div className={styles['playlist-heading-text']} onClick={handleToggleRename}>
 					{playlist?.name}
 				</div>
-				<div className={style['playlist-controls']}>
-					<HamburgerMenu onClose={() => setHamburgerVisibility(false)} visible={hamburgerVisibility} positionX={25} positionY={100}>
-						<HamburgerMenuItem title="Edit" icon={editIcon} hide={playlist.locked} />
-						<HamburgerMenuItem title="Choose image" icon={undefined} hide={playlist.locked} />
+				<div className={styles['playlist-controls']}>
+					<HamburgerMenu onClose={() => setHamburgerVisibility(false)} visible={isHamburgerVisible} positionX={25} positionY={100}>
+						<HamburgerMenuItem title="Edit" icon={editIcon} hidden={playlist.locked} />
+						<HamburgerMenuItem title="Choose image" icon={imageIcon} hidden={playlist.locked} />
 						<HamburgerMenuItem title={playlist.locked ? 'Unlock playlist' : 'Lock playlist'} lottieIcon={lockIcon} onClick={handleLockPlaylist} isActive={playlist.locked} lottieActiveFrame={1} lottieInactiveFrame={9} useLottie />
-						<HamburgerMenuItem title={playlist.pinned ? 'Unpin playlist' : 'Pin playlist'} onClick={handlePinPlaylist} isActive={playlist.pinned} hide={playlist.locked} />
+						<HamburgerMenuItem title={playlist.pinned ? 'Unpin playlist' : 'Pin playlist'} onClick={handlePinPlaylist} isActive={playlist.pinned} hidden={playlist.locked} />
 					</HamburgerMenu>
 					{isLocal && (
 						<>
 							<ToolTip text="Play Playlist">
-								<div className={`${style['playlist-heading-btn']} ${style['btn-hover-animation']} ${style['playlist-play-btn']}`} onClick={handlePlay}>
-									<img className={style['play-icon']} src={playIcon} alt="" draggable="false" />
+								<div className={`${styles['playlist-heading-btn']} ${styles['btn-hover-animation']} ${styles['playlist-play-btn']}`} onClick={handlePlay}>
+									<img className={styles['play-icon']} src={playIcon} alt="" draggable="false" />
 								</div>
 							</ToolTip>
 							{!playlist.locked && (
 								<>
 									<ToolTip text="Import Tracks">
-										<div className={`${style['playlist-heading-btn']} ${style['btn-hover-animation']} ${style['playlist-import-btn']}`} onClick={handleAddTracks} onMouseEnter={() => startAnimation(lottieAddTracksRef)} onMouseLeave={() => stopAnimation(lottieAddTracksRef)}>
-											<Lottie className={style['import-icon']} animationData={folderIcon} lottieRef={lottieAddTracksRef} loop={false} autoplay={false} />
+										<div className={`${styles['playlist-heading-btn']} ${styles['btn-hover-animation']} ${styles['playlist-import-btn']}`} onClick={handleAddTracks} onMouseEnter={() => startAnimation(lottieAddTracksRef)} onMouseLeave={() => stopAnimation(lottieAddTracksRef)}>
+											<Lottie className={styles['import-icon']} animationData={folderIcon} lottieRef={lottieAddTracksRef} loop={false} autoplay={false} />
 										</div>
 									</ToolTip>
 									<ToolTip text="Delete Playlist">
-										<div className={`${style['playlist-heading-btn']} ${style['btn-hover-animation']} ${style['playlist-delete-btn']}`} onClick={() => setDialogVisibility(true)} onMouseEnter={() => startAnimation(lottieDeletePlaylistRef)} onMouseLeave={() => stopAnimation(lottieDeletePlaylistRef)}>
-											<Lottie className={style['delete-icon']} animationData={trashIcon} lottieRef={lottieDeletePlaylistRef} loop={false} autoplay={false} />
+										<div className={`${styles['playlist-heading-btn']} ${styles['btn-hover-animation']} ${styles['playlist-delete-btn']}`} onClick={toggleDialog} onMouseEnter={() => startAnimation(lottieDeletePlaylistRef)} onMouseLeave={() => stopAnimation(lottieDeletePlaylistRef)}>
+											<Lottie className={styles['delete-icon']} animationData={trashIcon} lottieRef={lottieDeletePlaylistRef} loop={false} autoplay={false} />
 										</div>
 									</ToolTip>
 								</>
 							)}
 							<ToolTip text="Options">
-								<div className={`${style['playlist-heading-btn']} ${style['btn-hover-animation']} ${style['playlist-menu-btn']}`} onClick={() => setHamburgerVisibility(true)}>
-									<Lottie className={style['menu-icon']} animationData={menuIcon} lottieRef={lottieShowMenuRef} loop={false} autoplay={false} />
+								<div className={`${styles['playlist-heading-btn']} ${styles['btn-hover-animation']} ${styles['playlist-menu-btn']}`} onClick={() => setHamburgerVisibility(true)}>
+									<Lottie className={styles['menu-icon']} animationData={menuIcon} lottieRef={lottieShowMenuRef} loop={false} autoplay={false} />
 								</div>
 							</ToolTip>
 						</>
 					)}
 				</div>
 			</div>
-			<div className={style.divider} />
-			<div className={style['playlist-content']}>
+			<div className={styles.divider} />
+			<div className={styles['playlist-content']}>
 				{tracks.length > 0 && (
 					<DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
 						<SortableContext items={tracks} strategy={verticalListSortingStrategy}>
@@ -333,7 +327,7 @@ const Playlist: FC = memo(() => {
 											onContextMenu={(e) => {
 												e.preventDefault();
 												setUsingContextMenuId(track.id);
-												setVisibility(true);
+												toggleContextMenu();
 												setPosition({
 													x: e.pageX,
 													y: e.pageY
@@ -350,11 +344,11 @@ const Playlist: FC = memo(() => {
 						<DragOverlay modifiers={[restrictToWindowEdges]}>{isDraggingId ? <PlaylistTrack track={tracks[tracks.findIndex((x) => x.id === isDraggingId)]} locked={playlist.locked} onContextMenu={() => {}} /> : null}</DragOverlay>
 					</DndContext>
 				)}
-				{visibility && (
+				{isContextMenuVisible && (
 					<ContextMenu y={position.y} x={position.x}>
-						<ContextMenuItem header="Play Next" staticIcon={deleteIcon} type="default" onClick={() => handlePlayNext(usingContextMenuId)} />
-						<ContextMenuItem header="Play Last" staticIcon={deleteIcon} type="default" onClick={() => handlePlayLast(usingContextMenuId)} />
-						<ContextMenuItem header="Delete from Playlist" staticIcon={deleteIcon} type="danger" onClick={() => handleTrackRemove(usingContextMenuId)} hide={playlist.locked} />
+						<ContextMenuItem text="Play Next" staticIcon={addTopIcon} type="default" onClick={() => handlePlayNext(usingContextMenuId)} />
+						<ContextMenuItem text="Play Last" staticIcon={addBottomIcon} type="default" onClick={() => handlePlayLast(usingContextMenuId)} />
+						<ContextMenuItem text="Delete from Playlist" staticIcon={deleteIcon} type="danger" onClick={() => handleTrackRemove(usingContextMenuId)} hidden={playlist.locked} />
 					</ContextMenu>
 				)}
 			</div>

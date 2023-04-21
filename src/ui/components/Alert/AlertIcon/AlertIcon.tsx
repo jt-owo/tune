@@ -1,4 +1,3 @@
-import { FC } from 'react';
 import Lottie from 'lottie-react';
 import { AlertType } from '../../../../typings/types';
 
@@ -10,9 +9,7 @@ interface AlertIconProps {
 	type: AlertType;
 }
 
-const AlertIcon: FC<AlertIconProps> = (props) => {
-	const { type } = props;
-
+const AlertIcon = ({ type }: AlertIconProps): JSX.Element => {
 	switch (type) {
 		case 'info':
 			return <Lottie animationData={infoIcon} className="lottie" />;

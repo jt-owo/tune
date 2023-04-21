@@ -1,7 +1,7 @@
-import { FC, SyntheticEvent, useEffect, useRef, useCallback } from 'react';
+import { SyntheticEvent, useEffect, useRef, useCallback } from 'react';
 import { play, playNext, playPrevious } from '../../../state/slices/playerSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { getFilePath } from '../../util';
+import Format from '../../util/format';
 
 import AudioControlButton from './AudioControlButton/AudioControlButton';
 import PlayPauseButton from './PlayPauseButton/PlayPauseButton';
@@ -16,13 +16,14 @@ import playBtn from '../../../../assets/animations/playPause.json';
 import skipBackBtn from '../../../../assets/animations/skipBack.json';
 import skipForwardBtn from '../../../../assets/animations/skipForward.json';
 
-import style from './AudioPlayer.module.scss';
+import styles from './AudioPlayer.module.scss';
 
-const AudioPlayer: FC = () => {
+const AudioPlayer = (): JSX.Element => {
 	const audioRef = useRef<HTMLAudioElement & { setSinkId(deviceId: string): void; volume: number }>(null);
 
 	const currentTrack = useAppSelector((state) => state.player.currentTrack);
 	const isPlaying = useAppSelector((state) => state.player.isPlaying);
+	const isShuffle = useAppSelector((state) => state.player.isShuffle);
 	const outputDeviceId = useAppSelector((state) => state.player.outputDeviceId);
 
 	const dispatch = useAppDispatch();
@@ -71,20 +72,20 @@ const AudioPlayer: FC = () => {
 	}, [handlePlayPause]);
 
 	return (
-		<div className={style['player-container']}>
-			<div className={style['player-controls-container']}>
+		<div className={styles['player-container']}>
+			<div className={styles['player-controls-container']}>
 				<ServiceSelector />
-				<div className={style['player-control-divider']} />
+				<div className={styles['player-control-divider']} />
 				{currentTrack && <NowPlaying track={currentTrack} onPlay={handlePlayPause} onNextTrack={handlePlayNext} onPreviousTrack={handlePlayPrev} />}
 				<VolumeSlider audioRef={audioRef} />
 				<SeekBar audioRef={audioRef} />
 				<AudioControlButton id="skip-back-btn" onClick={handlePlayPrev} animationData={skipBackBtn} />
 				<PlayPauseButton isPlaying={isPlaying} onClick={handlePlayPause} animationData={playBtn} />
 				<AudioControlButton id="skip-forward-btn" onClick={handlePlayNext} animationData={skipForwardBtn} />
-				<ShuffleButton />
+				<ShuffleButton on={isShuffle} />
 				<RepeatButton />
 			</div>
-			{currentTrack?.service === 'local' && currentTrack.filePath && <audio src={getFilePath(currentTrack.filePath)} ref={audioRef} onEnded={onEnded} crossOrigin="anonymous" />}
+			{currentTrack?.service === 'local' && currentTrack.filePath && <audio src={Format.getFilePath(currentTrack.filePath)} ref={audioRef} onEnded={onEnded} crossOrigin="anonymous" />}
 		</div>
 	);
 };

@@ -1,14 +1,15 @@
-import { FC, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IArtist } from '../../../typings/types';
 import { useAppSelector } from '../../hooks';
 import SpotifyAPI from '../../api/spotify';
 
 import View from '../../components/View/View';
+
 import HomeItemMedium from '../../components/Home_Elements/HomeItemMedium/HomeItemMedium';
 
-import style from './Home.module.scss';
+import styles from './Home.module.scss';
 
-const Home: FC = () => {
+const Home = (): JSX.Element => {
 	const user = useAppSelector((state) => state.user.data);
 	const spotifyToken = useAppSelector((state) => state.user.spotifyToken);
 
@@ -22,18 +23,16 @@ const Home: FC = () => {
 			setTopArtists(artists);
 		};
 
-		if (spotifyToken) {
-			loadTopItems(spotifyToken);
-		}
+		if (spotifyToken) loadTopItems(spotifyToken);
 	}, [spotifyToken]);
 
 	return (
 		<View title={title} id="home">
-			<div className={style.content}>
+			<div className={styles.content}>
 				{topArtists.length > 1 && (
 					<div>
 						<h3>You top artists</h3>
-						<div className={style['top-artists']}>
+						<div className={styles['top-artists']}>
 							{topArtists.map((artist) => {
 								return <HomeItemMedium key={artist.name} title={artist.name} image={artist.images[0].url} />;
 							})}

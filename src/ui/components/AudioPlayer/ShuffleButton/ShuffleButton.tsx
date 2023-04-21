@@ -1,25 +1,27 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import { useState, useRef, FC } from 'react';
-
-import style from './ShuffleButton.module.scss';
+import { toggleShuffle } from '../../../../state/slices/playerSlice';
+import { useAppDispatch } from '../../../hooks';
 
 import shuffleIcon from '../../../../../assets/ui-icons/shuffle.svg';
 
-const ShuffleButton: FC = () => {
-	const [isShuffle, setIsShuffle] = useState(false);
+import styles from './ShuffleButton.module.scss';
 
-	const shuffleRef = useRef<HTMLDivElement>(null);
+interface ShuffleButtonProps {
+	on: boolean;
+}
+
+const ShuffleButton = ({ on }: ShuffleButtonProps): JSX.Element => {
+	const dispatch = useAppDispatch();
 
 	const handleShuffle = () => {
-		setIsShuffle(!isShuffle);
-		shuffleRef.current?.classList.toggle(style.active);
+		dispatch(toggleShuffle());
 	};
 
 	return (
-		<div className={style['shuffle-btn']} ref={shuffleRef} onClick={handleShuffle}>
-			<img src={shuffleIcon} alt="" className={style['shuffle-btn-img']} />
-			<div className={style['shuffle-btn-text']}>Shuffle</div>
+		<div className={`${styles['shuffle-btn']} ${on ? 'active' : ''}`} onClick={handleShuffle}>
+			<img src={shuffleIcon} alt="" className={styles['shuffle-btn-img']} />
+			<div className={styles['shuffle-btn-text']}>Shuffle</div>
 		</div>
 	);
 };

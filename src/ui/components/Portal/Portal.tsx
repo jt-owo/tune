@@ -1,6 +1,4 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable @typescript-eslint/no-shadow */
-import { FC, useLayoutEffect, useState } from 'react';
+import { ReactNode, useLayoutEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 function createWrapper(wrapperID: string): HTMLDivElement {
@@ -12,12 +10,10 @@ function createWrapper(wrapperID: string): HTMLDivElement {
 
 interface PortalProps {
 	wrapperID: string;
-	children: JSX.Element | JSX.Element[];
+	children: ReactNode;
 }
 
-const Portal: FC<PortalProps> = (props) => {
-	const { children, wrapperID } = props;
-
+const Portal = ({ children, wrapperID }: PortalProps): JSX.Element | null => {
 	const [wrapperElement, setWrapperElement] = useState<HTMLDivElement>();
 
 	useLayoutEffect(() => {

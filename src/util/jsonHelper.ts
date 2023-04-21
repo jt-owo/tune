@@ -7,9 +7,9 @@ class Json {
 	 * @param json JSON string to validate.
 	 * @returns True if the string is a valid JSON string.
 	 */
-	static validate(json: string) {
+	static validate<T = unknown>(json: string) {
 		try {
-			JSON.parse(json);
+			JSON.parse(json) as T;
 		} catch (err) {
 			return false;
 		}

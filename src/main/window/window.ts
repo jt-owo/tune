@@ -4,8 +4,8 @@ import log from 'electron-log';
 import { autoUpdater } from 'electron-updater';
 import path from 'path';
 import { DynamicStore } from '../api/dynamicStore';
-import { resolveHtmlPath } from '../util';
 import MenuBuilder from './menu';
+import PathResolver from '../util/pathResolver';
 
 export interface WindowBounds {
 	width: number;
@@ -89,7 +89,7 @@ export default class Window {
 			this.browserWindow.setFullScreen(true);
 		}
 
-		this.browserWindow.loadURL(resolveHtmlPath('index.html'));
+		this.browserWindow.loadURL(PathResolver.resolveHtml('index.html'));
 
 		this.browserWindow.on('ready-to-show', () => {
 			this.onReadyToShow();

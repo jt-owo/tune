@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react';
+import { useEffect } from 'react';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import AppRoutes, { AppRoutesParams } from './routes';
 import { useAppDispatch } from './hooks';
@@ -21,7 +21,7 @@ import AlertContainer from './components/Alert/Alert';
 
 import './Application.scss';
 
-const Application: FC = () => {
+const Application = (): JSX.Element => {
 	const dispatch = useAppDispatch();
 
 	// Load local playlists.
@@ -50,14 +50,14 @@ const Application: FC = () => {
 
 	return (
 		<div id="app-container">
-			{window.process.platform !== 'darwin' ? <Titlebar /> : <div id="macos-titlebar" />}
+			<Titlebar />
 			<Router>
 				<Navigation />
 				<Routes>
 					<Route path={AppRoutes.Home} element={<Home />} />
 					<Route path={AppRoutes.Library} element={<Library />} />
 					<Route path={AppRoutes.Browse} element={<Browse />} />
-					<Route path={AppRoutesParams.PlaylistID} element={<Playlist />} />
+					<Route path={AppRoutesParams.PlaylistParams} element={<Playlist />} />
 					<Route path={AppRoutes.Settings} element={<Settings />} />
 				</Routes>
 			</Router>

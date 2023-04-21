@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import newGuid from '../../ui/util';
 import { IAlert } from '../../typings/types';
+import Guid from '../../util/guid';
 
 export type AlertState = {
 	items: IAlert[];
@@ -17,7 +17,7 @@ export const alertSlice = createSlice({
 	reducers: {
 		addAlert: (state, action: PayloadAction<IAlert>) => {
 			state.items.push({
-				id: newGuid(),
+				id: Guid.new(),
 				message: action.payload.message,
 				type: action.payload.type
 			});

@@ -1,71 +1,66 @@
-/* eslint-disable @typescript-eslint/dot-notation */
-/* eslint-disable react/button-has-type */
-import { FC, useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
+import useToggle from '../../hooks/useToggle';
 
-import style from './RenameDialog.module.scss';
+import TextBox from '../TextBox/TextBox';
+
+import styles from './RenameDialog.module.scss';
 
 interface RenameDialogProps {
-	nameCB: (data: string) => void;
+	cb: (name: string) => void;
 	onClose: () => void;
 	visible: boolean;
 	value?: string;
 }
 
-const RenameDialog: FC<RenameDialogProps> = (props) => {
-	const { value, visible, nameCB, onClose } = props;
-
-	const [isFading, setFading] = useState(false);
+const RenameDialog = ({ value, visible, cb, onClose }: RenameDialogProps): JSX.Element | null => {
+	const [isFading, toggleFading] = useToggle();
 
 	const ref = useRef<HTMLDivElement>(null);
 
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		nameCB((e.currentTarget[0] as HTMLInputElement).value);
+		cb((e.currentTarget[0] as HTMLInputElement).value);
 
 		setTimeout(() => {
-			setFading(false);
+			toggleFading();
 			onClose();
 		}, 200);
-		setFading(true);
+		toggleFading();
 	};
 
 	const handleCancel = useCallback(() => {
-		nameCB(value || '');
+		cb(value || '');
 
 		setTimeout(() => {
-			setFading(false);
+			toggleFading();
 			onClose();
 		}, 200);
-		setFading(true);
-	}, [nameCB, onClose, value]);
+		toggleFading();
+	}, [cb, onClose, toggleFading, value]);
 
 	useEffect(() => {
 		const checkIfClickedOutside = (e: Event) => {
 			// If the menu is open and the clicked target is not within the menu, call the cancel callback
-			if (visible && ref.current && !ref.current.contains(e.target as Node)) {
-				handleCancel();
-			}
+			if (visible && ref.current && !ref.current.contains(e.target as Node)) handleCancel();
 		};
 
 		document.addEventListener('mouseup', checkIfClickedOutside);
 
-		return () => {
-			// Clean up the event listener
-			document.removeEventListener('mouseup', checkIfClickedOutside);
-		};
+		// Clean up the event listener
+		return () => document.removeEventListener('mouseup', checkIfClickedOutside);
 	}, [visible, handleCancel, onClose]);
 
 	if (!visible) return null;
 
 	return (
-		<div className={`${style.dialog} ${isFading ? style.fading : style.visible}`} ref={ref}>
+		<div className={`${styles.dialog} ${isFading ? styles.fading : styles.visible}`} ref={ref}>
 			<form onSubmit={handleSubmit}>
-				<input type="text" defaultValue={value} className="text-input-3" />
-				<div className={style['button-container']}>
-					<button className={style['confirm-btn']} type="submit">
+				<TextBox size="large" defaultValue={value} />
+				<div className={styles['button-container']}>
+					<button className={styles['confirm-btn']} type="submit">
 						Rename
 					</button>
-					<button className={style['cancel-btn']} type="reset" onClick={handleCancel}>
+					<button className={styles['cancel-btn']} type="button" onClick={handleCancel}>
 						Cancel
 					</button>
 				</div>

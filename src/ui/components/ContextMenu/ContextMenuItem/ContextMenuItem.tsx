@@ -1,14 +1,13 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import { FC } from 'react';
 import Lottie, { LottieComponentProps } from 'lottie-react';
 
-import style from './ContextMenuItem.module.scss';
+import styles from './ContextMenuItem.module.scss';
 
 interface ContextMenuItemDefaultProps {
 	type: 'default' | 'danger';
-	header: string;
-	hide?: boolean;
+	text: string;
+	hidden?: boolean;
 	onClick?: () => void;
 }
 
@@ -22,32 +21,23 @@ type ContextMenuItemConditionalProps =
 			lottieIcon?: LottieComponentProps['animationData'];
 	  };
 
-export type Props = ContextMenuItemDefaultProps & ContextMenuItemConditionalProps;
+export type ContextMenuItemProps = ContextMenuItemDefaultProps & ContextMenuItemConditionalProps;
 
-const ContextMenuItem: FC<Props> = (props) => {
-	const { onClick, hide, header, staticIcon, lottieIcon, type } = props;
+const ContextMenuItem = ({ onClick, hidden, text, staticIcon, lottieIcon, type }: ContextMenuItemProps): JSX.Element | null => {
+	if (hidden || (!staticIcon && !lottieIcon)) return null;
 
-	if (hide) return null;
+	const renderIcon = () => {
+		if (staticIcon) return <img src={staticIcon} alt="" />;
+		if (lottieIcon) return <Lottie className={styles.lottie} animationData={lottieIcon} loop={false} />;
+		return null;
+	};
 
-	if (staticIcon && !lottieIcon) {
-		return (
-			<li onClick={onClick} className={`${style['context-menu-item']} ${style[type]}`}>
-				<img src={staticIcon} alt="" />
-				<div className={style['context-menu-item-text']}>{header}</div>
-			</li>
-		);
-	}
-
-	if (lottieIcon && !staticIcon) {
-		return (
-			<li onClick={onClick} className={`${style['context-menu-item']} ${style[type]}`}>
-				<Lottie className={style.lottie} animationData={lottieIcon} loop={false} />
-				<div className={style['context-menu-item-text']}>{header}</div>
-			</li>
-		);
-	}
-
-	return null;
+	return (
+		<li onClick={onClick} className={`${styles['context-menu-item']} ${styles[type]}`}>
+			{renderIcon()}
+			<div className={styles['context-menu-item-text']}>{text}</div>
+		</li>
+	);
 };
 
 export default ContextMenuItem;

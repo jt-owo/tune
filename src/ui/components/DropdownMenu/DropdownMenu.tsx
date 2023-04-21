@@ -1,13 +1,16 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import { FC, ReactElement, useState, useEffect, useRef } from 'react';
+import { ReactElement, useCallback, useEffect, useRef } from 'react';
+import useToggle from '../../hooks/useToggle';
 
-import style from './DropdownMenu.module.scss';
 import DropdownMenuItem, { DropdownMenuItemProps } from './DropdownMenuItem/DropdownMenuItem';
 
 import arrowIcon from '../../../../assets/ui-icons/angle-down-solid-w.svg';
 
-const ANIMATION_TIME = 100; // milliseconds
+import styles from './DropdownMenu.module.scss';
+
+/** @const Time of the animation in miliseconds. */
+const ANIMATION_TIME = 100;
 
 interface DropdownMenuProps {
 	children: ReactElement<DropdownMenuItemProps>[] | undefined;
@@ -16,31 +19,32 @@ interface DropdownMenuProps {
 	onChange?: (current: string) => void;
 }
 
-const DropdownMenu: FC<DropdownMenuProps> = (props) => {
-	const { children, value, onChange, className } = props;
-
-	const [visible, setVisible] = useState(false);
+const DropdownMenu = ({ children, value, className, onChange }: DropdownMenuProps): JSX.Element => {
+	const [isVisible, toggleVisibility] = useToggle();
 
 	const ref = useRef<HTMLDivElement>(null);
 	const listRef = useRef<HTMLDivElement>(null);
 
-	const setListVisibility = (e: boolean) => {
-		if (e) {
-			setVisible(true);
-			return;
-		}
+	const setListVisibility = useCallback(
+		(e: boolean) => {
+			if (e) {
+				toggleVisibility();
+				return;
+			}
 
-		if (listRef.current && !listRef.current.classList.contains(style.hide)) {
-			listRef.current.classList.add(style.hide);
+			if (listRef.current && !listRef.current.classList.contains(styles.hide)) {
+				listRef.current.classList.add(styles.hide);
 
-			setTimeout(() => {
-				setVisible(false);
-				if (listRef.current) {
-					listRef.current.classList.remove(style.hide);
-				}
-			}, ANIMATION_TIME);
-		}
-	};
+				setTimeout(() => {
+					toggleVisibility();
+					if (listRef.current) {
+						listRef.current.classList.remove(styles.hide);
+					}
+				}, ANIMATION_TIME);
+			}
+		},
+		[toggleVisibility]
+	);
 
 	const onSelect = (selected: string) => {
 		if (onChange) {
@@ -59,27 +63,23 @@ const DropdownMenu: FC<DropdownMenuProps> = (props) => {
 
 	useEffect(() => {
 		const checkIfClickedOutside = (e: MouseEvent) => {
-			if (visible && ref.current && !ref.current.contains(e.target as Node)) {
-				setListVisibility(false);
-			}
+			if (isVisible && ref.current && !ref.current.contains(e.target as Node)) setListVisibility(false);
 		};
 
 		document.addEventListener('mouseup', checkIfClickedOutside);
 
-		return () => {
-			// Clean up the event listener
-			document.removeEventListener('mouseup', checkIfClickedOutside);
-		};
-	}, [visible]);
+		// Clean up the event listener
+		return () => document.removeEventListener('mouseup', checkIfClickedOutside);
+	}, [setListVisibility, isVisible]);
 
 	return (
-		<div className={`${style.container} ${className}`} ref={ref}>
-			<div className={style.selector} onClick={() => setListVisibility(!visible)}>
+		<div className={`${styles.container} ${className}`} ref={ref}>
+			<div className={styles.selector} onClick={() => setListVisibility(!isVisible)}>
 				<span>{getLabelFromValue()}</span>
 				<img src={arrowIcon} alt="" />
 			</div>
-			{visible && (
-				<div className={style.list} ref={listRef}>
+			{isVisible && (
+				<div className={styles.list} ref={listRef}>
 					{children &&
 						children.map((child) => {
 							return <DropdownMenuItem key={child.props.value} value={child.props.value} label={child.props.label} selectCB={onSelect} />;

@@ -1,15 +1,15 @@
 /* eslint-disable jsx-a11y/interactive-supports-focus */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import { FC } from 'react';
-
 import maximizeIcon from '../../../../assets/ui-icons/titlebar-win/square-regular.svg';
 import minimizeIcon from '../../../../assets/ui-icons/titlebar-win/minus-solid.svg';
 import closeIcon from '../../../../assets/ui-icons/titlebar-win/x-solid.svg';
 import UpdateButton from './UpdateButton/UpdateButton';
 
-import style from './Titlebar.module.scss';
+import styles from './Titlebar.module.scss';
 
-const Titlebar: FC = () => {
+const Titlebar = (): JSX.Element => {
+	if (window.process.platform === 'darwin') return <div id="macos-titlebar" />;
+
 	const minimize = () => {
 		window.api?.minimize();
 	};
@@ -23,16 +23,16 @@ const Titlebar: FC = () => {
 	};
 
 	return (
-		<nav className={style.titlebar}>
+		<nav className={styles.titlebar}>
 			<UpdateButton />
-			<div className={style.buttons}>
-				<div className={style.minimize} role="button" onClick={minimize}>
+			<div className={styles.buttons}>
+				<div className={styles.minimize} role="button" onClick={minimize}>
 					<img src={minimizeIcon} alt="" />
 				</div>
-				<div className={style.maximize} role="button" onClick={maximize}>
+				<div className={styles.maximize} role="button" onClick={maximize}>
 					<img src={maximizeIcon} alt="" />
 				</div>
-				<div className={style.close} role="button" onClick={close}>
+				<div className={styles.close} role="button" onClick={close}>
 					<img src={closeIcon} alt="" />
 				</div>
 			</div>

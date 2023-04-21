@@ -1,15 +1,14 @@
-import { ChangeEvent, FC, RefObject, useEffect, useRef, useState, useCallback } from 'react';
+/* eslint-disable no-param-reassign */
+import { ChangeEvent, RefObject, useEffect, useRef, useState, useCallback } from 'react';
 
-import audioPlayerStyle from '../AudioPlayer.module.scss';
-import style from './SeekBar.module.scss';
+import audioPlayerStyles from '../AudioPlayer.module.scss';
+import styles from './SeekBar.module.scss';
 
 interface SeekBarProps {
 	audioRef: RefObject<HTMLAudioElement>;
 }
 
-const SeekBar: FC<SeekBarProps> = (props) => {
-	const { audioRef } = props;
-
+const SeekBar = ({ audioRef }: SeekBarProps): JSX.Element => {
 	const progressBarRef = useRef<HTMLDivElement>(null);
 	const durationHoverRef = useRef<HTMLDivElement>(null);
 
@@ -125,19 +124,19 @@ const SeekBar: FC<SeekBarProps> = (props) => {
 
 	return (
 		<>
-			<div className={style['duration-floater']}>
+			<div className={styles['duration-floater']}>
 				{currentTime} / {totalDuration}
 			</div>
 			{audioRef.current?.currentTime ? (
-				<div className={style['duration-hover-floater']} ref={durationHoverRef}>
+				<div className={styles['duration-hover-floater']} ref={durationHoverRef}>
 					{currentTime} / {totalDuration}
 				</div>
 			) : null}
-			<div className={audioPlayerStyle['slider-container']} onMouseEnter={handleProgressBarEnter} onMouseLeave={handleProgressBarLeave}>
-				<div className={style['progress-bar']} ref={progressBarRef} />
-				<div className={style['current-time']}>{currentTime}</div>
-				<input type="range" min="0" max="1000" className={style['seek-slider']} value={seekPosition} onChange={handleSeekTo} />
-				<div className={style['total-duration']}>{totalDuration}</div>
+			<div className={audioPlayerStyles['slider-container']} onMouseEnter={handleProgressBarEnter} onMouseLeave={handleProgressBarLeave}>
+				<div className={styles['progress-bar']} ref={progressBarRef} />
+				<div className={styles['current-time']}>{currentTime}</div>
+				<input type="range" min="0" max="1000" className={styles['seek-slider']} value={seekPosition} onChange={handleSeekTo} />
+				<div className={styles['total-duration']}>{totalDuration}</div>
 			</div>
 		</>
 	);

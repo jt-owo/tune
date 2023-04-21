@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ITrack, RepeatMode } from '../../typings/types';
-import { getNextID } from '../../ui/util';
+import TrackHelper from '../../ui/util/trackHelper';
 
 export type PlayerState = {
 	/** Queue */
@@ -47,7 +47,7 @@ export const playerSlice = createSlice({
 		},
 		addToQueueNext: (state, action: PayloadAction<ITrack>) => {
 			const queue = [...state.queue];
-			const id = getNextID(queue);
+			const id = TrackHelper.getNextID(queue);
 
 			queue.splice(1, 0, {
 				...action.payload,
@@ -58,7 +58,7 @@ export const playerSlice = createSlice({
 		},
 		addToQueueLast: (state, action: PayloadAction<ITrack>) => {
 			const queue = [...state.queue];
-			const id = getNextID(queue);
+			const id = TrackHelper.getNextID(queue);
 
 			queue.push({
 				...action.payload,
@@ -90,10 +90,13 @@ export const playerSlice = createSlice({
 				state.currentTrack = state.queue[state.index];
 				state.isPlaying = true;
 			}
+		},
+		toggleShuffle: (state) => {
+			state.isShuffle = !state.isShuffle;
 		}
 	}
 });
 
-export const { setQueue, updateQueue, setOutputDevice, play, playNext, playPrevious, addToQueueNext, addToQueueLast } = playerSlice.actions;
+export const { setQueue, updateQueue, setOutputDevice, play, playNext, playPrevious, addToQueueNext, addToQueueLast, toggleShuffle } = playerSlice.actions;
 
 export default playerSlice.reducer;

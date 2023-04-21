@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { addAlert } from '../../../state/slices/alertSlice';
 import { IAlbum, IArtist, ITrack } from '../../../typings/types';
@@ -6,9 +6,11 @@ import SpotifyAPI from '../../api/spotify';
 
 import View from '../../components/View/View';
 
-import style from './Browse.module.scss';
+import TextBox from '../../components/TextBox/TextBox';
 
-const Browse: FC = () => {
+import styles from './Browse.module.scss';
+
+const Browse = (): JSX.Element => {
 	const spotifyToken = useAppSelector((state) => state.user.spotifyToken);
 
 	const dispatch = useAppDispatch();
@@ -46,8 +48,9 @@ const Browse: FC = () => {
 
 	return (
 		<View title="Browse" id="browse">
-			<div className={style.content}> </div>
-			<input type="text" className={style['text-input-3']} value={query} onChange={(e) => setQuery(e.currentTarget.value)} onKeyDown={handleEnterKey} />
+			<div className={styles.content}>
+				<TextBox size="large" value={query} onChange={(e) => setQuery(e.currentTarget.value)} onKeyDown={handleEnterKey} />
+			</div>
 		</View>
 	);
 };

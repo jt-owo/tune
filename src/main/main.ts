@@ -1,5 +1,5 @@
 /* eslint @typescript-eslint/no-var-requires: off, global-require: off, class-methods-use-this: off, no-new: off */
-import { app, ipcMain, protocol } from 'electron';
+import { app, components, ipcMain, protocol } from 'electron';
 import dotenv from 'dotenv';
 import Window from './window/window';
 import TuneLibrary from './library';
@@ -45,7 +45,9 @@ class Main {
 	private discord?: DiscordClient;
 
 	constructor() {
-		app.on('ready', () => {
+		app.on('ready', async () => {
+			await components.whenReady();
+			console.log('components ready:', components.status());
 			// Load contents from .env file into process.env.
 			dotenv.config();
 			this.onReady();

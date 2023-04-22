@@ -95,6 +95,7 @@ const Settings = (): JSX.Element => {
 					</TabItem>
 					<TabItem label="About">
 						<p>tune. 0.1.0</p>
+						<a href="https://bitmovin.com/demos/drm">DRM Module Test</a>
 					</TabItem>
 				</TabControl>
 			</div>

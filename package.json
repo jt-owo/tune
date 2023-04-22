@@ -100,7 +100,7 @@
 		"css-minimizer-webpack-plugin": "^4.2.2",
 		"detect-port": "^1.5.1",
 		"dotenv": "^16.0.3",
-		"electron": "^23.0.0",
+		"electron": "github:castlabs/electron-releases#v24.1.2+wvcus",
 		"electron-builder": "^23.6.0",
 		"electron-devtools-installer": "^3.2.0",
 		"electronmon": "^2.0.2",

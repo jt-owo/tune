@@ -150,6 +150,9 @@
 		"appId": "net.jtowo.tune",
 		"asar": true,
 		"asarUnpack": "**\\*.{node,dll}",
+		"electronDownload": {
+			"mirror": "https://github.com/castlabs/electron-releases/releases/download/v"
+		},
 		"files": [
 			"dist",
 			"node_modules",

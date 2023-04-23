@@ -21,6 +21,9 @@ contextBridge.exposeInMainWorld('api', {
 		},
 		openURL(url: string) {
 			ipcRenderer.invoke(Channels.OPEN_URL, url);
+		},
+		setTrack(name: string, artists: string, album: string) {
+			ipcRenderer.invoke(Channels.SET_TRACK, [name, artists, album]);
 		}
 	},
 	config: {

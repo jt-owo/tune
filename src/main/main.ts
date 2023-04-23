@@ -47,9 +47,8 @@ class Main {
 	constructor() {
 		app.on('ready', async () => {
 			await components.whenReady();
+			// eslint-disable-next-line no-console
 			console.log('components ready:', components.status());
-			// Load contents from .env file into process.env.
-			dotenv.config();
 			this.onReady();
 		});
 
@@ -102,9 +101,24 @@ class Main {
 
 			if (Json.validate(value)) this.configFile.set(key, JSON.parse(value));
 		});
+
+		ipcMain.handle(Channels.SET_TRACK, (_event, args) => {
+			const name = args[0];
+			const artists = args[1];
+			const album = args[2];
+
+			this.discord?.setTrack({
+				name,
+				artists,
+				album
+			});
+		});
 	}
 
 	private onReady() {
+		// Load contents from .env file into process.env.
+		dotenv.config();
+
 		this.database = new TuneLibrary(app.getPath('userData'));
 		this.configFile = new DynamicStore('userConfig', USER_CONFIG_DEFAULTS);
 		this.mainWindow = new Window(this.configFile);

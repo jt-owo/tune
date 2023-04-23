@@ -14,6 +14,9 @@ interface NowPlayingProps {
 const NowPlaying = ({ track, onPlay, onPreviousTrack, onNextTrack }: NowPlayingProps): JSX.Element => {
 	const { name, artists, image, isLoaded } = Format.getTrackFormatted(track);
 
+	// Set track so the main process knows what track is currently playing.
+	window.api?.system.setTrack(name, artists, name);
+
 	useMediaSession({
 		title: name,
 		artist: artists,

@@ -1,27 +1,27 @@
 import { useEffect } from 'react';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
-import AppRoutes, { AppRoutesParams } from './routes';
-import { useAppDispatch } from './hooks';
-import { setOutputDevice } from '../state/slices/playerSlice';
-import { loadPlaylists, loadSpotifyPlaylists } from '../state/slices/playlistsSlice';
-import { updateUser, updateSpotifyToken } from '../state/slices/userSlice';
+import AppRoutes, { AppRoutesParams } from '../routes';
+import { useAppDispatch } from '../hooks';
+import { setOutputDevice } from '../../state/slices/playerSlice';
+import { loadPlaylists, loadSpotifyPlaylists } from '../../state/slices/playlistsSlice';
+import { updateUser, updateSpotifyToken } from '../../state/slices/userSlice';
 
-import SpotifyAPI from './api/spotify';
+import SpotifyAPI from '../api/spotify';
 
-import Titlebar from './components/Titlebar/Titlebar';
-import Home from './views/Home/Home';
-import Library from './views/Library/Library';
-import Browse from './views/Browse/Browse';
-import Playlist from './views/Playlist/Playlist';
-import Settings from './views/Settings/Settings';
-import Navigation from './components/Navigation/Navigation';
-import Queue from './components/Queue/Queue';
-import AudioPlayer from './components/AudioPlayer/AudioPlayer';
-import AlertContainer from './components/Alert/Alert';
+import Titlebar from '../components/Titlebar/Titlebar';
+import Home from '../views/Home/Home';
+import Library from '../views/Library/Library';
+import Browse from '../views/Browse/Browse';
+import Playlist from '../views/Playlist/Playlist';
+import Settings from '../views/Settings/Settings';
+import Navigation from '../components/Navigation/Navigation';
+import Queue from '../components/Queue/Queue';
+import AudioPlayer from '../components/AudioPlayer/AudioPlayer';
+import AlertContainer from '../components/Alert/Alert';
 
-import './Application.scss';
+import './App.scss';
 
-const Application = (): JSX.Element => {
+const App = (): JSX.Element => {
 	const dispatch = useAppDispatch();
 
 	// Load local playlists.
@@ -68,4 +68,4 @@ const Application = (): JSX.Element => {
 	);
 };
 
-export default Application;
+export default App;

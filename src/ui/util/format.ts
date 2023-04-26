@@ -18,28 +18,25 @@ class Format {
 	 * Formats duration data for display.
 	 * @param duration Duration of the track in seconds.
 	 * @param long If the song should be returned as a long form string like 'xx minutes, xx seconds'.
-	 * @returns A string in this format: MM:SS
+	 * @returns A string in this format: MM:SS. If {@link long} is true then the format will be: 'xx minutes, xx seconds'.
 	 */
-	static getDuration = (duration?: number, long?: boolean): string => {
-		if (duration) {
-			if (!long) {
-				const minutes = Math.floor(duration / 60);
-				const seconds = Math.floor(duration - minutes * 60);
+	static getDuration = (duration?: number, long = false): string => {
+		if (!duration) return NaN.toString();
+		if (!long) {
+			const minutes = Math.floor(duration / 60);
+			const seconds = Math.floor(duration - minutes * 60);
 
-				if (seconds < 10) {
-					return `${minutes}:0${seconds}`;
-				}
-				return `${minutes}:${seconds}`;
-			}
-			const hours = Math.floor(duration / 3600);
-			const minutes = Math.floor((duration - hours * 3600) / 60);
-			const seconds = Math.floor(duration - hours * 3600 - minutes * 60);
-
-			if (hours === 0) return `${minutes} minutes${seconds ? `, ${seconds} seconds` : ''}`;
-			if (minutes === 0) return `${seconds} seconds`;
-			return `${hours} hours, ${minutes} minutes${seconds ? `, ${seconds} seconds` : ''}`;
+			if (seconds < 10) return `${minutes}:0${seconds}`;
+			return `${minutes}:${seconds}`;
 		}
-		return NaN.toString();
+
+		const hours = Math.floor(duration / 3600);
+		const minutes = Math.floor((duration - hours * 3600) / 60);
+		const seconds = Math.floor(duration - hours * 3600 - minutes * 60);
+
+		if (hours === 0) return `${minutes} minutes${seconds ? `, ${seconds} seconds` : ''}`;
+		if (minutes === 0) return `${seconds} seconds`;
+		return `${hours} hours, ${minutes} minutes${seconds ? `, ${seconds} seconds` : ''}`;
 	};
 
 	/**

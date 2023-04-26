@@ -39,7 +39,7 @@ const installExtensions = async () => {
 };
 
 /** @const minimum width of the window */
-const MIN_WIDTH = 960;
+const MIN_WIDTH = 1200;
 
 /** @const minimum height of the window */
 const MIN_HEIGHT = 640;

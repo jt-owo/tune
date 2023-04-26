@@ -4,7 +4,7 @@
 	/* Layout */
 	display: flex;
 	align-items: center;
-	padding: 7px 10px;
+	height: 32px;
 	margin: 3px;
 
 	/* Animation */
@@ -32,20 +32,27 @@
 	font-size: 14px;
 }
 
-.context-menu-item > img {
-	/* Layout */
-	height: 16px;
-	margin-right: 5px;
-}
+.context-menu-item {
+	img {
+		/* Layout */
+		height: 16px;
+		margin: 0 5px 0 7px;
 
-.context-menu-item > .lottie {
-	/* Layout */
-	height: 20px;
-	margin: 0;
-	padding: 0;
-}
+		filter: invert(1);
+	}
 
-.context-menu-item.danger:hover {
-	/* Color */
-	background-color: $danger-color;
+	.lottie {
+		/* Layout */
+		height: 20px;
+		padding-right: 8px;
+		margin: 0 4px 0 4px;
+		padding: 0;
+
+		filter: invert(1);
+	}
+
+	&.danger:hover {
+		/* Color */
+		background-color: $danger-color;
+	}
 }

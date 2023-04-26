@@ -34,7 +34,7 @@ const SeekBar = ({ audioRef }: SeekBarProps): JSX.Element => {
 	const updateDurationFloaterPosition = useCallback(() => {
 		if (durationHoverRef.current && audioRef.current) {
 			const width = window.innerWidth;
-			const left = (audioRef.current.currentTime / audioRef.current.duration) * width * 0.98 + 10; // 0.98 + 10 is to keep the floater centered over the drag handle while moving
+			const left = (audioRef.current.currentTime / audioRef.current.duration) * width * 0.99 + 10; // 0.98 + 10 is to keep the floater centered over the drag handle while moving
 			const floaterWidth = durationHoverRef.current.offsetWidth;
 			const clearance = 10; // min distance the floater should stay away from the window borders in pixels
 
@@ -53,6 +53,7 @@ const SeekBar = ({ audioRef }: SeekBarProps): JSX.Element => {
 		if (progressBarRef.current) {
 			progressBarRef.current.style.opacity = '0.3';
 		}
+		updateDurationFloaterPosition();
 		handleDurationOnHover(true);
 	};
 
@@ -111,7 +112,7 @@ const SeekBar = ({ audioRef }: SeekBarProps): JSX.Element => {
 		updateProgressDiv();
 
 		if (interval) clearTimeout(interval);
-		interval = setInterval(seekUpdate, 500);
+		interval = setInterval(seekUpdate, 200);
 
 		return () => {
 			if (interval) clearInterval(interval);

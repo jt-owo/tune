@@ -16,18 +16,28 @@ class Format {
 
 	/**
 	 * Formats duration data for display.
-	 * @param duration Duration of the track.
+	 * @param duration Duration of the track in seconds.
+	 * @param long If the song should be returned as a long form string like 'xx minutes, xx seconds'.
 	 * @returns A string in this format: MM:SS
 	 */
-	private static getDuration = (duration?: number): string => {
+	static getDuration = (duration?: number, long?: boolean): string => {
 		if (duration) {
-			const minutes = Math.floor(duration / 60);
-			const seconds = Math.floor(duration - minutes * 60);
+			if (!long) {
+				const minutes = Math.floor(duration / 60);
+				const seconds = Math.floor(duration - minutes * 60);
 
-			if (seconds < 10) {
-				return `${minutes}:0${seconds}`;
+				if (seconds < 10) {
+					return `${minutes}:0${seconds}`;
+				}
+				return `${minutes}:${seconds}`;
 			}
-			return `${minutes}:${seconds}`;
+			const hours = Math.floor(duration / 3600);
+			const minutes = Math.floor((duration - hours * 3600) / 60);
+			const seconds = Math.floor(duration - hours * 3600 - minutes * 60);
+
+			if (hours === 0) return `${minutes} minutes${seconds ? `, ${seconds} seconds` : ''}`;
+			if (minutes === 0) return `${seconds} seconds`;
+			return `${hours} hours, ${minutes} minutes${seconds ? `, ${seconds} seconds` : ''}`;
 		}
 		return NaN.toString();
 	};
@@ -58,6 +68,7 @@ class Format {
 		return {
 			name: track.name!,
 			artists: Format.getArtists(track.album?.artists),
+			album: track.album?.name ?? '',
 			duration: Format.getDuration(track.duration),
 			image: Format.getImage(track.album?.images),
 			isLoaded: track.album !== undefined

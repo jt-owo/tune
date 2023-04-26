@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, RefObject } from 'react';
 import useToggle from './useToggle';
 
-const useContextMenu = () => {
+const useContextMenu = (target?: RefObject<HTMLElement>) => {
 	const [visibility, toggle, hide] = useToggle();
 	const [position, setPosition] = useState({
 		x: 0,
@@ -9,12 +9,20 @@ const useContextMenu = () => {
 	});
 
 	useEffect(() => {
-		const handleClick = () => hide();
-		document.addEventListener('click', handleClick);
+		const handleClick = (e: MouseEvent) => {
+			if (target) {
+				if (target.current && !target.current.contains(e.target as Node)) hide();
+			} else {
+				hide();
+			}
+		};
+		document.addEventListener('click', (e) => {
+			handleClick(e);
+		});
 		return () => {
 			document.removeEventListener('click', handleClick);
 		};
-	}, [hide]);
+	}, [hide, target]);
 
 	return [visibility, toggle, position, setPosition] as const;
 };

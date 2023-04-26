@@ -88,7 +88,7 @@ const Navigation = (): JSX.Element => {
 					{addNew && <TextBox placeholder="Name..." className={styles['new-playlist-name-field']} autoFocus onBlur={() => toggleAddNew()} onChange={(e) => setNewPlaylistName(e.target.value)} onKeyDown={handleKeyDown} />}
 					{pinnedPlaylists?.map((playlist) => {
 						return (
-							<NavLink to={`${AppRoutes.Playlist}/${playlist.id}/${playlist.service}`} title={playlist.name} key={playlist.id} className={`${styles['playlist-btn']} ${styles['btn-hover-animation']} ${location.pathname === `${AppRoutes.Playlist}/${playlist.id}` ? styles.active : ''}`} draggable="false">
+							<NavLink to={`${AppRoutes.Playlist}/${playlist.id}/${playlist.service}`} title={playlist.name} key={playlist.id} className={`${styles['playlist-btn']} ${styles['btn-hover-animation']} ${location.pathname === `${AppRoutes.Playlist}/${playlist.id}/${playlist.service}` ? styles.active : ''}`} draggable="false">
 								<div className={styles['playlist-navitem']}>
 									<img src={defaultAlbumCover} alt="" className={styles['playlist-navitem-img']} />
 									<div className={styles['playlist-navitem-name']}>{playlist.name}</div>

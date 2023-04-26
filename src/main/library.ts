@@ -1,7 +1,6 @@
 import fs from 'fs';
 import path from 'path';
 import Json from '../util/jsonHelper';
-import { IPlaylist } from '../typings/types';
 
 export type DatabaseValue = IPlaylist[] | string | number | undefined;
 export type DatabaseKey = 'playlists' | 'version' | 'libPath';

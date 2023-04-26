@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { addAlert } from '../../../state/slices/alertSlice';
-import { IAlbum, IArtist, ITrack } from '../../../typings/types';
 import SpotifyAPI from '../../api/spotify';
 
 import View from '../../components/View/View';

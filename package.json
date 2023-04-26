@@ -57,7 +57,10 @@
 		],
 		"transform": {
 			"\\.(ts|tsx|js|jsx)$": "ts-jest"
-		}
+		},
+		"setupFilesAfterEnv": [
+			"<rootDir>/src/ui/setupTests.ts"
+		]
 	},
 	"dependencies": {
 		"@dnd-kit/core": "^6.0.8",

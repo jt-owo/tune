@@ -1,15 +1,15 @@
-export interface Image {
+interface Image {
 	height?: number;
 	width?: number;
 	url: string;
 }
 
-export interface IUser {
+interface IUser {
 	name: string;
 	avatar?: Image;
 }
 
-export interface IPlaylist {
+interface IPlaylist {
 	id: string;
 	name: string;
 	description: string;
@@ -27,12 +27,12 @@ export interface IPlaylist {
 	tracksHref?: string;
 }
 
-export interface IArtist {
+interface IArtist {
 	name: string;
 	images: Image[];
 }
 
-export interface IAlbum {
+interface IAlbum {
 	name: string;
 	artists: IArtist[];
 	images: Image[];
@@ -40,7 +40,7 @@ export interface IAlbum {
 	totalTracks: number;
 }
 
-export interface ITrack {
+interface ITrack {
 	/**
 	 * Unique identifier of the track.
 	 *
@@ -67,7 +67,7 @@ export interface ITrack {
 	service: StreamingService;
 }
 
-export interface IPlaybackState {
+interface IPlaybackState {
 	track?: ITrack;
 	isPlaying: boolean;
 	isShuffle: boolean;
@@ -76,19 +76,19 @@ export interface IPlaybackState {
 	progress: number;
 }
 
-export type RepeatMode = 'off' | 'on' | 'all';
+type RepeatMode = 'off' | 'on' | 'all';
 
-export type StreamingService = 'local' | 'spotify';
+type StreamingService = 'local' | 'spotify';
 
-export type AlertType = 'info' | 'error' | 'warn' | 'success';
+type AlertType = 'info' | 'error' | 'warn' | 'success';
 
-export interface IAlert {
+interface IAlert {
 	id?: string;
 	message: string;
 	type: AlertType;
 }
 
-export interface IFormattedTrack {
+interface IFormattedTrack {
 	/**
 	 * Title of the track.
 	 */

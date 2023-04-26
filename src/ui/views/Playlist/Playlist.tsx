@@ -14,7 +14,6 @@ import useContextMenu from '../../hooks/useContextMenu';
 import useToggle from '../../hooks/useToggle';
 import SpotifyAPI from '../../api/spotify';
 import AppRoutes from '../../routes';
-import { IPlaylist, ITrack } from '../../../typings/types';
 import Services from '../../util/services';
 import TrackHelper from '../../util/trackHelper';
 

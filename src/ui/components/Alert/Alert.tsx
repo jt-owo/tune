@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import { useCallback } from 'react';
-import { AlertType } from '../../../typings/types';
 import { removeAlert } from '../../../state/slices/alertSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import useFadeOut from '../../hooks/useFadeOut';

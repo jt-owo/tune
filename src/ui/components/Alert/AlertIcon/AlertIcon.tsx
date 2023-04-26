@@ -1,5 +1,4 @@
 import Lottie from 'lottie-react';
-import { AlertType } from '../../../../typings/types';
 
 import infoIcon from '../../../../../assets/animations/alertCircle.json';
 import successIcon from '../../../../../assets/animations/checkmark.json';

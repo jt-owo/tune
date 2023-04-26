@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import { useRef } from 'react';
-import { IPlaylist } from '../../../../typings/types';
 import RenameDialog from '../../../components/RenameDialog/RenameDialog';
 import ToolTip from '../../../components/ToolTip/ToolTip';
 import ContextMenu from '../../../components/ContextMenu/ContextMenu';

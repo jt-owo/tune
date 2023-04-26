@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { IArtist } from '../../../typings/types';
 import { useAppSelector } from '../../hooks';
 import SpotifyAPI from '../../api/spotify';
 

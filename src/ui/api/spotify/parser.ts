@@ -1,4 +1,3 @@
-import { IArtist, IAlbum, ITrack, IUser, IPlaybackState, IPlaylist } from '../../../typings/types';
 import Guid from '../../../util/guid';
 
 /**

@@ -99,6 +99,10 @@ export interface IFormattedTrack {
 	 */
 	artists: string;
 	/**
+	 * Name of the track's album.
+	 */
+	album: string;
+	/**
 	 * Duration of the track in this format: MM:SS
 	 */
 	duration: string;

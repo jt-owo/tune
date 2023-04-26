@@ -137,6 +137,15 @@
 	}
 }
 
+@keyframes playlistHeaderEnter {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
 /* Basic Animations */
 
 .btn-hover-animation {

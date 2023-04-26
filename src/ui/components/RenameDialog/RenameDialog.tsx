@@ -9,10 +9,11 @@ interface RenameDialogProps {
 	cb: (name: string) => void;
 	onClose: () => void;
 	visible: boolean;
+	position: { x: number; y: number };
 	value?: string;
 }
 
-const RenameDialog = ({ value, visible, cb, onClose }: RenameDialogProps): JSX.Element | null => {
+const RenameDialog = ({ value, visible, position, cb, onClose }: RenameDialogProps): JSX.Element | null => {
 	const [isFading, toggleFading] = useToggle();
 
 	const ref = useRef<HTMLDivElement>(null);
@@ -44,16 +45,16 @@ const RenameDialog = ({ value, visible, cb, onClose }: RenameDialogProps): JSX.E
 			if (visible && ref.current && !ref.current.contains(e.target as Node)) handleCancel();
 		};
 
-		document.addEventListener('mouseup', checkIfClickedOutside);
+		document.addEventListener('mousedown', checkIfClickedOutside);
 
 		// Clean up the event listener
-		return () => document.removeEventListener('mouseup', checkIfClickedOutside);
+		return () => document.removeEventListener('mousedown', checkIfClickedOutside);
 	}, [visible, handleCancel, onClose]);
 
 	if (!visible) return null;
 
 	return (
-		<div className={`${styles.dialog} ${isFading ? styles.fading : styles.visible}`} ref={ref}>
+		<div className={`${styles.dialog} ${isFading ? styles.fading : styles.visible}`} style={{ top: position.y, left: position.x }} ref={ref}>
 			<form onSubmit={handleSubmit}>
 				<TextBox size="large" defaultValue={value} />
 				<div className={styles['button-container']}>

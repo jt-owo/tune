@@ -35,7 +35,6 @@ export const playlistsSlice = createSlice({
 		},
 		deletePlaylist: (state, action: PayloadAction<string>) => {
 			state.local = state.local.filter((playlist) => !(playlist.id === action.payload));
-
 			window.api?.db.set('playlists', JSON.stringify([...state.local]));
 		},
 		updatePlaylist: (state, action: PayloadAction<IPlaylist>) => {

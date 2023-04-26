@@ -110,10 +110,14 @@ export const playerSlice = createSlice({
 		updateOutputDevice: (state, action: PayloadAction<string>) => {
 			state.playback.outputDeviceId = action.payload;
 			window.api?.config.set('outputDeviceId', JSON.stringify(action.payload));
+		},
+		updateVolume: (state, action: PayloadAction<number>) => {
+			state.playback.volume = action.payload;
+			window.api?.config.set('volume', action.payload.toString());
 		}
 	}
 });
 
-export const { setQueue, updateQueue, addToQueueNext, addToQueueLast, togglePlay, playNext, playPrevious, toggleShuffle, updateOutputDevice } = playerSlice.actions;
+export const { setQueue, updateQueue, addToQueueNext, addToQueueLast, togglePlay, playNext, playPrevious, toggleShuffle, updateOutputDevice, updateVolume } = playerSlice.actions;
 
 export default playerSlice.reducer;

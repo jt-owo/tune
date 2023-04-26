@@ -1,10 +1,12 @@
 /* eslint-disable no-param-reassign */
-import { ChangeEvent, RefObject, useCallback, useEffect, useRef, useState, WheelEvent } from 'react';
+import { ChangeEvent, RefObject, useCallback, useEffect, useRef, WheelEvent } from 'react';
 import Lottie, { LottieRefCurrentProps } from 'lottie-react';
-
-import styles from './VolumeSlider.module.scss';
+import { useAppDispatch, useAppSelector } from '../../../hooks';
+import { updateVolume } from '../../../../state/slices/playerSlice';
 
 import volumeIcon from '../../../../../assets/animations/volume.json';
+
+import styles from './VolumeSlider.module.scss';
 
 interface VolumeSliderProps {
 	audioRef: RefObject<HTMLAudioElement>;
@@ -29,31 +31,16 @@ let lottieInitialFrame: number;
 const VolumeSlider = ({ audioRef }: VolumeSliderProps): JSX.Element => {
 	const volumeSliderProgressRef = useRef<HTMLDivElement>(null);
 	const lottieRef = useRef<LottieRefCurrentProps>(null);
-	const [volume, setVolume] = useState(parseInt(window.api?.config.get('volume').toString() ?? '25', 10));
+
+	const dispatch = useAppDispatch();
+
+	const volume = useAppSelector((state) => state.player.playback.volume);
 
 	const updateVolumeSliderProgress = useCallback(() => {
 		if (volumeSliderProgressRef.current) {
 			volumeSliderProgressRef.current.style.right = `${100 - volume * 1.0}%`;
 		}
 	}, [volumeSliderProgressRef, volume]);
-
-	const setInitialVolumeSliderState = () => {
-		const initialVolume = parseInt(window.api?.config.get('volume').toString() ?? '25', 10);
-
-		if (initialVolume <= 1) {
-			volumeSliderState = VOLUME_SLIDER_STATES.MUTE;
-			lottieInitialFrame = LOTTIE_VOLUME_FRAMES.MUTE;
-		} else if (initialVolume < 35) {
-			volumeSliderState = VOLUME_SLIDER_STATES.MIN_VOLUME;
-			lottieInitialFrame = LOTTIE_VOLUME_FRAMES.MIN_VOLUME;
-		} else if (initialVolume < 70) {
-			volumeSliderState = VOLUME_SLIDER_STATES.MID_VOLUME;
-			lottieInitialFrame = LOTTIE_VOLUME_FRAMES.MID_VOLUME;
-		} else {
-			volumeSliderState = VOLUME_SLIDER_STATES.MAX_VOLUME;
-			lottieInitialFrame = LOTTIE_VOLUME_FRAMES.MAX_VOLUME;
-		}
-	};
 
 	const handleAnimation = useCallback(() => {
 		// Handle animation of lottie icon - sry for this mess
@@ -81,26 +68,42 @@ const VolumeSlider = ({ audioRef }: VolumeSliderProps): JSX.Element => {
 	}, [lottieRef, volume]);
 
 	const handleScroll = (e: WheelEvent<HTMLInputElement>) => {
-		if (e.deltaY < 0 && volume < 100) setVolume((current) => current + 1);
-		else if (e.deltaY > 0 && volume > 0) setVolume((current) => current - 1);
+		if (e.deltaY < 0 && volume < 100) dispatch(updateVolume(volume + 1));
+		else if (e.deltaY > 0 && volume > 0) dispatch(updateVolume(volume - 1));
 	};
 
 	const handleVolumeChange = (e: ChangeEvent<HTMLInputElement>) => {
-		const newVolume = parseInt(e.target.value, 10);
-		setVolume(newVolume);
-		window.api?.config.set('volume', JSON.stringify(newVolume.toString()));
+		const value = parseInt(e.target.value, 10);
+		dispatch(updateVolume(value));
 	};
 
 	useEffect(() => {
-		if (audioRef.current) {
-			audioRef.current.volume = volume / 100;
-		}
+		if (audioRef.current) audioRef.current.volume = volume / 100;
 	}, [audioRef, volume]);
 
 	// Set initial volume slider state and lottie icon frame on component mount
 	useEffect(() => {
+		const setInitialVolumeSliderState = () => {
+			const initialVolume = volume;
+
+			if (initialVolume <= 1) {
+				volumeSliderState = VOLUME_SLIDER_STATES.MUTE;
+				lottieInitialFrame = LOTTIE_VOLUME_FRAMES.MUTE;
+			} else if (initialVolume < 35) {
+				volumeSliderState = VOLUME_SLIDER_STATES.MIN_VOLUME;
+				lottieInitialFrame = LOTTIE_VOLUME_FRAMES.MIN_VOLUME;
+			} else if (initialVolume < 70) {
+				volumeSliderState = VOLUME_SLIDER_STATES.MID_VOLUME;
+				lottieInitialFrame = LOTTIE_VOLUME_FRAMES.MID_VOLUME;
+			} else {
+				volumeSliderState = VOLUME_SLIDER_STATES.MAX_VOLUME;
+				lottieInitialFrame = LOTTIE_VOLUME_FRAMES.MAX_VOLUME;
+			}
+		};
+
 		setInitialVolumeSliderState();
 		lottieRef?.current?.goToAndStop(lottieInitialFrame, true);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	// Update volume slider progress and handle animation on volume change

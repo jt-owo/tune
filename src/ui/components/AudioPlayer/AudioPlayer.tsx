@@ -40,20 +40,20 @@ const AudioPlayer = (): JSX.Element => {
 	const onEnded = (_e: SyntheticEvent<HTMLAudioElement>) => handlePlayNext();
 
 	useEffect(() => {
-		if (audioRef.current && playback.outputDeviceId) {
-			audioRef.current.setSinkId(playback.outputDeviceId);
-		}
+		if (audioRef.current && playback.outputDeviceId) audioRef.current.setSinkId(playback.outputDeviceId);
 	}, [audioRef, playback.outputDeviceId]);
 
 	useEffect(() => {
-		if (!audioRef.current) return;
+		if (!audioRef.current || !playback.track) return;
 
 		if (playback.isPlaying) {
-			audioRef.current.play().catch(() => {});
+			// eslint-disable-next-line no-console
+			audioRef.current.play().catch(console.error);
+			audioRef.current.volume = playback.volume / 100;
 		} else {
 			audioRef.current.pause();
 		}
-	}, [audioRef, playback.isPlaying]);
+	}, [audioRef, playback.isPlaying, playback.track, playback.volume]);
 
 	// Adds keyboard shortcuts for play/pause. Maybe more in the future?
 	useEffect(() => {

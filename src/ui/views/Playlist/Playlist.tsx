@@ -87,6 +87,8 @@ const Playlist = memo(() => {
 
 	const playlistContainerRef = useRef<HTMLDivElement>(null);
 
+	const duration = Math.round(tracks.reduce((acc, track) => acc + (track.duration ?? 0), 0));
+
 	const handleDragStart = (event: DragStartEvent) => {
 		const { active } = event;
 		setIsDraggingId(active.id);
@@ -238,7 +240,7 @@ const Playlist = memo(() => {
 	return (
 		<div className={styles['playlist-container']} onScroll={checkScroll} ref={playlistContainerRef}>
 			<Dialog heading="Delete?" description="You are about to delete this playlist. This action cannot be undone!" onClose={hideDialog} visible={isDialogVisible} type="danger" confirmText="Delete" rejectText="Keep" confirmCallback={handleDeletePlaylist} />
-			<PlaylistHeader playlist={playlist} handlePlay={handlePlay} handleAddTracks={handleAddTracks} handleLockPlaylist={handleLockPlaylist} handlePinPlaylist={handlePinPlaylist} handleRename={handleRename} handleToggleRename={handleToggleRename} toggleRename={toggleRename} toggleDialog={toggleDialog} renameVisible={isRenameVisible} shouldFloat={headerFloat} />
+			<PlaylistHeader playlist={playlist} duration={duration} handlePlay={handlePlay} handleAddTracks={handleAddTracks} handleLockPlaylist={handleLockPlaylist} handlePinPlaylist={handlePinPlaylist} handleRename={handleRename} handleToggleRename={handleToggleRename} toggleRename={toggleRename} toggleDialog={toggleDialog} renameVisible={isRenameVisible} shouldFloat={headerFloat} />
 			<div className={styles.sortbar}>
 				<div className={styles.title}>Title</div>
 				<div className={styles.album}>Album</div>

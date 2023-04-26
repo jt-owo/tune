@@ -20,7 +20,7 @@ class Format {
 	 * @returns A string in this format: MM:SS. If {@link long} is true then the format will be: 'xx minutes, xx seconds'.
 	 */
 	static getDuration = (duration?: number, long = false): string => {
-		if (!duration) return NaN.toString();
+		if (!duration) return '';
 		if (!long) {
 			const minutes = Math.floor(duration / 60);
 			const seconds = Math.floor(duration - minutes * 60);

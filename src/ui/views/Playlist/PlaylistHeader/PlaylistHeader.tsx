@@ -20,6 +20,7 @@ import checkboxIcon from '../../../../../assets/animations/bookmark.json';
 
 interface PlaylistHeaderProps {
 	playlist: IPlaylist;
+	duration: number;
 	handlePlay: () => void;
 	handleAddTracks: () => void;
 	handleRename: (data: string) => void;
@@ -32,7 +33,7 @@ interface PlaylistHeaderProps {
 	shouldFloat: boolean;
 }
 
-const PlaylistHeader = ({ playlist, handlePlay, handleAddTracks, handleRename, toggleRename, toggleDialog, handleToggleRename, handleLockPlaylist, handlePinPlaylist, renameVisible, shouldFloat }: PlaylistHeaderProps) => {
+const PlaylistHeader = ({ playlist, duration, handlePlay, handleAddTracks, handleRename, toggleRename, toggleDialog, handleToggleRename, handleLockPlaylist, handlePinPlaylist, renameVisible, shouldFloat }: PlaylistHeaderProps) => {
 	const playlistMenuRef = useRef<HTMLDivElement>(null);
 
 	const [isPlaylistOptionsVisible, togglePlaylistOptions, playlistOptionsPosition, setPlaylistOptionsPosition] = useContextMenu(playlistMenuRef);
@@ -48,7 +49,7 @@ const PlaylistHeader = ({ playlist, handlePlay, handleAddTracks, handleRename, t
 							<div className={styles['playlist-heading-title']} onClick={handleToggleRename}>
 								{playlist?.name}
 							</div>
-							<div className={styles['playlist-heading-duration']}>{/** TODO: Add plylist duration once implemented  */}</div>
+							<div className={styles['playlist-heading-duration']}>{Format.getDuration(duration, true)}</div>
 						</div>
 						<div className={styles['playlist-controls']}>
 							{playlist.service === 'local' && (
@@ -91,7 +92,7 @@ const PlaylistHeader = ({ playlist, handlePlay, handleAddTracks, handleRename, t
 							{playlist?.name}
 						</div>
 						<div className={styles['playlist-heading-description']}>{playlist.description || 'This is a template description'}</div>
-						<div className={styles['playlist-heading-duration']}>{/** TODO: Add plylist duration once implemented  */}</div>
+						<div className={styles['playlist-heading-duration']}>{Format.getDuration(duration, true)}</div>
 						<div className={styles['playlist-controls']}>
 							{playlist.service === 'local' && (
 								<>

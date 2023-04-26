@@ -67,15 +67,6 @@ interface ITrack {
 	service: StreamingService;
 }
 
-interface IPlaybackState {
-	track?: ITrack;
-	isPlaying: boolean;
-	isShuffle: boolean;
-	repeatMode: RepeatMode;
-	volume: number;
-	progress: number;
-}
-
 type RepeatMode = 'off' | 'on' | 'all';
 
 type StreamingService = 'local' | 'spotify';
@@ -115,4 +106,32 @@ interface IFormattedTrack {
 	 * Only neccessary for local audio files.
 	 */
 	isLoaded: boolean;
+}
+
+interface IQueueState {
+	/** Current list of tracks in the queue. */
+	tracks: ITrack[];
+	/** Recently played tracks. */
+	history: ITrack[];
+	/**
+	 * Current Track index.
+	 *
+	 * The index represents the current track from {@link tracks}.
+	 * (e.g. if the index is 0 the first track of the array will be played)
+	 */
+	index: number;
+}
+
+interface IPlaybackState {
+	/** The track that's currently playing. */
+	track?: ITrack;
+	/** Progress of the track in ms. */
+	progress: number;
+	/** Player sound volume */
+	volume: number;
+	isPlaying: boolean;
+	isShuffle: boolean;
+	repeatMode: RepeatMode;
+	/** Selected Output Device, if none is selected the default audio device is used. */
+	outputDeviceId?: string;
 }

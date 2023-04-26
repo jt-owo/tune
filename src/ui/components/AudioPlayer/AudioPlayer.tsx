@@ -1,5 +1,5 @@
 import { SyntheticEvent, useEffect, useRef, useCallback } from 'react';
-import { play, playNext, playPrevious } from '../../../state/slices/playerSlice';
+import { togglePlay, playNext, playPrevious } from '../../../state/slices/playerSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import Format from '../../util/format';
 
@@ -18,17 +18,19 @@ import skipForwardBtn from '../../../../assets/animations/skipForward.json';
 
 import styles from './AudioPlayer.module.scss';
 
-const AudioPlayer = (): JSX.Element => {
-	const audioRef = useRef<HTMLAudioElement & { setSinkId(deviceId: string): void; volume: number }>(null);
+interface TuneHTMLAudioElement extends HTMLAudioElement {
+	setSinkId(deviceId: string): void;
+	volume: number;
+}
 
-	const currentTrack = useAppSelector((state) => state.player.currentTrack);
-	const isPlaying = useAppSelector((state) => state.player.isPlaying);
-	const isShuffle = useAppSelector((state) => state.player.isShuffle);
-	const outputDeviceId = useAppSelector((state) => state.player.outputDeviceId);
+const AudioPlayer = (): JSX.Element => {
+	const audioRef = useRef<TuneHTMLAudioElement>(null);
+
+	const playback = useAppSelector((state) => state.player.playback);
 
 	const dispatch = useAppDispatch();
 
-	const handlePlayPause = useCallback(() => dispatch(play()), [dispatch]);
+	const handlePlayPause = useCallback(() => dispatch(togglePlay()), [dispatch]);
 
 	const handlePlayNext = () => dispatch(playNext());
 
@@ -38,20 +40,20 @@ const AudioPlayer = (): JSX.Element => {
 	const onEnded = (_e: SyntheticEvent<HTMLAudioElement>) => handlePlayNext();
 
 	useEffect(() => {
-		if (audioRef.current && outputDeviceId) {
-			audioRef.current.setSinkId(outputDeviceId);
+		if (audioRef.current && playback.outputDeviceId) {
+			audioRef.current.setSinkId(playback.outputDeviceId);
 		}
-	}, [audioRef, outputDeviceId]);
+	}, [audioRef, playback.outputDeviceId]);
 
 	useEffect(() => {
 		if (!audioRef.current) return;
 
-		if (isPlaying) {
+		if (playback.isPlaying) {
 			audioRef.current.play().catch(() => {});
 		} else {
 			audioRef.current.pause();
 		}
-	}, [audioRef, isPlaying]);
+	}, [audioRef, playback.isPlaying]);
 
 	// Adds keyboard shortcuts for play/pause. Maybe more in the future?
 	useEffect(() => {
@@ -66,9 +68,7 @@ const AudioPlayer = (): JSX.Element => {
 			}
 		});
 
-		return () => {
-			document.removeEventListener('keydown', () => {});
-		};
+		return () => document.removeEventListener('keydown', () => {});
 	}, [handlePlayPause]);
 
 	return (
@@ -76,16 +76,16 @@ const AudioPlayer = (): JSX.Element => {
 			<div className={styles['player-controls-container']}>
 				<ServiceSelector />
 				<div className={styles['player-control-divider']} />
-				{currentTrack && <NowPlaying track={currentTrack} onPlay={handlePlayPause} onNextTrack={handlePlayNext} onPreviousTrack={handlePlayPrev} />}
+				{playback.track && <NowPlaying track={playback.track} onPlay={handlePlayPause} onNextTrack={handlePlayNext} onPreviousTrack={handlePlayPrev} />}
 				<VolumeSlider audioRef={audioRef} />
 				<SeekBar audioRef={audioRef} />
 				<AudioControlButton id="skip-back-btn" onClick={handlePlayPrev} animationData={skipBackBtn} />
-				<PlayPauseButton isPlaying={isPlaying} onClick={handlePlayPause} animationData={playBtn} />
+				<PlayPauseButton isPlaying={playback.isPlaying} onClick={handlePlayPause} animationData={playBtn} />
 				<AudioControlButton id="skip-forward-btn" onClick={handlePlayNext} animationData={skipForwardBtn} />
-				<ShuffleButton on={isShuffle} />
+				<ShuffleButton on={playback.isShuffle} />
 				<RepeatButton />
 			</div>
-			{currentTrack?.service === 'local' && currentTrack.filePath && <audio src={Format.getFilePath(currentTrack.filePath)} ref={audioRef} onEnded={onEnded} crossOrigin="anonymous" />}
+			{playback.track?.service === 'local' && playback.track.filePath && <audio src={Format.getFilePath(playback.track.filePath)} ref={audioRef} onEnded={onEnded} crossOrigin="anonymous" />}
 		</div>
 	);
 };

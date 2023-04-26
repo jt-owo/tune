@@ -14,7 +14,6 @@ import styles from './Queue.module.scss';
 
 const Queue = (): JSX.Element => {
 	const queue = useAppSelector((state) => state.player.queue);
-	const queueIndex = useAppSelector((state) => state.player.index);
 	const dispatch = useAppDispatch();
 
 	const [tracks, setTracks] = useState<ITrack[]>([]);
@@ -53,13 +52,13 @@ const Queue = (): JSX.Element => {
 	};
 
 	const handleTrackRemove = (index: number) => {
-		const updateData = [...queue];
+		const updateData = [...queue.tracks];
 		updateData.splice(index + 1, 1);
 		dispatch(updateQueue(updateData));
 	};
 
 	const handleQueueClear = () => {
-		const updateData: ITrack[] = [...queue];
+		const updateData: ITrack[] = [...queue.tracks];
 
 		if (updateData.length <= 1) {
 			if (clearBtnRef.current) {
@@ -76,10 +75,10 @@ const Queue = (): JSX.Element => {
 	};
 
 	useEffect(() => {
-		if (queue.length > 0) {
-			setTracks(queue);
+		if (queue.tracks.length > 0) {
+			setTracks(queue.tracks);
 		}
-	}, [queue]);
+	}, [queue.tracks]);
 
 	return (
 		<div className={styles['queue-container']}>
@@ -87,7 +86,7 @@ const Queue = (): JSX.Element => {
 			<div className={styles.queue}>
 				<DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
 					<SortableContext items={tracks} strategy={verticalListSortingStrategy}>
-						{tracks && tracks.slice(queueIndex + 1, tracks.length).map((track, index) => (isDraggingId !== track.id ? <QueueTrack key={track.id} id={track.id} track={track} index={index} removeTrack={handleTrackRemove} /> : <QueueTrack key={track.id} id={track.id} track={track} index={index} isDragging />))}
+						{tracks && tracks.slice(queue.index + 1, tracks.length).map((track, index) => (isDraggingId !== track.id ? <QueueTrack key={track.id} id={track.id} track={track} index={index} removeTrack={handleTrackRemove} /> : <QueueTrack key={track.id} id={track.id} track={track} index={index} isDragging />))}
 					</SortableContext>
 					<DragOverlay modifiers={[restrictToWindowEdges]}>{isDraggingId ? <QueueTrack index={-1} id={tracks.findIndex((x) => x.id === isDraggingId)} track={tracks[tracks.findIndex((x) => x.id === isDraggingId)]} /> : null}</DragOverlay>
 				</DndContext>

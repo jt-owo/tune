@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import AppRoutes, { AppRoutesParams } from '../routes';
 import { useAppDispatch } from '../hooks';
-import { setOutputDevice } from '../../state/slices/playerSlice';
 import { loadPlaylists, loadSpotifyPlaylists } from '../../state/slices/playlistsSlice';
 import { updateUser, updateSpotifyToken } from '../../state/slices/userSlice';
 
@@ -26,11 +25,6 @@ const App = (): JSX.Element => {
 
 	// Load local playlists.
 	dispatch(loadPlaylists());
-
-	// Load the saved output device id to the player.
-	if (window.api) {
-		dispatch(setOutputDevice(window.api.config.get('outputDeviceId').toString()));
-	}
 
 	useEffect(() => {
 		const loadSpotifyContent = async (accessToken: string) => {

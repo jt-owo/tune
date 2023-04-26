@@ -2,33 +2,31 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import TrackHelper from '../../ui/util/trackHelper';
 
-export type PlayerState = {
-	/** Queue */
-	queue: ITrack[];
-	index: number;
-	history: ITrack[];
+type PlayerState = {
+	/** Contians all information about the queue */
+	queue: IQueueState;
 
-	/** Playback info */
-	currentTrack?: ITrack;
-	isPlaying: boolean;
-	isShuffle: boolean;
-	repeatMode: RepeatMode;
-	volume: number;
-	progress: number;
-
-	/** Misc. */
-	outputDeviceId?: string;
+	/** Contains all information about playback, like volume or the current track. */
+	playback: IPlaybackState;
 };
 
+const configVolume = window.api?.config.get('volume').toString();
+const configOutputDevice = window.api?.config.get('outputDeviceId').toString();
+
 const initialState: PlayerState = {
-	queue: [],
-	index: 0,
-	history: [],
-	isPlaying: false,
-	isShuffle: false,
-	repeatMode: 'off',
-	volume: 0,
-	progress: 0
+	queue: {
+		tracks: [],
+		history: [],
+		index: 0
+	},
+	playback: {
+		isPlaying: false,
+		isShuffle: false,
+		repeatMode: 'off',
+		volume: configVolume ? parseInt(configVolume, 10) : 20,
+		progress: 0,
+		outputDeviceId: configOutputDevice ?? 'default'
+	}
 };
 
 export const playerSlice = createSlice({
@@ -36,16 +34,25 @@ export const playerSlice = createSlice({
 	initialState,
 	reducers: {
 		setQueue: (state, action: PayloadAction<ITrack[]>) => {
-			state.queue = action.payload;
-			state.index = 0;
-			state.currentTrack = state.queue[state.index];
-			state.isPlaying = true;
+			state.queue = {
+				tracks: action.payload,
+				history: [...state.queue.history],
+				index: 0
+			};
+
+			const track = state.queue.tracks[state.queue.index];
+
+			state.playback = {
+				...state.playback,
+				track,
+				isPlaying: true
+			};
 		},
 		updateQueue: (state, action: PayloadAction<ITrack[]>) => {
-			state.queue = action.payload;
+			state.queue.tracks = action.payload;
 		},
 		addToQueueNext: (state, action: PayloadAction<ITrack>) => {
-			const queue = [...state.queue];
+			const queue = [...state.queue.tracks];
 			const id = TrackHelper.getNextID(queue);
 
 			queue.splice(1, 0, {
@@ -53,10 +60,10 @@ export const playerSlice = createSlice({
 				id
 			});
 
-			state.queue = queue;
+			state.queue.tracks = queue;
 		},
 		addToQueueLast: (state, action: PayloadAction<ITrack>) => {
-			const queue = [...state.queue];
+			const queue = [...state.queue.tracks];
 			const id = TrackHelper.getNextID(queue);
 
 			queue.push({
@@ -64,38 +71,44 @@ export const playerSlice = createSlice({
 				id
 			});
 
-			state.queue = queue;
+			state.queue.tracks = queue;
 		},
-		setOutputDevice: (state, action: PayloadAction<string>) => {
-			state.outputDeviceId = action.payload;
-			window.api?.config.set('outputDeviceId', JSON.stringify(action.payload));
-		},
-		play: (state) => {
-			state.isPlaying = !state.isPlaying;
+		togglePlay: (state) => {
+			state.playback.isPlaying = !state.playback.isPlaying;
 		},
 		playNext: (state) => {
-			const lastTrack = state.queue[state.index];
-			if (state.index < state.queue.length) {
-				state.index += 1;
-				state.currentTrack = state.queue[state.index];
-				state.isPlaying = true;
+			const lastTrack = state.queue.tracks[state.queue.index];
+			if (state.queue.index < state.queue.tracks.length) {
+				state.queue.index += 1;
+				state.playback = {
+					...state.playback,
+					track: state.queue.tracks[state.queue.index],
+					isPlaying: true
+				};
 			}
 
-			if (lastTrack) state.history.push(lastTrack);
+			if (lastTrack) state.queue.history.push(lastTrack);
 		},
 		playPrevious: (state) => {
-			if (state.index !== 0 && state.index <= state.queue.length) {
-				state.index -= 1;
-				state.currentTrack = state.queue[state.index];
-				state.isPlaying = true;
+			if (state.queue.index !== 0 && state.queue.index <= state.queue.tracks.length) {
+				state.queue.index -= 1;
+				state.playback = {
+					...state.playback,
+					track: state.queue.tracks[state.queue.index],
+					isPlaying: true
+				};
 			}
 		},
 		toggleShuffle: (state) => {
-			state.isShuffle = !state.isShuffle;
+			state.playback.isShuffle = !state.playback.isShuffle;
+		},
+		updateOutputDevice: (state, action: PayloadAction<string>) => {
+			state.playback.outputDeviceId = action.payload;
+			window.api?.config.set('outputDeviceId', JSON.stringify(action.payload));
 		}
 	}
 });
 
-export const { setQueue, updateQueue, setOutputDevice, play, playNext, playPrevious, addToQueueNext, addToQueueLast, toggleShuffle } = playerSlice.actions;
+export const { setQueue, updateQueue, addToQueueNext, addToQueueLast, togglePlay, playNext, playPrevious, toggleShuffle, updateOutputDevice } = playerSlice.actions;
 
 export default playerSlice.reducer;

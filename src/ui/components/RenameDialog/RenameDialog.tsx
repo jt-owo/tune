@@ -40,15 +40,15 @@ const RenameDialog = ({ value, visible, position, cb, onClose }: RenameDialogPro
 	}, [cb, onClose, toggleFading, value]);
 
 	useEffect(() => {
-		const checkIfClickedOutside = (e: Event) => {
+		const onMouseDown = (e: MouseEvent) => {
 			// If the menu is open and the clicked target is not within the menu, call the cancel callback
 			if (visible && ref.current && !ref.current.contains(e.target as Node)) handleCancel();
 		};
 
-		document.addEventListener('mousedown', checkIfClickedOutside);
+		document.addEventListener('mousedown', onMouseDown);
 
 		// Clean up the event listener
-		return () => document.removeEventListener('mousedown', checkIfClickedOutside);
+		return () => document.removeEventListener('mousedown', onMouseDown);
 	}, [visible, handleCancel, onClose]);
 
 	if (!visible) return null;

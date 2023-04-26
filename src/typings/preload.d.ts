@@ -23,6 +23,7 @@ interface TuneAPI {
 		selectFiles(): Promise<string[]>;
 		loadMetadata(trackJSON: string): Promise<string>;
 		openURL(url: string): Promise<void>;
+		setTrack(name: string, artists: string, album: string): void;
 	};
 	config: {
 		/**

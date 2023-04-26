@@ -1,18 +1,16 @@
-import { ArtistItem, AlbumItem, TrackItem, PlaylistItem } from '../../../typings/spotify/items';
-import { UserProfileResult, SearchResult, PlaybackStateResult } from '../../../typings/spotify/results';
 import { IArtist, IAlbum, ITrack, IUser, IPlaybackState, IPlaylist } from '../../../typings/types';
 import Guid from '../../../util/guid';
 
 /**
- * The SpotifyParser class contains all functions to parse spotify items into the tune format.
+ * The {@link SpotifyParser} class contains all functions to parse spotify responses into the tune format.
  */
 class SpotifyParser {
 	/**
 	 * Parses a spotify artist object array into the tune format.
-	 * @param artists Array of artists. (From spotify result)
+	 * @param artists Array of {@link SpotifyAPI.Artist}.
 	 * @returns An array of artists in the tune format.
 	 */
-	static parseArtists(artists: ArtistItem[]): IArtist[] {
+	static parseArtists(artists: SpotifyAPI.Artist[]): IArtist[] {
 		return artists.map((artist) => {
 			return {
 				name: artist.name,
@@ -23,10 +21,10 @@ class SpotifyParser {
 
 	/**
 	 * Parses a spotify album object into the tune format.
-	 * @param album Album object. (From spotify result)
+	 * @param album Album object.
 	 * @returns An album object in the tune format.
 	 */
-	static parseAlbum(album: AlbumItem): IAlbum {
+	static parseAlbum(album: SpotifyAPI.Album): IAlbum {
 		return {
 			name: album.name,
 			artists: this.parseArtists(album.artists),
@@ -38,19 +36,19 @@ class SpotifyParser {
 
 	/**
 	 * Parses a spotify album array into the tune format.
-	 * @param albums Album array. (From spotify result)
+	 * @param albums Album array.
 	 * @returns An album array in the tune format.
 	 */
-	static parseAlbums(albums: AlbumItem[]): IAlbum[] {
+	static parseAlbums(albums: SpotifyAPI.Album[]): IAlbum[] {
 		return albums.map((album) => this.parseAlbum(album));
 	}
 
 	/**
 	 * Parses a spotify track object into the tune format.
-	 * @param track Track object. (From spotify result)
+	 * @param track Track object.
 	 * @returns A track object in the tune format.
 	 */
-	static parseTrack(track: TrackItem, id: number): ITrack {
+	static parseTrack(track: SpotifyAPI.Track, id: number): ITrack {
 		return {
 			id,
 			name: track.name,
@@ -62,10 +60,10 @@ class SpotifyParser {
 
 	/**
 	 * Parses a spotify track array into the tune format.
-	 * @param tracks Track array. (From spotify result)
+	 * @param tracks Track array.
 	 * @returns A track array in the tune format.
 	 */
-	static parseTracks(tracks: TrackItem[]): ITrack[] {
+	static parseTracks(tracks: SpotifyAPI.Track[]): ITrack[] {
 		return tracks.map((track, index) => {
 			const parsed = this.parseTrack(track, index + 1);
 			return parsed;
@@ -74,48 +72,54 @@ class SpotifyParser {
 
 	/**
 	 * Parses a spotify playlist object into the tune format.
-	 * @param playlist Playlist object. (From spotify result)
+	 * @param playlist Playlist object.
 	 * @returns A playlist object in the tune format.
 	 */
-	static parsePlaylist(playlist: PlaylistItem): IPlaylist {
+	static parsePlaylist(playlist: SpotifyAPI.Playlist): IPlaylist {
 		return {
 			id: Guid.new(),
 			name: playlist.name,
-			description: playlist.description,
+			description: playlist.description ?? '',
 			images: playlist.images,
 			tracks: [],
 			pinned: false,
 			locked: false,
 			service: 'spotify',
 			collaborative: playlist.collaborative,
-			public: playlist.public,
+			public: playlist.public ?? false,
 			tracksHref: playlist.tracks.href
 		};
 	}
 
 	/**
 	 * Parses a spotify playlist array into the tune format.
-	 * @param playlists Playlist array. (From spotify result)
+	 * @param playlists Playlist array.
 	 * @returns A playlist array in the tune format.
 	 */
-	static parsePlaylists(playlists: PlaylistItem[]): IPlaylist[] {
+	static parsePlaylists(playlists: SpotifyAPI.Playlist[]): IPlaylist[] {
 		return playlists.map((playlist) => this.parsePlaylist(playlist));
 	}
 
-	static parseUser(user: UserProfileResult): IUser {
+	/**
+	 * Parses a spotify user into the tune format.
+	 * @param user User profile response.
+	 * @returns User information.
+	 */
+	static parseUser(user: SpotifyAPI.UserProfileResponse): IUser {
+		const avatar = user.images ? user.images[0] : undefined;
+
 		return {
-			name: user.display_name,
-			email: user.email,
-			avatar: user.images[0]
+			name: user.display_name ?? '',
+			avatar
 		};
 	}
 
 	/**
 	 * Parses a spotify search result into seperate arrays of objects in the tune format.
-	 * @param data Result object. (From spotify result)
+	 * @param data Result object.
 	 * @returns Arrays for each search type. (e.g. album array)
 	 */
-	static parseSearch(data: SearchResult) {
+	static parseSearch(data: SpotifyAPI.SearchResponse) {
 		let albums: IAlbum[] = [];
 		if (data.albums) {
 			albums = this.parseAlbums(data.albums.items);
@@ -131,25 +135,25 @@ class SpotifyParser {
 			tracks = this.parseTracks(data.tracks.items);
 		}
 
-		return { albums, artists, tracks };
+		return { albums, artists, tracks } as const;
 	}
 
 	/**
 	 * Parses the spotify playback state result into the tune format.
-	 * @param playbackState PlaybackState result object. (From spotify result)
+	 * @param playbackState PlaybackState result object.
 	 * @returns A playback state object in the tune format.
 	 */
-	static parsePlaybackState(playbackState: PlaybackStateResult): IPlaybackState {
+	static parsePlaybackState(playbackState: SpotifyAPI.PlaybackStateResponse): IPlaybackState {
 		let track: ITrack | undefined;
 		if (playbackState.item) {
 			track = this.parseTrack(playbackState.item, -1);
 		}
 
 		return {
-			volume: playbackState.device.volume_percent,
-			progress: playbackState.progress_ms,
+			volume: playbackState.device.volume_percent ?? 0,
+			progress: playbackState.progress_ms ?? 0,
 			isPlaying: playbackState.is_playing,
-			repeatMode: playbackState.repeat_state,
+			repeatMode: 'off',
 			isShuffle: playbackState.shuffle_state,
 			track
 		};

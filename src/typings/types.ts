@@ -6,8 +6,7 @@ export interface Image {
 
 export interface IUser {
 	name: string;
-	email: string;
-	avatar: Image;
+	avatar?: Image;
 }
 
 export interface IPlaylist {

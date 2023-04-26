@@ -1,7 +1,6 @@
 import fs from 'fs';
 import * as mm from 'music-metadata';
 import Json from '../../util/jsonHelper';
-import { ITrack } from '../../typings/types';
 import { AudioMetadata } from '../../typings/metadata';
 
 export default class FileParser {

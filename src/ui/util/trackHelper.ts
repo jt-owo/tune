@@ -1,5 +1,3 @@
-import { ITrack } from '../../typings/types';
-
 class TrackHelper {
 	/**
 	 * Loads metadata for a list of tracks.

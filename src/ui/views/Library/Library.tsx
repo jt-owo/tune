@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../hooks';
 import SpotifyAPI from '../../api/spotify';
 import AppRoutes from '../../routes';
-import { IAlbum, ITrack } from '../../../typings/types';
 import Format from '../../util/format';
 
 import View from '../../components/View/View';

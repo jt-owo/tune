@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import defaultAlbumCover from '../../../assets/images/tune_no_artwork.svg';
-import { IArtist, IFormattedTrack, ITrack, Image } from '../../typings/types';
 
 class Format {
 	/**

@@ -3,7 +3,6 @@
 import { MouseEvent } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { ITrack } from '../../../../typings/types';
 import Format from '../../../util/format';
 import ToolTip from '../../../components/ToolTip/ToolTip';
 

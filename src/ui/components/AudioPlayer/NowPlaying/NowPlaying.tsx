@@ -1,4 +1,3 @@
-import { ITrack } from '../../../../typings/types';
 import useMediaSession from '../../../hooks/useMediaSession';
 import Format from '../../../util/format';
 

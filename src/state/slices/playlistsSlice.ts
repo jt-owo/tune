@@ -1,6 +1,5 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IPlaylist, ITrack } from '../../typings/types';
 import Guid from '../../util/guid';
 
 export type PlaylistsState = {

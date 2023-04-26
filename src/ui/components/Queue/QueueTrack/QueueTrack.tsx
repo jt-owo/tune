@@ -1,6 +1,5 @@
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { ITrack } from '../../../../typings/types';
 import Format from '../../../util/format';
 
 import deleteIcon from '../../../../../assets/ui-icons/trash-2.svg';

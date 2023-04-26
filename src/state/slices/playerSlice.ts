@@ -1,6 +1,5 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ITrack, RepeatMode } from '../../typings/types';
 import TrackHelper from '../../ui/util/trackHelper';
 
 export type PlayerState = {

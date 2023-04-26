@@ -14,16 +14,6 @@ class TrackHelper {
 
 		return loadedTracks;
 	};
-
-	/**
-	 * Checks for the largest id and returns the largest number + 1 to be always unique.
-	 * @param tracks Array of tracks.
-	 * @returns Next id.
-	 */
-	static getNextID = (tracks: ITrack[]) => {
-		const values = tracks.map((x) => x.id);
-		return Math.max(...values) + 1;
-	};
 }
 
 export default TrackHelper;

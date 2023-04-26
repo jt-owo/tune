@@ -46,7 +46,7 @@ interface ITrack {
 	 *
 	 * Also used for sorting & drag and drop
 	 */
-	id: number;
+	id: string;
 	/**
 	 * Name of the track.
 	 */
@@ -101,7 +101,7 @@ interface IFormattedTrack {
 	 */
 	image: string;
 	/**
-	 * True if all track is ready for display.
+	 * True if all track data is ready for display.
 	 *
 	 * Only neccessary for local audio files.
 	 */
@@ -132,6 +132,6 @@ interface IPlaybackState {
 	isPlaying: boolean;
 	isShuffle: boolean;
 	repeatMode: RepeatMode;
-	/** Selected Output Device, if none is selected the default audio device is used. */
+	/** Selected Output Device, if undefined the default audio device will be used. */
 	outputDeviceId?: string;
 }

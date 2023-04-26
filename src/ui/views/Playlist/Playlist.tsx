@@ -10,6 +10,7 @@ import { restrictToWindowEdges } from '@dnd-kit/modifiers';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { deletePlaylist, updatePlaylist } from '../../../state/slices/playlistsSlice';
 import { addToQueueLast, addToQueueNext, setQueue } from '../../../state/slices/playerSlice';
+import Guid from '../../../util/guid';
 import useContextMenu from '../../hooks/useContextMenu';
 import useToggle from '../../hooks/useToggle';
 import SpotifyAPI from '../../api/spotify';
@@ -17,6 +18,7 @@ import AppRoutes from '../../routes';
 import Services from '../../util/services';
 import TrackHelper from '../../util/trackHelper';
 
+import PlaylistHeader from './PlaylistHeader/PlaylistHeader';
 import PlaylistTrack from './PlaylistTrack/PlaylistTrack';
 import ToolTip from '../../components/ToolTip/ToolTip';
 import ContextMenu from '../../components/ContextMenu/ContextMenu';
@@ -29,7 +31,6 @@ import addBottomIcon from '../../../../assets/ui-icons/add-bottom.svg';
 import helpIcon from '../../../../assets/ui-icons/help-circle.svg';
 
 import styles from './Playlist.module.scss';
-import PlaylistHeader from './PlaylistHeader/PlaylistHeader';
 
 type PlaylistParams = {
 	id: string;
@@ -82,7 +83,7 @@ const Playlist = memo(() => {
 
 	// Context Menu states.
 	const [isContextMenuVisible, toggleContextMenu, position, setPosition] = useContextMenu();
-	const [usingContextMenuId, setUsingContextMenuId] = useState(-1);
+	const [usingContextMenuId, setUsingContextMenuId] = useState('');
 
 	const playlistContainerRef = useRef<HTMLDivElement>(null);
 
@@ -125,14 +126,9 @@ const Playlist = memo(() => {
 
 		const updateData = [...playlist.tracks];
 
-		let index = 1;
 		paths.forEach((path) => {
-			if (updateData.length > 0) {
-				index = TrackHelper.getNextID(updateData);
-			}
-
 			updateData.push({
-				id: index,
+				id: Guid.new(),
 				filePath: path,
 				service: 'local'
 			});
@@ -150,7 +146,7 @@ const Playlist = memo(() => {
 		if (tracks.length) dispatch(setQueue(tracks));
 	};
 
-	const handleTrackRemove = (trackID: number) => {
+	const handleTrackRemove = (trackID: string) => {
 		const updateData = [...playlist.tracks];
 
 		const index = updateData.findIndex((x) => x.id === trackID);
@@ -164,12 +160,12 @@ const Playlist = memo(() => {
 		);
 	};
 
-	const handlePlayNext = (trackID: number) => {
+	const handlePlayNext = (trackID: string) => {
 		const track = tracks.find((x) => x.id === trackID);
 		if (track) dispatch(addToQueueNext(track));
 	};
 
-	const handlePlayLast = (trackID: number) => {
+	const handlePlayLast = (trackID: string) => {
 		const track = tracks.find((x) => x.id === trackID);
 		if (track) dispatch(addToQueueLast(track));
 	};

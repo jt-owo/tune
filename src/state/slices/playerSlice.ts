@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import TrackHelper from '../../ui/util/trackHelper';
+import Guid from '../../util/guid';
 
 type PlayerState = {
 	/** Contians all information about the queue */
@@ -53,22 +53,20 @@ export const playerSlice = createSlice({
 		},
 		addToQueueNext: (state, action: PayloadAction<ITrack>) => {
 			const queue = [...state.queue.tracks];
-			const id = TrackHelper.getNextID(queue);
 
 			queue.splice(1, 0, {
 				...action.payload,
-				id
+				id: Guid.new()
 			});
 
 			state.queue.tracks = queue;
 		},
 		addToQueueLast: (state, action: PayloadAction<ITrack>) => {
 			const queue = [...state.queue.tracks];
-			const id = TrackHelper.getNextID(queue);
 
 			queue.push({
 				...action.payload,
-				id
+				id: Guid.new()
 			});
 
 			state.queue.tracks = queue;
@@ -96,6 +94,13 @@ export const playerSlice = createSlice({
 					...state.playback,
 					track: state.queue.tracks[state.queue.index],
 					isPlaying: true
+				};
+			} else {
+				// Queue is empty.
+				state.playback = {
+					...state.playback,
+					track: undefined,
+					isPlaying: false
 				};
 			}
 		},

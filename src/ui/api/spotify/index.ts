@@ -107,7 +107,7 @@ class SpotifyAPI {
 		if (offset && offset > 0) params.append('offset', offset.toString());
 
 		const data = await this.callAPI<SpotifyAPI.UserSavedTracksResponse>(token, 'https://api.spotify.com/v1/me/tracks', params);
-		return data.items.map((item, index) => SpotifyParser.parseTrack(item.track, index + 1));
+		return data.items.map((item) => SpotifyParser.parseTrack(item.track));
 	}
 
 	/**
@@ -164,7 +164,7 @@ class SpotifyAPI {
 	 */
 	static async fetchPlaylistTracks(token: string, url: string) {
 		const data = await this.callAPI<SpotifyAPI.PlaylistTrackResponse>(token, url);
-		return data.items.map((item, index) => SpotifyParser.parseTrack(item.track, index + 1));
+		return data.items.map((item) => SpotifyParser.parseTrack(item.track));
 	}
 
 	/**

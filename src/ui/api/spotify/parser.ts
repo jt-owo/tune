@@ -47,9 +47,9 @@ class SpotifyParser {
 	 * @param track Track object.
 	 * @returns A track object in the tune format.
 	 */
-	static parseTrack(track: SpotifyAPI.Track, id: number): ITrack {
+	static parseTrack(track: SpotifyAPI.Track): ITrack {
 		return {
-			id,
+			id: Guid.new(),
 			name: track.name,
 			album: this.parseAlbum(track.album),
 			duration: track.duration_ms / 1000,
@@ -63,10 +63,7 @@ class SpotifyParser {
 	 * @returns A track array in the tune format.
 	 */
 	static parseTracks(tracks: SpotifyAPI.Track[]): ITrack[] {
-		return tracks.map((track, index) => {
-			const parsed = this.parseTrack(track, index + 1);
-			return parsed;
-		});
+		return tracks.map((track) => this.parseTrack(track));
 	}
 
 	/**
@@ -144,9 +141,7 @@ class SpotifyParser {
 	 */
 	static parsePlaybackState(playbackState: SpotifyAPI.PlaybackStateResponse): IPlaybackState {
 		let track: ITrack | undefined;
-		if (playbackState.item) {
-			track = this.parseTrack(playbackState.item, -1);
-		}
+		if (playbackState.item) track = this.parseTrack(playbackState.item);
 
 		return {
 			volume: playbackState.device.volume_percent ?? 0,

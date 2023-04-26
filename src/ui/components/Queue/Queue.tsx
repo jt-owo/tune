@@ -51,9 +51,10 @@ const Queue = (): JSX.Element => {
 		}
 	};
 
-	const handleTrackRemove = (index: number) => {
+	const handleTrackRemove = (trackID: string) => {
 		const updateData = [...queue.tracks];
-		updateData.splice(index + 1, 1);
+		const index = updateData.findIndex((x) => x.id === trackID);
+		updateData.splice(index, 1);
 		dispatch(updateQueue(updateData));
 	};
 
@@ -86,9 +87,9 @@ const Queue = (): JSX.Element => {
 			<div className={styles.queue}>
 				<DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
 					<SortableContext items={tracks} strategy={verticalListSortingStrategy}>
-						{tracks && tracks.slice(queue.index + 1, tracks.length).map((track, index) => (isDraggingId !== track.id ? <QueueTrack key={track.id} id={track.id} track={track} index={index} removeTrack={handleTrackRemove} /> : <QueueTrack key={track.id} id={track.id} track={track} index={index} isDragging />))}
+						{tracks && tracks.slice(queue.index + 1, tracks.length).map((track) => (isDraggingId !== track.id ? <QueueTrack key={track.id} track={track} removeTrack={handleTrackRemove} /> : <QueueTrack key={track.id} track={track} isDragging />))}
 					</SortableContext>
-					<DragOverlay modifiers={[restrictToWindowEdges]}>{isDraggingId ? <QueueTrack index={-1} id={tracks.findIndex((x) => x.id === isDraggingId)} track={tracks[tracks.findIndex((x) => x.id === isDraggingId)]} /> : null}</DragOverlay>
+					<DragOverlay modifiers={[restrictToWindowEdges]}>{isDraggingId ? <QueueTrack track={tracks[tracks.findIndex((x) => x.id === isDraggingId)]} /> : null}</DragOverlay>
 				</DndContext>
 			</div>
 			<div className={styles['control-section']}>

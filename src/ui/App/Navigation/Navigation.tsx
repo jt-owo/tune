@@ -5,9 +5,10 @@ import { useAppDispatch, useAppSelector } from '../../hooks';
 import useToggle from '../../hooks/useToggle';
 import { addAlert } from '../../../state/slices/alertSlice';
 import AppRoutes from '../../routes';
+import Format from '../../util/format';
 
 import NavlistButton from './NavlistButton/NavlistButton';
-import TextBox from '../TextBox/TextBox';
+import TextBox from '../../components/TextBox/TextBox';
 
 import logo from '../../../../assets/images/logo.png';
 import iconPlus from '../../../../assets/ui-icons/plus-solid.svg';
@@ -15,8 +16,6 @@ import homeIcon from '../../../../assets/animations/home.json';
 import browseIcon from '../../../../assets/animations/explore.json';
 import libraryIcon from '../../../../assets/animations/folder.json';
 import settingsIcon from '../../../../assets/animations/settings.json';
-
-import defaultAlbumCover from '../../../../assets/images/tune_no_artwork.svg';
 
 import styles from './Navigation.module.scss';
 
@@ -87,7 +86,7 @@ const Navigation = (): JSX.Element => {
 						return (
 							<NavLink to={`${AppRoutes.Playlist}/${playlist.id}/${playlist.service}`} title={playlist.name} key={playlist.id} className={`${styles['playlist-btn']} ${styles['btn-hover-animation']} ${location.pathname === `${AppRoutes.Playlist}/${playlist.id}/${playlist.service}` ? styles.active : ''}`} draggable="false">
 								<div className={styles['playlist-navitem']}>
-									<img src={defaultAlbumCover} alt="" className={styles['playlist-navitem-img']} />
+									<img src={Format.getImage(playlist.images)} alt="" className={styles['playlist-navitem-img']} />
 									<div className={styles['playlist-navitem-name']}>{playlist.name}</div>
 								</div>
 							</NavLink>

@@ -12,7 +12,7 @@ const AudioPlayer = () => {
 	const track = useAppSelector((state) => state.player.playback.track);
 	const outputDeviceId = useAppSelector((state) => state.player.playback.outputDeviceId);
 
-	const [timeProgress, setTimeProgress] = useState(0);
+	const [progress, setProgress] = useState(0);
 	const [duration, setDuration] = useState(0);
 
 	const audioRef = useRef<TuneHTMLAudioElement>(null);
@@ -24,8 +24,8 @@ const AudioPlayer = () => {
 				<ServiceIcon />
 				<div className={styles['player-control-divider']} />
 				{track && <NowPlaying track={track} audioRef={audioRef} seekBarRef={seekBarRef} setDuration={setDuration} outputDeviceId={outputDeviceId} />}
-				<AudioControls audioRef={audioRef} seekBarRef={seekBarRef} setProgress={setTimeProgress} />
-				<SeekBar audioRef={audioRef} seekBarRef={seekBarRef} progress={timeProgress} duration={duration} />
+				<AudioControls audioRef={audioRef} seekBarRef={seekBarRef} setProgress={setProgress} />
+				<SeekBar audioRef={audioRef} seekBarRef={seekBarRef} progress={progress} duration={duration} />
 			</div>
 		</div>
 	);

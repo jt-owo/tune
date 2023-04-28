@@ -1,5 +1,10 @@
 @import '../../styles/colors';
 
+#no-titlebar {
+	height: 35px;
+	-webkit-app-region: drag;
+}
+
 .titlebar {
 	display: block;
 	display: flex;

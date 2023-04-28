@@ -36,11 +36,6 @@ body {
 	user-select: none;
 }
 
-#macos-titlebar {
-	height: 35px;
-	-webkit-app-region: drag;
-}
-
 ::-webkit-scrollbar-thumb {
 	width: 5px;
 	background-color: $dark-gray-2;

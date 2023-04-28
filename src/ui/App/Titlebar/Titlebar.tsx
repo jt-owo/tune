@@ -5,8 +5,8 @@ import UpdateButton from './UpdateButton/UpdateButton';
 
 import styles from './Titlebar.module.scss';
 
-const Titlebar = (): JSX.Element => {
-	if (window.process.platform === 'darwin') return <div id="macos-titlebar" />;
+const TitleBar = (): JSX.Element => {
+	if (window.process.platform === 'darwin') return <div id={styles['no-titlebar']} />;
 
 	const minimize = () => {
 		window.api?.minimize();
@@ -38,4 +38,4 @@ const Titlebar = (): JSX.Element => {
 	);
 };
 
-export default Titlebar;
+export default TitleBar;

@@ -4,26 +4,24 @@ import AppRoutes, { AppRoutesParams } from '../routes';
 import { useAppDispatch } from '../hooks';
 import { loadPlaylists, loadSpotifyPlaylists } from '../../state/slices/playlistsSlice';
 import { updateUser, updateSpotifyToken } from '../../state/slices/userSlice';
-
 import SpotifyAPI from '../api/spotify';
 
-import Titlebar from '../components/Titlebar/Titlebar';
+import TitleBar from './Titlebar/Titlebar';
+import Navigation from './Navigation/Navigation';
+import AudioPlayer from './AudioPlayer/AudioPlayer';
+import Queue from './Queue/Queue';
+
 import Home from '../views/Home/Home';
 import Library from '../views/Library/Library';
 import Browse from '../views/Browse/Browse';
 import Playlist from '../views/Playlist/Playlist';
 import Settings from '../views/Settings/Settings';
-import Navigation from '../components/Navigation/Navigation';
-import Queue from '../components/Queue/Queue';
 import AlertContainer from '../components/Alert/Alert';
-import AudioPlayer from '../components/AudioPlayer/AudioPlayer';
 
-import './App.scss';
+import styles from './App.module.scss';
 
 const App = (): JSX.Element => {
 	const dispatch = useAppDispatch();
-
-	// Load local playlists.
 	dispatch(loadPlaylists());
 
 	useEffect(() => {
@@ -43,8 +41,8 @@ const App = (): JSX.Element => {
 	}, [dispatch]);
 
 	return (
-		<div id="app-container">
-			<Titlebar />
+		<div id={styles['app-container']}>
+			<TitleBar />
 			<Router>
 				<Navigation />
 				<Routes>

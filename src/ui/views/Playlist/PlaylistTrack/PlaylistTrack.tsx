@@ -1,5 +1,5 @@
-/* eslint-disable no-nested-ternary */
 /* eslint-disable react/jsx-no-useless-fragment */
+/* eslint-disable no-nested-ternary */
 import { MouseEvent } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';

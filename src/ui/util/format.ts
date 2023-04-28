@@ -20,7 +20,8 @@ class Format {
 	 * @returns A string in this format: MM:SS. If {@link long} is true then the format will be: 'xx minutes, xx seconds'.
 	 */
 	static getDuration = (duration?: number, long = false): string => {
-		if (!duration) return NaN.toString();
+		if (!duration && long) return '';
+		if (!duration) return '00:00';
 		if (!long) {
 			const minutes = Math.floor(duration / 60);
 			const seconds = Math.floor(duration - minutes * 60);
@@ -60,7 +61,18 @@ class Format {
 	 * @param track Track object.
 	 * @returns Formatted track object.
 	 */
-	static getTrackFormatted = (track: ITrack): IFormattedTrack => {
+	static getTrackFormatted = (track?: ITrack): IFormattedTrack => {
+		if (!track) {
+			return {
+				name: '',
+				artists: '',
+				album: '',
+				duration: '',
+				image: '',
+				isLoaded: false
+			};
+		}
+
 		return {
 			name: track.name!,
 			artists: Format.getArtists(track.album?.artists),

@@ -1,9 +1,7 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import { useState, useEffect } from 'react';
 import Lottie from 'lottie-react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { setOutputDevice } from '../../../state/slices/playerSlice';
+import { updateOutputDevice } from '../../../state/slices/playerSlice';
 import { updateSpotifyToken } from '../../../state/slices/userSlice';
 import SpotifyAPI from '../../api/spotify';
 
@@ -22,9 +20,9 @@ import xMark from '../../../../assets/ui-icons/x-mark.svg';
 import styles from './Settings.module.scss';
 
 const Settings = (): JSX.Element => {
-	const outputDeviceId = useAppSelector((state) => state.player.outputDeviceId);
+	const outputDeviceId = useAppSelector((state) => state.player.playback.outputDeviceId);
 	const spotifyToken = useAppSelector((state) => state.user.spotifyToken);
-	const user = useAppSelector((state) => state.user.data);
+	const userName = useAppSelector((state) => state.user.data?.name);
 
 	const [audioDevices, setOutputDevices] = useState<MediaDeviceInfo[]>([]);
 
@@ -35,7 +33,7 @@ const Settings = (): JSX.Element => {
 		setOutputDevices(mediaDevices.filter((device) => device.kind === 'audiooutput'));
 	};
 
-	const handleOutputDeviceChange = (e: string) => dispatch(setOutputDevice(e));
+	const handleOutputDeviceChange = (e: string) => dispatch(updateOutputDevice(e));
 
 	const handleSpotifyLogout = () => dispatch(updateSpotifyToken(''));
 
@@ -78,7 +76,7 @@ const Settings = (): JSX.Element => {
 							) : (
 								<div className={styles['connection-status']}>
 									<Lottie className={styles.lottie} animationData={checkmarkGreen} loop={false} />
-									Connected as {user?.name}
+									Connected as {userName}
 								</div>
 							)}
 						</div>

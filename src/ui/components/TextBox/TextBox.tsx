@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/no-autofocus */
 import { ChangeEvent, KeyboardEvent } from 'react';
 
 import styles from './TextBox.module.scss';

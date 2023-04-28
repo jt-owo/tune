@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 class TrackHelper {
 	/**
 	 * Loads metadata for a list of tracks.
@@ -16,13 +17,18 @@ class TrackHelper {
 	};
 
 	/**
-	 * Checks for the largest id and returns the largest number + 1 to be always unique.
+	 * TODO: implement.
+	 * PROTOTYPE SHUFFLE!
+	 * Shuffles an array of tracks.
 	 * @param tracks Array of tracks.
-	 * @returns Next id.
+	 * @returns Randomly shuffled array of tracks.
 	 */
-	static getNextID = (tracks: ITrack[]) => {
-		const values = tracks.map((x) => x.id);
-		return Math.max(...values) + 1;
+	static shuffle = (tracks: ITrack[]) => {
+		const copy = [...tracks];
+
+		// Shuffle array
+
+		return copy;
 	};
 }
 

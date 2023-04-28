@@ -2,35 +2,27 @@ import { useEffect } from 'react';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import AppRoutes, { AppRoutesParams } from '../routes';
 import { useAppDispatch } from '../hooks';
-import { setOutputDevice } from '../../state/slices/playerSlice';
 import { loadPlaylists, loadSpotifyPlaylists } from '../../state/slices/playlistsSlice';
 import { updateUser, updateSpotifyToken } from '../../state/slices/userSlice';
-
 import SpotifyAPI from '../api/spotify';
 
-import Titlebar from '../components/Titlebar/Titlebar';
+import TitleBar from './Titlebar/Titlebar';
+import Navigation from './Navigation/Navigation';
+import AudioPlayer from './AudioPlayer/AudioPlayer';
+import Queue from './Queue/Queue';
+
 import Home from '../views/Home/Home';
 import Library from '../views/Library/Library';
 import Browse from '../views/Browse/Browse';
 import Playlist from '../views/Playlist/Playlist';
 import Settings from '../views/Settings/Settings';
-import Navigation from '../components/Navigation/Navigation';
-import Queue from '../components/Queue/Queue';
-import AudioPlayer from '../components/AudioPlayer/AudioPlayer';
 import AlertContainer from '../components/Alert/Alert';
 
-import './App.scss';
+import styles from './App.module.scss';
 
 const App = (): JSX.Element => {
 	const dispatch = useAppDispatch();
-
-	// Load local playlists.
 	dispatch(loadPlaylists());
-
-	// Load the saved output device id to the player.
-	if (window.api) {
-		dispatch(setOutputDevice(window.api.config.get('outputDeviceId').toString()));
-	}
 
 	useEffect(() => {
 		const loadSpotifyContent = async (accessToken: string) => {
@@ -49,8 +41,8 @@ const App = (): JSX.Element => {
 	}, [dispatch]);
 
 	return (
-		<div id="app-container">
-			<Titlebar />
+		<div id={styles['app-container']}>
+			<TitleBar />
 			<Router>
 				<Navigation />
 				<Routes>

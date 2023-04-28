@@ -1,0 +1,91 @@
+@import '../../../styles/colors';
+@import '../../../styles/fonts';
+
+.duration-floater {
+	position: fixed;
+	top: 5px;
+	left: 50%;
+	width: 150px;
+	transform: translateX(-50%);
+	text-align: center;
+	background-color: $dark-gray-3;
+	padding: 5px;
+	border-radius: 20px;
+	font-family: Quicksand-400;
+	z-index: 4;
+}
+
+.current-time,
+.total-duration {
+	padding: 10px;
+	display: none;
+}
+
+.duration-hover-floater {
+	/* Layout */
+	position: fixed;
+	bottom: 80px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	max-height: 40px;
+	min-width: 130px;
+	padding: 10px;
+	transform: translateX(-50%);
+
+	/* Font */
+	font-family: Quicksand-500;
+
+	/* Color */
+	background-color: $dark-gray-2;
+
+	/* Animation */
+	transition: opacity ease-in-out 0.1s;
+
+	/* Misc */
+	opacity: 0;
+	visibility: hidden;
+	border-radius: 10px;
+	z-index: 4;
+}
+
+#seek-bar {
+	--progress: 0;
+
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	left: 0;
+	opacity: 1;
+	-webkit-transition: 0.2s;
+	transition: opacity 0.2s;
+	border-radius: 19px;
+	z-index: 2;
+
+	appearance: none;
+	background: none;
+	cursor: pointer;
+
+	&::before {
+		content: '';
+		position: absolute;
+		height: 100%;
+		width: var(--progress);
+		background-color: #e2e5ff;
+		opacity: 0.2;
+		border-radius: 18px 0 0 18px;
+		top: 0;
+		left: 0;
+		transition: opacity ease-in-out 0.15s;
+	}
+
+	&:hover::before {
+		opacity: 0.3;
+	}
+
+	&::-webkit-slider-thumb {
+		-webkit-appearance: none;
+		height: 0px;
+		width: 0px;
+	}
+}

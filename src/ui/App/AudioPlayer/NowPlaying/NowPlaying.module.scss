@@ -1,0 +1,52 @@
+.track {
+	/* Layout */
+	margin-left: 15px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	z-index: 3;
+	pointer-events: none;
+}
+
+.track-artist {
+	/* Layout */
+	display: flex;
+	flex-direction: column;
+}
+
+.current-album-cover {
+	/* Layout */
+	width: 42px;
+	height: 42px;
+
+	/* Misc */
+	border-radius: 7px;
+	box-shadow: 0 0 15px rgba($color: #000000, $alpha: 0.5);
+	z-index: 1;
+}
+
+.current-track {
+	/* Layout */
+	margin-left: 15px;
+	margin-bottom: 1px;
+
+	/* Font */
+	font-family: Quicksand-700;
+}
+
+.current-artist {
+	/* Layout */
+	margin-left: 15px;
+
+	/* Color */
+	color: rgba($color: #ffffff, $alpha: 0.7);
+
+	/* Font */
+	font-family: Quicksand-500;
+	font-size: 13px;
+
+	:hover {
+		text-decoration: underline;
+		cursor: pointer;
+	}
+}

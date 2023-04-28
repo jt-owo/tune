@@ -1,0 +1,71 @@
+@import '../../../../styles/colors';
+
+.volume-slider-container {
+	position: fixed;
+	top: 7px;
+	left: 80px;
+	width: 130px;
+	background-color: $dark-gray-3;
+	border-radius: 13px;
+	overflow: hidden;
+
+	&:hover .volume-slider::before {
+		opacity: 0.4;
+	}
+}
+
+.volume-slider {
+	--progress: 0;
+
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	background-color: $dark-gray-3;
+	appearance: none;
+	opacity: 1;
+	border-radius: 13px;
+	-webkit-app-region: no-drag;
+
+	&::before {
+		content: '';
+		position: absolute;
+		height: 100%;
+		width: var(--progress);
+		background-color: $light-gray-1;
+		opacity: 0.25;
+		border-radius: 13px 0 0 13px;
+		transition: opacity 0.2s;
+	}
+
+	&::-webkit-slider-thumb {
+		-webkit-appearance: none;
+		height: 0px;
+		width: 0px;
+	}
+
+	&:active::before {
+		opacity: 0.6;
+	}
+}
+
+.volume-slider-icon {
+	position: relative;
+	top: 0px;
+	left: 5px;
+	height: 25px;
+	z-index: 1;
+	pointer-events: none;
+	float: left;
+}
+
+.volume-slider-percentage {
+	position: relative;
+	top: 4px;
+	right: 7px;
+	font-family: Quicksand-600;
+	font-size: 14px;
+	z-index: 1;
+	pointer-events: none;
+	float: right;
+}

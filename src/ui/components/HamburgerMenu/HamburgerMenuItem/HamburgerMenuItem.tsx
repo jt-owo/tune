@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import { useEffect, useRef } from 'react';
 import Lottie, { LottieRefCurrentProps } from 'lottie-react';
 

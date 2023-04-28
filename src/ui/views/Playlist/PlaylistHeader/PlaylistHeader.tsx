@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import { useRef } from 'react';
 import RenameDialog from '../../../components/RenameDialog/RenameDialog';
 import ToolTip from '../../../components/ToolTip/ToolTip';
@@ -20,7 +18,9 @@ import checkboxIcon from '../../../../../assets/animations/bookmark.json';
 
 interface PlaylistHeaderProps {
 	playlist: IPlaylist;
+	duration: number;
 	handlePlay: () => void;
+	handleShuffle: () => void;
 	handleAddTracks: () => void;
 	handleRename: (data: string) => void;
 	toggleRename: () => void;
@@ -32,7 +32,7 @@ interface PlaylistHeaderProps {
 	shouldFloat: boolean;
 }
 
-const PlaylistHeader = ({ playlist, handlePlay, handleAddTracks, handleRename, toggleRename, toggleDialog, handleToggleRename, handleLockPlaylist, handlePinPlaylist, renameVisible, shouldFloat }: PlaylistHeaderProps) => {
+const PlaylistHeader = ({ playlist, duration, handlePlay, handleShuffle, handleAddTracks, handleRename, toggleRename, toggleDialog, handleToggleRename, handleLockPlaylist, handlePinPlaylist, renameVisible, shouldFloat }: PlaylistHeaderProps) => {
 	const playlistMenuRef = useRef<HTMLDivElement>(null);
 
 	const [isPlaylistOptionsVisible, togglePlaylistOptions, playlistOptionsPosition, setPlaylistOptionsPosition] = useContextMenu(playlistMenuRef);
@@ -48,7 +48,7 @@ const PlaylistHeader = ({ playlist, handlePlay, handleAddTracks, handleRename, t
 							<div className={styles['playlist-heading-title']} onClick={handleToggleRename}>
 								{playlist?.name}
 							</div>
-							<div className={styles['playlist-heading-duration']}>{/** TODO: Add plylist duration once implemented  */}</div>
+							<div className={styles['playlist-heading-duration']}>{Format.getDuration(duration, true)}</div>
 						</div>
 						<div className={styles['playlist-controls']}>
 							{playlist.service === 'local' && (
@@ -57,7 +57,7 @@ const PlaylistHeader = ({ playlist, handlePlay, handleAddTracks, handleRename, t
 										<img className={styles['play-icon']} src={playIcon} alt="" draggable="false" />
 										Play
 									</div>
-									<div className={`${styles['playlist-heading-btn']} ${styles['btn-hover-animation']} ${styles['playlist-play-btn']}`} onClick={handlePlay}>
+									<div className={`${styles['playlist-heading-btn']} ${styles['btn-hover-animation']} ${styles['playlist-play-btn']}`} onClick={handleShuffle}>
 										<img className={styles['shuffle-icon']} src={shuffleIcon} alt="" draggable="false" />
 										Shuffle
 									</div>
@@ -91,7 +91,7 @@ const PlaylistHeader = ({ playlist, handlePlay, handleAddTracks, handleRename, t
 							{playlist?.name}
 						</div>
 						<div className={styles['playlist-heading-description']}>{playlist.description || 'This is a template description'}</div>
-						<div className={styles['playlist-heading-duration']}>{/** TODO: Add plylist duration once implemented  */}</div>
+						<div className={styles['playlist-heading-duration']}>{Format.getDuration(duration, true)}</div>
 						<div className={styles['playlist-controls']}>
 							{playlist.service === 'local' && (
 								<>
@@ -99,7 +99,7 @@ const PlaylistHeader = ({ playlist, handlePlay, handleAddTracks, handleRename, t
 										<img className={styles['play-icon']} src={playIcon} alt="" draggable="false" />
 										Play
 									</div>
-									<div className={`${styles['playlist-heading-btn']} ${styles['btn-hover-animation']} ${styles['playlist-play-btn']}`} onClick={handlePlay}>
+									<div className={`${styles['playlist-heading-btn']} ${styles['btn-hover-animation']} ${styles['playlist-play-btn']}`} onClick={handleShuffle}>
 										<img className={styles['shuffle-icon']} src={shuffleIcon} alt="" draggable="false" />
 										Shuffle
 									</div>

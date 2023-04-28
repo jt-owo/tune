@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable react-hooks/rules-of-hooks */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { memo, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent, DragStartEvent, DragOverlay, UniqueIdentifier } from '@dnd-kit/core';
@@ -10,6 +8,7 @@ import { restrictToWindowEdges } from '@dnd-kit/modifiers';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { deletePlaylist, updatePlaylist } from '../../../state/slices/playlistsSlice';
 import { addToQueueLast, addToQueueNext, setQueue } from '../../../state/slices/playerSlice';
+import Guid from '../../../util/guid';
 import useContextMenu from '../../hooks/useContextMenu';
 import useToggle from '../../hooks/useToggle';
 import SpotifyAPI from '../../api/spotify';
@@ -17,6 +16,7 @@ import AppRoutes from '../../routes';
 import Services from '../../util/services';
 import TrackHelper from '../../util/trackHelper';
 
+import PlaylistHeader from './PlaylistHeader/PlaylistHeader';
 import PlaylistTrack from './PlaylistTrack/PlaylistTrack';
 import ToolTip from '../../components/ToolTip/ToolTip';
 import ContextMenu from '../../components/ContextMenu/ContextMenu';
@@ -29,7 +29,6 @@ import addBottomIcon from '../../../../assets/ui-icons/add-bottom.svg';
 import helpIcon from '../../../../assets/ui-icons/help-circle.svg';
 
 import styles from './Playlist.module.scss';
-import PlaylistHeader from './PlaylistHeader/PlaylistHeader';
 
 type PlaylistParams = {
 	id: string;
@@ -82,9 +81,11 @@ const Playlist = memo(() => {
 
 	// Context Menu states.
 	const [isContextMenuVisible, toggleContextMenu, position, setPosition] = useContextMenu();
-	const [usingContextMenuId, setUsingContextMenuId] = useState(-1);
+	const [usingContextMenuId, setUsingContextMenuId] = useState('');
 
 	const playlistContainerRef = useRef<HTMLDivElement>(null);
+
+	const duration = Math.round(tracks.reduce((acc, track) => acc + (track.duration ?? 0), 0));
 
 	const handleDragStart = (event: DragStartEvent) => {
 		const { active } = event;
@@ -125,14 +126,9 @@ const Playlist = memo(() => {
 
 		const updateData = [...playlist.tracks];
 
-		let index = 1;
 		paths.forEach((path) => {
-			if (updateData.length > 0) {
-				index = TrackHelper.getNextID(updateData);
-			}
-
 			updateData.push({
-				id: index,
+				id: Guid.new(),
 				filePath: path,
 				service: 'local'
 			});
@@ -147,10 +143,17 @@ const Playlist = memo(() => {
 	};
 
 	const handlePlay = () => {
-		if (tracks.length) dispatch(setQueue(tracks));
+		if (tracks.length > 0) dispatch(setQueue(tracks));
 	};
 
-	const handleTrackRemove = (trackID: number) => {
+	const handleShuffle = () => {
+		if (tracks.length > 0) {
+			const shuffled = TrackHelper.shuffle(tracks);
+			dispatch(setQueue(shuffled));
+		}
+	};
+
+	const handleTrackRemove = (trackID: string) => {
 		const updateData = [...playlist.tracks];
 
 		const index = updateData.findIndex((x) => x.id === trackID);
@@ -164,12 +167,12 @@ const Playlist = memo(() => {
 		);
 	};
 
-	const handlePlayNext = (trackID: number) => {
+	const handlePlayNext = (trackID: string) => {
 		const track = tracks.find((x) => x.id === trackID);
 		if (track) dispatch(addToQueueNext(track));
 	};
 
-	const handlePlayLast = (trackID: number) => {
+	const handlePlayLast = (trackID: string) => {
 		const track = tracks.find((x) => x.id === trackID);
 		if (track) dispatch(addToQueueLast(track));
 	};
@@ -237,12 +240,17 @@ const Playlist = memo(() => {
 		} else if (isSpotify) {
 			if (foundPlaylist.tracksHref && spotifyToken) loadSpotifyTracks(spotifyToken, foundPlaylist.tracksHref);
 		}
+
+		// eslint-disable-next-line consistent-return
+		return () => {
+			setTracks([]);
+		};
 	}, [id, isLocal, isSpotify, playlists, spotifyPlaylists, spotifyToken]);
 
 	return (
 		<div className={styles['playlist-container']} onScroll={checkScroll} ref={playlistContainerRef}>
 			<Dialog heading="Delete?" description="You are about to delete this playlist. This action cannot be undone!" onClose={hideDialog} visible={isDialogVisible} type="danger" confirmText="Delete" rejectText="Keep" confirmCallback={handleDeletePlaylist} />
-			<PlaylistHeader playlist={playlist} handlePlay={handlePlay} handleAddTracks={handleAddTracks} handleLockPlaylist={handleLockPlaylist} handlePinPlaylist={handlePinPlaylist} handleRename={handleRename} handleToggleRename={handleToggleRename} toggleRename={toggleRename} toggleDialog={toggleDialog} renameVisible={isRenameVisible} shouldFloat={headerFloat} />
+			<PlaylistHeader playlist={playlist} duration={duration} handlePlay={handlePlay} handleShuffle={handleShuffle} handleAddTracks={handleAddTracks} handleLockPlaylist={handleLockPlaylist} handlePinPlaylist={handlePinPlaylist} handleRename={handleRename} handleToggleRename={handleToggleRename} toggleRename={toggleRename} toggleDialog={toggleDialog} renameVisible={isRenameVisible} shouldFloat={headerFloat} />
 			<div className={styles.sortbar}>
 				<div className={styles.title}>Title</div>
 				<div className={styles.album}>Album</div>

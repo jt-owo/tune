@@ -6,11 +6,17 @@ module.exports = {
 		'react/jsx-props-no-spreading': 'off',
 		'react/require-default-props': 'off',
 		'react/prop-types': 'off',
-		'import/no-unresolved': 'error',
+		'react/no-unused-prop-types': 'off',
 		'import/no-extraneous-dependencies': 'off',
 		'import/no-named-as-default': 'off',
 		'compat/compat': 'off',
-		'jsx-a11y/media-has-caption': 'off'
+		'@typescript-eslint/no-empty-function': 'off',
+		'jsx-a11y/click-events-have-key-events': 'off',
+		'jsx-a11y/no-static-element-interactions': 'off',
+		'jsx-a11y/no-noninteractive-element-interactions': 'off',
+		'jsx-a11y/interactive-supports-focus': 'off',
+		'jsx-a11y/media-has-caption': 'off',
+		'jsx-a11y/no-autofocus': 'off'
 	},
 	parserOptions: {
 		ecmaVersion: 2020,

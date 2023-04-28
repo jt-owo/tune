@@ -1,19 +1,10 @@
 /* eslint-disable consistent-return */
 /* eslint-disable compat/compat */
 import { useEffect } from 'react';
-
-interface Artwork {
-	src: string;
-	sizes: string;
-	type?: string;
-}
+import Format from '../util/format';
 
 export interface MediaSessionProps {
-	title?: string;
-	artist?: string;
-	album?: string;
-	artwork?: Artwork[];
-
+	track?: ITrack;
 	onPlay: MediaSessionActionHandler | null;
 	onPause: MediaSessionActionHandler | null;
 	onPreviousTrack: MediaSessionActionHandler | null;
@@ -21,31 +12,29 @@ export interface MediaSessionProps {
 }
 
 const useMediaSession = (props: MediaSessionProps) => {
-	const {
-		title = '',
-		artist = '',
-		album = '',
-		artwork = [],
+	const { track, onPlay, onPause, onPreviousTrack, onNextTrack } = props;
 
-		onPlay,
-		onPause,
-		onPreviousTrack,
-		onNextTrack
-	} = props;
+	const { name, artists, image } = Format.getTrackFormatted(track);
 
 	const { mediaSession } = navigator;
 
 	useEffect(() => {
 		mediaSession.metadata = new MediaMetadata({
-			title,
-			artist,
-			album,
-			artwork
+			title: name,
+			artist: artists,
+			album: image,
+			artwork: [
+				{
+					src: image,
+					sizes: '128x128', // TODO: Determine size from file metadata.
+					type: 'image/png'
+				}
+			]
 		});
 		return () => {
 			mediaSession.metadata = null;
 		};
-	}, [title, artist, album, artwork, mediaSession]);
+	}, [mediaSession, name, artists, image]);
 
 	useEffect(() => {
 		if (!onPlay) return;

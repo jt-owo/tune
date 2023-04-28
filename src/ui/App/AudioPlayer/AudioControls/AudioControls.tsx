@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
+import useMediaSession from '../../../hooks/useMediaSession';
 import { playNext, playPrevious, togglePlay } from '../../../../state/slices/playerSlice';
 
 import ControlButton from './ControlButton/ControlButton';
@@ -45,9 +46,9 @@ const AudioControls = ({ audioRef, seekBarRef, setProgress }: AudioControlsProps
 		progressAnimationRef.current = requestAnimationFrame(repeat);
 	}, [audioRef, seekBarRef, setProgress]);
 
-	const handlePlayPause = () => {
+	const handlePlayPause = useCallback(() => {
 		dispatch(togglePlay());
-	};
+	}, [dispatch]);
 
 	const handlePlayPrevious = () => {
 		dispatch(playPrevious());
@@ -57,6 +58,7 @@ const AudioControls = ({ audioRef, seekBarRef, setProgress }: AudioControlsProps
 		dispatch(playNext());
 	};
 
+	// Play / pause
 	useEffect(() => {
 		if (!audioRef.current) return;
 
@@ -69,6 +71,7 @@ const AudioControls = ({ audioRef, seekBarRef, setProgress }: AudioControlsProps
 		progressAnimationRef.current = requestAnimationFrame(repeat);
 	}, [isPlaying, audioRef, repeat, volume, track?.id]);
 
+	// Set the volume.
 	useEffect(() => {
 		if (!audioRef.current) return;
 
@@ -76,6 +79,32 @@ const AudioControls = ({ audioRef, seekBarRef, setProgress }: AudioControlsProps
 		audioRef.current.volume = volume / 100;
 		window.api?.config.set('volume', volume.toString());
 	}, [volume, audioRef]);
+
+	// Adds keyboard shortcuts for play/pause. Maybe more in the future?
+	useEffect(() => {
+		// Spacebar for play/pause.
+		document.addEventListener('keydown', (e) => {
+			if (e.code === 'Space') {
+				// Don't trigger if the user is typing in a text field.
+				if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+
+				e.preventDefault();
+				handlePlayPause();
+			}
+		});
+
+		return () => {
+			document.removeEventListener('keydown', () => {});
+		};
+	}, [handlePlayPause]);
+
+	useMediaSession({
+		track,
+		onPlay: handlePlayPause,
+		onPause: handlePlayPause,
+		onPreviousTrack: handlePlayPrevious,
+		onNextTrack: handlePlayNext
+	});
 
 	return (
 		<>

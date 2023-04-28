@@ -61,7 +61,18 @@ class Format {
 	 * @param track Track object.
 	 * @returns Formatted track object.
 	 */
-	static getTrackFormatted = (track: ITrack): IFormattedTrack => {
+	static getTrackFormatted = (track?: ITrack): IFormattedTrack => {
+		if (!track) {
+			return {
+				name: '',
+				artists: '',
+				album: '',
+				duration: '',
+				image: '',
+				isLoaded: false
+			};
+		}
+
 		return {
 			name: track.name!,
 			artists: Format.getArtists(track.album?.artists),

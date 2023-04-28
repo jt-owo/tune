@@ -149,7 +149,8 @@ class SpotifyParser {
 			isPlaying: playbackState.is_playing,
 			repeatMode: 'off',
 			isShuffle: playbackState.shuffle_state,
-			track
+			track,
+			outputDeviceId: ''
 		};
 	}
 }

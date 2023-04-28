@@ -4,6 +4,8 @@
 	display: flex;
 	flex-direction: row;
 	align-items: center;
+	z-index: 3;
+	pointer-events: none;
 }
 
 .track-artist {

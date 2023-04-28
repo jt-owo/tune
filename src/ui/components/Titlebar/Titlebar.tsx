@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/interactive-supports-focus */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import maximizeIcon from '../../../../assets/ui-icons/titlebar-win/square-regular.svg';
 import minimizeIcon from '../../../../assets/ui-icons/titlebar-win/minus-solid.svg';
 import closeIcon from '../../../../assets/ui-icons/titlebar-win/x-solid.svg';

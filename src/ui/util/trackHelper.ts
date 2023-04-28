@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 class TrackHelper {
 	/**
 	 * Loads metadata for a list of tracks.
@@ -13,6 +14,21 @@ class TrackHelper {
 		);
 
 		return loadedTracks;
+	};
+
+	/**
+	 * TODO: implement.
+	 * PROTOTYPE SHUFFLE!
+	 * Shuffles an array of tracks.
+	 * @param tracks Array of tracks.
+	 * @returns Randomly shuffled array of tracks.
+	 */
+	static shuffle = (tracks: ITrack[]) => {
+		const copy = [...tracks];
+
+		// Shuffle array
+
+		return copy;
 	};
 }
 

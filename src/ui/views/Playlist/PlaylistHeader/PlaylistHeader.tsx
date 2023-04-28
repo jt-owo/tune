@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import { useRef } from 'react';
 import RenameDialog from '../../../components/RenameDialog/RenameDialog';
 import ToolTip from '../../../components/ToolTip/ToolTip';
@@ -22,6 +20,7 @@ interface PlaylistHeaderProps {
 	playlist: IPlaylist;
 	duration: number;
 	handlePlay: () => void;
+	handleShuffle: () => void;
 	handleAddTracks: () => void;
 	handleRename: (data: string) => void;
 	toggleRename: () => void;
@@ -33,7 +32,7 @@ interface PlaylistHeaderProps {
 	shouldFloat: boolean;
 }
 
-const PlaylistHeader = ({ playlist, duration, handlePlay, handleAddTracks, handleRename, toggleRename, toggleDialog, handleToggleRename, handleLockPlaylist, handlePinPlaylist, renameVisible, shouldFloat }: PlaylistHeaderProps) => {
+const PlaylistHeader = ({ playlist, duration, handlePlay, handleShuffle, handleAddTracks, handleRename, toggleRename, toggleDialog, handleToggleRename, handleLockPlaylist, handlePinPlaylist, renameVisible, shouldFloat }: PlaylistHeaderProps) => {
 	const playlistMenuRef = useRef<HTMLDivElement>(null);
 
 	const [isPlaylistOptionsVisible, togglePlaylistOptions, playlistOptionsPosition, setPlaylistOptionsPosition] = useContextMenu(playlistMenuRef);
@@ -58,7 +57,7 @@ const PlaylistHeader = ({ playlist, duration, handlePlay, handleAddTracks, handl
 										<img className={styles['play-icon']} src={playIcon} alt="" draggable="false" />
 										Play
 									</div>
-									<div className={`${styles['playlist-heading-btn']} ${styles['btn-hover-animation']} ${styles['playlist-play-btn']}`} onClick={handlePlay}>
+									<div className={`${styles['playlist-heading-btn']} ${styles['btn-hover-animation']} ${styles['playlist-play-btn']}`} onClick={handleShuffle}>
 										<img className={styles['shuffle-icon']} src={shuffleIcon} alt="" draggable="false" />
 										Shuffle
 									</div>
@@ -100,7 +99,7 @@ const PlaylistHeader = ({ playlist, duration, handlePlay, handleAddTracks, handl
 										<img className={styles['play-icon']} src={playIcon} alt="" draggable="false" />
 										Play
 									</div>
-									<div className={`${styles['playlist-heading-btn']} ${styles['btn-hover-animation']} ${styles['playlist-play-btn']}`} onClick={handlePlay}>
+									<div className={`${styles['playlist-heading-btn']} ${styles['btn-hover-animation']} ${styles['playlist-play-btn']}`} onClick={handleShuffle}>
 										<img className={styles['shuffle-icon']} src={shuffleIcon} alt="" draggable="false" />
 										Shuffle
 									</div>

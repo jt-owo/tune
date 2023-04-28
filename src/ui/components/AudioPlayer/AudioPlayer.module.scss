@@ -36,29 +36,6 @@
 	background-color: rgba($color: #ffffff, $alpha: 0.15);
 }
 
-.play-btn {
-	height: 38px;
-	position: absolute;
-	top: 12px;
-	right: 54px;
-}
-
-.skip-back-btn {
-	height: 38px;
-	position: absolute;
-	top: 12px;
-	right: 100px;
-	padding: 3px;
-}
-
-.skip-forward-btn {
-	height: 38px;
-	position: absolute;
-	top: 12px;
-	right: 10px;
-	padding: 3px;
-}
-
 .player-control-divider {
 	border-left: 1px solid rgba(255, 255, 255, 0.2);
 	margin: 7px 3px 7px 0px;

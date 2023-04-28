@@ -15,8 +15,8 @@ import Playlist from '../views/Playlist/Playlist';
 import Settings from '../views/Settings/Settings';
 import Navigation from '../components/Navigation/Navigation';
 import Queue from '../components/Queue/Queue';
-import AudioPlayer from '../components/AudioPlayer/AudioPlayer';
 import AlertContainer from '../components/Alert/Alert';
+import AudioPlayer from '../components/AudioPlayer/AudioPlayer';
 
 import './App.scss';
 

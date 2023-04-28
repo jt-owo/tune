@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/interactive-supports-focus */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import { ReactElement, useCallback, useState } from 'react';
 import { TabItemProps } from './TabItem/TabItem';
 

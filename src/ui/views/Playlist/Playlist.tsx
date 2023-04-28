@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable react-hooks/rules-of-hooks */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { memo, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent, DragStartEvent, DragOverlay, UniqueIdentifier } from '@dnd-kit/core';
@@ -145,7 +143,14 @@ const Playlist = memo(() => {
 	};
 
 	const handlePlay = () => {
-		if (tracks.length) dispatch(setQueue(tracks));
+		if (tracks.length > 0) dispatch(setQueue(tracks));
+	};
+
+	const handleShuffle = () => {
+		if (tracks.length > 0) {
+			const shuffled = TrackHelper.shuffle(tracks);
+			dispatch(setQueue(shuffled));
+		}
 	};
 
 	const handleTrackRemove = (trackID: string) => {
@@ -235,12 +240,17 @@ const Playlist = memo(() => {
 		} else if (isSpotify) {
 			if (foundPlaylist.tracksHref && spotifyToken) loadSpotifyTracks(spotifyToken, foundPlaylist.tracksHref);
 		}
+
+		// eslint-disable-next-line consistent-return
+		return () => {
+			setTracks([]);
+		};
 	}, [id, isLocal, isSpotify, playlists, spotifyPlaylists, spotifyToken]);
 
 	return (
 		<div className={styles['playlist-container']} onScroll={checkScroll} ref={playlistContainerRef}>
 			<Dialog heading="Delete?" description="You are about to delete this playlist. This action cannot be undone!" onClose={hideDialog} visible={isDialogVisible} type="danger" confirmText="Delete" rejectText="Keep" confirmCallback={handleDeletePlaylist} />
-			<PlaylistHeader playlist={playlist} duration={duration} handlePlay={handlePlay} handleAddTracks={handleAddTracks} handleLockPlaylist={handleLockPlaylist} handlePinPlaylist={handlePinPlaylist} handleRename={handleRename} handleToggleRename={handleToggleRename} toggleRename={toggleRename} toggleDialog={toggleDialog} renameVisible={isRenameVisible} shouldFloat={headerFloat} />
+			<PlaylistHeader playlist={playlist} duration={duration} handlePlay={handlePlay} handleShuffle={handleShuffle} handleAddTracks={handleAddTracks} handleLockPlaylist={handleLockPlaylist} handlePinPlaylist={handlePinPlaylist} handleRename={handleRename} handleToggleRename={handleToggleRename} toggleRename={toggleRename} toggleDialog={toggleDialog} renameVisible={isRenameVisible} shouldFloat={headerFloat} />
 			<div className={styles.sortbar}>
 				<div className={styles.title}>Title</div>
 				<div className={styles.album}>Album</div>

@@ -1,6 +1,3 @@
-/* eslint-disable jsx-a11y/no-autofocus */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
 import { KeyboardEvent, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { addPlaylist } from '../../../state/slices/playlistsSlice';

@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import Lottie, { LottieComponentProps } from 'lottie-react';
 
 import styles from './ContextMenuItem.module.scss';

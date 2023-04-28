@@ -1,50 +1,56 @@
-import useMediaSession from '../../../hooks/useMediaSession';
+/* eslint-disable no-param-reassign */
+import { RefObject, SyntheticEvent, useEffect } from 'react';
+import { useAppDispatch } from '../../../hooks';
+import { playNext } from '../../../../state/slices/playerSlice';
 import Format from '../../../util/format';
 
 import styles from './NowPlaying.module.scss';
 
-interface NowPlayingProps {
+interface DisplayTrackProps {
 	track: ITrack;
-	onPlay: () => void;
-	onPreviousTrack: () => void;
-	onNextTrack: () => void;
+	audioRef: RefObject<TuneHTMLAudioElement>;
+	seekBarRef: RefObject<HTMLInputElement>;
+	setDuration: React.Dispatch<React.SetStateAction<number>>;
+	outputDeviceId: string;
 }
 
-const NowPlaying = ({ track, onPlay, onPreviousTrack, onNextTrack }: NowPlayingProps): JSX.Element => {
+const NowPlaying = ({ track, audioRef, seekBarRef, outputDeviceId, setDuration }: DisplayTrackProps) => {
+	const dispatch = useAppDispatch();
+
 	const { name, artists, image, isLoaded } = Format.getTrackFormatted(track);
 
-	// Set track so the main process knows what track is currently playing.
+	// Send track to the main process for discord-rpc.
 	window.api?.system.setTrack(name, artists, name);
 
-	useMediaSession({
-		title: name,
-		artist: artists,
-		album: image,
-		artwork: [
-			{
-				src: image,
-				sizes: '128x128', // TODO: Determine size from file metadata.
-				type: 'image/png'
-			}
-		],
-		onPlay,
-		onPause: onPlay,
-		onPreviousTrack,
-		onNextTrack
-	});
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	const onEnded = (_e: SyntheticEvent<TuneHTMLAudioElement>) => dispatch(playNext());
+
+	const onLoadedMetadata = () => {
+		if (!audioRef.current || !seekBarRef.current) return;
+
+		const seconds = audioRef.current.duration;
+		setDuration(seconds);
+	};
+
+	useEffect(() => {
+		audioRef?.current?.setSinkId(outputDeviceId);
+	}, [audioRef, outputDeviceId]);
 
 	return (
-		<div className={styles.track}>
-			{isLoaded && (
-				<>
-					<img src={image} alt="" className={styles['current-album-cover']} />
-					<div className={styles['track-info']}>
-						<div className={styles['current-track']}>{name}</div>
-						<div className={styles['current-artist']}>{artists}</div>
-					</div>
-				</>
-			)}
-		</div>
+		<>
+			<div className={styles.track}>
+				{isLoaded && (
+					<>
+						<img src={image} alt="" className={styles['current-album-cover']} />
+						<div className={styles['track-info']}>
+							<div className={styles['current-track']}>{name}</div>
+							<div className={styles['current-artist']}>{artists}</div>
+						</div>
+					</>
+				)}
+			</div>
+			{track.service === 'local' && track.filePath && <audio ref={audioRef} src={Format.getFilePath(track.filePath)} onLoadedMetadata={onLoadedMetadata} onEnded={onEnded} />}
+		</>
 	);
 };
 

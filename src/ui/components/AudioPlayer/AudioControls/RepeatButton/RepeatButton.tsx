@@ -1,11 +1,9 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import { useState, useRef } from 'react';
 
-import styles from './RepeatButton.module.scss';
+import repeatIcon from '../../../../../../assets/ui-icons/repeat.svg';
+import oneIcon from '../../../../../../assets/ui-icons/one-circle.svg';
 
-import repeatIcon from '../../../../../assets/ui-icons/repeat.svg';
-import oneIcon from '../../../../../assets/ui-icons/one-circle.svg';
+import styles from './RepeatButton.module.scss';
 
 const REPEAT_MODE = {
 	OFF: 0,
@@ -14,26 +12,25 @@ const REPEAT_MODE = {
 };
 
 const RepeatButton = (): JSX.Element => {
-	const [isRepeat, setIsRepeat] = useState(REPEAT_MODE.OFF);
+	const [repeatMode, setRepeatMode] = useState(REPEAT_MODE.OFF);
 
 	const repeatRef = useRef<HTMLDivElement>(null);
 
 	const handleRepeat = () => {
-		switch (isRepeat) {
+		switch (repeatMode) {
 			case REPEAT_MODE.OFF:
-				setIsRepeat(REPEAT_MODE.ALL);
+				setRepeatMode(REPEAT_MODE.ALL);
 				repeatRef.current?.classList.toggle(styles.active);
 				break;
 			case REPEAT_MODE.ALL:
-				setIsRepeat(REPEAT_MODE.ONE);
+				setRepeatMode(REPEAT_MODE.ONE);
 				repeatRef.current?.classList.toggle(styles.one);
 				break;
 			case REPEAT_MODE.ONE:
-				setIsRepeat(REPEAT_MODE.OFF);
+				setRepeatMode(REPEAT_MODE.OFF);
 				repeatRef.current?.classList.toggle(styles.one);
 				repeatRef.current?.classList.toggle(styles.active);
 				break;
-
 			default:
 				break;
 		}

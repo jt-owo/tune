@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import { useCallback } from 'react';
 import { removeAlert } from '../../../state/slices/alertSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks';

@@ -76,12 +76,19 @@ export const playerSlice = createSlice({
 		},
 		playNext: (state) => {
 			const lastTrack = state.queue.tracks[state.queue.index];
-			if (state.queue.index < state.queue.tracks.length) {
+			if (state.queue.index < state.queue.tracks.length - 1) {
 				state.queue.index += 1;
 				state.playback = {
 					...state.playback,
 					track: state.queue.tracks[state.queue.index],
 					isPlaying: true
+				};
+			} else {
+				// Queue is empty.
+				state.playback = {
+					...state.playback,
+					track: undefined,
+					isPlaying: false
 				};
 			}
 
@@ -94,13 +101,6 @@ export const playerSlice = createSlice({
 					...state.playback,
 					track: state.queue.tracks[state.queue.index],
 					isPlaying: true
-				};
-			} else {
-				// Queue is empty.
-				state.playback = {
-					...state.playback,
-					track: undefined,
-					isPlaying: false
 				};
 			}
 		},

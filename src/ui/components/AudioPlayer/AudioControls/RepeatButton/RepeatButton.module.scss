@@ -1,12 +1,12 @@
-@import '../../../styles/colors';
+@import '../../../../styles/colors';
 
-.shuffle-btn {
+.repeat-btn {
 	background-color: $dark-gray-3;
 	display: flex;
 	align-items: center;
 	position: fixed;
 	top: 5px;
-	left: 220px;
+	left: 313px;
 	width: 85px;
 	padding: 6px 8px 6px 8px;
 	border-radius: 20px;
@@ -14,29 +14,44 @@
 	-webkit-app-region: no-drag;
 }
 
-.shuffle-btn-img {
+.repeat-btn-img {
 	height: 16px;
 	margin-right: 6px;
 }
 
-.shuffle-btn-text {
+.repeat-btn-text {
 	font-family: Quicksand-500;
 	font-size: 14px;
 }
 
-.shuffle-btn:hover {
+.repeat-btn-one {
+	height: 10px;
+	position: absolute;
+	top: 15px;
+	left: 16px;
+	filter: invert(1);
+	opacity: 0;
+	transition: all ease-in-out 0.15s;
+}
+
+.repeat-btn:hover {
 	background-color: $hover-color-verylight;
 }
 
-.shuffle-btn.active {
+.repeat-btn.active {
 	color: #000000;
 	background-color: #ffffff;
 
-	.shuffle-btn-img {
+	.repeat-btn-img {
 		filter: invert(1);
 	}
 
-	.shuffle-btn-text {
+	.repeat-btn-text {
 		font-family: Quicksand-700;
+	}
+}
+.repeat-btn.one {
+	.repeat-btn-one {
+		opacity: 1;
 	}
 }

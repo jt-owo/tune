@@ -1,5 +1,5 @@
 import { KeyboardEvent, useState } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { addPlaylist } from '../../../state/slices/playlistsSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import useToggle from '../../hooks/useToggle';
@@ -23,6 +23,7 @@ const Navigation = (): JSX.Element => {
 	const [addNew, toggleAddNew] = useToggle();
 	const [newPlaylistName, setNewPlaylistName] = useState('');
 
+	const navigate = useNavigate();
 	const location = useLocation();
 
 	const playlists = useAppSelector((state) => state.playlists.local);
@@ -56,19 +57,19 @@ const Navigation = (): JSX.Element => {
 					<img src={logo} alt="logo" className={styles['nav-bar-logo']} draggable="false" />
 				</li>
 				<li>
-					<NavLink to={AppRoutes.Home} className={`${styles['nav-btn']} ${styles['btn-hover-animation']} ${styles['home-btn']} ${location.pathname === AppRoutes.Home ? styles.active : ''}`} draggable="false">
+					<Link to={AppRoutes.Home} className={`${styles['nav-btn']} ${styles['btn-hover-animation']} ${styles['home-btn']} ${location.pathname === AppRoutes.Home ? styles.active : ''}`} draggable="false">
 						<NavlistButton animation={homeIcon} doLoop={false} title="Home" />
-					</NavLink>
+					</Link>
 				</li>
 				<li>
-					<NavLink to={AppRoutes.Browse} className={`${styles['nav-btn']} ${styles['btn-hover-animation']} ${styles['browse-btn']} ${location.pathname === AppRoutes.Browse ? styles.active : ''}`} draggable="false">
+					<Link to={AppRoutes.Browse} className={`${styles['nav-btn']} ${styles['btn-hover-animation']} ${styles['browse-btn']} ${location.pathname === AppRoutes.Browse ? styles.active : ''}`} draggable="false">
 						<NavlistButton animation={browseIcon} doLoop={false} title="Browse" />
-					</NavLink>
+					</Link>
 				</li>
 				<li>
-					<NavLink to={AppRoutes.Library} className={`${styles['nav-btn']} ${styles['btn-hover-animation']} ${styles['library-btn']} ${location.pathname === AppRoutes.Library ? styles.active : ''}`} draggable="false">
+					<Link to={AppRoutes.Library} className={`${styles['nav-btn']} ${styles['btn-hover-animation']} ${styles['library-btn']} ${location.pathname === AppRoutes.Library ? styles.active : ''}`} draggable="false">
 						<NavlistButton animation={libraryIcon} doLoop={false} title="Library" />
-					</NavLink>
+					</Link>
 				</li>
 				<li className={styles['pinned-playlist-section']}>
 					<h2>PLAYLISTS</h2>
@@ -84,21 +85,29 @@ const Navigation = (): JSX.Element => {
 					{addNew && <TextBox placeholder="Name..." className={styles['new-playlist-name-field']} autoFocus onBlur={() => toggleAddNew()} onChange={(e) => setNewPlaylistName(e.target.value)} onKeyDown={handleKeyDown} />}
 					{pinnedPlaylists?.map((playlist) => {
 						return (
-							<NavLink to={`${AppRoutes.Playlist}/${playlist.id}/${playlist.service}`} title={playlist.name} key={playlist.id} className={`${styles['playlist-btn']} ${styles['btn-hover-animation']} ${location.pathname === `${AppRoutes.Playlist}/${playlist.id}/${playlist.service}` ? styles.active : ''}`} draggable="false">
+							<Link to={`${AppRoutes.Playlist}/${playlist.id}/${playlist.service}`} title={playlist.name} key={playlist.id} className={`${styles['playlist-btn']} ${styles['btn-hover-animation']} ${location.pathname === `${AppRoutes.Playlist}/${playlist.id}/${playlist.service}` ? styles.active : ''}`} draggable="false">
 								<div className={styles['playlist-navitem']}>
 									<img src={Format.getImage(playlist.images)} alt="" className={styles['playlist-navitem-img']} />
 									<div className={styles['playlist-navitem-name']}>{playlist.name}</div>
 								</div>
-							</NavLink>
+							</Link>
 						);
 					})}
 				</li>
 				<li>
-					<NavLink to={AppRoutes.Settings} className={`${styles['nav-btn']} ${styles['btn-hover-animation']} ${styles['settings-btn']} ${location.pathname === AppRoutes.Settings ? styles.active : ''}`} draggable="false">
+					<Link to={AppRoutes.Settings} className={`${styles['nav-btn']} ${styles['btn-hover-animation']} ${styles['settings-btn']} ${location.pathname === AppRoutes.Settings ? styles.active : ''}`} draggable="false">
 						<NavlistButton animation={settingsIcon} doLoop={false} title="Settings" />
-					</NavLink>
+					</Link>
 				</li>
 			</ul>
+			<div id={styles['history-button-container']}>
+				<button type="button" onClick={() => navigate(-1)}>
+					&lt;
+				</button>
+				<button type="button" onClick={() => navigate(1)}>
+					&gt;
+				</button>
+			</div>
 		</nav>
 	);
 };

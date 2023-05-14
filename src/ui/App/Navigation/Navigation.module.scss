@@ -167,3 +167,8 @@
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }
+
+#history-button-container {
+	position: absolute;
+	z-index: 99;
+}

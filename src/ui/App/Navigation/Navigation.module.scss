@@ -20,10 +20,6 @@
 	//box-shadow: 3px 3px 3px 3px rgb(4, 4, 4);
 }
 
-.nav-bar > :last-child {
-	margin-top: auto;
-}
-
 .nav-bar-logo {
 	width: 90px;
 	max-width: 45%;
@@ -109,10 +105,16 @@
 	font-size: 14px;
 }
 
-.spacer {
+.horizontal-spacer {
 	border: none;
 	border-top: 1px solid rgba(255, 255, 255, 0.2);
 	margin: 8px 10px 5px 10px;
+}
+
+.vertical-spacer {
+	border: none;
+	border-left: 1px solid $hover-color-light;
+	margin: 4px 0px 4px 0px;
 }
 
 .btn-hover-animation {
@@ -170,6 +172,56 @@
 }
 
 #history-button-container {
-	position: absolute;
+	/* Layout */
+	position: fixed;
+	top: 5px;
+	left: 87px;
+	display: flex;
+
+	/* Color */
+	background-color: $floating-component-color;
+
+	border: $hover-color-light 1px solid;
+	border-radius: 420px;
 	z-index: 99;
+	-webkit-app-region: no-drag;
+
+	button {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 80px;
+		height: 28px;
+
+		color: #ffffff;
+		background-color: transparent;
+
+		border: none;
+		border-radius: 0 420px 420px 0;
+
+		transition: background-color ease-out 0.15s;
+
+		&:hover {
+			background-color: $hover-color-medium;
+		}
+
+		&:active {
+			background-color: $hover-color-light;
+		}
+
+		img {
+			filter: invert(1);
+		}
+	}
+
+	button:first-child {
+		border-radius: 420px 0 0 420px;
+		img {
+			rotate: 180deg;
+		}
+	}
+}
+
+.control-center-spacer {
+	margin-top: auto;
 }

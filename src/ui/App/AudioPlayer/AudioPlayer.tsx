@@ -8,14 +8,17 @@ import SeekBar from './SeekBar/SeekBar';
 
 import styles from './AudioPlayer.module.scss';
 
-const AudioPlayer = () => {
+interface AudioPlayerProps {
+	audioRef: React.RefObject<TuneHTMLAudioElement>;
+}
+
+const AudioPlayer = ({ audioRef }: AudioPlayerProps) => {
 	const track = useAppSelector((state) => state.player.playback.track);
 	const outputDeviceId = useAppSelector((state) => state.player.playback.outputDeviceId);
 
 	const [progress, setProgress] = useState(0);
 	const [duration, setDuration] = useState(0);
 
-	const audioRef = useRef<TuneHTMLAudioElement>(null);
 	const seekBarRef = useRef<HTMLInputElement>(null);
 
 	return (

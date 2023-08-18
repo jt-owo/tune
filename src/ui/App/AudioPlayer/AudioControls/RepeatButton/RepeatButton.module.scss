@@ -1,14 +1,13 @@
 @import '../../../../styles/colors';
 
 .repeat-btn {
-	background-color: $dark-gray-3;
+	position: relative;
 	display: flex;
 	align-items: center;
-	position: fixed;
-	top: 5px;
-	left: 313px;
-	width: 85px;
+	justify-content: center;
+	width: 100%;
 	padding: 6px 8px 6px 8px;
+	background-color: $dark-gray-3;
 	border-radius: 20px;
 	transition: background-color ease-in-out 0.15s;
 	-webkit-app-region: no-drag;

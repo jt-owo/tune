@@ -1,9 +1,9 @@
 import { KeyboardEvent, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { addPlaylist } from '../../../state/slices/playlistsSlice';
+import { addAlert } from '../../../state/slices/alertSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import useToggle from '../../hooks/useToggle';
-import { addAlert } from '../../../state/slices/alertSlice';
 import AppRoutes from '../../routes';
 import Format from '../../util/format';
 
@@ -16,10 +16,16 @@ import homeIcon from '../../../../assets/animations/home.json';
 import browseIcon from '../../../../assets/animations/explore.json';
 import libraryIcon from '../../../../assets/animations/folder.json';
 import settingsIcon from '../../../../assets/animations/settings.json';
+import chevron from '../../../../assets/ui-icons/chevron-right.svg';
 
 import styles from './Navigation.module.scss';
+import ControlCenter from '../AudioPlayer/AudioControls/ControlCenter/ControlCenter';
 
-const Navigation = (): JSX.Element => {
+interface NavigationProps {
+	audioRef: React.RefObject<TuneHTMLAudioElement>;
+}
+
+const Navigation = ({ audioRef }: NavigationProps): JSX.Element => {
 	const [addNew, toggleAddNew] = useToggle();
 	const [newPlaylistName, setNewPlaylistName] = useState('');
 
@@ -71,6 +77,11 @@ const Navigation = (): JSX.Element => {
 						<NavlistButton animation={libraryIcon} doLoop={false} title="Library" />
 					</Link>
 				</li>
+				<li>
+					<Link to={AppRoutes.Settings} className={`${styles['nav-btn']} ${styles['btn-hover-animation']} ${styles['settings-btn']} ${location.pathname === AppRoutes.Settings ? styles.active : ''}`} draggable="false">
+						<NavlistButton animation={settingsIcon} doLoop={false} title="Settings" />
+					</Link>
+				</li>
 				<li className={styles['pinned-playlist-section']}>
 					<h2>PLAYLISTS</h2>
 					<div className={styles['new-playlist-btn']} onClick={() => toggleAddNew()}>
@@ -79,7 +90,7 @@ const Navigation = (): JSX.Element => {
 					</div>
 				</li>
 				<li>
-					<div className={styles.spacer} />
+					<div className={styles['horizontal-spacer']} />
 				</li>
 				<li>
 					{addNew && <TextBox placeholder="Name..." className={styles['new-playlist-name-field']} autoFocus onBlur={() => toggleAddNew()} onChange={(e) => setNewPlaylistName(e.target.value)} onKeyDown={handleKeyDown} />}
@@ -94,18 +105,20 @@ const Navigation = (): JSX.Element => {
 						);
 					})}
 				</li>
-				<li>
-					<Link to={AppRoutes.Settings} className={`${styles['nav-btn']} ${styles['btn-hover-animation']} ${styles['settings-btn']} ${location.pathname === AppRoutes.Settings ? styles.active : ''}`} draggable="false">
-						<NavlistButton animation={settingsIcon} doLoop={false} title="Settings" />
-					</Link>
+				<li className={styles['control-center-spacer']}>
+					<div className={styles['horizontal-spacer']} />
+				</li>
+				<li className={styles['control-center']}>
+					<ControlCenter audioRef={audioRef} />
 				</li>
 			</ul>
 			<div id={styles['history-button-container']}>
 				<button type="button" onClick={() => navigate(-1)}>
-					&lt;
+					<img src={chevron} alt="" />
 				</button>
+				<div className={styles['vertical-spacer']} />
 				<button type="button" onClick={() => navigate(1)}>
-					&gt;
+					<img src={chevron} alt="" />
 				</button>
 			</div>
 		</nav>

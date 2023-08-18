@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import AppRoutes, { AppRoutesParams } from '../routes';
 import { useAppDispatch } from '../hooks';
@@ -24,6 +24,8 @@ const App = (): JSX.Element => {
 	const dispatch = useAppDispatch();
 	dispatch(loadPlaylists());
 
+	const audioRef = useRef<TuneHTMLAudioElement>(null);
+
 	useEffect(() => {
 		const loadSpotifyContent = async (accessToken: string) => {
 			const user = await SpotifyAPI.fetchUserProfile(accessToken);
@@ -44,7 +46,7 @@ const App = (): JSX.Element => {
 		<div id={styles['app-container']}>
 			<TitleBar />
 			<Router>
-				<Navigation />
+				<Navigation audioRef={audioRef} />
 				<Routes>
 					<Route path={AppRoutes.Home} element={<Home />} />
 					<Route path={AppRoutes.Library} element={<Library />} />
@@ -53,7 +55,7 @@ const App = (): JSX.Element => {
 					<Route path={AppRoutes.Settings} element={<Settings />} />
 				</Routes>
 			</Router>
-			<AudioPlayer />
+			<AudioPlayer audioRef={audioRef} />
 			<Queue />
 			<AlertContainer />
 		</div>

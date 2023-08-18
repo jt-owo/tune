@@ -6,9 +6,6 @@ import { playNext, playPrevious, togglePlay } from '../../../../state/slices/pla
 
 import ControlButton from './ControlButton/ControlButton';
 import PlayPauseButton from './PlayPauseButton/PlayPauseButton';
-import VolumeSlider from './VolumeSlider/VolumeSlider';
-import ShuffleButton from './ShuffleButton/ShuffleButton';
-import RepeatButton from './RepeatButton/RepeatButton';
 
 import playBtn from '../../../../../assets/animations/playPause.json';
 import skipBackBtn from '../../../../../assets/animations/skipBack.json';
@@ -20,9 +17,8 @@ interface AudioControlsProps {
 	setProgress: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const configVolume = window.api?.config.get('volume').toString() ?? '20';
-
 const AudioControls = ({ audioRef, seekBarRef, setProgress }: AudioControlsProps) => {
+	const configVolume = window.api?.config.get('volume').toString() ?? '20';
 	const [volume, setVolume] = useState(parseInt(configVolume, 10));
 
 	const isPlaying = useAppSelector((state) => state.player.playback.isPlaying);
@@ -71,15 +67,6 @@ const AudioControls = ({ audioRef, seekBarRef, setProgress }: AudioControlsProps
 		progressAnimationRef.current = requestAnimationFrame(repeat);
 	}, [isPlaying, audioRef, repeat, volume, track?.id]);
 
-	// Set the volume.
-	useEffect(() => {
-		if (!audioRef.current) return;
-
-		// Values of the audio's volume property are between 0.0 and 1.0
-		audioRef.current.volume = volume / 100;
-		window.api?.config.set('volume', volume.toString());
-	}, [volume, audioRef]);
-
 	// Adds keyboard shortcuts for play/pause. Maybe more in the future?
 	useEffect(() => {
 		// Spacebar for play/pause.
@@ -98,6 +85,10 @@ const AudioControls = ({ audioRef, seekBarRef, setProgress }: AudioControlsProps
 		};
 	}, [handlePlayPause]);
 
+	useEffect(() => {
+		setVolume(parseInt(configVolume, 10));
+	}, [configVolume]);
+
 	useMediaSession({
 		track,
 		onPlay: handlePlayPause,
@@ -111,9 +102,6 @@ const AudioControls = ({ audioRef, seekBarRef, setProgress }: AudioControlsProps
 			<ControlButton id="skip-back-btn" onClick={handlePlayPrevious} animationData={skipBackBtn} />
 			<PlayPauseButton isPlaying={isPlaying} onClick={handlePlayPause} animationData={playBtn} />
 			<ControlButton id="skip-forward-btn" onClick={handlePlayNext} animationData={skipForwardBtn} />
-			<VolumeSlider volume={volume} setVolume={setVolume} />
-			<ShuffleButton />
-			<RepeatButton />
 		</>
 	);
 };

@@ -9,7 +9,7 @@
 	width: 240px;
 	list-style-type: none;
 	margin: 0;
-	padding: 0;
+	padding: 0 10px;
 	overflow: hidden;
 	display: flex;
 	flex-direction: column;
@@ -37,7 +37,7 @@
 	color: #ffffff;
 	font-family: Quicksand-400;
 	padding: 5px 16px 5px 10px;
-	margin: 5px 10px;
+	margin: 5px 0px;
 	border-radius: 20px;
 }
 
@@ -49,7 +49,7 @@
 	font-family: Quicksand-400;
 	font-weight: bold;
 	padding: 5px 10px 5px 5px;
-	margin: 5px 10px;
+	margin: 5px 0px;
 	border-radius: 10px;
 }
 
@@ -62,12 +62,9 @@
 	font-size: 16px;
 	font-weight: bold;
 	padding: 5px 16px;
-	margin: 5px 10px;
 	border-radius: 10px;
 	border-style: none;
 	background-color: $dark-gray-3;
-
-	max-width: 178px;
 
 	&:focus {
 		outline: none;
@@ -91,7 +88,7 @@
 .pinned-playlist-section {
 	font-family: Quicksand-700;
 	float: left;
-	margin-left: 20px;
+	margin-left: 10px;
 	color: rgb(199, 199, 199);
 	font-size: 12px;
 	font-weight: bold;
@@ -129,10 +126,6 @@
 	background-image: linear-gradient(to right, rgb(0, 140, 255), rgb(162, 0, 255));
 	box-shadow: 0 0 12px rgb(111, 0, 255);
 }
-
-// .active:hover {
-// 	box-shadow: 0px 0px 2px 3px $hover-color-dark;
-// }
 
 .new-playlist-btn {
 	float: right;

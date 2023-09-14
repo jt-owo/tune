@@ -60,25 +60,25 @@ const Navigation = ({ audioRef }: NavigationProps): JSX.Element => {
 		<nav className={styles['nav-bar-container']}>
 			<ul className={styles['nav-bar']}>
 				<li>
-					<img src={logo} alt="logo" className={styles['nav-bar-logo']} draggable="false" />
+					<img src={logo} alt="logo" className={styles['nav-bar-logo']} draggable={false} />
 				</li>
 				<li>
-					<Link to={AppRoutes.Home} className={`${styles['nav-btn']} ${styles['btn-hover-animation']} ${styles['home-btn']} ${location.pathname === AppRoutes.Home ? styles.active : ''}`} draggable="false">
+					<Link to={AppRoutes.Home} className={`${styles['nav-btn']} ${styles['btn-hover-animation']} ${styles['home-btn']} ${location.pathname === AppRoutes.Home ? styles.active : ''}`} draggable={false}>
 						<NavlistButton animation={homeIcon} doLoop={false} title="Home" />
 					</Link>
 				</li>
 				<li>
-					<Link to={AppRoutes.Browse} className={`${styles['nav-btn']} ${styles['btn-hover-animation']} ${styles['browse-btn']} ${location.pathname === AppRoutes.Browse ? styles.active : ''}`} draggable="false">
+					<Link to={AppRoutes.Browse} className={`${styles['nav-btn']} ${styles['btn-hover-animation']} ${styles['browse-btn']} ${location.pathname === AppRoutes.Browse ? styles.active : ''}`} draggable={false}>
 						<NavlistButton animation={browseIcon} doLoop={false} title="Browse" />
 					</Link>
 				</li>
 				<li>
-					<Link to={AppRoutes.Library} className={`${styles['nav-btn']} ${styles['btn-hover-animation']} ${styles['library-btn']} ${location.pathname === AppRoutes.Library ? styles.active : ''}`} draggable="false">
+					<Link to={AppRoutes.Library} className={`${styles['nav-btn']} ${styles['btn-hover-animation']} ${styles['library-btn']} ${location.pathname === AppRoutes.Library ? styles.active : ''}`} draggable={false}>
 						<NavlistButton animation={libraryIcon} doLoop={false} title="Library" />
 					</Link>
 				</li>
 				<li>
-					<Link to={AppRoutes.Settings} className={`${styles['nav-btn']} ${styles['btn-hover-animation']} ${styles['settings-btn']} ${location.pathname === AppRoutes.Settings ? styles.active : ''}`} draggable="false">
+					<Link to={AppRoutes.Settings} className={`${styles['nav-btn']} ${styles['btn-hover-animation']} ${styles['settings-btn']} ${location.pathname === AppRoutes.Settings ? styles.active : ''}`} draggable={false}>
 						<NavlistButton animation={settingsIcon} doLoop={false} title="Settings" />
 					</Link>
 				</li>
@@ -96,7 +96,7 @@ const Navigation = ({ audioRef }: NavigationProps): JSX.Element => {
 					{addNew && <TextBox placeholder="Name..." className={styles['new-playlist-name-field']} autoFocus onBlur={() => toggleAddNew()} onChange={(e) => setNewPlaylistName(e.target.value)} onKeyDown={handleKeyDown} />}
 					{pinnedPlaylists?.map((playlist) => {
 						return (
-							<Link to={`${AppRoutes.Playlist}/${playlist.id}/${playlist.service}`} title={playlist.name} key={playlist.id} className={`${styles['playlist-btn']} ${styles['btn-hover-animation']} ${location.pathname === `${AppRoutes.Playlist}/${playlist.id}/${playlist.service}` ? styles.active : ''}`} draggable="false">
+							<Link to={`${AppRoutes.Playlist}/${playlist.id}/${playlist.service}`} title={playlist.name} key={playlist.id} className={`${styles['playlist-btn']} ${styles['btn-hover-animation']} ${location.pathname === `${AppRoutes.Playlist}/${playlist.id}/${playlist.service}` ? styles.active : ''}`} draggable={false}>
 								<div className={styles['playlist-navitem']}>
 									<img src={Format.getImage(playlist.images)} alt="" className={styles['playlist-navitem-img']} />
 									<div className={styles['playlist-navitem-name']}>{playlist.name}</div>

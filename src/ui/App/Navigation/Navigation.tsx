@@ -19,13 +19,8 @@ import settingsIcon from '../../../../assets/animations/settings.json';
 import chevron from '../../../../assets/ui-icons/chevron-right.svg';
 
 import styles from './Navigation.module.scss';
-import ControlCenter from '../AudioPlayer/AudioControls/ControlCenter/ControlCenter';
 
-interface NavigationProps {
-	audioRef: React.RefObject<TuneHTMLAudioElement>;
-}
-
-const Navigation = ({ audioRef }: NavigationProps): JSX.Element => {
+const Navigation = (): JSX.Element => {
 	const [addNew, toggleAddNew] = useToggle();
 	const [newPlaylistName, setNewPlaylistName] = useState('');
 
@@ -108,9 +103,7 @@ const Navigation = ({ audioRef }: NavigationProps): JSX.Element => {
 				<li className={styles['control-center-spacer']}>
 					<div className={styles['horizontal-spacer']} />
 				</li>
-				<li className={styles['control-center']}>
-					<ControlCenter audioRef={audioRef} />
-				</li>
+				<li className={styles['control-center']} id="control-center-wrapper" />
 			</ul>
 			<div id={styles['history-button-container']}>
 				<button type="button" onClick={() => navigate(-1)}>

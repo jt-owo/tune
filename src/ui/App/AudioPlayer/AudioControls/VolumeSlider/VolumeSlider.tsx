@@ -1,5 +1,6 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable no-nested-ternary */
-import { WheelEvent, ChangeEvent, useRef, useEffect, useCallback } from 'react';
+import { WheelEvent, ChangeEvent, useRef, useEffect, useCallback, useState } from 'react';
 import Lottie, { LottieRefCurrentProps } from 'lottie-react';
 import useEffectOnce from '../../../../hooks/useEffectOnce';
 
@@ -8,8 +9,7 @@ import volumeIcon from '../../../../../../assets/animations/volume.json';
 import styles from './VolumeSlider.module.scss';
 
 interface VolumeSliderProps {
-	volume: number;
-	setVolume: React.Dispatch<React.SetStateAction<number>>;
+	audioRef: React.RefObject<TuneHTMLAudioElement>;
 }
 
 const LOTTIE_VOLUME_FRAMES = {
@@ -28,9 +28,13 @@ const VOLUME_SLIDER_STATES = {
 let volumeSliderState: number;
 let lottieInitialFrame: number;
 
-const VolumeSlider = ({ volume, setVolume }: VolumeSliderProps) => {
+const configVolume = window.api?.config.get('volume').toString() ?? '20';
+
+const VolumeSlider = ({ audioRef }: VolumeSliderProps) => {
 	const ref = useRef<HTMLInputElement>(null);
 	const lottieRef = useRef<LottieRefCurrentProps>(null);
+
+	const [volume, setVolume] = useState(parseInt(configVolume, 10));
 
 	const handleScroll = (e: WheelEvent<HTMLInputElement>) => {
 		if (e.deltaY < 0 && volume < 100) setVolume((x) => x + 1);
@@ -91,6 +95,15 @@ const VolumeSlider = ({ volume, setVolume }: VolumeSliderProps) => {
 		initSliderState();
 		lottieRef?.current?.goToAndStop(lottieInitialFrame, true);
 	});
+
+	// Set the volume.
+	useEffect(() => {
+		if (!audioRef.current) return;
+
+		// Values of the audio's volume property are between 0.0 and 1.0
+		audioRef.current.volume = volume / 100;
+		window.api?.config.set('volume', volume.toString());
+	}, [volume, audioRef]);
 
 	useEffect(handleAnimation, [handleAnimation]);
 

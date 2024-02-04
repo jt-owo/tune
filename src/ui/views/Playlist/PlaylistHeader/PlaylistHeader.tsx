@@ -54,11 +54,11 @@ const PlaylistHeader = ({ playlist, duration, handlePlay, handleShuffle, handleA
 							{playlist.service === 'local' && (
 								<>
 									<div className={`${styles['playlist-heading-btn']} ${styles['btn-hover-animation']} ${styles['playlist-play-btn']}`} onClick={handlePlay}>
-										<img className={styles['play-icon']} src={playIcon} alt="" draggable="false" />
+										<img className={styles['play-icon']} src={playIcon} alt="" draggable={false} />
 										Play
 									</div>
 									<div className={`${styles['playlist-heading-btn']} ${styles['btn-hover-animation']} ${styles['playlist-play-btn']}`} onClick={handleShuffle}>
-										<img className={styles['shuffle-icon']} src={shuffleIcon} alt="" draggable="false" />
+										<img className={styles['shuffle-icon']} src={shuffleIcon} alt="" draggable={false} />
 										Shuffle
 									</div>
 									<ToolTip text="More">
@@ -96,11 +96,11 @@ const PlaylistHeader = ({ playlist, duration, handlePlay, handleShuffle, handleA
 							{playlist.service === 'local' && (
 								<>
 									<div className={`${styles['playlist-heading-btn']} ${styles['btn-hover-animation']} ${styles['playlist-play-btn']}`} onClick={handlePlay}>
-										<img className={styles['play-icon']} src={playIcon} alt="" draggable="false" />
+										<img className={styles['play-icon']} src={playIcon} alt="" draggable={false} />
 										Play
 									</div>
 									<div className={`${styles['playlist-heading-btn']} ${styles['btn-hover-animation']} ${styles['playlist-play-btn']}`} onClick={handleShuffle}>
-										<img className={styles['shuffle-icon']} src={shuffleIcon} alt="" draggable="false" />
+										<img className={styles['shuffle-icon']} src={shuffleIcon} alt="" draggable={false} />
 										Shuffle
 									</div>
 									<ToolTip text="More">
